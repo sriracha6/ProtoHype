@@ -1,0 +1,30 @@
+{
+    "UxmlGuid": "90034abcce41f334b9aaf8219f569b53",
+    "UxmlPath": "Assets/Resources/Bodypart.uxml",
+    "CanvasX": 0,
+    "CanvasY": 0,
+    "CanvasWidth": 153,
+    "CanvasHeight": 115,
+    "MatchGameView": false,
+    "ZoomScale": 1.75,
+    "PanOffset": {
+        "x": 9.60797119140625,
+        "y": 87.67478942871094
+    },
+    "ColorModeBackgroundOpacity": 1.0,
+    "ImageModeCanvasBackgroundOpacity": 1.0,
+    "CameraModeCanvasBackgroundOpacity": 1.0,
+    "EnableCanvasBackground": false,
+    "CanvasBackgroundMode": 0,
+    "CanvasBackgroundColor": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 255.0
+    },
+    "CanvasBackgroundImage": {
+        "instanceID": 0
+    },
+    "CanvasBackgroundImageScaleMode": 1,
+    "CanvasBackgroundCameraName": ""
+}

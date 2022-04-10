@@ -1,0 +1,30 @@
+{
+    "UxmlGuid": "f372256ed993a2c48b45a2920f8928b2",
+    "UxmlPath": "Assets/Resources/Regiment.uxml",
+    "CanvasX": 0,
+    "CanvasY": 0,
+    "CanvasWidth": 130,
+    "CanvasHeight": 68,
+    "MatchGameView": false,
+    "ZoomScale": 4.0,
+    "PanOffset": {
+        "x": 179.0946044921875,
+        "y": 116.1997299194336
+    },
+    "ColorModeBackgroundOpacity": 1.0,
+    "ImageModeCanvasBackgroundOpacity": 1.0,
+    "CameraModeCanvasBackgroundOpacity": 1.0,
+    "EnableCanvasBackground": false,
+    "CanvasBackgroundMode": 0,
+    "CanvasBackgroundColor": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 255.0
+    },
+    "CanvasBackgroundImage": {
+        "instanceID": 0
+    },
+    "CanvasBackgroundImageScaleMode": 1,
+    "CanvasBackgroundCameraName": ""
+}

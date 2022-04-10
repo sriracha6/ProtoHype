@@ -1,0 +1,40 @@
+/* REMEMBER TO SAVE IN UI BUILDER FIRST */
+
+/*:root {
+    font-size: auto;
+}*/
+
+.actionbutton
+{
+    width: 25%;
+    height: 15%;
+    padding: 0px;
+}
+.actionbutton:hover
+{
+    background-color: #0099ff;
+    color: white;
+}
+.actionbutton:active
+{
+    background-color: #0099ff;
+    color: white;
+}
+
+#PawnInfo .unity-label
+{
+    font-size: 25px;
+}
+
+.unity-button
+{
+    border-radius:4px;
+    border: 1px solid black;
+}
+
+.icon{
+    width:25px;
+    height:25px;
+    background-color:white;
+}
+/*.icon-*/
