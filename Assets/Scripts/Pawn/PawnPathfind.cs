@@ -23,7 +23,6 @@ public class PawnPathfind : MonoBehaviour
     public float nextWaypointDistance = 3f;
     private string moveOption;
     public bool shouldPath;
-    public bool notDowned = true;
 
     public PawnOrientation orientation = PawnOrientation.Right;
 
@@ -64,7 +63,7 @@ public class PawnPathfind : MonoBehaviour
 
     private void Update()
     {
-        if (!notDowned)
+        if (p.pawnDowned)
         {
             shouldPath = false;
             return;
@@ -76,7 +75,6 @@ public class PawnPathfind : MonoBehaviour
         if (p.actionTypes == null || p.actionTypes.Count<=0)
         {
             shouldPath = false;
-            //path = null;
             isMoving = false;
             return;
         }
@@ -102,7 +100,7 @@ public class PawnPathfind : MonoBehaviour
     {
         if(p.actionTypes.Count<=0)
             return;
-
+        
         if (seeker.IsDone())
         {
             if ((p.actionTypes[0].Type.Equals("SearchAndDestroy") || p.actionTypes[0].Type.Equals("Attack")))
@@ -154,7 +152,7 @@ public class PawnPathfind : MonoBehaviour
         {
             if (path == null)
                 return;
-            
+
             if (currentWaypoint >= path.vectorPath.Count)
             {
                 reached = true;
@@ -214,19 +212,13 @@ public class PawnPathfind : MonoBehaviour
     //    //seeker.StartPath(rb.position, t, OnPathComplete);
     //}
 
-    private void orientate(PawnOrientation p)
-    {
-        //animator.Play("UpToSide");
-        orientation = p;
-    }
-
     #region                                  Closest Enemy
     Transform GetClosestEnemy(List<Transform> enemies)
     {
         Transform bestTarget = null;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 currentPosition = transform.position;
-        foreach (Transform potentialTarget in enemies)
+        foreach (Transform potentialTarget in enemies.AsReadOnly())
         {
             Vector3 directionToTarget = potentialTarget.position - currentPosition;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
@@ -244,7 +236,7 @@ public class PawnPathfind : MonoBehaviour
         Vector3 bestTarget = new Vector3(0,0,0);
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 currentPosition = transform.position;
-        foreach (Vector3 potentialTarget in enemies)
+        foreach (Vector3 potentialTarget in enemies.AsReadOnly())
         {
             Vector3 directionToTarget = potentialTarget - currentPosition;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
@@ -267,7 +259,7 @@ public class PawnPathfind : MonoBehaviour
             justTileFound = true;
             return ntile;
         }
-        Debug.LogWarning("Warning: Negative from attempt to move from "+position);
+        Debug.Log($"stuffs happening here dont delete me");
         return new Vector3(position.x, position.y); // i dont know wtf else to put here but this'll definitely cause issues
     }
     #endregion

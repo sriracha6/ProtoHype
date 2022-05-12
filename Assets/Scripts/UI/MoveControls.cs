@@ -24,6 +24,8 @@ public class MoveControls : MonoBehaviour
     public Button rallyBehindButton;
     public Button cancelButton;
 
+    private static MoveControls instance;
+
     private bool pressShift = false;
     //--------
     //public static ActionType actionType;
@@ -66,6 +68,7 @@ public class MoveControls : MonoBehaviour
         //actionTypes.Add(new MoveQueue(Pawn.GetAllFriendlies(),action));
         // finally it doesnt work :^)
 
+        instance = this;
         var root = GetComponent<UIDocument>().rootVisualElement;//
 
         runGunToggle = root.Q<Toggle>("RunGunToggle");
@@ -106,6 +109,20 @@ public class MoveControls : MonoBehaviour
         panel.style.display = DisplayStyle.None;
     }
 
+    public static void toggleMoveButton(bool off)
+    {
+        if (off)
+        {
+            instance.moveButton.style.backgroundColor = Color.gray;
+            instance.moveButton.focusable = false;
+        }
+        else
+        {
+            instance.moveButton.focusable = true;
+            instance.moveButton.style.backgroundColor = new Button().style.backgroundColor;
+        }
+    }
+
     public void Option(string option, bool shouldMove)
     {
         if (pressShift) // todo: keybinds
@@ -120,7 +137,7 @@ public class MoveControls : MonoBehaviour
         else
         {
             ActionType item;
-            if (!(option == "Move"))
+            if (option != "Move")
                 item = new ActionType(option, shouldMove);
             else
             {
@@ -129,8 +146,10 @@ public class MoveControls : MonoBehaviour
 
                 item = new ActionType(option, shouldMove, new Vector2Int(point.x, point.y), false);
             }
+            //Debug.Log($"SEL:{Player.ourSelectedPawns.Count}");
             foreach (Pawn p in Player.ourSelectedPawns) 
             {
+                Debug.Log($"adding {option} to {p.pname}");
                 p.actionTypes.Clear();
                 p.actionTypes.Add(item);
             }

@@ -8,11 +8,11 @@ public class Wound
 {
     public string type;
     public float bleedRate;
-    public Weapon sourceWeapon;
+    public Item sourceWeapon;
     public Attack sourceAttack;
     public float damage;
 
-    public Wound(string t, Weapon fromWeapon, float dmg,Attack attack,float brate=0f)
+    public Wound(string t, Item fromWeapon, float dmg,Attack attack,float brate=0f)
     {
         type = t;
         bleedRate = brate;

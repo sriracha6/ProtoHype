@@ -28,22 +28,15 @@ namespace PawnFunctions
     }
     public class Pawn : MonoBehaviour
     {
-        /* TODO: ADD DEFAULT PAWN LEVEL VAR HERE
-         * 
-         * 
-         * 
-         * 
-         */
-
         //        [HideInInspector]
         //        public GameObject pawnObject;
         //public SpriteRenderer pawnDarkener; // this is bad right
-        [SerializeField]
         public HealthSystem healthSystem;
         public SpriteRenderer sprite;
 
         public bool pawnSelected = false;
         public static bool mouseOverPawn = false;
+        public bool thisPawnMouseOver = false;
 
         [HideInInspector] public List<ActionType> actionTypes = new List<ActionType>();
 
@@ -80,59 +73,47 @@ namespace PawnFunctions
         public List<Country> enemyCountries = new List<Country>();
 
         private void OnTriggerEnter2D(Collider2D collision)     // TODO: FIX???????? 
-        { // todo: add returns to save a few cycles?
-            if (collision.gameObject.GetComponent<BoxSelection>()) // fairly sure this is better to do by just checking the name
+        {
+            if (!BoxSelection.letGo && collision.gameObject.GetComponent<BoxSelection>()) // fairly sure this is better to do by just checking the name
             {
                 pawnSelected = true;
                 //pawnDarkener.forceRenderingOff = false;
                 
-                if (!Player.selectedPawns.Contains(this) && BoxSelection.mode == 0) // normal
+                if (!BoxSelection.newSelectedPawns.Contains(this) && BoxSelection.mode == SelectionMode.Default) 
+                    BoxSelection.newSelectedPawns.Add(this);
+                if (BoxSelection.newSelectedPawns.Contains(this) && BoxSelection.mode == SelectionMode.Subtract) 
+                    BoxSelection.newSelectedPawns.Remove(this);
+                if (BoxSelection.mode == SelectionMode.ClearAll)
                 {
-                    Player.selectedPawns.Add(this);
-                    if (country == Player.playerCountry)
-                    {
-                        Player.ourSelectedPawns.Add(this);
-                    }
-                }
-                if (Player.selectedPawns.Contains(this) && BoxSelection.mode == 2) // subtract
-                {
-                    Player.selectedPawns.Remove(this);
-                    if (country == Player.playerCountry)
-                    {
-                        Player.ourSelectedPawns.Remove(this);
-                    }
-                }
-                if (BoxSelection.mode == -1) // delete all
-                {
+                    Debug.Log($"[*]CLEAR");
+                    BoxSelection.newSelectedPawns = null;
                     Player.selectedPawns = null; // this way itll shit out a fucking error when isee my bad programming
                     Player.ourSelectedPawns = null;
                 }
             }
         }
 
-        private void OnTriggerExit2D(Collider2D collision)     // TODO: FIX????????
+        private void OnTriggerExit2D(Collider2D collision)     // TODO: FIX????????. we can fix this getcomponent with a simple tag check
         {
-            if (collision.gameObject.GetComponent<BoxSelection>())
+            if (BoxSelection.letGo && collision.gameObject.GetComponent<BoxSelection>())
             {
                 pawnSelected = false;
-                if (BoxSelection.letGo)
-                {
-                    Player.selectedPawns.Remove(this);
-                    if (country == Player.playerCountry)
-                    {
-                        Player.ourSelectedPawns.Remove(this);
-                    }
-                }
+                Player.selectedPawns.Remove(this);
+                if (country == Player.playerCountry)
+                    Player.ourSelectedPawns.Remove(this);
+                BoxSelection.newSelectedPawns.Clear();
             }
         }
 
-        private void OnMouseDown()
+        private void OnMouseEnter()
         {
             mouseOverPawn = true;
+            thisPawnMouseOver = true;
         }
-        private void OnMouseUp()
+        private void OnMouseExit()
         {
             mouseOverPawn = false;
+            thisPawnMouseOver = false;
         }
     }
 }

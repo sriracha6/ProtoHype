@@ -6,6 +6,10 @@ using Weapons;
 using Body;
 using Attacks;
 using Armors;
+using System.Linq;
+
+using static HealthFunctions;
+//using HS = HealthFunctions;
 
 public struct Vital
 {
@@ -17,6 +21,12 @@ public struct Vital
 		system = vitalsystem;
 		effectiveness = efectiveness;
 	}
+
+	public Vital(Vital v)
+    {
+		this.system = v.system;
+		this.effectiveness = v.effectiveness;
+    }
 }
 
 public class HealthSystem : MonoBehaviour
@@ -32,48 +42,57 @@ public class HealthSystem : MonoBehaviour
 	public const int normalBodypartHitChance = 25;
 	
 	//[Header("Info")] // :)
-	[HideInInspector] public bool isAlive { get; private set; }
 	[SerializeField] float totalBleedRate;
-	[SerializeField] public List<Vital> vitals = new List<Vital>();
+	public List<Vital> vitals = new List<Vital>();
 	public List<Bodypart> bodyparts = new List<Bodypart>();
 	List<Bodypart> bleedingBodyparts = new List<Bodypart>(); // so we dont have to search all bodyparts
 	private float __pain;
 	public float pain { get { return __pain; } set { __pain = Mathf.Clamp01(value); } }
+	public float lastDamageTime { get; private set; }
+	public Pawn lastAttacker { get; private set; }
+
+	public string userFriendlyStatus { get; private set; }
 	[Space]
 
 	[Header("Components")]
 	[SerializeField] Rigidbody2D rb;
-	[SerializeField] Pawn p;
+	[SerializeField] Pawn ___p;
+	[SerializeField] public Pawn p { get; private set; }
+	[SerializeField] Animator anim;
 	[SerializeField] CombatSystem combat;
 	[SerializeField] PawnPathfind pfind;
 	[SerializeField] SpriteRenderer weaponSprite;
+	[SerializeField] SpriteRenderer shieldSprite;
 	[SerializeField] ParticleSystem blood;
 	[SerializeField] GameObject bloodPrefab;
 	[SerializeField] GameObject bloodParent;
 
 	public List<Wound> wounds = new List<Wound>();
 
-	public delegate void NotifyPawnInfo(List<Vital> wounds, float pain);
-	public delegate void NotifyPawnShock(string reason);
-	public delegate void NotifyPawnBPs(List<Bodypart> bps, float pain);
+	//public delegate void NotifyPawnInfo(List<Vital> wounds, float pain);
+	//public delegate void NotifyPawnShock(string reason);
+	//public delegate void NotifyPawnBPs(List<Bodypart> bps, float pain);
 	
 	// todo: destroy seeker too?
 
 	private void Awake()
 	{
-		NotifyPawnInfo v = new NotifyPawnInfo(UpdateVitals);
-        NotifyPawnShock s = new NotifyPawnShock(UpdateShock);
-		NotifyPawnBPs b = new NotifyPawnBPs(UpdateBodyparts);
+		p = ___p;
+		//NotifyPawnInfo  v  = new NotifyPawnInfo(UpdateVitals);
+        //NotifyPawnShock s  = new NotifyPawnShock(UpdateShock);
+		//NotifyPawnBPs   b  = new NotifyPawnBPs(UpdateBodyparts);
 
-		bodyparts = new List<Bodypart>(BodypartManager.BodypartList); // WE DONT WANT EVERYONE TO HAVE THE SAME PARTS. CRISIS AVERTED!!!!!
-		// todo: add random to make it feel ^^ more geniune?
-
-		vitals.Add(new Vital(VitalSystem.Dexterity, 1f));          
-		vitals.Add(new Vital(VitalSystem.Sight, 1f));              
-		vitals.Add(new Vital(VitalSystem.Breathing, 1f));          
-		vitals.Add(new Vital(VitalSystem.Conciousness, 1f));       //
-		vitals.Add(new Vital(VitalSystem.BloodPumping, 1f));       
-		vitals.Add(new Vital(VitalSystem.Moving, 1f));             
+		//bodyparts = BodypartManager.BodypartList; // WE DONT WANT EVERYONE TO HAVE THE SAME PARTS. CRISIS AVERTED!!!!!
+																	  // todo: add random to make it feel ^^ more geniune?
+		foreach(Bodypart sex in BodypartManager.BodypartList)
+        {
+			// fuck this :(
+			bodyparts.Add(new Bodypart(sex));
+        }
+		foreach(Vital vs in Loader.loader.defaultVitals)
+        {
+			vitals.Add(new Vital(vs));
+        }
 	}
 
     private void UpdateBodyparts(List<Bodypart> bps, float pain) { }
@@ -86,46 +105,60 @@ public class HealthSystem : MonoBehaviour
 		bloodParent = GameManager2D.Instance.bloodParent;
 	}
 
-	public void SubtractHealth(float amount, Weapon sourceWeapon, Attack attack = null, DamageType rangeDType = DamageType.None) // 0: melee, 1:range this is a bad solution
-	{
-		//if (sourceWeapon == null) // we need this for final build
-		//	sourceWeapon = WeaponManager.Get("Empty");
+    protected void FixedUpdate()
+    {
+		// this is an unbelievably stupid way to do this
+		// but if i have to use it, it should definitely be fixed time
+		lastDamageTime += Time.fixedDeltaTime;
+    }
+	/// <summary>
+	/// Amount instead of attack because attack values don't take into account skills, etc.
+	/// </summary>
+	public void TakeMeleeDamage(float amount, Weapon sourceWeapon, Pawn attacker, Attack attack)
+    {
+		lastDamageTime = 0;
+		lastAttacker = attacker;
 
 		Bodypart bp = GetBodypart();
 		float armorDamageAmount = amount - amount /
-					totalReduction(armorFromBodyparts(bp),attack.damageType,backup: amount); // crisis averted: dividing by 0
-		// -- Generate Wound --
-		if (rangeDType != DamageType.None) // this is bad code
-		{
-			float brate = rangeDType == DamageType.Sharp ? randomVariation(armorDamageAmount) : 0;
-			totalBleedRate += brate;
-			DoDamage(bp, new Wound(rangeDType.ToString(), sourceWeapon, armorDamageAmount, attack, brate));
-			//Debug.Log($"NEW WOUND\n---------------\nDAMAGE:{wounds[wounds.Count - 1].damage}\nBLEEDRATE:{wounds[wounds.Count - 1].bleedRate}\nTYPE:{wounds[wounds.Count - 1].type}", gameObject);
+					totalReduction(armorFromBodyparts(bp.Name, p), attack.damageType, backup: amount); 
 
-		}          // Range
-		else
-		{
-			float brate = attack.damageType.ToString() == "Sharp" ? randomVariation(armorDamageAmount) : 0;
-			totalBleedRate += brate;
-			DoDamage(bp, new Wound(attack.damageType.ToString(), sourceWeapon, armorDamageAmount, attack, brate));
-			//Debug.Log($"NEW PROJECTILE WOUND\n---------------\nDAMAGE:{wounds[wounds.Count - 1].damage}\nBLEEDRATE:{wounds[wounds.Count - 1].bleedRate}\nTYPE:{wounds[wounds.Count - 1].type}", gameObject);
-		}                               // elee
+		float brate = attack.damageType.ToString() == "Sharp" ? randomVariation(armorDamageAmount) : 0;
+		totalBleedRate += brate;
+
+		DoDamage(bp, new Wound(attack.damageType.ToString(), sourceWeapon, armorDamageAmount, attack, brate));
 		generateBloodSplatter(1);
 	}
+
+	public void TakeRangeDamage(float amount, Weapon sourceWeapon, Pawn attacker, DamageType rangeDamageType, Attack attack) // todo: this kinda sucks with the reptition
+    {
+		//if (sourceWeapon == null) // we need this for final build
+		//	sourceWeapon = WeaponManager.Get("Empty");
+		lastDamageTime = 0; // this is a stupid af solution.
+		lastAttacker = attacker;
+
+		Bodypart bp = GetBodypart();
+		float armorDamageAmount = amount - amount /
+					totalReduction(armorFromBodyparts(bp.Name, p), attack.damageType, backup: amount); // crisis averted: dividing by 0
+																							   // -- Generate Wound --
+		float brate = rangeDamageType == DamageType.Sharp ? randomVariation(armorDamageAmount) : 0;
+		totalBleedRate += brate;
+		DoDamage(bp, new Wound(rangeDamageType.ToString(), sourceWeapon, armorDamageAmount, attack, brate));
+
+		generateBloodSplatter(1);
+	}		
 
     public Bodypart GetBodypart()
 	{
 		int x = Random.Range(0, 100);
+		List<Bodypart> _a;
+
 		if (x <= normalBodypartHitChance)
-		{
-			List<Bodypart> _ = bodyparts.FindAll(x => x.hitChance.Equals(HitChance.Normal)); // is this necessary 
-			return _[Random.Range(0, _.Count)];
-		}
+			 _a = bodyparts.FindAll(x => x.hitChance.Equals(HitChance.Normal)); // is this necessary 
 		else
-		{
-			List<Bodypart> _ = bodyparts.FindAll(x => x.hitChance.Equals(HitChance.Elevated));
-			return _[Random.Range(0, _.Count)];
-		}
+			_a = bodyparts.FindAll(x => x.hitChance.Equals(HitChance.Elevated));
+		
+		return _a[Random.Range(0, _a.Count)];
 	}
 
 	public void DoDamage(Bodypart p, Wound w)
@@ -143,18 +176,18 @@ public class HealthSystem : MonoBehaviour
 
 		// --- REFRESH VITALS --- 
 		if (p.effects != VitalSystem.None && p.effectAmount.Equals(EffectAmount.Normal)) // 75%
-		{
-			vitals[(int)GetVital(p.effects, 1)] = new Vital(p.effects, Mathf.Clamp01(0.75f * (w.damage / (p.HP / p.TotalHP)) / 100));
-		} // 75%
+			vitals[(int)GetVitalI(p.effects)] = 
+				new Vital(p.effects, Mathf.Clamp01(0.75f * (w.damage / (p.HP / p.TotalHP)) / 100));
+		 // 75%
 		else if (p.effects != VitalSystem.None && p.effectAmount.Equals(EffectAmount.Minor))
-		{
-			vitals[(int)GetVital(p.effects, 1)] = new Vital(p.effects, Mathf.Clamp01(0.25f * (w.damage / (p.HP / p.TotalHP)) / 100));
-		}                                            // 25%
+			vitals[(int)GetVitalI(p.effects)] =
+				new Vital(p.effects, Mathf.Clamp01(0.25f * (w.damage / (p.HP / p.TotalHP)) / 100));
+		                                            // 25%
 		// --- //
 
 		pain += p.painFactor*(p.TotalHP-p.HP)/100;
 
-		vitals[(int)GetVital(VitalSystem.Conciousness,1)] = new Vital(VitalSystem.Conciousness,1f-pain); // sex
+		vitals[(int)GetVitalI(VitalSystem.Conciousness)] = new Vital(VitalSystem.Conciousness,1f-pain); // sex
 
 		if (pain >= 1f)
 			Down("in neurogenic shock"); // neurogenic shock
@@ -168,19 +201,20 @@ public class HealthSystem : MonoBehaviour
 		// todo: check if it's open before you update it pointlessly. ctrl + f this file to see all 100000 instances
         p.wounds.Add(w);
 
-		UpdateVitals(vitals, pain);
+		TryUpdatePawnInfo();
+	}
+
+	public void TryUpdatePawnInfo()
+    {
+		if (PawnInfo.currentSelectedPawn == this.p)
+		{
+			GameManager2D.Instance.pawnInfo.UpdateHealth(bodyparts, pain);
+			GameManager2D.Instance.pawnInfo.UpdateVitals(vitals, pain);
+			GameManager2D.Instance.pawnInfo.UpdateShock(userFriendlyStatus);
+		}
 	}
 
     #region Death/Down
-    public void Down(string reason)
-	{
-		UpdateVitals(vitals, pain);
-		pfind.notDowned = false;
-		
-		rb.rotation = 45f;
-		weaponSprite.forceRenderingOff = true; // destroy is expensive, so this is better. and if there is coming back from the dead for some reason, just flick it bcak on.
-		UpdateShock(reason);
-	}
 	public void Bleed()
 	{
 		totalBlood -= Mathf.Clamp(GetVital(VitalSystem.BloodPumping) * (bleedToBlood * totalBleedRate), 0f, maxBlood);
@@ -200,16 +234,38 @@ public class HealthSystem : MonoBehaviour
 		{
 			bp.HP -= bleedHPLoss * bp.wounds.Count; // todo
 		}
-		GameManager2D.Instance.pawnInfo.UpdateHealth(bodyparts, pain);
-		GameManager2D.Instance.pawnInfo.UpdateVitals(vitals, pain);
+		TryUpdatePawnInfo();
 	}
+
+	public void Down(string reason)
+	{
+		if (PawnInfo.currentSelectedPawn == this.p)
+			UpdateVitals(vitals, pain);
+
+		userFriendlyStatus = reason;
+		p.pawnDowned = true;
+
+		Destroy(pfind); // well if you're downed you shouldnt get up this is a bad approach though especially for mods, TODO
+		Destroy(combat);
+
+		anim.speed = 0.5f;
+		anim.Play("Down");
+		weaponSprite.forceRenderingOff = true; // destroy's expensive so this should be like a 0.5% improvement. also it means we can EASILY get it back at any time
+		shieldSprite.forceRenderingOff = true;
+
+		if (PawnInfo.currentSelectedPawn == this.p)
+			UpdateShock(reason);
+	}
+
 	public void Die(string reason) // todo: benchmark destroy vs just setting the parts inactive
 	{
-		GameManager2D.Instance.pawnInfo.UpdateVitals(vitals, pain); // events
-		GameManager2D.Instance.pawnInfo.UpdateHealth(bodyparts, 0);
+		TryUpdatePawnInfo();
+		userFriendlyStatus = reason;
+
 		CancelInvoke();
-		isAlive = false;
+		anim.StopPlayback();//s
 		p.dead = true;
+		p.pawnDowned = true;
 		rb.rotation = 45f;
 		weaponSprite.forceRenderingOff = true; // destroy is expensive, so this is better. and if there is coming back from the dead for some reason, just flick it bcak on.
 		Destroy(rb); // ez optimization, and prevents spaghetti code. le magnum opus.
@@ -220,7 +276,6 @@ public class HealthSystem : MonoBehaviour
 	}
     #endregion
 
-    #region Functions
 	public void generateBloodSplatter(int amount)
     {
 		// todo: object pooling
@@ -233,45 +288,17 @@ public class HealthSystem : MonoBehaviour
 			_.transform.position = new Vector2(temp.x + Random.Range(0f, 1f), temp.y + Random.Range(0f, 1f));
 		}
 	}
-	public float randomVariation(float orig)
-	{
-		return (float)System.Math.Round(Random.Range(0.75f, 1.25f) * orig, System.MidpointRounding.AwayFromZero);
-	}
-	public List<Armor> armorFromBodyparts(Bodypart b)
-    {
-		List<Armor> temp = new List<Armor>();
-		for (int i = 0; i<p.armor.Count; i++)
-        {
-			if (p.armor[i].covers.Contains(b))
-				temp.Add(p.armor[i]);
-        }
-		return temp;
-    }
-	public float totalReduction(List<Armor> a,DamageType dt,float backup=0)
-    {
-		float r = 0;
-		for(int i = 0; i < a.Count; i++)
-        {
-			r += a[i].getProtection(dt);
-        }
-        if (r <= 0) { return backup; }
-		return r;
-    }
-	public float GetVital(VitalSystem v , int mode=0)
-	{
-		if (mode == 1)
-		{
-			return vitals.FindIndex(x => x.system == v);
-		}
 
+	public int GetVitalI(VitalSystem v)
+    {
+		return vitals.FindIndex(x => x.system == v);
+	}
+
+	public float GetVital(VitalSystem v)
+	{
 		if (v == VitalSystem.Moving)
-		{
 			return vitals.Find(x => x.system == VitalSystem.Conciousness).effectiveness * vitals.Find(x=>x.system==VitalSystem.Breathing).effectiveness * vitals.Find(x=>x.system==v).effectiveness;
-		}
 		else
-		{
 			return vitals.Find(x => x.system == VitalSystem.Conciousness).effectiveness * vitals.Find(x => x.system == v).effectiveness;
-		}
 	} // for other files. WE DONT WANT THIS TO BE STATIC!!! OR ANY OF THESE PAWN FILES!!!
-    #endregion
 }

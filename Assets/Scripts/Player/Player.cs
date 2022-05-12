@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
 
     public static int regimentSelectNumber;
 
-    private void Awake()
+    private void Start()
     {
         playerCountry = CountryManager.Get("France"); // AAAA! todo! make dyanimc. his is the source of bugs if i dont remember
     }

@@ -26,7 +26,7 @@ public class DevTools : MonoBehaviour
     List<Armor> armors = new List<Armor>();
     List<Projectile> sampleProjectiles = new List<Projectile>();
 
-    private void Start()
+    private void Awake()
     {
         Loaders.LoadBodyparts("C:\\Users\\frenz\\Music\\bodyparts.xml");
 
@@ -60,7 +60,7 @@ public class DevTools : MonoBehaviour
         List<Shield> emptyShields = new List<Shield>();
         shields.Add(shield);
 
-        TroopTypeManager.Create("Archer", CountryManager.Get("France"),sampleBOW,sampleweapons, armors, shields, 0, 2, 3,5);
+        TroopTypeManager.Create("Archer", CountryManager.Get("France"),sampleBOW, sampleweapons, armors, shields, 0, 2, 3,5);
         TroopTypeManager.Create("Swordsman", CountryManager.Get("Germany"), sampleweapons, new List<Weapon>(), armors, emptyShields, 3,5,0,2);
 
         RegimentManager.Create(TroopTypeManager.Get("Archer"), CountryManager.Get("France"), 0);

@@ -23,19 +23,21 @@ public class ProjectileBehaviour : MonoBehaviour
     Rigidbody2D rb;
     [SerializeField]
     SpriteRenderer sprite;
-       
-    private void Start()
-    {
-        Destroy(gameObject, projectileMaxLifetime);
-    }
+    [SerializeField]
+    Collider2D ourCollider;
 
+    PawnFunctions.Pawn sourcePawn;
+
+    private void Start() =>
+        Destroy(gameObject, projectileMaxLifetime);
 
     // take end parameter to auto destroy there?
-    public void DoMovement(Transform target, float inaccuracy, Projectile projectileType, float thisWeaponDamage)
+    public void CreateAndMove(Transform target, float inaccuracy, Projectile projectileType, float thisWeaponDamage, PawnFunctions.Pawn sourcePawn)
     {
         thisProjectile = projectileType;
         weaponDamage = thisWeaponDamage;
         thisType = projectileType.damageType;
+        this.sourcePawn = sourcePawn;
 
         sprite.sprite = PawnRenderer.getProjectile(projectileType.Name);
 
@@ -49,13 +51,13 @@ public class ProjectileBehaviour : MonoBehaviour
 
         // TODO: NO ATAN2!!!!!!!!!!!!!
         rb.rotation = Mathf.Atan2(diff.y,diff.x) * Mathf.Rad2Deg;
-        rb.AddForce(((targetNew-transform.position)) * projectileForce, ForceMode2D.Impulse);
+        rb.AddForce((targetNew-transform.position) * projectileForce, ForceMode2D.Impulse);
     }
                                                             // we need this reference for the image
     public void DoThrow(Transform target, float inaccuracy, Weapon weapon, float damage)
     {
         weaponDamage = damage;
-        thisType = weapon.attacks[0].damageType; // todo: uhm.
+        thisType = weapon.attacks[(int)(Random.value * weapon.attacks.Count)].damageType;
         thisWeapon = weapon;
 
         Vector3 targetNew = target.position;
@@ -77,10 +79,16 @@ public class ProjectileBehaviour : MonoBehaviour
             return;
         if (collision.gameObject.TryGetComponent(out HealthSystem h)) 
         {
-            thisWeapon = thisWeapon == null ? WeaponManager.Get("Empty") : thisWeapon;
-            h.SubtractHealth(thisProjectile.damage * weaponDamage, thisWeapon, 
-                new Attack("Hit",thisProjectile.damageType,false,thisProjectile.damage*weaponDamage), thisType);
+            if (h.p == sourcePawn)
+            {
+                Physics2D.IgnoreCollision(collision, ourCollider);
+                return;
+            }
+            //thisWeapon = thisWeapon == null ? WeaponManager.Get("Empty") : thisWeapon;
+            h.TakeRangeDamage(thisProjectile.damage * weaponDamage, thisWeapon, sourcePawn,
+                thisType,
+                new Attack("Hit",thisProjectile.damageType,false,thisProjectile.damage*weaponDamage));
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
     }
 }

@@ -25,17 +25,18 @@ public class TilemapPlace : MonoBehaviour
         return tiles.Where(x => x != null).ToArray().Length;
     }
 
-    private static void resetAllTmaps()
+    private static void resetAllTmaps() // wtf
     {
         GameManager2D.Instance.groundTilemap.ClearAllTiles();
         GameManager2D.Instance.solidTilemap.ClearAllTiles();
     }
 
-    public static void placeTiles(float[,] noiseMap, TerrainType[] tTypes) 
-    {                                                                     
+    public static void placeTiles(float[,] noiseMap, TerrainType[] tTypesUnsorted) 
+    {
         //resetAllTmaps();
-        tilemap = new TerrainType[noiseMap.GetLength(0), noiseMap.GetLength(1)];
+        TerrainType[] tTypes = tTypesUnsorted.OrderBy(x=>x.height).ToArray(); // this line of code saves the entire game, i'll make it a puzzle! figure out why! ;)
 
+        tilemap = new TerrainType[noiseMap.GetLength(0), noiseMap.GetLength(1)];
         for(int x = 0; x < noiseMap.GetLength(0); x++)
         {
             for(int y = 0; y < noiseMap.GetLength(1); y++)
@@ -47,15 +48,18 @@ public class TilemapPlace : MonoBehaviour
                         switch(tTypes[i].type)
                         {
                             case SpecialType.None:
-                                GameManager2D.Instance.groundTilemap.SetTile(new Vector3Int(x, y, 0), tTypes[i].tbase);
+                                GameManager2D.Instance.groundTilemap.SetTile(new Vector3Int(x, y, 0), tTypes[i].tile);
                                 tilemap[x,y] = tTypes[i];
                                 break;
-                            case SpecialType.Solid:
-                                GameManager2D.Instance.solidTilemap.SetTile(new Vector3Int(x,y,0), tTypes[i].tbase);
+                            case SpecialType.Mountain:
+                                GameManager2D.Instance.solidTilemap.SetTile(new Vector3Int(x,y,0), tTypes[i].thisIsVeryBadSpaghettiButImOutOfIdeas);
                                 tilemap[x,y] = tTypes[i];
                                 break;
-                            case SpecialType.Water:
+                            case SpecialType.Water: 
                                 tilemap[x, y] = tTypes[i];
+                                break;
+                            default:
+                                Debug.Log($"WTF?");
                                 break;
                         }
                         break;
@@ -63,13 +67,15 @@ public class TilemapPlace : MonoBehaviour
                 }
             }
         }
+        GameManager2D.Instance.solidTilemap.RefreshAllTiles();
+        GameManager2D.Instance.groundTilemap.RefreshAllTiles();
 
         Instance.pfinder.Scan();
     }
 
-    public void placeTrees(List<Vector3Int> points, List<Buildings.Nature> flora,System.Random rand, GameObject treeFab)
+/*    public void placeTrees(List<Vector3Int> points, List<Buildings.Nature> flora,System.Random rand, GameObject treeFab)
     {
-        // --- generate trees to place at the points --- //
+        // --- generate trees to place at the points
         Buildings.Nature[] choices = flora.ToArray();
         Buildings.Nature[] treeAtPoint = new Buildings.Nature[points.Count];
 
@@ -78,7 +84,6 @@ public class TilemapPlace : MonoBehaviour
             treeAtPoint[i] = choices[rand.Next(0,choices.Length)];
         }
 
-        // --- place --- //
         // I NEED A ARM AND A LEG
         // CARTI IN LOVE WITH THE BREAD
         // IN 2020 THERE WILL BE A GLOBAL PANDEMIC THAT WILL SHUT DOWN THE WORLD
@@ -91,18 +96,22 @@ public class TilemapPlace : MonoBehaviour
 
         foreach(Vector3Int point in points)       // TODO: object pooling
         {
-            //Player.tmap.GetTile(point) != null &&
-            //Debug.Log(tilemap[point.x,point.y
-            if (tilemap[point.x, point.y].supportsNature) // not water or solid & supports nature
+            try
             {
-                //GameManager2D.Instance.solidTilemap.SetTile(point, treeAtPoint[j].tbase);
-                //Debug.Log(treeAtPoint[j].Name);
-                var x = Instantiate(treeFab, Instance.treeParent);
-                var PENIS = treeAtPoint[j].sprites[rand.Next(0, treeAtPoint[j].sprites.Count)];
-                x.GetComponent<SpriteRenderer>().sprite = PENIS;
-                x.transform.position = point;
+                if (tilemap[point.x, point.y].supportsNature && tilemap[point.x, point.y].type!=SpecialType.Mountain) // not water or solid & supports nature
+                {
+                    var x = Instantiate(treeFab, Instance.treeParent);
+                    var PENIS = treeAtPoint[j].sprites[rand.Next(0, treeAtPoint[j].sprites.Count)];
+                    x.GetComponent<SpriteRenderer>().sprite = PENIS;
+                    x.transform.position = point;
+                }
+                j++;
             }
-            j++;
+            catch(System.NullReferenceException e)
+            {
+                Debug.DrawLine(Vector2.zero, new Vector2(point.x,point.y), Color.magenta, 10f);
+                break;
+            }
         }
-    }
+    }*/
 }

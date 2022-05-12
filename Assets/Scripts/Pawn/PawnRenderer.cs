@@ -24,6 +24,8 @@ using static CachedItems;
 ///     Render.
 ///     Step 2. ????
 ///     Step 3. Profit
+///     
+///     also prolly should've just cached everything used in save file right away but thats for later me ig
 /// </summary>
 public class PawnRenderer : MonoBehaviour
 {
@@ -187,9 +189,7 @@ public class PawnRenderer : MonoBehaviour
         try
         {
             if (CachedItems.renderedProjectiles.Exists(x => x.name == name))
-            {
                 return CachedItems.renderedProjectiles.Find(x=>x.name==name).sprite;
-            }
             else
             {
                 var rawData = System.IO.File.ReadAllBytes($"C:\\Users\\frenz\\Music\\assets\\weapons\\Projectile\\{name}.png"); // todo: it does this every time you load a pawn? how about no.
@@ -206,7 +206,7 @@ public class PawnRenderer : MonoBehaviour
         }
         catch (System.IO.IOException e)
         {
-            Debug.LogError("Couldn't load projectile of name " + name + "\n\n" + e);
+            Debug.LogError("Couldn't load projectile '" + name + "'\n\n" + e);
             return null;
         }
     }

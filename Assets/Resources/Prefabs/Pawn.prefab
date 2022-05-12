@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3088852015259915811}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.163, y: -0.09, z: 0}
+  m_LocalPosition: {x: 1.456, y: -0.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7526895195975188615}
@@ -4980,7 +4980,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.85333335, y: 0.85333335}
+  m_Size: {x: 0.16, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -5072,7 +5072,6 @@ MonoBehaviour:
   speed: 7
   nextWaypointDistance: 3
   shouldPath: 0
-  notDowned: 1
   orientation: 0
   runAndGunEffectToSpeed: 0.75
   isRunAndGun: 1
@@ -5119,20 +5118,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19880fda447239c4ebd640a1e63b145b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalBlood: 10
-  bleedToBlood: 0.3
-  bleedRate: 0.5
-  bleedHPLoss: 1
-  maxBlood: 10
-  normalBodypartHitChance: 25
-  isAlive: 0
   totalBleedRate: 0
-  pain: 0
   rb: {fileID: 2221456928737561880}
-  p: {fileID: 4103537463890445299}
+  ___p: {fileID: 4103537463890445299}
+  anim: {fileID: 7651848475595865476}
   combat: {fileID: 3213804089190479892}
   pfind: {fileID: 6899968418176702960}
   weaponSprite: {fileID: 2339952832213691577}
+  shieldSprite: {fileID: 8508489183387639642}
   blood: {fileID: 4352134263903742567}
   bloodPrefab: {fileID: 7398264897055499705, guid: 7d080d9c75183794a9d8d6dca1824c00, type: 3}
   bloodParent: {fileID: 0}
@@ -5193,7 +5186,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5087462624300014132}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0

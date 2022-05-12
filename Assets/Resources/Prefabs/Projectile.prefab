@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2719336224592951716}
   - component: {fileID: 143340068702015036}
   - component: {fileID: 3850354987980703815}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Projectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -29,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4190417553652417840}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2546, z: 0}
-  m_LocalScale: {x: 1, y: 0.1119133, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -217,10 +217,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c9ab3c423c4a849b315a3cb8f5974a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileMaxLifetime: 10
+  projectileMaxLifetime: 20
   projectileForce: 2
   rb: {fileID: 3396684114454823075}
   sprite: {fileID: 326647347499783084}
+  ourCollider: {fileID: 3850354987980703815}
 --- !u!61 &3850354987980703815
 BoxCollider2D:
   m_ObjectHideFlags: 0

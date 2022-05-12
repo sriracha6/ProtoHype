@@ -31,17 +31,21 @@ public class CameraMove : MonoBehaviour
     {
         camObject.transform.position = new Vector3(MapGenerator.mapW/2,MapGenerator.mapH/2,-10); // position the camera in middle of scene
         _thecam = thecam; // >:(
+
+        thecam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().enabled = false;
     }
 
     protected void Start()                                  
     {
-        resizeBounds(MapGenerator.mapW,MapGenerator.mapH);
+        //resizeBounds(MapGenerator.mapW,MapGenerator.mapH);
     }
 
     public void resizeBounds(int width, int height)
     {
         bounds.gameObject.transform.localScale = new Vector2(width, height);
         bounds.gameObject.transform.position = Vector2.zero;
+        // we also need to relimit max fov so its not out of bounds somefucking how.
+        maxFov = width / 5 + (width/50); // this was my first guess and it's pretty fuckin spot on
     }
 
     void Update()
@@ -148,5 +152,17 @@ public class CameraMove : MonoBehaviour
         thecam.m_Lens.OrthographicSize -= amount;
         
         thecam.m_Lens.OrthographicSize = Mathf.Clamp(thecam.m_Lens.OrthographicSize, minFov, maxFov);
+    }
+
+    public void ScreenShake()
+    {
+        StartCoroutine(nameof(_screenshake));
+    }
+
+    private IEnumerator _screenshake()
+    {
+        thecam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().enabled = true;
+        yield return new WaitForSecondsRealtime(0.2f);
+        thecam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().enabled = false;
     }
 }

@@ -7,30 +7,44 @@ using UnityEngine.UIElements;
 
 public class PawnInfo : MonoBehaviour
 {
-    public VisualElement root;
-    public VisualElement panel;
-    public VisualElement hpanel;
-    public VisualElement bplist;
+    VisualElement root;
+    VisualElement panel;
+    VisualElement hpanel;
+    VisualElement vitalsbox;
+    VisualElement bplist;
+    Label painLabel;
 
+    public static Pawn currentSelectedPawn; // useful for mods too
     public Button closeButton;
 
     public VisualTreeAsset bodypart;
+    public VisualTreeAsset vital;
 
     private void Start()
     {
-        HealthSystem.NotifyPawnBPs b = new HealthSystem.NotifyPawnBPs(UpdateHealth);
-        HealthSystem.NotifyPawnInfo i = new HealthSystem.NotifyPawnInfo(UpdateVitals);
-        HealthSystem.NotifyPawnShock s = new HealthSystem.NotifyPawnShock(UpdateShock);
+        //HealthSystem.NotifyPawnBPs b = new HealthSystem.NotifyPawnBPs(UpdateHealth);
+        //HealthSystem.NotifyPawnInfo i = new HealthSystem.NotifyPawnInfo(UpdateVitals);
+        //HealthSystem.NotifyPawnShock s = new HealthSystem.NotifyPawnShock(UpdateShock);
 
         root = GetComponent<UIDocument>().rootVisualElement;
-        panel = root.Q<VisualElement>("PawnInfo");
-        hpanel = panel.Q<VisualElement>("Health");
+        panel = root.Q<VisualElement>("PawnInfoParent");
+        hpanel = panel.Q<VisualElement>("Body").Q<VisualElement>("Bodyadada").Q<VisualElement>("Health");
+        vitalsbox = panel.Q<VisualElement>("VitalStatuses");
+        painLabel = vitalsbox.Q<Label>("PainLabel");
 
-        closeButton = panel.parent.Q<Button>("closebutton");
+        closeButton = panel.Q<Button>("CloseButton");
         closeButton.clicked += delegate { close(); };
 
-        bplist = hpanel.Q<VisualElement>("list").Q<VisualElement>("unity-content-and-vertical-scroll-container").Q<VisualElement>("unity-content-viewport").Q<VisualElement>("unity-content-container");
+        bplist = hpanel.Q<VisualElement>("unity-content-container");
         panel.style.display = DisplayStyle.None;
+
+        /*vitalsbox.Add(vital.CloneTree()); // for pain
+        for(int i = 0; i < Loader.loader.defaultVitals.Count; i++)
+        {
+            var v = vital.CloneTree();
+            vitalLabelsBCGAY.Add(v.Q<Label>("Text"));
+            vitalsbox.Add(v);
+        }*/
     }
 
     public void ShowPawnInfo(Pawn p)
@@ -39,47 +53,46 @@ public class PawnInfo : MonoBehaviour
         {
             GameObject.Destroy(child.gameObject);
         }*/
+        currentSelectedPawn = p;
         panel.style.display = DisplayStyle.Flex;
 
-        panel.Q<Label>("PName").text = p.pname;
-        panel.Q<Label>("TrooptypeCountry").text = p.country.memberName + " " + p.troopType.Name;
-        panel.Q<Label>("Skills").text = "[sword]" + p.meleeSkill + " [range]" + p.rangeSkill;
+        panel.Q<Label>("QuickInfo").text = $"{p.pname} | {p.country.memberName} {p.troopType.Name} | [sword] {p.meleeSkill} [bow] {p.rangeSkill}";
 
         UpdateHealth(p.healthSystem.bodyparts, p.healthSystem.pain);
+        UpdateVitals(p.healthSystem.vitals, p.healthSystem.pain);
+        UpdateShock(p.healthSystem.userFriendlyStatus);
     }
 
     public void UpdateHealth(List<Bodypart> bps, float pain)
     {
         bplist.Clear();
-        foreach (Bodypart b in bps)
+        foreach (Bodypart b in bps) // thank god there was a bug here it helped me find that i was making a left right leg and a 5th 4th toe
         {
             if (b.wounds.Count > 0)
-            {
                 ShowBodyPart(b);   
-            }
         }
         string painparsed = pain > 0 ? (pain*100).ToString()+"%" : "None";
-        UpdateShock("");
-        hpanel.Q<Label>("pain").text = "Pain: "+painparsed;
+        painLabel.text = "Pain: "+painparsed;
+        //UpdateShock("");
     }
 
     public void UpdateVitals(List<Vital> vitals, float pain)
     {
-        string vitalsParsed = "";
-        foreach(Vital v in vitals)
+        string parsedVitals = "";
+        foreach (Vital v in vitals)
         {
-            vitalsParsed += ParseVital(v);
+            parsedVitals += ParseVital(v);
         }
 
-        hpanel.Q<Label>("vitaltext").text = vitalsParsed;
+        vitalsbox.Q<Label>("SystemsLabel").text = parsedVitals;
         // ---------
-        string painparsed = pain >= 0 ? (pain*100).ToString() : "None";
-        hpanel.Q<Label>("pain").text = "Pain: " + painparsed;
+        string painparsed = pain > 0 ? (pain*100).ToString() : "None";
+        hpanel.Q<Label>("PainLabel").text = "Pain: " + painparsed;
     }
 
     public void UpdateShock(string type)
     {
-        panel.Q<Label>("shockText").text = type; // todo: rich text pls
+        panel.Q<Label>("ShockLabel").text = type; // todo: rich text pls
     }
 
     void ShowBodyPart(Bodypart b)
@@ -102,22 +115,22 @@ public class PawnInfo : MonoBehaviour
 
     string ParseWound(Wound w)
     {
-        string h = w.sourceAttack.Name.ToString();
-        string e = w.sourceWeapon.Name.ToString();
-        string l = w.damage.ToString();
-        string ll;
+        string one = w.sourceAttack.Name.ToString();
+        string two = w.sourceWeapon.Name.ToString();
+        string three = w.damage.ToString();
+        string four="";
+        string fivesixseveneight="";
+        string MSinmybankaccount="";
         string o = w.bleedRate > 0 ? w.bleedRate.ToString() : "";
 
-        return h + $"({e}):" + l + "Bleed:"+o;
+        return one + $"({two}):" + three + "Bleed:"+o+four+fivesixseveneight+MSinmybankaccount;
     }
 
     string ParseVital(Vital v)
     {
-        return v.system + ":\n" + (v.effectiveness*100)+"%\n";
+        return v.system + "  :  " + (v.effectiveness*100)+"%\n";
     }
     
-    void close()
-    {
+    void close() =>
         panel.style.display = DisplayStyle.None;
-    }
 }

@@ -8,6 +8,7 @@ using static TextureGenerator;
 using static WaterFeature;
 using static TilemapPlace;
 using Nature;
+using PawnFunctions;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class MapGenerator : MonoBehaviour
     public float noiseScale;
     public bool autoUpdate;
     public DrawMode drawMode;
-    public TerrainType[] terrainTypes;
+    //public TerrainType[] terrainTypes;
     [Space]
     [Range(0f,1f)]public float shallowSeaLevel;
     [Range(0f,1f)]public float deepSeaLevel;
@@ -40,7 +41,7 @@ public class MapGenerator : MonoBehaviour
     public string treesSeed;
     [Range(0f,10f)] public float radius;
     public int rejectionSamples = 30;
-    [Range(0f,1f)] public float treeHeight = 0.4f;
+    [Range(0f,1f)] public float treeHeight;
 
     [Space][Space][Space]
     [Header("Components")]
@@ -60,7 +61,6 @@ public class MapGenerator : MonoBehaviour
         mapW = mapWidth;
         mapH = mapHeight;
 
-
         currentBiome = BiomeManager.Get("Plains");
         treeHeight = currentBiome.plantDensity;
 
@@ -71,8 +71,15 @@ public class MapGenerator : MonoBehaviour
 
     List<Vector2> treePoints = new List<Vector2>();
 
+    protected void Start()
+    {
+        generateTestRoom(100, 100);
+        mapBounds.resizeBounds(100, 100);
+    }
+
     public void GenMap()
     {
+        List<TerrainType> terrainTypes = currentBiome.terrainFrequencies.terrain;
         erosionAmount = Mathf.CeilToInt(mapWidth / 100);
 
         mapH = mapHeight;
@@ -95,7 +102,7 @@ public class MapGenerator : MonoBehaviour
             for(int x = 0; x<width; x++)
             {
                 float currentHeight = noiseMap[x, y];
-                for (int i = 0; i < terrainTypes.Length; i++)
+                for (int i = 0; i < terrainTypes.Count; i++)
                 {
                     if (currentHeight <= terrainTypes[i].height)
                     {
@@ -115,11 +122,13 @@ public class MapGenerator : MonoBehaviour
 
         //List<WaterPoint> waterPoints =  TextureGenerator.perlinToTmap(noiseMap,terrainTypes,shallowSeaLevel,deepSeaLevel);
 
-        TilemapPlace.placeTiles(noiseMap,terrainTypes);
+        TilemapPlace.placeTiles(noiseMap,terrainTypes.ToArray()); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
 
-        TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
+        //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
         generateWater();
         mapBounds.resizeBounds(mapWidth, mapHeight);
+        
+        new PathfindExtra();
     }
 
     private void generateWater()
@@ -140,6 +149,27 @@ public class MapGenerator : MonoBehaviour
         water.transform.position = new Vector3(mapWidth/2, mapHeight/2, -11);
     }
 
+    public static void generateTestRoom(int width, int height)
+    {
+        GameObject go = Instantiate(Loader.loader.testMat);
+        go.transform.position = new Vector3(width/2,height/2,0);
+        go.transform.localScale = new Vector3(width, height, 1);
+
+        mapW = width;
+        mapH = height;
+
+        TilemapPlace.tilemap = new TerrainType[width, height];
+        for(int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                TilemapPlace.tilemap[x, y] = TerrainTypeManager.Get("Test Tile");
+            }
+        }
+
+        new PathfindExtra();
+    }
+
     private void OnValidate() // i love this
     {
         if (mapWidth<1)
@@ -153,6 +183,10 @@ public class MapGenerator : MonoBehaviour
     }
 
     // todo: this is so ineffcient for some reasonn
+    /// <summary>
+    /// this shit fucking sucks. im not doing this. doesnt really fit the game anyway. maybe another update bc fuck
+    /// </summary>
+    /// <returns></returns>
     public List<Vector3Int> generateTrees() // i promies this is the most inefficient algorithm in the entire project
     {
         float[,] treeNoiseMap = RandomMap.genNoise(mapWidth, mapHeight, treesSeed.GetHashCode().GetHashCode(), noiseScale, octaves, persistence, lacunarity, offset);

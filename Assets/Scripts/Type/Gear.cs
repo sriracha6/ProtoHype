@@ -12,9 +12,9 @@ using Armors;
 public class Gear
 {
     public List<Armor> armor = new List<Armor>();
-    public Weapon weapon;
+    public Item weapon;
 
-    public Gear(List<Armor> armo, Weapon wpn)
+    public Gear(List<Armor> armo, Item wpn)
     {
         armor = armo;
         weapon = wpn;

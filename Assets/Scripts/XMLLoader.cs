@@ -50,7 +50,14 @@ namespace XMLLoader
             if (isGeneric)
             {
                 List<Weapon> list = new List<Weapon>();
-                list.AddRange(ParseFuncs.parseWeapons(xmls.SelectSingleNode("List")));
+                List<Item> items = new List<Item>();
+                List<Weapon> meleeWeapons = new List<Weapon>();
+                foreach(Item item in items)
+                {
+                    meleeWeapons.Add(WeaponManager.Get(item.ID));
+                }
+
+                list.AddRange(meleeWeapons);
 
                 GenericManager.CreateGenericList(xmls.SelectSingleNode("List").Attributes.GetNamedItem("name").InnerText, list,
                     typeof(Weapon));
@@ -97,7 +104,13 @@ namespace XMLLoader
             if (isGeneric)
             {
                 List<Weapon> list = new List<Weapon>();
-                list.AddRange(ParseFuncs.parseWeapons(xmls.SelectSingleNode("List")));
+                List<Weapon> items = ParseFuncs.parseWeapons(xmls.SelectSingleNode("List"));
+                List<Weapon> rangedWeapons = new List<Weapon>();
+                foreach(Item item in items)
+                {
+                    rangedWeapons.Add(WeaponManager.Get(item.ID)); // so glad i made this
+                }
+                list.AddRange(rangedWeapons);
 
                 GenericManager.CreateGenericList(xmls.SelectSingleNode("List").Attributes.GetNamedItem("name").InnerText, list,
                     typeof(Weapon));
@@ -286,8 +299,7 @@ namespace XMLLoader
                         (HitChance)Enum.Parse(typeof(HitChance), x.SelectSingleNode("HitChance").InnerText),
                         (CountType)Enum.Parse(typeof(CountType), x.SelectSingleNode("CountType").InnerText));
                 }
-                List<Bodypart> temp = new List<Bodypart>();
-                foreach (Bodypart b in new List<Bodypart>(BodypartManager.BodypartList))
+                foreach (Bodypart b in new List<Bodypart>(BodypartManager.BodypartList)) // fuck you i have to make a new temp list
                 {
                     if (b.count > 1)
                     {
@@ -296,21 +308,16 @@ namespace XMLLoader
                             if (b.countType == CountType.Sides)
                             {
                                 string newname = i == 0 ? "Left " + b.Name : "Right " + b.Name;
-                                temp.Add(BodypartManager.Create(newname, b.TotalHP, b.type, b.partOf, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType));
+                                BodypartManager.Create(newname, b.TotalHP, b.type, b.partOf, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType);
                             }
                             else if (b.countType == CountType.Numbered)
                             {
                                 string newname = ParseFuncs.AddOrdinal(i) + " "+b.Name;
-                                temp.Add(BodypartManager.Create(newname, b.TotalHP, b.type, b.partOf, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType));
+                                BodypartManager.Create(newname, b.TotalHP, b.type, b.partOf, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType);
                             }
                         }
                     }
-                    else
-                    {
-                        temp.Add(b);
-                    }
                 }
-                BodypartManager.BodypartList = new List<Bodypart>(temp);
             }
             else
             {
@@ -444,8 +451,7 @@ namespace XMLLoader
                     null,
                     (SpecialType)Enum.Parse(typeof(SpecialType), xmls.SelectSingleNode("SpecialType").InnerText),
                     ParseFuncs.strToBool(xmls.SelectSingleNode("SupportsNature").InnerText));
-                
-                SpriteSheetCreator.Instance.createTerrainTileFromSheet(LoadImage(ParseFuncs.nameToImagePath(temp.name, "TerrainType")), ref temp, temp.name);
+                    SpriteSheetCreator.Instance.createTerrainTileFromSheet(LoadImage(ParseFuncs.nameToImagePath(temp.name, "TerrainType")), ref temp);
             }
             else
             {
@@ -454,7 +460,7 @@ namespace XMLLoader
             }
         }
         public static void LoadBiome(string filepath)
-        {//
+        {
             XmlElement xmls = LoadFile(filepath);
 
             if (xmls.SelectSingleNode("Type").InnerText=="Biome")
@@ -507,14 +513,12 @@ namespace XMLLoader
 
             foreach(XmlElement x in xmls.SelectNodes("GenericSpecial"))
             {
-                if(x.InnerText == "Any")
+                if (x.InnerText == "Any")
                 {
-                    weapons.Add(WeaponManager.WeaponList[Random.Range(0,WeaponManager.WeaponList.Count)]);
+                    weapons.Add(WeaponManager.WeaponList[Random.Range(0, WeaponManager.WeaponList.Count)]);
                 }
-                else if(x.InnerText == "None")
-                {
+                else if (x.InnerText == "None")
                     weapons.Add(null); //todo: this does nothing yet
-                }
             }
 
             foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
@@ -532,7 +536,7 @@ namespace XMLLoader
             {
                 if (x.InnerText == "Any")
                 {
-                    weapons.Add(ProjectileManager.ProjectileList[Random.Range(0, WeaponManager.WeaponList.Count)]);
+                    weapons.Add(ProjectileManager.ProjectileList[Random.Range(0, ProjectileManager.ProjectileList.Count)]);
                 }
                 else if (x.InnerText == "None")
                 {
@@ -633,8 +637,9 @@ namespace XMLLoader
                 terrain.Add(TerrainTypeManager.Get(node.InnerText)); // remember this doesnt work yet because i havent created any yet
                 frequencies.Add(float.Parse(node.Attributes.GetNamedItem("frequency").InnerText));
             }
-            terrain.Add(new TerrainType("Water", 0.4f, Color.blue, null, SpecialType.Water, false));
-            terrain.Add(new TerrainType("Mountain", 0.9f, new Color(256,100,100), null, SpecialType.Solid, false));
+            //                                                              V bc call is ambiguous
+            terrain.Add(new TerrainType("Water", BiomeArea.waterHeight, Color.blue, Loader.loader.mountainTile, SpecialType.Water, false));
+            terrain.Add(new TerrainType("Mountain", 0.9f, new Color(256,100,100), Loader.loader.mountainTile, SpecialType.Mountain, false));
 
             return new TerrainFrequencies(terrain, frequencies); // todo: frequencies are obsolete if height exists. wtf was i thinking
         }

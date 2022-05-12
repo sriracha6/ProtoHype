@@ -60,11 +60,17 @@ public class TileSelection : MonoBehaviour
 
         if (Input.GetMouseButtonUp(1))
         {
-            Player.selectedTileBounds.Add(area);
-            GetTilesInArea();
-            lineRenderer.positionCount = 0;
-            Destroy(bcollider);
-            transform.position = new Vector3(0, 0, 10);
+            if (Player.selectedTiles.Count > 0)
+            {
+                Player.selectedTileBounds.Add(area);
+                GetTilesInArea();
+                lineRenderer.positionCount = 0;
+                Destroy(bcollider);
+                transform.position = new Vector3(0, 0, 10);
+                MoveControls.toggleMoveButton(false);
+            }
+            else
+                MoveControls.toggleMoveButton(true);
         }
 
         void GetTilesInArea()
@@ -77,11 +83,10 @@ public class TileSelection : MonoBehaviour
                 {
                     Vector3Int p = new Vector3Int(x, y, 0);
                     if (bcollider.bounds.Contains(p))
-                    {
+                    
                         //TileBase t = tmap.GetTile(tmap.WorldToCell(p));
                         //Player.selectedTiles.Add(t);
                         Player.selectedTilePoses.Add(p);
-                    }
                 }
             }
             //print(Player.selectedTiles.Count);

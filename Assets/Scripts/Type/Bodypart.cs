@@ -36,13 +36,13 @@ namespace Body
     }
     public enum HitChance
     {
-        Normal,
-        Elevated
-    }
-
-    public static class BodypartManager
-    {
-        public static List<Bodypart> BodypartList = new List<Bodypart>();
+        Normal,                                                                               
+        Elevated                                                                              
+    }                                                                                         
+                                                                                              
+    public static class BodypartManager                                                       
+    {                                                                                         
+        public static List<Bodypart> BodypartList { get; private set; } = new List<Bodypart>();
 
         public static Bodypart Create(string name, float hp, PartType pt, Bodypart parent, float pfactor, float bfactor,
             float dfactor, int cunt, VitalSystem effectz, EffectAmount eamont, HitChance hchance, CountType counttype)
@@ -63,7 +63,7 @@ namespace Body
         {
             try
             {
-                return BodypartList.Find(x => x.Name == name);
+                return new Bodypart(BodypartList.Find(x => x.Name == name)); // so no modifiying bc no readonly classes
             }
             catch (NullReferenceException)
             {
@@ -111,6 +111,24 @@ namespace Body
             effectAmount = eamont;
             hitChance = hchance;
             countType = ct;
+        }
+
+        public Bodypart(Bodypart bp)
+        {
+            Name = bp.Name;
+            HP = bp.HP;
+            TotalHP = bp.TotalHP;
+            effectiveness = bp.effectiveness;
+            type = bp.type;
+            partOf = bp.partOf;
+            painFactor = bp.painFactor;
+            bleedingFactor = bp.bleedingFactor;
+            damageMultiplier = bp.damageMultiplier;
+            count = bp.count;
+            effects = bp.effects;
+            effectAmount = bp.effectAmount;
+            hitChance = bp.hitChance;
+            countType = bp.countType;
         }
     }
 }

@@ -18,26 +18,25 @@ namespace PawnFunctions
         public int x;
         public int y;
 
-        public int Taken;
+        public bool Taken;
 
         public static implicit operator Vector2Int(Pos p)
         {
             return new Vector2Int(p.x, p.y);
         }
 
-        public Pos(int q, int e, int taken)
+        public Pos(int q, int e, bool taken)
         {
             x = q; y = e; Taken = taken;
         }
-        public Pos(int q, int e)
-        { x = q; y = e; Taken = 0; }
     }
     public class PathfindExtra
     {
         //public static int[][] tileUsed = new int[0][];
         //public static Tiles<int> tileUsed = new Tiles<int>();
         //public static Dictionary<int,Pos> tileUsed = new Dictionary<int,Pos>();
-        public static List<Pos> tileUsed = new List<Pos>();
+        //public static List<Pos> tileUsed = new List<Pos>();
+        public static List<Pos> tiles;
 
         public static int sizeX;
         public static int sizeY;
@@ -45,18 +44,13 @@ namespace PawnFunctions
         private int negativePointX;
         private int negativePointY;
         
-        private static int Get(int x, int y)
-        {
-            return tileUsed.FindIndex(0,tileUsed.Count,c=>c.x==x&&c.y==y);
-        }
-
         public static void SetUsed(int x, int y)
         {
-            tileUsed[Get(x, y)] = new Pos(x,y,1);
+            tiles[x+y] = new Pos(x,y,true);
         }
         public static void SetFree(int x, int y)
         {
-            tileUsed[Get(x,y)] = new Pos(x, y, 0);
+            tiles[x+y] = new Pos(x,y,false);
         }
 
         /// <summary>
@@ -65,21 +59,13 @@ namespace PawnFunctions
         /// <returns>a picture of a weewee</returns>
         public static Pos FindNearest(Vector2Int check)
         {
-            // in full honestly, if this works, this solution was thought up by an AI. i'm so scared. it's smarter than me.
-            Pos pos = tileUsed.OrderBy(p => Math.Abs(p.x - check.x) + Math.Abs(p.y - check.y)).FirstOrDefault(p => !(p.Taken==1));
-            return pos;
+            // ASREADONLY IS O(1) FUCK YES IM GONNA KISS SOMEONE THIS IS SO SEXY SEXY SEXY SEXY SEXY SEXY
+            return tiles.AsReadOnly().OrderBy(p => Math.Abs(p.x - check.x) + Math.Abs(p.y - check.y)).FirstOrDefault(p => p.Taken == false);
         }
 
         public static bool PresentAt(int x, int y)
         {
-            if (tileUsed[Get(x,y)].Taken == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return tiles[x + y].Taken;
         }
         /*public static int[][] BoundsToMap(BoundsInt bounds)
         {
@@ -96,14 +82,16 @@ namespace PawnFunctions
             sizeX = MapGenerator.mapW;
             sizeY = MapGenerator.mapH;
 
-            for (int tx = 0; tx < MapGenerator.mapW; tx++)
+            tiles = new List<Pos>();
+
+            for (int tx = 0; tx < sizeX; tx++)
             {
-                for (int ty = 0; ty < MapGenerator.mapH; ty++)
+                for (int ty = 0; ty < sizeY; ty++)
                 {
-                    if(GameManager2D.Instance.groundTilemap.GetTile(new Vector3Int(tx,ty,0)) != null)
-                        tileUsed.Add(new Pos(tx, ty, 0));
+                    if (TilemapPlace.tilemap[tx, ty].type == SpecialType.None)
+                        tiles.Add(new Pos(tx, ty, false));
                     else
-                        tileUsed.Add(new Pos(tx, ty,1));    // stupidly ez way to prevent from going into walls
+                        tiles.Add(new Pos(tx, ty, true));
                 }
             }
         }

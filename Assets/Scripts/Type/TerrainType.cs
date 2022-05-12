@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum SpecialType { None, Water, Solid }
+public enum SpecialType { None, Water, Mountain }
 
 [System.Serializable]
 public class TerrainType
@@ -13,14 +13,28 @@ public class TerrainType
     public float height;
     public Color color;
     public string name;
-    public RandomTile tbase;
     public SpecialType type;
     public bool supportsNature;
+    public FuckBitchTile tile;
+    public RuleTile thisIsVeryBadSpaghettiButImOutOfIdeas;
 
-    public TerrainType(string name, float height, Color color, RandomTile tbase, SpecialType special, bool supportedNature)
+    public TerrainType(string name, float height, Color color, FuckBitchTile tbase, SpecialType special, bool supportedNature)
     {
         this.height = height;
         this.color = color;
+        //this.m_Sprites = tbase;
+        this.name = name;
+        this.type = special;
+        this.supportsNature = supportedNature;
+    }
+
+
+    public TerrainType(string name, float height, Color color, RuleTile tbase, SpecialType special, bool supportedNature)
+    {
+        this.height = height;
+        this.color = color;
+        //this.m_Sprites = tbase;
+        this.thisIsVeryBadSpaghettiButImOutOfIdeas = tbase;
         this.name = name;
         this.type = special;
         this.supportsNature = supportedNature;
@@ -31,7 +45,7 @@ public static class TerrainTypeManager // todo: id this?
 {
     public static List<TerrainType> TerrainTypeList = new List<TerrainType>();  
 
-    public static TerrainType Create(string name, float height, Color color, RandomTile tbase, SpecialType special, bool supportedNature)
+    public static TerrainType Create(string name, float height, Color color, FuckBitchTile tbase, SpecialType special, bool supportedNature)
     {
         if (!TerrainTypeList.Any(x => x.name == name))
         {

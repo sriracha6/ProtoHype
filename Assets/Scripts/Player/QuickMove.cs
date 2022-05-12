@@ -6,7 +6,7 @@ using System.Linq;
 using System;
 
 /// <summary>
-/// drag on pawns to move them : <b>if you can't take that it doesn't draw a line for each person, suffer. maybe i'll make a box for where they end up?</b>
+/// drag on pawns to move them (add shift support? todo) : <b>if you can't take that it doesn't draw a line for each person, suffer. maybe i'll make a box for where they end up?</b>
 /// </summary>
 public class QuickMove : MonoBehaviour
 {
@@ -36,9 +36,10 @@ public class QuickMove : MonoBehaviour
             Vector2 mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
             RaycastHit2D hit = Physics2D.Linecast(mousePos, Vector3.one);
-            if (hit.transform.gameObject.TryGetComponent(out Pawn p)
+            Pawn p;
+            if (hit.transform != null && hit.transform.gameObject.TryGetComponent(out p)
                 && Player.ourSelectedPawns.Count > 0
-                /*&& !UIManager.mouseOverUI*/)
+                && !UIManager.mouseOverUI)
             {
                 startheldTime = Time.time;
                 shouldGo = true;

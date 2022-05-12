@@ -1,16 +1,137 @@
 /* REMEMBER TO SAVE IN UI BUILDER FIRST */
 
-/*:root {
-    font-size: auto;
-}*/
+/* 
+THIS IS USED FOR AUTOFILLING
+----------------------------
+
+align-content	
+align-items	
+align-self	
+all	
+background-color	
+background-image	
+border-bottom-color	
+border-bottom-left-radius	
+border-bottom-right-radius	
+border-bottom-width	
+border-color	
+border-left-color	
+border-left-width	
+border-radius	
+border-right-color	
+border-right-width	
+border-top-color	
+border-top-left-radius	
+border-top-right-radius	
+border-top-width	
+border-width	
+bottom	
+color	
+cursor	
+display	
+flex	
+flex-basis	
+flex-direction	
+flex-grow	
+flex-shrink	
+flex-wrap	
+font-size	
+height	
+justify-content	
+left	
+letter-spacing	
+margin	
+margin-bottom	
+margin-left	
+margin-right	
+margin-top	
+max-height	
+max-width	
+min-height	
+min-width	
+opacity	
+overflow	
+padding	
+padding-bottom	
+padding-left	
+padding-right	
+padding-top	
+position	
+right	
+rotate	
+scale	
+text-overflow	
+text-shadow	
+top	
+transform-origin	
+transition	
+transition-delay	
+transition-duration	
+transition-property	
+transition-timing-function	
+translate	
+-unity-background-image-tint-color	
+-unity-background-scale-mode	
+-unity-font	
+-unity-font-definition	
+-unity-font-style	
+-unity-overflow-clip-box	
+-unity-paragraph-spacing	
+-unity-slice-bottom	
+-unity-slice-left	
+-unity-slice-right	
+-unity-slice-scale	
+-unity-slice-top	
+-unity-text-align	
+-unity-text-outline	
+-unity-text-outline-color	
+-unity-text-outline-width	
+-unity-text-overflow-position	
+visibility	
+white-space	
+width	
+word-spacing
+*/
+
+:root {
+    /*font-size: auto;*/
+    --gray-0: #faf9f9;
+    --gray-1: #eeedec;
+    --gray-2: #e2e0de;
+    --gray-3: #d5d3cf;
+    --gray-4: #c6c3be;
+    --gray-5: #b6b3ac;
+    --gray-6: #a49f97;
+    --gray-7: #8e887e;
+    --gray-8: #736b5e;
+    --gray-9: #443f35;
+
+    --gray-2-0: #fbf9f8;
+    --gray-2-1: #f3eceb;
+    --gray-2-2: #ebdedc;
+    --gray-2-3: #e2cfcc;
+    --gray-2-4: #d8beba;
+    --gray-2-5: #ccaca6;
+    --gray-2-6: #bf9690;
+    --gray-2-7: #b07c74;
+    --gray-2-8: #9b5b51;
+    --gray-2-9: #6a2d23;
+}
 
 .actionbutton
 {
-    width: 25%;
-    height: 15%;
+    /*width: 25%;
+    padding-right: 4px;
     padding: 0px;
+    height: 15%;
+    -unity-text-align: middle-right;*/
+    color: black;
+    background-color: var(--gray-7);
+    border-width: 4px;
+    font-size: initial;
+    border-color: var(--gray-4);
 }
-.actionbutton:hover
+/*.actionbutton:hover
 {
     background-color: #0099ff;
     color: white;
@@ -19,7 +140,7 @@
 {
     background-color: #0099ff;
     color: white;
-}
+}*/
 
 #PawnInfo .unity-label
 {
@@ -28,8 +149,8 @@
 
 .unity-button
 {
-    border-radius:4px;
-    border: 1px solid black;
+    border-radius:0px;
+    background-color: var(--gray-3);
 }
 
 .icon{
@@ -37,4 +158,89 @@
     height:25px;
     background-color:white;
 }
-/*.icon-*/
+.timebutton
+{
+    background-color: var(--gray-2-9);
+    border-radius: 0px;
+    border-color: var(--gray-0);
+
+}
+#TimeControls
+{
+    background-color: var(--gray-3);
+}
+
+/* pawn info close button */
+#pi-closebutton
+{
+    border-width: 0px;
+    color: white;
+}
+
+.unity-label
+{
+    color: white;
+}
+
+
+.unity-scroller { width: 15px; }
+.unity-scroller * {width: 15px;}
+
+.unity-toggle__input #unity-checkmark
+{
+    background-color: var(--gray-9);
+}
+
+.unity-toggle__checkmark:enabled
+{
+    -unity-background-image-tint-color: white;
+    background-image: resource("ui/check");
+}
+
+
+
+
+
+#PawnInfoParent
+{
+    background-color: var(--gray-9);
+}
+#TitleBar
+{
+    background-color: var(--gray-7);
+}
+#TitleBar #CloseButton
+{
+    background-color: #ff6961;
+    padding:0;
+    margin:0;
+}
+#TitleBar #MoreInfo
+{
+    border-radius: 10px;
+    width: 15px;
+    color: white;
+    background-color: var(--gray-2-6);
+
+    padding:0;
+    margin:0;
+}
+.moreinfo
+{
+    border-radius: 10px;
+    left: 100%;
+    width: 15px;
+    color: white;
+    background-color: var(--gray-2-6);
+}
+
+
+.consistentLabel
+{
+    font-size: 100%;
+}
+
+#Vitals
+{
+    background-color: var(--gray-6);
+}
