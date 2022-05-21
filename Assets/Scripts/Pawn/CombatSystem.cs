@@ -133,7 +133,7 @@ public class CombatSystem : MonoBehaviour
             .CreateAndMove(target.gameObject.transform, CS.calculateInaccuracy(shouldRunAndGun, p, runAndGunInaccuracy),
             // todo: no
             CS.getRandomProjectile(p.inventory)
-            , p.activeWeapon.rangedDamage, p);
+            , p.activeWeapon.rangedDamage, p, p.activeWeapon);
     }
     void doRangeThrowerAttack(Pawn target)
     {

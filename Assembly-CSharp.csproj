@@ -120,7 +120,9 @@
     <Compile Include="Assets\Scripts\Type\Projectile.cs" />
     <Compile Include="Assets\Scripts\Pawn\PawnManager.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\Build.cs" />
+    <Compile Include="Assets\Scripts\FireBehaviour.cs" />
     <Compile Include="Assets\Scripts\Pawn\ExtraPathfind.cs" />
+    <Compile Include="Assets\Scripts\UI\TooltipManipulator.cs" />
     <Compile Include="Assets\Scripts\RNG\TreeGenerator.cs" />
     <Compile Include="Assets\Scripts\Player\GameManager2D.cs" />
     <Compile Include="Assets\Scripts\RNG\EditorMapGen.cs" />
@@ -132,7 +134,8 @@
     <Compile Include="Assets\Scripts\RNG\TilemapShadow.cs" />
     <Compile Include="Assets\Scripts\RNG\Direction.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
-    <Compile Include="Assets\Scripts\UI\TooltipManipulator.cs" />
+    <Compile Include="Assets\Baracuda\IL2CPP\IL2CPP_AOT.cs" />
+    <Compile Include="Assets\Scripts\FireManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -140,6 +143,7 @@
     <None Include="Assets\Resources\Prefabs\UI\VitalStat.uxml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Scripts\Shaders\TilemapBlend.shader" />
+    <None Include="Assets\Resources\Prefabs\UI\Reggymint.uxml" />
     <None Include="Assets\Scripts\Shaders\TerrainBlending.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain_Add.shader" />
@@ -901,6 +905,38 @@
     <ProjectReference Include="AstarPathfindingProject.csproj">
       <Project>{EBAB5EB1-2583-5632-1905-4465622CB3FE}</Project>
       <Name>AstarPathfindingProject</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Monitoring.csproj">
+      <Project>{972A66B7-03CE-F1B3-5368-61AABEA5573E}</Project>
+      <Name>Assembly-Baracuda-Monitoring</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Threading.csproj">
+      <Project>{CD6CFFD5-B4A4-69EF-CF20-B85336E5B7AF}</Project>
+      <Name>Assembly-Baracuda-Threading</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Pooling.csproj">
+      <Project>{0D2EC563-CAC8-E2BA-7B87-A655B33E8256}</Project>
+      <Name>Assembly-Baracuda-Pooling</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Reflection.csproj">
+      <Project>{24C270D6-C2A9-5C0F-3168-D3A7FF59DE1B}</Project>
+      <Name>Assembly-Baracuda-Reflection</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Threading-Editor.csproj">
+      <Project>{2CD4FFC1-049A-15C3-E920-B166343FF2A6}</Project>
+      <Name>Assembly-Baracuda-Threading-Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Monitoring.GUI.csproj">
+      <Project>{945A19EA-B8DA-8E8A-5C05-2BD80E2410F6}</Project>
+      <Name>Assembly-Baracuda-Monitoring.GUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Monitoring-Editor.csproj">
+      <Project>{0D114B8F-464E-DF6C-50B3-7111BE85A563}</Project>
+      <Name>Assembly-Baracuda-Monitoring-Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Monitoring.Example.csproj">
+      <Project>{D3293A88-31AE-C57F-1341-750617C73CC1}</Project>
+      <Name>Assembly-Baracuda-Monitoring.Example</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

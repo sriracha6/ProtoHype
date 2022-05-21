@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+public enum PawnShockRating { Good, Warning, Bad}
 public class PawnInfo : MonoBehaviour
 {
     VisualElement root;
@@ -38,6 +39,8 @@ public class PawnInfo : MonoBehaviour
         bplist = hpanel.Q<VisualElement>("unity-content-container");
         panel.style.display = DisplayStyle.None;
 
+        UIManager.MakeDraggable(panel, panel.Q<VisualElement>("TitleBar"));
+
         /*vitalsbox.Add(vital.CloneTree()); // for pain
         for(int i = 0; i < Loader.loader.defaultVitals.Count; i++)
         {
@@ -60,7 +63,7 @@ public class PawnInfo : MonoBehaviour
 
         UpdateHealth(p.healthSystem.bodyparts, p.healthSystem.pain);
         UpdateVitals(p.healthSystem.vitals, p.healthSystem.pain);
-        UpdateShock(p.healthSystem.userFriendlyStatus);
+        UpdateShock(p.healthSystem.userFriendlyStatus, p.healthSystem.statusType);
     }
 
     public void UpdateHealth(List<Bodypart> bps, float pain)
@@ -87,29 +90,52 @@ public class PawnInfo : MonoBehaviour
         vitalsbox.Q<Label>("SystemsLabel").text = parsedVitals;
         // ---------
         string painparsed = pain > 0 ? (pain*100).ToString() : "None";
-        hpanel.Q<Label>("PainLabel").text = "Pain: " + painparsed;
+        panel.Q<Label>("PainLabel").text = "Pain: " + painparsed;
     }
 
-    public void UpdateShock(string type)
+    public void UpdateShock(string type, PawnShockRating typeColor)
     {
+        Color color;
+        switch (typeColor)
+        {
+            case PawnShockRating.Warning:
+                color = new Color(192,181,46);
+                break;
+            case PawnShockRating.Bad:
+                color = new Color(192,54,46);
+                break;
+            default:
+                color = new Color(46,192,88);
+                break;
+        }
+        var a = panel.Q<VisualElement>("ShockPanel").style.backgroundColor.value;
+        a = color; // todo: rich text pls
         panel.Q<Label>("ShockLabel").text = type; // todo: rich text pls
     }
 
     void ShowBodyPart(Bodypart b)
     {
         VisualElement bodypartnew = bodypart.CloneTree();//
-        bodypartnew.Q<Label>("Name").text = b.Name;
-        bodypartnew.Q<Label>("hpMakeThisABar").text = b.HP+"/"+b.TotalHP;
-        bodypartnew.Q<Label>("bleedrate").text = "error";
+        bodypartnew.Q<Label>("Info").text = $"{b.Name}  |  {b.HP}/{b.TotalHP}";
+        if (b.bleedingRate <= 0)
+        {
+            bodypartnew.Q<VisualElement>("BloodIcon").style.display = DisplayStyle.None;
+            bodypartnew.Q<Label>("Info2").text = "";
+        }
+        else
+        {
+            bodypartnew.Q<VisualElement>("BloodIcon").style.display = DisplayStyle.Flex;
+            bodypartnew.Q<Label>("Info2").text = b.bleedingRate.ToString();
+        }
 
-        VisualElement woundList = bodypartnew.Q<VisualElement>("unity-content-container");
+        string woundText = "";
         foreach (Wound w in b.wounds) 
         {
-            Label labeel = new Label(ParseWound(w));
-            labeel.enableRichText = true;
-            labeel.style.fontSize = 10f;
-            woundList.Add(labeel);
+            woundText += ParseWound(w) + "\n";
         }
+        bodypartnew.tooltip = woundText;
+        bodypartnew.AddManipulator(new ToolTipManipulator());
+        
         bplist.Add(bodypartnew);
     }
 
@@ -118,12 +144,13 @@ public class PawnInfo : MonoBehaviour
         string one = w.sourceAttack.Name.ToString();
         string two = w.sourceWeapon.Name.ToString();
         string three = w.damage.ToString();
+
         string four="";
         string fivesixseveneight="";
         string MSinmybankaccount="";
         string o = w.bleedRate > 0 ? w.bleedRate.ToString() : "";
 
-        return one + $"({two}):" + three + "Bleed:"+o+four+fivesixseveneight+MSinmybankaccount;
+        return one + $"({two}):" + three + " | Bleed:"+o+four+fivesixseveneight+MSinmybankaccount;
     }
 
     string ParseVital(Vital v)

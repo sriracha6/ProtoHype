@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// Beware line 86.
+/// Beware line 90.
 /// </summary>
 public class ContextMenuShower : MonoBehaviour
 {
@@ -39,16 +39,36 @@ public class ContextMenuShower : MonoBehaviour
         menu.style.display = DisplayStyle.None;
         //menu.parent.style.display = DisplayStyle.None;
     }
-    private void Update()
+    /*private void Update()
     {
-        if (Input.GetMouseButtonUp(1)) // TODO: keybinds
+        if (Input.GetMouseButtonUp(1) && !UIManager.mouseOverUI) // TODO: keybinds
         {
-            menu.style.top = Screen.height - Input.mousePosition.y; // why for y but not x? wtf?
-            menu.style.marginLeft = Input.mousePosition.x;
-
+            Vector2 pos;
+            pos.y = Screen.height - Input.mousePosition.y - menu.style.height.value.value;
+            pos.x = Input.mousePosition.x - menu.style.width.value.value;
+            
+            menu.style.left = pos.x;
+            menu.style.top = pos.y;
             menu.style.display = DisplayStyle.Flex; 
         }
+    }*/
+
+    public void Position(MouseUpEvent e)
+    {
+        if(Input.GetMouseButtonUp(1) && !UIManager.mouseOverUI) // todo keybinds
+        {
+            Vector2 pos;
+            //pos.y = Screen.height - e.originalMousePosition.y - menu.style.height.value.value;
+            pos.y = e.originalMousePosition.y;
+            pos.x = e.originalMousePosition.x;
+            //pos.x = e.originalMousePosition.x - menu.style.width.value.value;
+
+            menu.style.left = pos.x;
+            menu.style.top = pos.y;
+            menu.style.display = DisplayStyle.Flex;
+        }
     }
+
     private void LateUpdate()
     {
         HideIfClickedOutside(menu);

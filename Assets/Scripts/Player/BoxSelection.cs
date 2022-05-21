@@ -21,6 +21,7 @@ public class BoxSelection : MonoBehaviour
     public static List<Pawn> newSelectedPawns = new List<Pawn>();
 
     public static bool letGo;
+    private bool started;
     public static SelectionMode mode;
 
     void Start()
@@ -37,18 +38,18 @@ public class BoxSelection : MonoBehaviour
             mode = SelectionMode.ClearAll;
         else
             mode = SelectionMode.Default; // normal
-
-        if (Input.GetMouseButtonDown(0) && !Pawn.mouseOverPawn)
+        
+        if (Input.GetMouseButtonDown(0) && !Pawn.mouseOverPawn && !UIManager.mouseOverUI)
         {
             Player.selectedTiles.Clear();
             // WHY THE FUCK WERE THESE EVEN HERE???S???? FUCK YOU!!
             //Player.selectedPawns.Clear();
             //Player.ourSelectedPawns.Clear();
-
+            started = true;
+            lineRenderer.positionCount = 4;
             boxFill.forceRenderingOff = false;
 
             lineRenderer.loop = true;
-            lineRenderer.positionCount = 4;
             initialMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
             lineRenderer.SetPosition(0, new Vector3(initialMousePos.x, initialMousePos.y, -5));
             lineRenderer.SetPosition(1, new Vector3(initialMousePos.x, initialMousePos.y, -5));
@@ -62,7 +63,7 @@ public class BoxSelection : MonoBehaviour
             // todo:keybinds
         }
 
-        if (Input.GetMouseButton(0) && !Pawn.mouseOverPawn && !Input.GetMouseButton(1))
+        if (Input.GetMouseButton(0) && !Pawn.mouseOverPawn && !Input.GetMouseButton(1) && started)
         {
             currentMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -83,8 +84,9 @@ public class BoxSelection : MonoBehaviour
                 Mathf.Abs(initialMousePos.y - currentMousePos.y));
         }
 
-        if (Input.GetMouseButtonUp(0) && !UIManager.mouseOverUI)
+        if (Input.GetMouseButtonUp(0) && !UIManager.mouseOverUI && started)
         {
+            started = false;
             lineRenderer.positionCount = 0;
             Destroy(bcollider);
             boxFill.forceRenderingOff = true;

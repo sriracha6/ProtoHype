@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Weapons;
 
 /// <summary>
 /// Since you're already here, here's some cool ideas I rejected:
@@ -13,6 +14,7 @@ using UnityEngine.UIElements;
 public class MoveControls : MonoBehaviour
 {
     public Toggle runGunToggle;
+    public Toggle secondaryToggle;
     public static VisualElement panel;
 
     public Button searchDestroyButton;
@@ -72,6 +74,7 @@ public class MoveControls : MonoBehaviour
         var root = GetComponent<UIDocument>().rootVisualElement;//
 
         runGunToggle = root.Q<Toggle>("RunGunToggle");
+        secondaryToggle = root.Q<Toggle>("SecondaryToggle");
         panel = root.Q<VisualElement>("MoveControls");
 
         searchDestroyButton = root.Q<Button>("SearchDestroyButton");
@@ -95,6 +98,7 @@ public class MoveControls : MonoBehaviour
         cancelButton.clicked += delegate { Option("Cancel", false); };
 
         runGunToggle.RegisterValueChangedCallback(evt => RunAndGunToggle());
+        secondaryToggle.RegisterValueChangedCallback(evt => SecondaryToggle());
 
         panel.style.display = DisplayStyle.None;
     }
@@ -139,6 +143,14 @@ public class MoveControls : MonoBehaviour
             ActionType item;
             if (option != "Move")
                 item = new ActionType(option, shouldMove);
+            else if(option == "Cancel")
+            {
+                item = null;
+                foreach(Pawn p in Player.ourSelectedPawns)
+                {
+                    p.actionTypes.Clear();
+                }
+            }
             else
             {
                 Vector2Int center = Vector2Int.FloorToInt(Player.selectedTilePoses[Player.selectedTilePoses.Count/2]);
@@ -151,7 +163,8 @@ public class MoveControls : MonoBehaviour
             {
                 Debug.Log($"adding {option} to {p.pname}");
                 p.actionTypes.Clear();
-                p.actionTypes.Add(item);
+                if(item!=null)
+                    p.actionTypes.Add(item);
             }
         }
         print("Doing ActionType: " + option);
@@ -171,7 +184,19 @@ public class MoveControls : MonoBehaviour
         {
             p.actionTypes.Add(item);
         }
+
         Debug.Log($"Toggled run&gun for {Player.ourSelectedPawns.Count} pawns.");
+    }
+
+    public void SecondaryToggle()
+    {
+        foreach (Pawn p in Player.ourSelectedPawns)
+        {
+            Weapon w = secondaryToggle.value ? p.heldSidearm : p.heldPrimary;
+            p.activeWeapon = w; 
+        }
+
+        Debug.Log($"Toggled secondary for {Player.ourSelectedPawns.Count} pawns.");
     }
 
     public static string GetUntilOrEmpty(string text, string stopAt)

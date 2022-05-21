@@ -12,6 +12,7 @@ public class Loader : MonoBehaviour
 {
     public static Loader loader { get; private set; }
 
+    public GameObject firePrefab;
     public RuleTile mountainTile;
     public Tile testTile;
     public GameObject testMat;

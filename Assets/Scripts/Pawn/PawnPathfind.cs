@@ -142,8 +142,6 @@ public class PawnPathfind : MonoBehaviour
             PathfindExtra.SetFree(pos.x,pos.y);
             justTileFound = false;
         }
-
-        isMoving = false;
     }
 
     void FixedUpdate()
@@ -174,6 +172,7 @@ public class PawnPathfind : MonoBehaviour
             // THIS FIXES A FUCKING PATHFINDING SLOWDOWN BUG AND IT OPTIMIZES THE GAME BY
             // REMOVE A SQRT CALL??? FUCK YEAH THAT WAS WORTH 4 HOURS HHOLY SHIT!!!
 
+            speed *= TilemapPlace.tilemap[(int)transform.position.x, (int)transform.position.y].walkSpeed;
 
             // crisis averted. instead of using rb velocity, we use the dir variable. duh. my god.
             if(dir.x > 0)
@@ -212,6 +211,12 @@ public class PawnPathfind : MonoBehaviour
     //    //seeker.StartPath(rb.position, t, OnPathComplete);
     //}
 
+    // TODO
+    // TODO
+    // TODO
+    // TODO
+    // check: is this checked many times? is get closest done for pawn pathfind AND combat system? is that a source of
+    //  some bugs? is that slowing down the game x10?
     #region                                  Closest Enemy
     Transform GetClosestEnemy(List<Transform> enemies)
     {

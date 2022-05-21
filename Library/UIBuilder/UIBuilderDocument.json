@@ -45,13 +45,13 @@
                     "UxmlPath": "Assets/uxml.uxml",
                     "CanvasX": 6,
                     "CanvasY": 76,
-                    "CanvasWidth": 1013,
-                    "CanvasHeight": 442,
+                    "CanvasWidth": 999,
+                    "CanvasHeight": 453,
                     "MatchGameView": true,
-                    "ZoomScale": 5.0,
+                    "ZoomScale": 1.5,
                     "PanOffset": {
-                        "x": -2776.73974609375,
-                        "y": -1000.8260498046875
+                        "x": -795.1448974609375,
+                        "y": -257.8948059082031
                     },
                     "ColorModeBackgroundOpacity": 1.0,
                     "ImageModeCanvasBackgroundOpacity": 1.0,

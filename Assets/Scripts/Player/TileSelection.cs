@@ -22,7 +22,7 @@ public class TileSelection : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && !Pawn.mouseOverPawn && !Input.GetMouseButton(0)) // TODO: keybinds
+        if (Input.GetMouseButtonDown(1) && !Pawn.mouseOverPawn && !Input.GetMouseButton(0) && !UIManager.mouseOverUI) // TODO: keybinds
         {
             //Player.selectedPawns = null;
             // TODO: ^ this should be done better or tell the player that it doesnt work.

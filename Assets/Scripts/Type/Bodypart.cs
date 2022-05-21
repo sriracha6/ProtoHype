@@ -76,8 +76,9 @@ namespace Body
     public class Bodypart
     {
         public string Name;
-        public float TotalHP { get; private set; }
+        public float TotalHP { get; }
         public float HP;
+        public float bleedingRate;
         public PartType type;
         public Bodypart partOf;
         public List<Wound> wounds = new List<Wound>();
@@ -87,12 +88,12 @@ namespace Body
         public float damageMultiplier;
         public float effectiveness; // percent 0.85*x
 
-        public int count;
-        public VitalSystem effects;
-        public EffectAmount effectAmount;
+        public int count { get; }
+        public VitalSystem effects { get;  }
+        public EffectAmount effectAmount { get; }
 
-        public HitChance hitChance;
-        public CountType countType;
+        public HitChance hitChance { get; }
+        public CountType countType { get; }
 
         public Bodypart(string name, float hp, PartType pt, Bodypart parent, float pfactor, float bfactor, 
             float dfactor, int cunt, VitalSystem effectz, EffectAmount eamont, HitChance hchance, CountType ct)

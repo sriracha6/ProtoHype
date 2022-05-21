@@ -11,6 +11,7 @@ public enum SpecialType { None, Water, Mountain }
 public class TerrainType
 {
     public float height;
+    public float walkSpeed;
     public Color color;
     public string name;
     public SpecialType type;
@@ -24,6 +25,7 @@ public class TerrainType
         this.color = color;
         //this.m_Sprites = tbase;
         this.name = name;
+        this.walkSpeed = 1-height;
         this.type = special;
         this.supportsNature = supportedNature;
     }

@@ -10,13 +10,12 @@ public class TilemapPlace : MonoBehaviour
 {
     public static TilemapPlace Instance;
     public static TerrainType[,] tilemap;
+    public static Build[,] buildings;
     [SerializeField] AstarPath pfinder;
     [SerializeField] Transform treeParent;
 
-    protected void Awake()
-    {
+    protected void Awake() =>
         Instance = this;
-    }
 
     public static int GetNumberOfTiles(Tilemap tilemap)
     {
@@ -25,15 +24,8 @@ public class TilemapPlace : MonoBehaviour
         return tiles.Where(x => x != null).ToArray().Length;
     }
 
-    private static void resetAllTmaps() // wtf
-    {
-        GameManager2D.Instance.groundTilemap.ClearAllTiles();
-        GameManager2D.Instance.solidTilemap.ClearAllTiles();
-    }
-
     public static void placeTiles(float[,] noiseMap, TerrainType[] tTypesUnsorted) 
     {
-        //resetAllTmaps();
         TerrainType[] tTypes = tTypesUnsorted.OrderBy(x=>x.height).ToArray(); // this line of code saves the entire game, i'll make it a puzzle! figure out why! ;)
 
         tilemap = new TerrainType[noiseMap.GetLength(0), noiseMap.GetLength(1)];
@@ -69,7 +61,7 @@ public class TilemapPlace : MonoBehaviour
         }
         GameManager2D.Instance.solidTilemap.RefreshAllTiles();
         GameManager2D.Instance.groundTilemap.RefreshAllTiles();
-
+        buildings = new Build[mapW, mapH];
         Instance.pfinder.Scan();
     }
 

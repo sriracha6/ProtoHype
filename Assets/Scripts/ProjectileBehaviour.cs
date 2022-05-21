@@ -32,12 +32,13 @@ public class ProjectileBehaviour : MonoBehaviour
         Destroy(gameObject, projectileMaxLifetime);
 
     // take end parameter to auto destroy there?
-    public void CreateAndMove(Transform target, float inaccuracy, Projectile projectileType, float thisWeaponDamage, PawnFunctions.Pawn sourcePawn)
+    public void CreateAndMove(Transform target, float inaccuracy, Projectile projectileType, float thisWeaponDamage, PawnFunctions.Pawn sourcePawn, Weapon thisWeapon)
     {
         thisProjectile = projectileType;
         weaponDamage = thisWeaponDamage;
         thisType = projectileType.damageType;
         this.sourcePawn = sourcePawn;
+        this.thisWeapon = thisWeapon;
 
         sprite.sprite = PawnRenderer.getProjectile(projectileType.Name);
 

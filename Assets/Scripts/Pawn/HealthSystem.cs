@@ -52,6 +52,7 @@ public class HealthSystem : MonoBehaviour
 	public Pawn lastAttacker { get; private set; }
 
 	public string userFriendlyStatus { get; private set; }
+	public PawnShockRating statusType { get; private set; } = PawnShockRating.Good;
 	[Space]
 
 	[Header("Components")]
@@ -69,21 +70,11 @@ public class HealthSystem : MonoBehaviour
 
 	public List<Wound> wounds = new List<Wound>();
 
-	//public delegate void NotifyPawnInfo(List<Vital> wounds, float pain);
-	//public delegate void NotifyPawnShock(string reason);
-	//public delegate void NotifyPawnBPs(List<Bodypart> bps, float pain);
-	
 	// todo: destroy seeker too?
 
 	private void Awake()
 	{
 		p = ___p;
-		//NotifyPawnInfo  v  = new NotifyPawnInfo(UpdateVitals);
-        //NotifyPawnShock s  = new NotifyPawnShock(UpdateShock);
-		//NotifyPawnBPs   b  = new NotifyPawnBPs(UpdateBodyparts);
-
-		//bodyparts = BodypartManager.BodypartList; // WE DONT WANT EVERYONE TO HAVE THE SAME PARTS. CRISIS AVERTED!!!!!
-																	  // todo: add random to make it feel ^^ more geniune?
 		foreach(Bodypart sex in BodypartManager.BodypartList)
         {
 			// fuck this :(
@@ -101,7 +92,7 @@ public class HealthSystem : MonoBehaviour
 
     private void Start()
 	{
-		InvokeRepeating(nameof(Bleed), 0f, bleedRate * 10f);
+		StartCoroutine(Bleed());
 		bloodParent = GameManager2D.Instance.bloodParent;
 	}
 
@@ -124,8 +115,8 @@ public class HealthSystem : MonoBehaviour
 					totalReduction(armorFromBodyparts(bp.Name, p), attack.damageType, backup: amount); 
 
 		float brate = attack.damageType.ToString() == "Sharp" ? randomVariation(armorDamageAmount) : 0;
+		bp.bleedingRate = brate;
 		totalBleedRate += brate;
-
 		DoDamage(bp, new Wound(attack.damageType.ToString(), sourceWeapon, armorDamageAmount, attack, brate));
 		generateBloodSplatter(1);
 	}
@@ -142,6 +133,7 @@ public class HealthSystem : MonoBehaviour
 					totalReduction(armorFromBodyparts(bp.Name, p), attack.damageType, backup: amount); // crisis averted: dividing by 0
 																							   // -- Generate Wound --
 		float brate = rangeDamageType == DamageType.Sharp ? randomVariation(armorDamageAmount) : 0;
+		bp.bleedingRate = brate;
 		totalBleedRate += brate;
 		DoDamage(bp, new Wound(rangeDamageType.ToString(), sourceWeapon, armorDamageAmount, attack, brate));
 
@@ -210,12 +202,12 @@ public class HealthSystem : MonoBehaviour
 		{
 			GameManager2D.Instance.pawnInfo.UpdateHealth(bodyparts, pain);
 			GameManager2D.Instance.pawnInfo.UpdateVitals(vitals, pain);
-			GameManager2D.Instance.pawnInfo.UpdateShock(userFriendlyStatus);
+			GameManager2D.Instance.pawnInfo.UpdateShock(userFriendlyStatus, statusType);
 		}
 	}
 
     #region Death/Down
-	public void Bleed()
+	IEnumerator Bleed()
 	{
 		totalBlood -= Mathf.Clamp(GetVital(VitalSystem.BloodPumping) * (bleedToBlood * totalBleedRate), 0f, maxBlood);
 
@@ -235,6 +227,9 @@ public class HealthSystem : MonoBehaviour
 			bp.HP -= bleedHPLoss * bp.wounds.Count; // todo
 		}
 		TryUpdatePawnInfo();
+
+		yield return new WaitForSeconds(bleedRate * 10);
+		StartCoroutine(Bleed());
 	}
 
 	public void Down(string reason)
@@ -243,6 +238,7 @@ public class HealthSystem : MonoBehaviour
 			UpdateVitals(vitals, pain);
 
 		userFriendlyStatus = reason;
+		statusType = PawnShockRating.Warning;
 		p.pawnDowned = true;
 
 		Destroy(pfind); // well if you're downed you shouldnt get up this is a bad approach though especially for mods, TODO
@@ -266,7 +262,15 @@ public class HealthSystem : MonoBehaviour
 		anim.StopPlayback();//s
 		p.dead = true;
 		p.pawnDowned = true;
+		statusType = PawnShockRating.Bad;
 		rb.rotation = 45f;
+
+		p.country.members.Remove(p);
+		p.country.memberTransforms.Remove(transform);
+
+		if(!PopulateRegiments.hideState)
+			PopulateRegiments.updateAllRegimentsSelectNumber(Player.regimentSelectNumber);
+		
 		weaponSprite.forceRenderingOff = true; // destroy is expensive, so this is better. and if there is coming back from the dead for some reason, just flick it bcak on.
 		Destroy(rb); // ez optimization, and prevents spaghetti code. le magnum opus.
 		//Destroy(p); // we should NOT DO THIS!!

@@ -77,6 +77,8 @@ public class PawnManager : MonoBehaviour
         newPawn.country.Add(newPawn);
         newPawn.sprite.material.color = generateSkinColor();
         allPawns.Add(newPawn);
+        // todo
+        PopulateRegiments.updateAllRegimentsSelectNumber(Player.regimentSelectNumber);
         return newPawn;
     }
 

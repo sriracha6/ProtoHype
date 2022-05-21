@@ -451,6 +451,7 @@ namespace XMLLoader
                     null,
                     (SpecialType)Enum.Parse(typeof(SpecialType), xmls.SelectSingleNode("SpecialType").InnerText),
                     ParseFuncs.strToBool(xmls.SelectSingleNode("SupportsNature").InnerText));
+
                     SpriteSheetCreator.Instance.createTerrainTileFromSheet(LoadImage(ParseFuncs.nameToImagePath(temp.name, "TerrainType")), ref temp);
             }
             else

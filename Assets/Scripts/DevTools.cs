@@ -66,6 +66,13 @@ public class DevTools : MonoBehaviour
         RegimentManager.Create(TroopTypeManager.Get("Archer"), CountryManager.Get("France"), 0);
         RegimentManager.Create(TroopTypeManager.Get("Swordsman"), CountryManager.Get("Germany"), 1);
         RegimentManager.Create(TroopTypeManager.Get("Swordsman"), CountryManager.Get("France"), 2);
+        RegimentManager.Create(TroopTypeManager.Get("Swordsman"), CountryManager.Get("France"), 3);
+        RegimentManager.Create(TroopTypeManager.Get("Swordsman"), CountryManager.Get("France"), 4);
+        RegimentManager.Create(TroopTypeManager.Get("Swordsman"), CountryManager.Get("France"), 5);
+        RegimentManager.Create(TroopTypeManager.Get("Swordsman"), CountryManager.Get("France"), 6);
+        RegimentManager.Create(TroopTypeManager.Get("Swordsman"), CountryManager.Get("France"), 7);
+        RegimentManager.Create(TroopTypeManager.Get("Swordsman"), CountryManager.Get("France"), 8);
+        RegimentManager.Create(TroopTypeManager.Get("Swordsman"), CountryManager.Get("France"), 9);
 
         sampleProjectiles.Add(ProjectileManager.Create("arrow","yup","Bow",3f,DamageType.Sharp,0,false));
     }
@@ -88,6 +95,13 @@ public class DevTools : MonoBehaviour
         {
             pManager.CreatePawn(CountryManager.Get("France"), CachedItems.RandomName, TroopTypeManager.Get("Archer"), 
                         RegimentManager.Get(1), cam.ScreenToWorldPoint(Input.mousePosition), sampleProjectiles);
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            var go = Instantiate(Loader.loader.firePrefab);
+            Vector2Int p = Vector2Int.FloorToInt(cam.ScreenToWorldPoint(Input.mousePosition));
+            go.transform.position = new Vector3(p.x, p.y, -2);
         }
     }
 }

@@ -16,7 +16,7 @@ public class WeatherManager : MonoBehaviour
     [SerializeField] private ParticleSystem lightningPS;
 
     Camera maincam;
-    [SerializeField] WeatherType currentWeather = WeatherType.Clear;
+    public static WeatherType currentWeather = WeatherType.Clear;
 
     [Range(-100,150)] public float currentTemperature;
     [Range(-15f, 15f)] public float temperatureChange;

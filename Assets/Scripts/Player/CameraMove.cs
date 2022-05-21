@@ -84,11 +84,9 @@ public class CameraMove : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(2)) // todo keybinds
         {
-            RaycastHit2D hit = Physics2D.Raycast(mainCam.ScreenToWorldPoint(Input.mousePosition),
-                mainCam.transform.position - mainCam.ScreenToWorldPoint(Input.mousePosition), 10);
-
-            if(hit.transform.GetComponent<Pawn>() != null)
-                follow(hit.transform.gameObject);
+            var find = PawnManager.GetAll().Find(p => p.thisPawnMouseOver);
+            if (find != null)
+                follow(find.gameObject);
         }
     }
 

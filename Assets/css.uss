@@ -116,6 +116,8 @@ word-spacing
     --gray-2-7: #b07c74;
     --gray-2-8: #9b5b51;
     --gray-2-9: #6a2d23;
+
+    --cursor-point: resource("ui/cursors/point");
 }
 
 .actionbutton
@@ -243,4 +245,44 @@ word-spacing
 #Vitals
 {
     background-color: var(--gray-6);
+}
+
+#RegimentSelect /* this would be aight for a glass blur effect? */
+{
+    background-color: var(--gray-5);
+}
+#RegimentSelect #ScrollButton
+{
+    border-width: 0px;
+    background-color: var(--gray-8);
+}
+#RegimentShiz #Controls #HideButton
+{
+    border-width:0px;
+    margin:0; padding:0;
+}
+
+#Regiment-Label
+{
+    color:white;
+    background-color: black;
+}
+
+#RegimentControlStuff
+{
+    background-color: var(--gray-5); /* same color as the regiment select box so it should subtly nod at it */
+}
+
+#RegimentControlStuff #unity-tracker
+{
+    border-radius: 0px;
+    width: 7px;
+    height: 24px;
+    background-color: var(--gray-2-8);
+}
+#RegimentControlStuff #unity-dragger
+{
+    background-color: var(--gray-2-6+);
+    height:15px;
+    top:30%;
 }
