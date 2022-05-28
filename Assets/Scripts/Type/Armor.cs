@@ -18,9 +18,9 @@ namespace Armors
     {
         public static List<Armor> ArmorList = new List<Armor>();
 
-        public static Armor Create(string name, string desc, int healthpoints, float sharppot, float bluntpot, float movespeedeffect, Layer laye, bool isUtil, List<Bodypart> coverList) // creates if it DOESNT exist
+        public static Armor Create(string filepath, string name, string desc, int healthpoints, float sharppot, float bluntpot, float movespeedeffect, Layer laye, bool isUtil, List<Bodypart> coverList) // creates if it DOESNT exist
         {
-            Armor c = new Armor(name, desc, healthpoints, sharppot, bluntpot, movespeedeffect, laye, isUtil, coverList);
+            Armor c = new Armor(filepath, name, desc, healthpoints, sharppot, bluntpot, movespeedeffect, laye, isUtil, coverList);
             ArmorList.Add(c);
             return c;
         }
@@ -59,8 +59,8 @@ namespace Armors
         public List<Bodypart> covers = new List<Bodypart>();
         public bool isUtility;
 
-        public Armor(string name, string desc, int healthpoints, float sharppot, float bluntpot, float movespeedeffect, Layer laye, bool isUtil, List<Bodypart> coverList)
-            : base(name, desc)
+        public Armor(string filepath, string name, string desc, int healthpoints, float sharppot, float bluntpot, float movespeedeffect, Layer laye, bool isUtil, List<Bodypart> coverList)
+            : base(name, desc, filepath)
         {
             hitPoints = healthpoints;
             sharpProtection = sharppot;

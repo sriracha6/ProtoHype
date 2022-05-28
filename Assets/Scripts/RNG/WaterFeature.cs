@@ -116,7 +116,7 @@ public static class WaterFeature
 
                     //Debug.DrawLine(rpos - points[ri-1], rpos - points[ri + 1], Color.red, 5f);
 
-                    if (!(GameManager2D.Instance.groundTilemap.GetTile(Vector3Int.CeilToInt(rpos)) != null
+                    if (!(WCMngr.I.groundTilemap.GetTile(Vector3Int.CeilToInt(rpos)) != null
                         || lod2 < mind2 || lod2 > maxd2 ||
                         hid2 < mind2 || hid2 > maxd2))
                         continue;

@@ -93,7 +93,7 @@ public class HealthSystem : MonoBehaviour
     private void Start()
 	{
 		StartCoroutine(Bleed());
-		bloodParent = GameManager2D.Instance.bloodParent;
+		bloodParent = WCMngr.I.bloodParent;
 	}
 
     protected void FixedUpdate()
@@ -102,9 +102,7 @@ public class HealthSystem : MonoBehaviour
 		// but if i have to use it, it should definitely be fixed time
 		lastDamageTime += Time.fixedDeltaTime;
     }
-	/// <summary>
 	/// Amount instead of attack because attack values don't take into account skills, etc.
-	/// </summary>
 	public void TakeMeleeDamage(float amount, Weapon sourceWeapon, Pawn attacker, Attack attack)
     {
 		lastDamageTime = 0;
@@ -140,7 +138,18 @@ public class HealthSystem : MonoBehaviour
 		generateBloodSplatter(1);
 	}		
 
-    public Bodypart GetBodypart()
+	public void TakeBurn(float amount)
+    {
+		lastDamageTime = 0;
+		lastAttacker = null;
+
+		Bodypart bp = GetBodypart();
+
+		DoDamage(bp, new Wound("Burn", null, amount, null, 0));
+		generateBloodSplatter(1);
+	}
+
+	public Bodypart GetBodypart()
 	{
 		int x = Random.Range(0, 100);
 		List<Bodypart> _a;
@@ -200,9 +209,9 @@ public class HealthSystem : MonoBehaviour
     {
 		if (PawnInfo.currentSelectedPawn == this.p)
 		{
-			GameManager2D.Instance.pawnInfo.UpdateHealth(bodyparts, pain);
-			GameManager2D.Instance.pawnInfo.UpdateVitals(vitals, pain);
-			GameManager2D.Instance.pawnInfo.UpdateShock(userFriendlyStatus, statusType);
+			WCMngr.I.pawnInfo.UpdateHealth(bodyparts, pain);
+			WCMngr.I.pawnInfo.UpdateVitals(vitals, pain);
+			WCMngr.I.pawnInfo.UpdateShock(userFriendlyStatus, statusType);
 		}
 	}
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Armors;
-
+// how about we delete these when we're done placing pawns to use 50% less RAM :: TODO
 public class CachedItems
 {
     public struct RenderedPawn 
@@ -20,34 +20,34 @@ public class CachedItems
     public struct RenderedShield
     {
         public Sprite sprite;
-        public string name;
+        public int id;
 
-        public RenderedShield(Sprite sprite, string name)
+        public RenderedShield(Sprite sprite, int id)
         {
             this.sprite = sprite;
-            this.name = name;
+            this.id = id;
         }
     }
     public struct RenderedWeapon
     {
         public Sprite sprite;
-        public string name;
+        public int id;
 
-        public RenderedWeapon(Sprite sprite, string name)
+        public RenderedWeapon(Sprite sprite, int id)
         {
             this.sprite = sprite;
-            this.name = name;
+            this.id = id;
         }
     }
     public struct RenderedArmor
     {
         public Sprite sprite;
-        public string name;
+        public int id;
 
-        public RenderedArmor(Sprite sprite, string name)
+        public RenderedArmor(Sprite sprite, int id)
         {
             this.sprite = sprite;
-            this.name = name;
+            this.id = id;
         }
     }
     public struct RenderedProjectile
@@ -72,6 +72,17 @@ public class CachedItems
             this.name = name;
         }
     }
+    public struct RenderedCountry
+    {
+        public Sprite image;
+        public string name;
+
+        public RenderedCountry(Sprite flag, string name)
+        {
+            this.image = flag;
+            this.name = name;
+        }
+    }
 
 
     public static List<RenderedWeapon> renderedWeapons = new List<RenderedWeapon>();
@@ -80,7 +91,7 @@ public class CachedItems
     public static List<RenderedPawn> renderedPawns = new List<RenderedPawn>();
     public static List<RenderedProjectile> renderedProjectiles = new List<RenderedProjectile>();
     public static List<RenderedFlora> renderedFlora = new List<RenderedFlora>();
-
+    public static List<RenderedCountry> renderedCountries = new List<RenderedCountry>();
 
     public static List<Sprite> bloodSplatters = new List<Sprite>();
     public static List<string> firstNames = new List<string>();

@@ -12,6 +12,7 @@ public class Loader : MonoBehaviour
 {
     public static Loader loader { get; private set; }
 
+    public GameObject flagPrefab;
     public GameObject firePrefab;
     public RuleTile mountainTile;
     public Tile testTile;
@@ -53,11 +54,11 @@ public class Loader : MonoBehaviour
 
         Loaders.LoadBodyparts("C:\\Users\\frenz\\Music\\bodyparts.xml");
 
-        Loaders.LoadMeleeWeapon("C:\\Users\\frenz\\Music\\ahlspiess.xml");
-        Loaders.LoadRangedWeapon("C:\\Users\\frenz\\Music\\arbalest.xml");
-        Loaders.LoadShield("C:\\Users\\frenz\\Music\\heatershield.xml");
-        Loaders.LoadArmor("C:\\Users\\frenz\\Music\\guantlet.xml");
-        Loaders.LoadProjectile("C:\\Users\\frenz\\Music\\bodkinarrow.xml");
+        //Loaders.LoadMeleeWeapon("C:\\Users\\frenz\\Music\\ahlspiess.xml");
+        Loaders.LoadRangedWeapon("C:\\Users\\frenz\\Music\\arbalest.wc");
+        //Loaders.LoadShield("C:\\Users\\frenz\\Music\\heatershield.xml");
+        Loaders.LoadArmor("C:\\Users\\frenz\\Music\\guantlet.wc");
+        Loaders.LoadProjectile("C:\\Users\\frenz\\Music\\bodkinarrow.wc");
 
         /*Loaders.LoadNature("C:\\Users\\frenz\\Music\\cactus.xml");
         Loaders.LoadNature("C:\\Users\\frenz\\Music\\shrub.xml");
@@ -65,19 +66,28 @@ public class Loader : MonoBehaviour
         Loaders.LoadNature("C:\\Users\\frenz\\Music\\pinetree.xml");
         Loaders.LoadNature("C:\\Users\\frenz\\Music\\grass6969.xml");
         Loaders.LoadNature("C:\\Users\\frenz\\Music\\bush.xml");*/
-        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\deepsand.xml");
-        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\dirt.xml");
-        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\sand.xml");
-        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\grass.xml");
-        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\quicksand.xml");
-        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\testtile.xml");
+        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\tt\\deepsand.wc");
+        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\tt\\dirt.wc");
+        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\tt\\sand.wc");
+        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\tt\\grass.wc");
+        Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\tt\\quicksand.wc");
 
-        //Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\sand.xml");
+        TerrainTypeManager.Create("Test Tile", 1f, Color.magenta, null, SpecialType.None, false);
+
         Loaders.LoadBiome("C:\\Users\\frenz\\Music\\plains.xml");
         Loaders.LoadBiome("C:\\Users\\frenz\\Music\\desert.xml");
 
         Loaders.loadBlood();
         Loaders.loadNames();
+        foreach (string file in Directory.GetFiles(@"D:\medgame\wcfile\WC File Creator\WC File Creator\bin\Release\net6.0\pack\melee"))
+        {
+            Debug.Log($"{file}");
+            Loaders.LoadMeleeWeapon(file);
+        }
+        foreach (string file in Directory.GetFiles(@"D:\medgame\wcfile\WC File Creator\WC File Creator\bin\Release\net6.0\pack\ranged"))
+        {
+            Loaders.LoadRangedWeapon(file);
+        }
         //Loaders.LoadCountryOutfit("C:\\Users\\frenz\\Music\\germany.xml");
 
         defaultVitals.Add(new Vital(VitalSystem.Dexterity, 1f));

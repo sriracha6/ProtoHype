@@ -1,4 +1,5 @@
 using Baracuda.Monitoring;
+using PawnFunctions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ using static WeatherManager;
 
 /// <summary>
 /// TODO: object pooling for instantiate
+/// 
+/// its slow to put a buncha triggers on all the fire and kinda spaghetti so just check if the pawn is in the tile range of the fire.
 /// </summary>
 public class FireBehaviour : MonitoredBehaviour
 {
@@ -47,8 +50,20 @@ public class FireBehaviour : MonitoredBehaviour
                 break;
         }
 
-        if(Size <= 0)
+        var currentBuilding = TilemapPlace.buildings[(int)transform.position.x, (int)transform.position.y];
+
+        if (Size <= 0                                                                                    // no fire
+           || currentBuilding == null                                                                    // we destroyed it
+           || currentBuilding.flammability <= 0)                                                         // weird edge case
+        {
+            FireManager.firePositions.Remove(transform.position);
+            PathfindExtra.SetFree((int)transform.position.x, (int)transform.position.y);
             Destroy(gameObject);
+        }
+        currentBuilding.hitpoints -= (Size / 10) * (currentBuilding.flammability/100 * currentBuilding.hitpoints);
+
+        if (currentBuilding.hitpoints <= 0)
+            TilemapPlace.DestroyBuilding(transform.position);
 
         if (Size >= 5 && Random.Range(0, 100) >= 100-spreadRate)
         {
@@ -65,7 +80,9 @@ public class FireBehaviour : MonitoredBehaviour
 
                 var g = go.transform.position;
                 g.z = -2;
+
                 FireManager.firePositions.Add(go.transform.position);
+                PathfindExtra.SetUsed((int)transform.position.x, (int)transform.position.y);
             }
         }
         spr.size = new Vector2(Size, Size);

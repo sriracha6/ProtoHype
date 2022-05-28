@@ -34,31 +34,34 @@ public class DevTools : MonoBehaviour
         attks.Add(new Attack("stab", DamageType.Sharp, false, 5)); 
         attks.Add(new Attack("slash", DamageType.Sharp, false, 10));
 
-        WeaponManager.CreateMelee("Empty", WeaponType.Melee,"Empty","Empty",0f,false,0,0,0,new List<Attack>());
+        //WeaponManager.CreateMelee("","Empty", WeaponType.Melee,"Empty","Empty",0f,false,0,0,0,new List<Attack>());
 
-        sampleweapons.Add(WeaponManager.CreateMelee("sexknief", WeaponType.Melee, "Dagger",
-                         "its a sex knife", MeleeRange.Far, false, 10, 0, 0.5f, attks));
-        sampleweapons.Add(WeaponManager.CreateMelee("hugh mungus", WeaponType.Melee, "Longsword",
-                 "its a sex sword", MeleeRange.Short, false, 10, 0, 2f, attks));
+        sampleweapons = new List<Weapon>(WeaponManager.WeaponList);
+        //sampleweapons.Add(WeaponManager.CreateMelee("","sexknief", WeaponType.Melee, "Dagger",
+        //                 "its a sex knife", MeleeRange.Far, false, 10, 0, 0.5f, attks));
+        //sampleweapons.Add(WeaponManager.CreateMelee("","hugh mungus", WeaponType.Melee, "Longsword",
+        //         "its a sex sword", MeleeRange.Short, false, 10, 0, 2f, attks));
 
         List<Bodypart> head = new List<Bodypart>();
         head.Add(BodypartManager.Get("Head"));
         head.Add(BodypartManager.Get("Torso"));
 
-        armors.Add(ArmorManager.Create("halo","it covers your dome",150,10,5,-2,Layer.outer,false,head));
-        armors.Add(ArmorManager.Create("idk","it is idk",150,10,5,-2,Layer.skin,false,head));
+        armors.Add(ArmorManager.Create("","halo","it covers your dome",150,10,5,-2,Layer.outer,false,head));
+        armors.Add(ArmorManager.Create("","idk","it is idk",150,10,5,-2,Layer.skin,false,head));
 
         List<Weapon> sampleBOW = new List<Weapon>();
-        sampleBOW.Add(WeaponManager.CreateRanged("bow","bow",WeaponType.Ranged, "Bow",
+        sampleBOW.Add(WeaponManager.CreateRanged("","bow","bow",WeaponType.Ranged, "Bow",
             25,5,RangeType.Shooter,0.5f,0f,"Sharp",5,1f,0.95f,0.8f,0.5f));
 
-        CountryManager.Create("Germany","German");
-        CountryManager.Create("France","French");
+        Loaders.LoadCountry(@"C:\Users\frenz\Music\countries\germany.wc");
+        Loaders.LoadCountry(@"C:\Users\frenz\Music\countries\france.wc");
+        //CountryManager.Create("Germany","German");
+        //CountryManager.Create("France","French");
 
-        Shield shield = ShieldManager.Create("buckler","peeny",5,5,-0.3f,0.25f,0.25f);
+        Shield shield = ShieldManager.Create("","buckler","peeny",5,5,-0.3f,0.25f,0.25f);
         List<Shield> shields = new List<Shield>();
         List<Shield> emptyShields = new List<Shield>();
-        shields.Add(shield);
+        //shields.Add(shield);
 
         TroopTypeManager.Create("Archer", CountryManager.Get("France"),sampleBOW, sampleweapons, armors, shields, 0, 2, 3,5);
         TroopTypeManager.Create("Swordsman", CountryManager.Get("Germany"), sampleweapons, new List<Weapon>(), armors, emptyShields, 3,5,0,2);
@@ -78,12 +81,13 @@ public class DevTools : MonoBehaviour
     }
 
 
+#if !UNITY_EDITOR
     [MenuItem("Developer/Kill All Pawns")]
     public static void thing()
     {
         PawnManager.GetAll().ForEach(p => Destroy(p.gameObject));
     }
-
+#endif
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))

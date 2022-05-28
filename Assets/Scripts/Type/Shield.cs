@@ -9,9 +9,9 @@ namespace Shields
     {
         public static List<Shield> ShieldList = new List<Shield>();
 
-        public static Shield Create(string name, string desc, float sharpProt, float bluntProt, float moveSpeedEffect, float baseBlockChnc, float siz) // creates if it DOESNT exist
+        public static Shield Create(string sourcefile, string name, string desc, float sharpProt, float bluntProt, float moveSpeedEffect, float baseBlockChnc, float siz) // creates if it DOESNT exist
         {
-            Shield c = new Shield(name, desc, sharpProt, bluntProt, moveSpeedEffect, baseBlockChnc, siz);
+            Shield c = new Shield(sourcefile, name, desc, sharpProt, bluntProt, moveSpeedEffect, baseBlockChnc, siz);
             ShieldList.Add(c);
             return c;
         }
@@ -48,8 +48,8 @@ namespace Shields
         public float baseBlockChance;
         public float size;
 
-        public Shield(string name, string desc, float sharpProt, float bluntProt, float moveSpeedEffect, float baseBlockChnc, float siz) // same for this
-            :base(name, desc)
+        public Shield(string sourcefile, string name, string desc, float sharpProt, float bluntProt, float moveSpeedEffect, float baseBlockChnc, float siz) // same for this
+            :base(name, desc, sourcefile)
         {
             sharpProtection = sharpProt;
             bluntProtection = bluntProt;

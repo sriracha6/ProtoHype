@@ -17,7 +17,8 @@ public class Build
     public bool hasRubble;
     public RubbleType rubbleType;
 
-    public int hitpoints; // dont add max hitpoints and hitpoints. no. thats not how it works
+    public int maxHitpoints;
+    public int hitpoints;
     public int flammability;
 
     public Build(string name, string description, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int hitpoints, int flammability)
@@ -30,7 +31,8 @@ public class Build
         this.isSpecialPlace = isSpecialPlace;
         this.hasRubble = hasRubble;
         this.rubbleType = rubbleType;
-        this.hitpoints = hitpoints;
+        this.maxHitpoints = hitpoints;
+        this.hitpoints = maxHitpoints;
         this.flammability = flammability;
     }
 }

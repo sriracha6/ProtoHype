@@ -40,11 +40,11 @@ public class TilemapPlace : MonoBehaviour
                         switch(tTypes[i].type)
                         {
                             case SpecialType.None:
-                                GameManager2D.Instance.groundTilemap.SetTile(new Vector3Int(x, y, 0), tTypes[i].tile);
+                                WCMngr.I.groundTilemap.SetTile(new Vector3Int(x, y, 0), tTypes[i].tile);
                                 tilemap[x,y] = tTypes[i];
                                 break;
                             case SpecialType.Mountain:
-                                GameManager2D.Instance.solidTilemap.SetTile(new Vector3Int(x,y,0), tTypes[i].thisIsVeryBadSpaghettiButImOutOfIdeas);
+                                WCMngr.I.solidTilemap.SetTile(new Vector3Int(x,y,0), tTypes[i].thisIsVeryBadSpaghettiButImOutOfIdeas);
                                 tilemap[x,y] = tTypes[i];
                                 break;
                             case SpecialType.Water: 
@@ -59,10 +59,17 @@ public class TilemapPlace : MonoBehaviour
                 }
             }
         }
-        GameManager2D.Instance.solidTilemap.RefreshAllTiles();
-        GameManager2D.Instance.groundTilemap.RefreshAllTiles();
+        WCMngr.I.solidTilemap.RefreshAllTiles();
+        WCMngr.I.groundTilemap.RefreshAllTiles();
         buildings = new Build[mapW, mapH];
         Instance.pfinder.Scan();
+    }
+
+    public static void DestroyBuilding (Vector2 position)
+    {
+        buildings[(int)position.x, (int)position.y] = null;
+        WCMngr.I.groundTilemap.SetTile(Vector3Int.FloorToInt(position), null);
+        // TODO : RUBBLE EFFECT
     }
 
 /*    public void placeTrees(List<Vector3Int> points, List<Buildings.Nature> flora,System.Random rand, GameObject treeFab)

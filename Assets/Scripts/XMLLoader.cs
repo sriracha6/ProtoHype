@@ -20,6 +20,7 @@ using Generics;
 using UnityEngine.Tilemaps;
 using Nature;
 using static TilemapPlace;
+using static CachedItems;
 using static WeatherManager;
 
 /// <summary>
@@ -32,20 +33,56 @@ namespace XMLLoader
 {
     public class Loaders
     {
-        public static XmlElement LoadFile(string filepath)
+        public static XmlElement LoadWC(string filepath)
+        {
+            string file = File.ReadAllText(filepath);
+            XmlDocument xmlDocument = new XmlDocument();
+            string num = file.Substring(0, file.IndexOf('W'));
+            int readUntil = int.Parse(num);
+            int readStart = num.Length + 2; // already added two in WC file maker
+            Debug.Log($"{filepath}\n\n{file.Substring(readStart, readUntil - readStart)}");
+
+            xmlDocument.LoadXml(file.Substring(readStart, readUntil-readStart));
+            return xmlDocument.DocumentElement;
+        }
+        public static XmlElement LoadXML(string filepath)
         {
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(filepath);
             return xmlDocument.DocumentElement;
         }
-        public static byte[] LoadImage(string filepath)
+        public static byte[] LoadImage(string filepath) // ALWAYS WC
         {
-            return File.ReadAllBytes(filepath);
+            string line1 = File.ReadAllLines(filepath)[0];
+            int startRead = int.Parse(line1.Substring(0,line1.IndexOf('W')));
+            byte[] fileRaw = File.ReadAllBytes(filepath);
+            byte[] img = fileRaw.Skip(startRead).ToArray();
+
+            return img;
         }
+        public static Texture2D LoadTex(string filepath)
+        {
+            byte[] image = LoadImage(filepath);
+            Texture2D tex = new Texture2D(0, 0);
+            tex.LoadImage(image);
+            tex.Apply();
+            return tex;
+        }
+        public static Sprite LoadSprite(string filepath)
+        {
+            Texture2D tex = LoadTex(filepath);
+            float ppu = tex.width;
+            return Sprite.Create(tex, new Rect(0,0, tex.width, tex.height), new Vector2(0,0), ppu);
+        }
+        public static Sprite LoadSprite(Texture2D tex, float ppu)
+        {
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0, 0), ppu);
+        }
+        //-----------------------------------------------------------------//
 
         public static void LoadMeleeWeapon(string filepath, bool isGeneric = false)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
 
             if (isGeneric)
             {
@@ -81,7 +118,7 @@ namespace XMLLoader
                 }
 
                 //Debug.Log((string)typeof(MeleeRange).GetField(xmls.SelectSingleNode("MeleeRange").InnerText).GetValue(typeof(MeleeRange)));//.GetValue(typeof(MeleeRange))));
-                WeaponManager.CreateMelee(xmls.SelectSingleNode("Name").InnerText, WeaponType.Melee,
+                WeaponManager.CreateMelee(filepath, xmls.SelectSingleNode("Name").InnerText, WeaponType.Melee,
                     xmls.SelectSingleNode("WeaponClass").InnerText, xmls.SelectSingleNode("Description").InnerText,
                     MeleeRange.getByName(xmls.SelectSingleNode("MeleeRange").InnerText),
                     xmls.SelectSingleNode("Warmup").InnerText.strToBool(),
@@ -99,7 +136,7 @@ namespace XMLLoader
         }
         public static void LoadRangedWeapon(string filepath, bool isGeneric = false)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
 
             if (isGeneric)
             {
@@ -120,7 +157,7 @@ namespace XMLLoader
 
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Ranged"))
             {
-                WeaponManager.CreateRanged(xmls.SelectSingleNode("Name").InnerText,
+                WeaponManager.CreateRanged(filepath, xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description").InnerText, WeaponType.Ranged, 
                     xmls.SelectSingleNode("WeaponClass").InnerText,
                     int.Parse(xmls.SelectSingleNode("Range").InnerText),
@@ -145,7 +182,7 @@ namespace XMLLoader
         }
         public static void LoadProjectile(string filepath, bool isGeneric = false)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
 
             if (isGeneric)
             {
@@ -177,7 +214,7 @@ namespace XMLLoader
 
         public static void LoadShield(string filepath, bool isGeneric = false)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
 
             if (isGeneric)
             {
@@ -192,7 +229,7 @@ namespace XMLLoader
 
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Shield"))
             {
-                ShieldManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                ShieldManager.Create(filepath, xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description").InnerText,
                     float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Sharp")[0].InnerText),
                     float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Blunt")[0].InnerText),
@@ -208,7 +245,7 @@ namespace XMLLoader
         }
         public static void LoadArmor(string filepath, bool isGeneric = false)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
 
             if (isGeneric)
             {
@@ -223,7 +260,7 @@ namespace XMLLoader
 
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Armor"))
             {
-                ArmorManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                ArmorManager.Create(filepath, xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description").InnerText,
                     int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
                     float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Sharp")[0].InnerText),
@@ -242,7 +279,7 @@ namespace XMLLoader
 
         public static void LoadCountryOutfit(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadXML(filepath); // todo: this will be WC when we need archer icons and stuff hopefully
 
             int currentLoop = 0;
             foreach (XmlElement x in xmls.SelectNodes("Soldier"))
@@ -261,27 +298,27 @@ namespace XMLLoader
             }
         }
 
-        public static void LoadCountries(string filepath)
+        public static void LoadCountry(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
-            if (xmls.SelectSingleNode("Countries")!=null)
+            XmlElement xmls = LoadWC(filepath);
+            if (xmls.SelectSingleNode("MemberName") != null)
             {
-                foreach (XmlElement x in xmls.SelectSingleNode("Countries").ChildNodes)
-                {
-                    CountryManager.Create(x.Attributes.GetNamedItem("name").Value,
-                        x.SelectSingleNode("MemberName").InnerText);
-                }
+                Debug.Log($"{xmls.SelectSingleNode("MemberName").ParentNode.Attributes.GetNamedItem("name").Value}");
+                var x = CountryManager.Create(xmls.SelectSingleNode("MemberName").ParentNode.Attributes.GetNamedItem("name").Value,
+                    xmls.SelectSingleNode("MemberName").InnerText);
+
+                CachedItems.renderedCountries.Add(new RenderedCountry(LoadSprite(filepath), x.Name));
             }
             else
             {
-                Debug.Log("Not a countries file.");
+                Debug.Log("Not a country file.");
                 return;
             }
         }
         
         public static void LoadBodyparts(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadXML(filepath);
             if (xmls.SelectSingleNode("//BodyParts")!=null)
             {
                 foreach (XmlNode x in xmls.SelectSingleNode("//BodyParts").SelectNodes("BodyPart"))
@@ -328,7 +365,7 @@ namespace XMLLoader
 
         public static void LoadBuilding(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Building"))
             {
                 BuildingManager.Create(xmls.SelectSingleNode("Name").InnerText,
@@ -348,7 +385,7 @@ namespace XMLLoader
         }
         public static void LoadFurniture(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Prop"))
             {
                 FurnitureManager.Create(xmls.SelectSingleNode("Name").InnerText,
@@ -368,7 +405,7 @@ namespace XMLLoader
         }
         public static void LoadFloor(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Floor"))
             {
                 FloorManager.Create(xmls.SelectSingleNode("Name").InnerText,
@@ -383,7 +420,7 @@ namespace XMLLoader
         }
         public static void LoadRoof(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Roof"))
             {
                 RoofManager.Create(xmls.SelectSingleNode("Name").InnerText,
@@ -400,7 +437,7 @@ namespace XMLLoader
         }
         public static void LoadNature(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadXML(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Nature"))
             {
                 NatureManager.Create(xmls.SelectSingleNode("Name").InnerText,
@@ -408,7 +445,7 @@ namespace XMLLoader
                     int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
                     int.Parse(xmls.SelectSingleNode("CoverQuality").InnerText),
                     xmls.SelectSingleNode("Lean").InnerText.strToBool(),
-                    ParseFuncs.parseSpriteSheetFromName(xmls.SelectSingleNode("Name").InnerText, "Nature"));
+                    ParseFuncs.parseSpriteSheetFromName(filepath));
             }
             else
             {
@@ -419,7 +456,7 @@ namespace XMLLoader
         }
         public static void LoadTrap(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Trap"))
             {
                 TrapManager.Create(xmls.SelectSingleNode("Name").InnerText,
@@ -441,7 +478,7 @@ namespace XMLLoader
 
         public static void LoadTerrainType(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlNode xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText == "TerrainType")
             {
                 TerrainType temp = 
@@ -452,7 +489,8 @@ namespace XMLLoader
                     (SpecialType)Enum.Parse(typeof(SpecialType), xmls.SelectSingleNode("SpecialType").InnerText),
                     ParseFuncs.strToBool(xmls.SelectSingleNode("SupportsNature").InnerText));
 
-                    SpriteSheetCreator.Instance.createTerrainTileFromSheet(LoadImage(ParseFuncs.nameToImagePath(temp.name, "TerrainType")), ref temp);
+                    SpriteSheetCreator.Instance.createTerrainTileFromSheet(
+                        LoadImage(filepath), ref temp);
             }
             else
             {
@@ -462,7 +500,7 @@ namespace XMLLoader
         }
         public static void LoadBiome(string filepath)
         {
-            XmlElement xmls = LoadFile(filepath);
+            XmlElement xmls = LoadXML(filepath);
 
             if (xmls.SelectSingleNode("Type").InnerText=="Biome")
             {
@@ -501,8 +539,8 @@ namespace XMLLoader
         }
         public static void loadNames()
         {
-            CachedItems.firstNames = File.ReadAllText("C:\\Users\\frenz\\Music\\assets\\names.txt").Split('\n').ToList();
-            CachedItems.surnames = File.ReadAllText("C:\\Users\\frenz\\Music\\assets\\surnames.txt").Split('\n').ToList();
+            CachedItems.firstNames = File.ReadAllText(Application.persistentDataPath+"\\names.txt").Split('\n').ToList();
+            CachedItems.surnames = File.ReadAllText(Application.persistentDataPath + "\\surnames.txt").Split('\n').ToList();
         }
     }
 
@@ -645,11 +683,10 @@ namespace XMLLoader
             return new TerrainFrequencies(terrain, frequencies); // todo: frequencies are obsolete if height exists. wtf was i thinking
         }
 
-        public static List<Sprite> parseSpriteSheetFromName(string name, string type)
+        public static List<Sprite> parseSpriteSheetFromName(string filepath)
         {
-            string path = ParseFuncs.nameToImagePath(name, type);
             List<Sprite> sprites = new List<Sprite>();
-            byte[] file = Loaders.LoadImage(path);
+            byte[] file = Loaders.LoadImage(filepath);
             sprites = SpriteSheetCreator.createSpritesFromSheet(file);
             return sprites;
         }
@@ -703,11 +740,6 @@ namespace XMLLoader
         {
             return System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
             ToTitleCase(t.ToLower());
-        }
-
-        public static string nameToImagePath(string name, string type)
-        {
-            return Application.persistentDataPath + "/Textures/" + type +"/"+ name + ".png";
         }
 
         public static List<int> AllIndexesOf(this string str, string value)

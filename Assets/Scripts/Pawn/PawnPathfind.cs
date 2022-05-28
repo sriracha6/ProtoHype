@@ -56,7 +56,7 @@ public class PawnPathfind : MonoBehaviour
 
     void Start()
     {
-        cam = GameManager2D.Instance.mainCam;
+        cam = WCMngr.I.mainCam;
 
         InvokeRepeating("UpdatePath", 0f, 1f); // this is a cool fucktion
     }
@@ -68,6 +68,13 @@ public class PawnPathfind : MonoBehaviour
             shouldPath = false;
             return;
         }
+
+        if (FireManager.firePositions.Count > 0)
+            if (FireManager.firePositions.AsReadOnly().Contains(new Vector2((int)transform.position.x, (int)transform.position.y)))
+            {
+                animator.Play("Recoil");
+                p.healthSystem.TakeBurn(Random.Range(4, 9)); // i wish i could make it based of size but who gives 2 shits
+            }
 
         //Debug.Log(path == null);
 
@@ -100,7 +107,8 @@ public class PawnPathfind : MonoBehaviour
     {
         if(p.actionTypes.Count<=0)
             return;
-        
+        if (p.regiment.flagBearer.dead)
+            speed *= 0.8f;
         if (seeker.IsDone())
         {
             if ((p.actionTypes[0].Type.Equals("SearchAndDestroy") || p.actionTypes[0].Type.Equals("Attack")))
@@ -138,7 +146,7 @@ public class PawnPathfind : MonoBehaviour
         
         if (justTileFound)
         {
-            Vector3Int pos = GameManager2D.Instance.groundTilemap.WorldToCell(rb.position);
+            Vector3Int pos = WCMngr.I.groundTilemap.WorldToCell(rb.position);
             PathfindExtra.SetFree(pos.x,pos.y);
             justTileFound = false;
         }
@@ -257,14 +265,14 @@ public class PawnPathfind : MonoBehaviour
     Vector3 PosFromMove(Vector2Int position)
     {
         // TODO: this is pretty bad im pretty sure
-        Vector3Int ntile = GameManager2D.Instance.groundTilemap.WorldToCell((Vector3Int)position);
+        Vector3Int ntile = WCMngr.I.groundTilemap.WorldToCell((Vector3Int)position);
         if (!PathfindExtra.PresentAt(ntile.x, ntile.y))
         {
             PathfindExtra.SetUsed(ntile.x, ntile.y);
             justTileFound = true;
             return ntile;
         }
-        Debug.Log($"stuffs happening here dont delete me");
+        Debug.Log($"stuffs happening here dont delete this line");
         return new Vector3(position.x, position.y); // i dont know wtf else to put here but this'll definitely cause issues
     }
     #endregion

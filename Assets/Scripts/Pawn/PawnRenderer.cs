@@ -8,6 +8,7 @@ using System.Linq;
 using System;
 using Armors;
 using Body;
+using XMLLoader;
 //using System.Drawing;
 
 //using Graphics = System.Drawing.Graphics;
@@ -41,65 +42,58 @@ public class PawnRenderer : MonoBehaviour
     void Start()
     {
 
-        if(p.hasPrimary)
-            weapon.sprite = createSprite(
-                imageFromWeaponName(p.heldPrimary.Name,p.heldPrimary.Type),p.heldPrimary.Name, p.heldPrimary.size, Loadtype.Weapon);
+        if(p.hasPrimary && !p.isFlagBearer)
+            weapon.sprite =
+                imageFromWeaponID(p.heldPrimary.ID, p.heldPrimary.size);
         if (p.hasSidearm)
-            createSprite(
-                imageFromWeaponName(p.heldSidearm.Name, p.heldSidearm.Type), p.heldSidearm.Name, p.heldSidearm.size, Loadtype.Weapon);
+                imageFromWeaponID(p.heldSidearm.ID, p.heldSidearm.size);
 
         if (p.hasShield)
             shield.sprite = 
-                createSprite(imageFromShieldName(p.shield.Name), p.shield.Name, p.shield.size, Loadtype.Shield);
+                imageFromShieldID(p.shield.ID, p.shield.size);
 
         foreach(Armor a in p.armor) // todo : please try and get rid of this
         {
-            createSprite(imageFromArmorName(a.Name), a.Name, 1, Loadtype.Armor);
+            imageFromArmorName(a.ID);
         }
 
         p.sprite.sprite = renderAvatar(p.armor);
         TEX = p.sprite.sprite.texture;
     } 
 
-    private Sprite createSprite(Texture2D image, string backup, float size, Loadtype ltype)
+    /*private Sprite createSprite(Texture2D image, string backup, float size, Loadtype ltype)
     {
         try
         {
             bool exists = false;
 
             if (ltype == Loadtype.Weapon)
-                exists = !CachedItems.renderedWeapons.Exists(x => x.name == backup);
+                exists = !CachedItems.renderedWeapons.Exists(x => Weapons.WeaponManager.Get(x.id).Name == backup);
             else if (ltype == Loadtype.Shield)
-                exists = !CachedItems.renderedShields.Exists(x => x.name == backup);
+                exists = !CachedItems.renderedShields.Exists(x => Shields.ShieldManager.Get(x.id).Name == backup);
             else if(ltype == Loadtype.Armor)
-                exists = !CachedItems.renderedArmors.Exists(x => x.name == backup);
+                exists = !CachedItems.renderedArmors.Exists(x => x.id == Armors.ArmorManager.Get(backup).ID);
             if (exists)
             {
                 Sprite spr = Sprite.Create(image, new Rect(Vector2.zero // weapon??
                     , new Vector2(image.width, image.height)), Vector2.zero, WeaponSize / size);
 
                 if (ltype == Loadtype.Weapon)
-                {
-                    CachedItems.renderedWeapons.Add(new RenderedWeapon(spr, backup));
-                }
+                    CachedItems.renderedWeapons.Add(new RenderedWeapon(spr, Weapons.WeaponManager.Get(backup).ID));
                 else if (ltype == Loadtype.Shield)
-                {
-                    CachedItems.renderedShields.Add(new RenderedShield(spr, backup));
-                }
+                    CachedItems.renderedShields.Add(new RenderedShield(spr, Shields.ShieldManager.Get(backup).ID));
                 else
-                {
-                    CachedItems.renderedArmors.Add(new RenderedArmor(spr, backup));
-                }
+                    CachedItems.renderedArmors.Add(new RenderedArmor(spr, Armors.ArmorManager.Get(backup).ID));
                 return spr;
             }
             else
             {
                 if (ltype == Loadtype.Weapon)
-                    return CachedItems.renderedWeapons.Find(x => x.name == backup).sprite;
+                    return CachedItems.renderedWeapons.Find(x => Weapons.WeaponManager.Get(x.id).Name == backup).sprite;
                 else if (ltype == Loadtype.Shield)
-                    return CachedItems.renderedShields.Find(x=>x.name==backup).sprite;
+                    return CachedItems.renderedShields.Find(x=>Shields.ShieldManager.Get(x.id).Name==backup).sprite;
                 else 
-                    return CachedItems.renderedArmors.Find(x => x.name == backup).sprite;
+                    return CachedItems.renderedArmors.Find(x => x.id == Armors.ArmorManager.Get(backup).ID).sprite;
             }
         }
         catch(Exception e)
@@ -107,48 +101,50 @@ public class PawnRenderer : MonoBehaviour
             Debug.LogError($"error creating sprite {backup} \n {ltype}\n {size} \n w:{image.width} h{image.height} \n {e}");
             return null;
         }
-    }
-    private Texture2D imageFromWeaponName(string name, Weapons.WeaponType type)
+    }*/
+
+    private Sprite imageFromWeaponID(int id, float size)
     {
+        Debug.Log($"{id} : {WCMngr.I.flagWeapon.ID}");
+        if (id == WCMngr.I.flagWeapon.ID)
+            return null;
         //                          TODO: MAKE THIS DYNAMC V AND NOT LOAD EVERY TIME YOU MAKE A NEW PAWN!!!!!!!!@!!@!@!@!
         try
         {
-            if (!CachedItems.renderedWeapons.Exists(x => x.name == name))
+            if (!CachedItems.renderedWeapons.Exists(x => x.id == id))
             {
-                var rawData = System.IO.File.ReadAllBytes($"C:\\Users\\frenz\\Music\\assets\\weapons\\{type}\\{name}.png"); // todo: it does this every time you load a pawn? how about no.
-                Texture2D tex = new Texture2D(512, 512);
-                tex.LoadImage(rawData);
-                //tex.Resize(tex.width, tex.height); // what a devilish line of code! we don't need to resize if we already set the size that EVERY FILE is!
-                tex.Apply();
-                return tex;
+                Debug.Log($"{Weapons.WeaponManager.Get(id).Name}");
+                Texture2D tex = XMLLoader.Loaders.LoadTex(Weapons.WeaponManager.Get(id).SourceFile);
+                Sprite spr = Loaders.LoadSprite(tex, tex.height * size);
+                CachedItems.renderedWeapons.Add(new RenderedWeapon(spr, id));
+                return spr;
             }
             else
             {
-                return CachedItems.renderedWeapons.Find(x=>x.name==name).sprite.texture;
+                return CachedItems.renderedWeapons.Find(x=>x.id==id).sprite;
             }
         }catch(System.IO.IOException e)
         {
-            Debug.LogError("Couldn't load weapon of name "+name+"\n\n"+e);
+            Debug.LogError("Couldn't load weapon of id "+id+"\n"+e);
         }
         return null;
     }
-    private Texture2D imageFromShieldName(string name)
+    private Sprite imageFromShieldID(int id, float size)
     {
         //                          TODO: MAKE THIS DYNAMC V AND NOT LOAD EVERY TIME YOU MAKE A NEW PAWN!!!!!!!!@!!@!@!@!
         try
         {
-            if (!CachedItems.renderedShields.Exists(x => x.name == name))
+            if (!CachedItems.renderedShields.Exists(x => x.id == id))
             {
-                var rawData = System.IO.File.ReadAllBytes($"C:\\Users\\frenz\\Music\\assets\\armor\\shields\\{name}.png"); // todo: it does this every time you load a pawn? how about no.
-                Texture2D tex = new Texture2D(512, 512);
-                tex.LoadImage(rawData);
-                //tex.Resize(tex.width, tex.height); // what a devilish line of code! we don't need to resize if we already set the size that EVERY FILE is!
-                tex.Apply();
-                return tex;
+                //var rawData = System.IO.File.ReadAllBytes($"C:\\Users\\frenz\\Music\\assets\\armor\\shields\\{name}.png"); // todo: it does this every time you load a pawn? how about no.
+                Texture2D tex = Loaders.LoadTex(Shields.ShieldManager.Get(id).SourceFile);
+                Sprite spr = Loaders.LoadSprite(tex, tex.height * size);
+                CachedItems.renderedShields.Add(new RenderedShield(spr, id));
+                return spr;
             }
             else
             {
-                return CachedItems.renderedShields.Find(x=>x.name==name).sprite.texture;
+                return CachedItems.renderedShields.Find(x=>x.id==id).sprite;
             }
         }
         catch (System.IO.IOException e)
@@ -157,23 +153,21 @@ public class PawnRenderer : MonoBehaviour
         }
         return null;
     }
-    private Texture2D imageFromArmorName(string name)
+    private Sprite imageFromArmorName(int id)
     {
         //                          TODO: MAKE THIS DYNAMC V AND NOT LOAD EVERY TIME YOU MAKE A NEW PAWN!!!!!!!!@!!@!@!@!
         try
         {
-            if (!CachedItems.renderedArmors.Exists(x => x.name == name))
+            if (!CachedItems.renderedArmors.Exists(x => x.id == id))
             {
-                var rawData = System.IO.File.ReadAllBytes($"C:\\Users\\frenz\\Music\\assets\\armor\\armor\\{name}.png"); // todo: it does this every time you load a pawn? how about no.
-                Texture2D tex = new Texture2D(512, 512, TextureFormat.ARGB32, true);    
-                tex.LoadImage(rawData);
-                //tex.Resize(tex.width, tex.height); // what a devilish line of code! we don't need to resize if we already set the size that EVERY FILE is!
-                tex.Apply();
-                return tex;
+                Texture2D tex = Loaders.LoadTex(Armors.ArmorManager.Get(id).SourceFile);
+                Sprite spr = Loaders.LoadSprite(tex, 1);
+                CachedItems.renderedArmors.Add(new RenderedArmor(spr, id));
+                return spr;
             }
             else
             {
-                return CachedItems.renderedArmors.Find(x=>x.name==name).sprite.texture;
+                return CachedItems.renderedArmors.Find(x=>x.id==id).sprite;
             }
         }
         catch (System.IO.IOException e)
@@ -215,24 +209,21 @@ public class PawnRenderer : MonoBehaviour
     private Sprite renderAvatar(List<Armor> armor)
     {
         if (armor.Count == 0) 
-        {
-            return Sprite.Create(GameManager2D.Instance.defaultPawnTexture, new Rect(Vector2.zero, new Vector2(512, 512)), Vector2.zero, 512);
-        }
+            return Sprite.Create(WCMngr.I.defaultPawnTexture, new Rect(Vector2.zero, new Vector2(512, 512)), Vector2.zero, 512);
 
         if (CachedItems.renderedPawns.Exists(x => x.armors == armor))
-        {
             return CachedItems.renderedPawns.Find(x => x.armors == armor).sprite;
-        }
+
         else
         {
             Texture2D final = new Texture2D(512, 512, TextureFormat.ARGB32, true); 
-            final.SetPixels(GameManager2D.Instance.defaultPawnTexture.GetPixels());
+            final.SetPixels(WCMngr.I.defaultPawnTexture.GetPixels());
             //List<Armor> sortedArmors = armor.OrderBy(x=>x.layer).ToList(); // sort the list low to high
             List<Armor> sortedArmors = armor.OrderBy(o=>o.layer).ToList();
 
             for(int i=0;i<armor.Count;i++)
             {
-                Texture2D source = renderedArmors.Find(x=>x.name==armor[i].Name).sprite.texture;
+                Texture2D source = renderedArmors.Find(x=>x.id==armor[i].ID).sprite.texture;
                 final = CombineTextures(source,final);
             }
             final.Apply();
@@ -251,7 +242,7 @@ public class PawnRenderer : MonoBehaviour
         }
     }
 
-    // O(n^2)
+    // this is O(1) because always 512x512
     Texture2D CombineTextures(Texture2D _textureA, Texture2D _textureB)
     {
         //Create new textures
@@ -281,32 +272,7 @@ public class PawnRenderer : MonoBehaviour
         textureResult.Apply();
         return textureResult;
     }
-    /*public void CombineTextures(Texture2D a, List<Armor> armors)
-    {
-        var bitmap = new System.Drawing.Bitmap(512, 512);
-        using (var g = System.Drawing.Graphics.FromImage(bitmap))
-        {
-            for (int i = 0; i < armors.Count; i++)
-            {
-                g.DrawImage(Texture2Image(a), 0, 0);
-                g.DrawImage(Texture2Image(RenderedSprites.renderedArmors.Find(x=>x.name==armors[i].Name).sprite.texture), 0, 0);
-            }
-        }
-    }
 
-    public static System.Drawing.Image Texture2Image(Texture2D texture) // wtf? put this in some other class. wtf. todo: wtf. todo: make it do all of these at startup
-    {
-        System.Drawing.Image img;
-        using (MemoryStream MS = new MemoryStream())
-        {
-            texture.EncodeToPNG();
-            //Go To the  beginning of the stream.
-            MS.Seek(0, SeekOrigin.Begin);
-            //Create the image based on the stream.
-            img = System.Drawing.Bitmap.FromStream(MS);
-        }
-        return img;
-    }*/
     private enum Loadtype
     {
         Weapon,

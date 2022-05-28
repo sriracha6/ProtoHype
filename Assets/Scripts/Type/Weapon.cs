@@ -39,19 +39,19 @@ namespace Weapons
     {
         public static List<Weapon> WeaponList = new List<Weapon>();
 
-        public static Weapon CreateMelee(string name, WeaponType type, string weaponclass, string desc, float mrange, bool warmup,
+        public static Weapon CreateMelee(string sourcefile, string name, WeaponType type, string weaponclass, string desc, float mrange, bool warmup,
             int armorpens, int armorpenb, float Size, List<Attack> attks)
         {
-            Weapon c = new Weapon(name, type, weaponclass, desc, mrange, warmup, armorpens, armorpenb, Size, attks);
+            Weapon c = new Weapon(sourcefile, name, type, weaponclass, desc, mrange, warmup, armorpens, armorpenb, Size, attks);
             WeaponList.Add(c);
             return c;
         }
 
-        public static Weapon CreateRanged(string name, string desc, WeaponType type, string weaponclass, int range, float armorPen, RangeType rt, float meleeDamage, float warmupTime,
+        public static Weapon CreateRanged(string sourcefile, string name, string desc, WeaponType type, string weaponclass, int range, float armorPen, RangeType rt, float meleeDamage, float warmupTime,
             string meleeDamageType, int dmg, float size,
             float longAccuracy, float mediumAccuracy, float shortAccuracy)
         {
-            Weapon c = new Weapon(name, desc, type, weaponclass, range, armorPen, rt, meleeDamage, warmupTime, meleeDamageType, dmg, size, longAccuracy, mediumAccuracy, shortAccuracy);
+            Weapon c = new Weapon(sourcefile, name, desc, type, weaponclass, range, armorPen, rt, meleeDamage, warmupTime, meleeDamageType, dmg, size, longAccuracy, mediumAccuracy, shortAccuracy);
             WeaponList.Add(c);
             return c;
         }
@@ -84,32 +84,32 @@ namespace Weapons
     }
     public class Weapon : Item
     {
-        public WeaponType Type;
-        public string weaponClass;
-        public float meleeRange;
-        public bool hasWarmup;
-        public int armorPenSharp;
-        public int armorPenBlunt;
-        public float size; // in comparison to a 6ft person
-        public List<Attack> attacks = new List<Attack>();
+        public WeaponType Type { get; }
+        public string weaponClass { get; }
+        public float meleeRange { get; }
+        public bool hasWarmup { get; }
+        public int armorPenSharp { get; }
+        public int armorPenBlunt { get; }
+        public float size { get; } // in comparison to a 6ft person
+        public List<Attack> attacks { get; } = new List<Attack>();
 
-        public float longAccuracy;
-        public float shortAccuracy;
-        public float mediumAccuracy;
+        public float longAccuracy { get; }
+        public float shortAccuracy { get; }
+        public float mediumAccuracy { get; }
 
-        public bool enableRangedMeleeDamage;
-        public string meleeDamageType;
-        public float rangedMeleeDamage;
+        public bool enableRangedMeleeDamage { get;}
+        public string meleeDamageType { get;}
+        public float rangedMeleeDamage { get; }
 
-        public int rangedDamage;
-        public float rangeWarmupTime;
-        public float rangeArmorPen;
+        public int rangedDamage { get; }
+        public float rangeWarmupTime { get; }
+        public float rangeArmorPen { get; }
 
-        public int range;
-        public RangeType rangeType;
+        public int range { get; }
+        public RangeType rangeType { get; }
 
-        public Weapon(string name, WeaponType type, string description, string wc, float mrange, bool warmup, int armorpens,
-                      int armorpenb, float Size, List<Attack> attks) : base(name, description)
+        public Weapon(string sourcefile, string name, WeaponType type, string description, string wc, float mrange, bool warmup, int armorpens,
+                      int armorpenb, float Size, List<Attack> attks) : base(name, description, sourcefile)
         {
             Type = type;
             meleeRange = mrange;
@@ -119,9 +119,9 @@ namespace Weapons
             attacks = attks;
         }
 
-        public Weapon(string name, string description, WeaponType type, string wc, int r, float armopen, RangeType rt, float meleeDmg,
+        public Weapon(string sourcefile, string name, string description, WeaponType type, string wc, int r, float armopen, RangeType rt, float meleeDmg,
             float warmupTime, string meleeDmgType, int dmg, float siz,
-            float lAccuracy, float mAccuracy, float sAccuracy) : base(name, description)
+            float lAccuracy, float mAccuracy, float sAccuracy) : base(name, description, sourcefile)
         {
             Type = type;
             range = r;

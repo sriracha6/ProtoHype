@@ -105,9 +105,9 @@ public class ContextMenuShower : MonoBehaviour
             Player.selectedTileBounds.Clear();
             Player.selectedTilePoses.Clear();
 
-            Debug.Log(GameManager2D.Instance.groundTilemap.WorldToCell(GameManager2D.Instance.mainCam.ScreenToWorldPoint(Input.mousePosition)));
+            Debug.Log(WCMngr.I.groundTilemap.WorldToCell(WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition)));
             // wtf
-            Player.selectedTilePoses.Add(GameManager2D.Instance.groundTilemap.WorldToCell(GameManager2D.Instance.mainCam.ScreenToWorldPoint(Input.mousePosition)));
+            Player.selectedTilePoses.Add(WCMngr.I.groundTilemap.WorldToCell(WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition)));
 
             ActionType item = new ActionType("Move", true);
             foreach (PawnFunctions.Pawn p in Player.ourSelectedPawns) 

@@ -72,7 +72,7 @@ public class CombatSystem : MonoBehaviour
 
     void Start()
     {
-        projectileCollection = GameManager2D.Instance.projectileParent; // no. todo: this is no
+        projectileCollection = WCMngr.I.projectileParent; // no. todo: this is no
 
         onChangeWeapon(); // this is VERY bad
 
@@ -290,7 +290,7 @@ public class CombatSystem : MonoBehaviour
             closestEnemy.position) >= 2f)
         {
             p.activeWeapon = p.heldPrimary;
-            weaponSprite.sprite = CachedItems.renderedWeapons.Find(x => x.name == p.heldSidearm.Name).sprite;
+            weaponSprite.sprite = CachedItems.renderedWeapons.Find(x => x.id == p.heldSidearm.ID).sprite;
             p.activeWeaponSlot = ActiveWeapon.Primary;
         }
         onChangeWeapon();

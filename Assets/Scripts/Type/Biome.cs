@@ -93,7 +93,7 @@ namespace Nature
         public float plantDensity;
 
         public Biome(string name, string description, LocationData locationData, List<Weather> weatherFrequencies,
-            TerrainFrequencies terrainFrequencies, List<Buildings.Nature> flora, Color color, float plantDensity) : base(name, description)
+            TerrainFrequencies terrainFrequencies, List<Buildings.Nature> flora, Color color, float plantDensity) : base(name, description, "")
         {
             this.locationData = locationData;
             this.weatherFrequencies = weatherFrequencies;

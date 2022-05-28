@@ -133,11 +133,11 @@ public class MapGenerator : MonoBehaviour
 
     private void generateWater()
     {
-        foreach(Transform c in GameManager2D.Instance.groundTilemap.transform)
+        foreach(Transform c in WCMngr.I.groundTilemap.transform)
         {
             Destroy(c.gameObject); // kill kids (NOT LIKE THAT)
         }
-        GameObject water = Instantiate(waterPrefab, GameManager2D.Instance.groundTilemap.transform);
+        GameObject water = Instantiate(waterPrefab, WCMngr.I.groundTilemap.transform);
 
         Mesh m = water.GetComponent<MeshFilter>().sharedMesh;
         Vector3 meshSize = m.bounds.size;

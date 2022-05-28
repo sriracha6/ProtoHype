@@ -53,12 +53,11 @@ namespace PawnFunctions
         public bool hasSidearm;
         public bool hasPrimary;
 
-        // c# 7 moment
-        //public List<(Projectile projectile ,int count)> inventory = new List<(Projectile,int)>();
+        public bool isFlagBearer = false;
+
         public List<Projectile> inventory = new List<Projectile>();
 
         public List<Armor> armor = new List<Armor>(); // probably gonna regret doing it like this
-        //public float moveSpeed = 1f; // make this update with armor
 
         public Country country;
         public string pname;

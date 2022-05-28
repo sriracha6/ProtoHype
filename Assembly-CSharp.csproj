@@ -66,7 +66,9 @@
     <Compile Include="Assets\Scripts\FuckBitchTile.cs" />
     <Compile Include="Assets\Scripts\Type\Regiment.cs" />
     <Compile Include="Assets\Scripts\Type\Shield.cs" />
+    <Compile Include="Assets\Scripts\Pawn\FlagBehaviour.cs" />
     <Compile Include="Assets\Scripts\XMLLoader.cs" />
+    <Compile Include="Assets\Baracuda\IL2CPP\IL2CPP_AOT.cs" />
     <Compile Include="Assets\Scripts\RNG\TextureGenerator.cs" />
     <Compile Include="Assets\Scripts\UI\PopulateRegiments.cs" />
     <Compile Include="Assets\Scripts\UI\MoveControls.cs" />
@@ -124,7 +126,7 @@
     <Compile Include="Assets\Scripts\Pawn\ExtraPathfind.cs" />
     <Compile Include="Assets\Scripts\UI\TooltipManipulator.cs" />
     <Compile Include="Assets\Scripts\RNG\TreeGenerator.cs" />
-    <Compile Include="Assets\Scripts\Player\GameManager2D.cs" />
+    <Compile Include="Assets\Scripts\Player\WCMngr.cs" />
     <Compile Include="Assets\Scripts\RNG\EditorMapGen.cs" />
     <Compile Include="Assets\test.cs" />
     <Compile Include="Assets\Scripts\Type\Nature.cs" />
@@ -133,9 +135,8 @@
     <Compile Include="Assets\Scripts\Skills.cs" />
     <Compile Include="Assets\Scripts\RNG\TilemapShadow.cs" />
     <Compile Include="Assets\Scripts\RNG\Direction.cs" />
-    <Compile Include="Assets\Scripts\Generics.cs" />
-    <Compile Include="Assets\Baracuda\IL2CPP\IL2CPP_AOT.cs" />
     <Compile Include="Assets\Scripts\FireManager.cs" />
+    <Compile Include="Assets\Scripts\Generics.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -784,11 +785,11 @@
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.UIBuilderModule">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.UIBuilderModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UIBuilderModule">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.UIBuilderModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsInputSystemModule">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UIElementsInputSystemModule.dll</HintPath>
@@ -841,14 +842,14 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.2D.Psdimporter.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.001">
       <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
@@ -898,14 +899,6 @@
       <Project>{13C74137-E3B5-365C-06BA-0E672A621516}</Project>
       <Name>PackageToolsEditor</Name>
     </ProjectReference>
-    <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
-      <Project>{2247E6E4-6690-75BB-E5F0-4F30BC5A1C5D}</Project>
-      <Name>AstarPathfindingProjectEditor</Name>
-    </ProjectReference>
-    <ProjectReference Include="AstarPathfindingProject.csproj">
-      <Project>{EBAB5EB1-2583-5632-1905-4465622CB3FE}</Project>
-      <Name>AstarPathfindingProject</Name>
-    </ProjectReference>
     <ProjectReference Include="Assembly-Baracuda-Monitoring.csproj">
       <Project>{972A66B7-03CE-F1B3-5368-61AABEA5573E}</Project>
       <Name>Assembly-Baracuda-Monitoring</Name>
@@ -917,6 +910,10 @@
     <ProjectReference Include="Assembly-Baracuda-Pooling.csproj">
       <Project>{0D2EC563-CAC8-E2BA-7B87-A655B33E8256}</Project>
       <Name>Assembly-Baracuda-Pooling</Name>
+    </ProjectReference>
+    <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
+      <Project>{2247E6E4-6690-75BB-E5F0-4F30BC5A1C5D}</Project>
+      <Name>AstarPathfindingProjectEditor</Name>
     </ProjectReference>
     <ProjectReference Include="Assembly-Baracuda-Reflection.csproj">
       <Project>{24C270D6-C2A9-5C0F-3168-D3A7FF59DE1B}</Project>
@@ -937,6 +934,10 @@
     <ProjectReference Include="Assembly-Baracuda-Monitoring.Example.csproj">
       <Project>{D3293A88-31AE-C57F-1341-750617C73CC1}</Project>
       <Name>Assembly-Baracuda-Monitoring.Example</Name>
+    </ProjectReference>
+    <ProjectReference Include="AstarPathfindingProject.csproj">
+      <Project>{EBAB5EB1-2583-5632-1905-4465622CB3FE}</Project>
+      <Name>AstarPathfindingProject</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
