@@ -365,4 +365,5 @@ FodyWeavers.xsd
 /UserSettings
 /ProjectSettings
 
-/Library
+/Library/ArtifactDB
+/Library/ShaderCache.db
