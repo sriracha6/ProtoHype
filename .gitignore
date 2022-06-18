@@ -365,5 +365,10 @@ FodyWeavers.xsd
 /UserSettings
 /ProjectSettings
 
-/Library/ArtifactDB
-/Library/ShaderCache.db
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Mm]emoryCaptures/
