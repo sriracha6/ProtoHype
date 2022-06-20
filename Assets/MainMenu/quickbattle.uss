@@ -1,0 +1,119 @@
+.unity-popup-field__label {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 5%;
+    min-width: 35%;
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+}
+
+.unity-popup-field__input {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.unity-text-field__label {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: rgb(255, 255, 255);
+}
+
+.unity-text-field__input {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#Seed .unity-text-field__label {
+    min-width: 44px;
+}
+
+#RegimentSize .unity-text-field__input {
+    font-size: 18px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#RegimentSize .unity-label {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 0;
+    min-width: 130px;
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+}
+
+#DynamicTime .unity-label {
+    color: rgb(255, 255, 255);
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    min-width: 210px;
+}
+
+#MapSize .unity-text-field__input {
+    font-size: 18px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#MapSize .unity-label {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 0;
+    min-width: 130px;
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+}

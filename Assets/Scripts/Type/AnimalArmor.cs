@@ -1,0 +1,54 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Animals
+{
+    public static class AnimalArmorManager
+    {
+        public static List<AnimalArmor> AnimalArmorList = new List<AnimalArmor>();
+
+        public static AnimalArmor Create(string Name, string desc, string sourcefile, int protection, Animal forAnimal, float moveSpeedEffect)
+        {
+            //if(!CountryList.Exists(x => x.Name == name))
+            //{
+            AnimalArmor c = new AnimalArmor(Name, desc, sourcefile, protection, forAnimal, moveSpeedEffect);
+            AnimalArmorList.Add(c);
+            return c;
+            //}
+            //else
+            //{
+            //    return null;
+            //}
+        }
+        public static AnimalArmor Get(string name)
+        {
+            try
+            {
+                return AnimalArmorList.Find(x => x.Name == name);
+            }
+            catch (NullReferenceException)
+            {
+                //Create(name);
+                DB.Attention($"Couldn't find AnimalArmor of name {name}");
+                return null;
+                //return CountryList.Find(x => x.Name == name);
+            }
+        }
+    }
+    public class AnimalArmor : Item
+    {
+        public Animal forAnimal;
+        public int protection;
+        public float moveSpeedEffect;
+
+        public AnimalArmor(string Name, string Description, string Sourcefile, int protection, Animal forAnimal, float moveSpeedEffect)
+            : base(Name, Description, Sourcefile)
+        {
+            this.protection = protection;
+            this.moveSpeedEffect = moveSpeedEffect;
+            this.forAnimal = forAnimal;
+        }
+    }
+}

@@ -1,0 +1,164 @@
+:root {
+    --gray-0: rgb(250, 249, 249);
+    --gray-1: rgb(238, 237, 236);
+    --gray-2: rgb(226, 224, 222);
+    --gray-3: rgb(213, 211, 207);
+    --gray-4: rgb(198, 195, 190);
+    --gray-5: rgb(182, 179, 172);
+    --gray-6: rgb(164, 159, 151);
+    --gray-7: rgb(142, 136, 126);
+    --gray-8: rgb(115, 107, 94);
+    --gray-9: rgb(68, 63, 53);
+    --gray-2-0: rgb(251, 249, 248);
+    --gray-2-1: rgb(243, 236, 235);
+    --gray-2-2: rgb(235, 222, 220);
+    --gray-2-3: rgb(226, 207, 204);
+    --gray-2-4: rgb(216, 190, 186);
+    --gray-2-5: rgb(204, 172, 166);
+    --gray-2-6: rgb(191, 150, 144);
+    --gray-2-7: rgb(176, 124, 116);
+    --gray-2-8: rgb(155, 91, 81);
+    --gray-2-9: rgb(106, 45, 35);
+    --cursor-point: resource('ui/cursors/point');
+}
+
+.actionbutton {
+    color: black;
+    background-color: var(--gray-7);
+    border-width: 4px;
+    font-size: initial;
+    border-color: var(--gray-4);
+}
+
+#PawnInfo .unity-label {
+    font-size: 25px;
+}
+
+.unity-button {
+    border-radius: 0;
+    background-color: var(--gray-3);
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+    background-color: white;
+}
+
+.timebutton {
+    background-color: var(--gray-2-9);
+    border-radius: 0;
+    border-color: var(--gray-0);
+}
+
+#TimeControls {
+    background-color: var(--gray-3);
+}
+
+#pi-closebutton {
+    border-width: 0;
+    color: white;
+}
+
+.unity-label {
+    color: white;
+}
+
+.unity-scroller {
+    width: 15px;
+}
+
+.unity-scroller * {
+    width: 15px;
+}
+
+.unity-toggle__input #unity-checkmark {
+    background-color: var(--gray-9);
+}
+
+.unity-toggle__checkmark:enabled {
+    -unity-background-image-tint-color: white;
+    background-image: resource('ui/check');
+}
+
+#PawnInfoParent {
+    background-color: var(--gray-9);
+}
+
+#TitleBar {
+    background-color: var(--gray-7);
+}
+
+#TitleBar #CloseButton {
+    background-color: rgb(255, 105, 97);
+    padding: 0;
+    margin: 0;
+}
+
+#TitleBar #MoreInfo {
+    border-radius: 10px;
+    width: 15px;
+    color: white;
+    background-color: var(--gray-2-6);
+    padding: 0;
+    margin: 0;
+}
+
+.moreinfo {
+    border-radius: 10px;
+    left: 100%;
+    width: 15px;
+    color: white;
+    background-color: var(--gray-2-6);
+}
+
+.consistentLabel {
+    font-size: 100%;
+}
+
+#Vitals {
+    background-color: var(--gray-6);
+}
+
+#RegimentSelect {
+    background-color: var(--gray-5);
+}
+
+#RegimentSelect #ScrollButton {
+    border-width: 0;
+    background-color: var(--gray-8);
+}
+
+#RegimentShiz #Controls #HideButton {
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#Regiment-Label {
+    color: white;
+    background-color: black;
+}
+
+#RegimentControlStuff {
+    background-color: var(--gray-5);
+}
+
+#RegimentControlStuff #unity-tracker {
+    border-radius: 0;
+    width: 7px;
+    height: 24px;
+    background-color: var(--gray-2-8);
+}
+
+#RegimentControlStuff #unity-dragger {
+    background-color: var(--gray-2-6);
+    height: 15px;
+    top: 30%;
+}
+
+#RegimentSelect #ScrollView .unity-scroller * {
+    max-height: 20px;
+    min-height: 20px;
+    height: 20px;
+}

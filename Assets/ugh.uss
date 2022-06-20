@@ -1,0 +1,6 @@
+#unity-text-input {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
