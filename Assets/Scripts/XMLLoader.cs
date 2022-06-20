@@ -807,8 +807,7 @@ namespace XMLLoader
         public static Color parseColor(string text)
         {
             string[] split = text.Replace(" ","").Split(',');
-            Debug.Log($"{new Color(float.Parse(split[0]), float.Parse(split[1]), float.Parse(split[2]))}");
-            return new Color(float.Parse(split[0]),float.Parse(split[1]),float.Parse(split[2]));
+            return new Color32(byte.Parse(split[0]), byte.Parse(split[1]), byte.Parse(split[2]), 255);
         }
         public static int parseSkill(int mode, string input) // 0:min, 1:max
         {

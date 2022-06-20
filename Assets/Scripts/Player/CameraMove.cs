@@ -22,30 +22,27 @@ public class CameraMove : MonoBehaviour
     [SerializeField] PolygonCollider2D bounds;
     [SerializeField] Camera mainCam;
 
+    public static CameraMove I;
+
     Vector3 movement;
-    public static bool isFollowing = false;
+    public bool isFollowing = false;
     Vector2 lastMousePos;
-    static CinemachineVirtualCamera _thecam;
-    public static Transform camtransform;
+    public Transform camtransform;
     [HideInInspector] public bool canMove;
 
     protected void Awake()
     {
+        if (I == null)
+            I = this;
         camObject.transform.position = new Vector3(MapGenerator.I.mapW/2,MapGenerator.I.mapH /2,-10); // position the camera in middle of scene
-        _thecam = thecam; // >:(
 
         thecam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().enabled = false;
         camtransform = transform;
     }
 
-    protected void Start()                                  
-    {
-        //resizeBounds(MapGenerator.mapW,MapGenerator.mapH);
-    }
-
     public void resizeBounds(int width, int height)
     {
-        bounds.gameObject.transform.localScale = new Vector2(width, height);
+        bounds.gameObject.transform.localScale = new Vector2(width, height)*2;
         bounds.gameObject.transform.position = Vector2.zero;
         // we also need to relimit max fov so its not out of bounds somefucking how.
         maxFov = width / 5 + (width/50); // this was my first guess and it's pretty fuckin spot on
@@ -66,10 +63,10 @@ public class CameraMove : MonoBehaviour
 
         checkMouse();
 
-        if (Input.GetButtonDown("FasterCam"))
-            moveSpeed = 40f;
-        if (Input.GetButtonUp("FasterCam"))
-            moveSpeed = 32.5f;
+        if (Input.GetKeyDown(Keybinds.FasterCam))
+            moveSpeed *= 1.25f;
+        if (Input.GetKeyUp(Keybinds.FasterCam))
+            moveSpeed /= 1.25f;
 
         Vector3 pos = mainCam.WorldToViewportPoint(transform.position);
         pos.x = Mathf.Clamp(pos.x, 0.1f, 0.9f);
@@ -78,7 +75,7 @@ public class CameraMove : MonoBehaviour
         if (canMove)
         {
             transform.position = mainCam.ViewportToWorldPoint(pos);
-            camObject.transform.Translate(moveSpeed * Time.unscaledDeltaTime * movement);
+            transform.Translate(moveSpeed * Time.unscaledDeltaTime * movement);
         }
     }
 
@@ -95,40 +92,21 @@ public class CameraMove : MonoBehaviour
         }
     }
 
-    public static void follow(GameObject follow)
+    public void follow(GameObject follow)
     {
-        _thecam.Follow = follow.transform;
-        isFollowing = true;
+        I.thecam.Follow = follow.transform;
+        I.isFollowing = true;
     }
 
-    public static void unfollow()
+    public void unfollow()
     {
-        isFollowing = false;
-        _thecam.Follow = camtransform;
+        I.isFollowing = false;
+        I.thecam.Follow = I.camObject.transform;
     }
 
     private void checkMouse()
     {
-        if (Input.GetAxis("Mouse ScrollWheel") > 0)
-        {
-            if (lastMousePos == (Vector2)Input.mousePosition)
-                ZoomOrthoCamera(mainCam.ScreenToWorldPoint(lastMousePos), 1);
-            else
-            {
-                lastMousePos = Input.mousePosition;
-                ZoomOrthoCamera(mainCam.ScreenToWorldPoint(lastMousePos), 1);
-            }
-        }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0)
-        {
-            if (lastMousePos == (Vector2)Input.mousePosition)
-                ZoomOrthoCamera(mainCam.ScreenToWorldPoint(Input.mousePosition), -1);
-            else
-            {
-                lastMousePos = Input.mousePosition;
-                ZoomOrthoCamera(mainCam.ScreenToWorldPoint(Input.mousePosition), -1);
-            }
-        }
+        ZoomOrthoCamera(Input.GetAxis("Mouse ScrollWheel") * 5);
     }
 
     public void MoveTo(Vector2 pos) // todo : find a way to use this
@@ -137,25 +115,22 @@ public class CameraMove : MonoBehaviour
     }
 
     // Ortographic camera zoom towards a point (in world coordinates). Negative amount zooms in, positive zooms out
-    void ZoomOrthoCamera(Vector3 zoomTowards, float amount)
+    void ZoomOrthoCamera(/*Vector3 zoomTowards, */float amount)
     {
         if (thecam.m_Lens.OrthographicSize <= minFov && amount > 0)
             return;
         if (UIManager.mouseOverUI)
             return;
         // Calculate how much we will have to move towards the zoomTowards position
-        float multiplier = (1.0f / thecam.m_Lens.OrthographicSize * amount);
+        //float multiplier = (1.0f / thecam.m_Lens.OrthographicSize * amount);
 
-        transform.position += (zoomTowards - transform.position) * multiplier;
-        transform.position = new Vector3(transform.position.x,transform.position.y,-10f);
+        //thecam.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset += (zoomTowards - transform.position) * multiplier;
         
         thecam.m_Lens.OrthographicSize -= amount;
         
         thecam.m_Lens.OrthographicSize = Mathf.Clamp(thecam.m_Lens.OrthographicSize, minFov, maxFov);
-        if (thecam.m_Lens.OrthographicSize == maxFov)
-            canMove = false;
-        else
-            canMove = true;
+
+        canMove = thecam.m_Lens.OrthographicSize != maxFov;
     }
 
     public void ScreenShake()

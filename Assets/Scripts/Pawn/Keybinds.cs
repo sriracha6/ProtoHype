@@ -33,6 +33,7 @@ public static class Keybinds
     public static KeyCode rp_dec = KeyCode.LeftArrow;
 
     public static KeyCode hideUI = KeyCode.F1;
+    public static KeyCode FasterCam = KeyCode.LeftShift;
 
     public static bool UIhidden = false;
     public static int sliderStep = 5;

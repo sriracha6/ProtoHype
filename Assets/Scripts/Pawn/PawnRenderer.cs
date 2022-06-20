@@ -51,7 +51,6 @@ public class PawnRenderer : MonoBehaviour
 
         if (p.hasShield)
         {
-            DB.Null(shield);
             shield.sprite =
                 imageFromShieldID(p.shield.ID, p.shield.size);
         }

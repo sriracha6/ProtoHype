@@ -73,7 +73,7 @@ namespace RNG
                     map[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, map[x,y]);
                 }
             }
-            TilemapPlace.UpdateTilemap(map, MapGenerator.I.currentBiome.terrainFrequencies.terrain.ToArray(), false);
+            //TilemapPlace.UpdateTilemap(map, MapGenerator.I.currentBiome.terrainFrequencies.terrain.ToArray(), false);
 
             return map;
         }

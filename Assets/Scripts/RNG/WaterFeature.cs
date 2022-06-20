@@ -98,12 +98,9 @@ public static class WaterFeature
 
             for(int i = 0; i < river.radius * 2; i++)
             {
-                if (i % 2 == 0)
-                    newMap[(int)currentPosition.x, (int)((currentPosition.y + i).ClampInMap(height))] = waterLevel - 0.01f;
-                else
-                    newMap[(int)currentPosition.x, (int)((currentPosition.y - i).ClampInMap(height))] = waterLevel - 0.01f;
+                newMap[(int)direction.x, (direction.y + i).ClampInMap(height)] = waterLevel - 0.01f;
+                newMap[(int)direction.x, (direction.y - i).ClampInMap(height)] = waterLevel - 0.01f;
             }
-
             if (seed.Next(0, 100) >= 100 - CHANGE_SIZE_CHANCE)
             {
                 int x = seed.Next(0, 100);

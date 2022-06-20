@@ -68,7 +68,8 @@ public class MapGenerator : MonoBehaviour
     public bool isTestMap = false; // todo : should be false by default. lol
     public Biome currentBiome;
 
-    float[,] noiseMap;
+    public static float[,] noiseMap;
+    public static List<TerrainType> terrainTypes;
 
     protected void Awake()
     {
@@ -132,6 +133,7 @@ public class MapGenerator : MonoBehaviour
 
     public void GenMap()
     {
+        terrainTypes = currentBiome.terrainFrequencies.terrain;
         erosionAmount = Mathf.CeilToInt(mapWidth / 100);
 
         mapH = mapHeight;
@@ -152,16 +154,14 @@ public class MapGenerator : MonoBehaviour
         for (int i = 0; i < seasidesCount; i++)
             noiseMap.carveWaterBody(deepSeaLevel, rand, overrideRandom: true);
 
-        noiseMap.erodeNearWater(shallowSeaLevel, erosionAmount);
-        DrawMap();
+        //noiseMap.erodeNearWater(shallowSeaLevel, erosionAmount);
 
         new PathfindExtra();
+        DrawMap();
     }
 
     private void DrawMap()
     {
-        List<TerrainType> terrainTypes = currentBiome.terrainFrequencies.terrain;
-
         if (drawMode == DrawMode.NoiseMap)
         {
             currentTexture = TextureGenerator.textureFromHeightMap(noiseMap);
@@ -204,19 +204,18 @@ public class MapGenerator : MonoBehaviour
     private void generateWater()
     {
         foreach(Transform c in WCMngr.I.groundTilemap.transform)
-        {
             Destroy(c.gameObject); // kill kids (NOT LIKE THAT)
-        }
+        
         GameObject water = Instantiate(waterPrefab, WCMngr.I.groundTilemap.transform);
 
         Mesh m = water.GetComponent<MeshFilter>().sharedMesh;
-        Vector3 meshSize = m.bounds.size;
+        Vector3 meshSize = m.bounds.size * 2;
         
-        float xScale = mapWidth / meshSize.x;
-        float zScale = mapHeight / meshSize.z;
+        float xScale = (mapWidth * 2) / meshSize.x;
+        float zScale = (mapHeight * 2) / meshSize.z;
 
-        water.transform.localScale = new Vector3(xScale, 1, zScale); // wtf this works for now
-        water.transform.position = new Vector3(mapWidth/2, mapHeight/2, -11);
+        water.transform.localScale = new Vector3(xScale*2, 1, zScale*2);
+        water.transform.position = new Vector3(mapWidth+1, mapHeight+1, -11);
     }
 
     public static void generateTestRoom(int width, int height)
