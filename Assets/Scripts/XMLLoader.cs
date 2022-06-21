@@ -117,34 +117,34 @@ namespace XMLLoader
 
                 list.AddRange(meleeWeapons);
 
-                GenericManager.CreateGenericList(xmls.SelectSingleNode("List").Attributes.GetNamedItem("name").InnerText, list,
+                GenericManager.CreateGenericList(xmls.Q<string>("List", true), list,
                     typeof(Weapon));
 
                 return;
             }
 
-            if (xmls.SelectSingleNode("Type").InnerText.Equals("Melee"))
+            if (xmls.Q<string>("Type").Equals("Melee"))
             {
                 List<Attack> attacks = new List<Attack>();
 
-                foreach(XmlNode x in xmls.SelectSingleNode("Attacks").ChildNodes)
+                foreach(XmlNode x in xmls.Q<XmlNode>("Attacks", false, childNodes:true))
                 {
                     if (x.InnerXml.Equals("Attack"))
                     {
-                        attacks.Add(new Attack(x.Attributes.Item(0).InnerText,
-                            (DamageType)Enum.Parse(typeof(DamageType), x.SelectSingleNode("DamageType").InnerText),
-                            x.SelectSingleNode("Rare").InnerText.strToBool(),
-                            int.Parse(x.SelectSingleNode("Damage").InnerText)));
+                        attacks.Add(new Attack(x.Attrib(0),
+                            x.Enum<DamageType>(x.Q<string>("DamageType")),
+                            x.Q<bool>("Rare"),
+                            x.Q<int>("Damage")));
                     }
                 }
-                Weapon.CreateMelee(filepath, xmls.SelectSingleNode("Name").InnerText, WeaponType.Melee,
-                    xmls.SelectSingleNode("WeaponClass") == null ? "" : xmls.SelectSingleNode("WeaponClass").InnerText, 
-                    xmls.SelectSingleNode("Description") == null ? "" : xmls.SelectSingleNode("Description").InnerText,
-                    MeleeRange.getByName(xmls.SelectSingleNode("MeleeRange").InnerText),
-                    xmls.SelectSingleNode("Warmup").InnerText.strToBool(),
-                    int.Parse(xmls.SelectSingleNode("ArmorPenSharp").InnerText),
-                    int.Parse(xmls.SelectSingleNode("ArmorPenBlunt").InnerText),
-                    float.Parse(xmls.SelectSingleNode("Size").InnerText),
+                Weapon.CreateMelee(filepath, xmls.Q<string>("Name"), WeaponType.Melee,
+                    xmls.Q<string>("WeaponClass"), 
+                    xmls.Q<string>("Description"),
+                    MeleeRange.getByName(xmls.Q<string>("MeleeRange")),
+                    xmls.Q<bool>("Warmup"),
+                    xmls.Q<int>("ArmorPenSharp"),
+                    xmls.Q<int>("ArmorPenBlunt"),
+                    xmls.Q<float>("Size"),
                     attacks);
             }
             else
@@ -161,7 +161,7 @@ namespace XMLLoader
             if (isGeneric)
             {
                 List<Weapon> list = new List<Weapon>();
-                List<Weapon> items = ParseFuncs.parseWeapons(xmls.SelectSingleNode("List"));
+                List<Weapon> items = xmls.Q<List<Weapon>>("List");
                 List<Weapon> rangedWeapons = new List<Weapon>();
                 foreach(Item item in items)
                 {
@@ -169,33 +169,34 @@ namespace XMLLoader
                 }
                 list.AddRange(rangedWeapons);
 
-                GenericManager.CreateGenericList(xmls.SelectSingleNode("List").Attributes.GetNamedItem("name").InnerText, list,
+                GenericManager.CreateGenericList(xmls.Q<XmlNode>("List").Q<string>("name", attribute: true), list,
                     typeof(Weapon));
 
                 return;
             }
 
-            if (xmls.SelectSingleNode("Type").InnerText.Equals("Ranged"))
+            if (xmls.Q<string>("Type").Equals("Ranged"))
             {
-                var aclong = xmls.SelectSingleNode("Accuracy").SelectSingleNode("Long");
-                var acmed = xmls.SelectSingleNode("Accuracy").SelectSingleNode("Med");
-                var acshort = xmls.SelectSingleNode("Accuracy").SelectSingleNode("Short");
+                var aclong = xmls.Q<XmlNode>("Accuracy").Q<XmlNode>("Long");
+                var acmed = xmls.Q<XmlNode>("Accuracy").Q<XmlNode>("Med");
+                var acshort = xmls.Q<XmlNode>("Accuracy").Q<XmlNode>("Short");
 
-                var ff = xmls.SelectSingleNode("MeleeDamage").InnerText;
+                var ff = xmls.Q<string>("MeleeDamage");
 
                 if(!float.TryParse(ff, out float meleeDamage))
                     meleeDamage = 0;
-                Weapon.CreateRanged(filepath, xmls.SelectSingleNode("Name").InnerText,
-                    xmls.SelectSingleNode("Description") == null ? "" : xmls.SelectSingleNode("Description").InnerText, WeaponType.Ranged, 
-                    xmls.SelectSingleNode("WeaponClass") == null ? "" : xmls.SelectSingleNode("WeaponClass").InnerText,
-                    int.Parse(xmls.SelectSingleNode("Range").InnerText),
-                    float.Parse(xmls.SelectSingleNode("ArmorPen").InnerText),
-                    (RangeType)Enum.Parse(typeof(RangeType), xmls.SelectSingleNode("RangeType").InnerText),
+                Weapon.CreateRanged(filepath, xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"), 
+                    WeaponType.Ranged, 
+                    xmls.Q<string>("WeaponClass"),
+                    xmls.Q<int>("Range"),
+                    xmls.Q<float>("ArmorPen"),
+                    xmls.Enum<RangeType>(xmls.Q<string>("RangeType")),
                     meleeDamage,
-                    float.Parse(xmls.SelectSingleNode("Warmup").InnerText),
-                    xmls.SelectSingleNode("MeleeDamageType").InnerText,
-                    int.Parse(xmls.SelectSingleNode("Damage").InnerText),
-                    float.Parse(xmls.SelectSingleNode("Size").InnerText),
+                    xmls.Q<float>("Warmup"),
+                    xmls.Q<string>("MeleeDamageType"),
+                    xmls.Q<int>("Damage"),
+                    xmls.Q<float>("Size"),
                     aclong == null ? 0 : aclong.InnerText.parseFloat(),  // long
                     acmed == null ? 0 : acmed.InnerText.parseFloat(),  // med
                     acshort == null ? 0 : acshort.InnerText.parseFloat()   // short
@@ -215,23 +216,23 @@ namespace XMLLoader
             if (isGeneric)
             {
                 List<Projectile> list = new List<Projectile>();
-                list.AddRange(ParseFuncs.parseProjectiles(xmls.SelectSingleNode("List")));
+                list.AddRange(xmls.Q<List<Projectile>>("List"));
 
-                GenericManager.CreateGenericList(xmls.SelectSingleNode("List").Attributes.GetNamedItem("name").InnerText, list,
+                GenericManager.CreateGenericList(xmls.Q<XmlNode>("List").Q<string>("name", attribute: true), list,
                     typeof(Projectile));
 
                 return;
             }
-            if (xmls.SelectSingleNode("Type").InnerText.Equals("Projectile"))
+            if (xmls.Q<string>("Type").Equals("Projectile"))
             {
-                Projectile.Create(xmls.SelectSingleNode("Name").InnerText,
-                    xmls.SelectSingleNode("Description")==null ? "" : xmls.SelectSingleNode("Description").InnerText, 
+                Projectile.Create(xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"), 
                     filepath,
-                    xmls.SelectSingleNode("ForWeapon").InnerText,
-                    float.Parse(xmls.SelectSingleNode("Damage").InnerText),
-                    (DamageType)Enum.Parse(typeof(DamageType),ParseFuncs.toTitleCase(xmls.SelectSingleNode("DamageType").InnerText)),
-                    float.Parse(xmls.SelectSingleNode("AccuracyEffect").InnerText),
-                    xmls.SelectSingleNode("Fire").InnerText.strToBool());
+                    xmls.Q<string>("ForWeapon"),
+                    xmls.Q<float>("Damage"),
+                    xmls.Enum<DamageType>(xmls.Q<string>("DamageType").toTitleCase()),
+                    xmls.Q<float>("AccuracyEffect"),
+                    xmls.Q<bool>("Fire"));
             }
             else
             {
@@ -248,9 +249,9 @@ namespace XMLLoader
             if (isGeneric)
             {
                 List<Shield> list = new List<Shield>();
-                list.AddRange(ParseFuncs.parseShields(xmls.SelectSingleNode("List")));
+                list.AddRange(xmls.Q<List<Shield>>("List"));
 
-                GenericManager.CreateGenericList(xmls.SelectSingleNode("List").Attributes.GetNamedItem("name").InnerText, list,
+                GenericManager.CreateGenericList(xmls.Q<XmlNode>("List").Q<string>("name", attribute: true), list,
                     typeof(Shield));
 
                 return;
@@ -258,13 +259,13 @@ namespace XMLLoader
             
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Shield"))
             {
-                Shield.Create(filepath, xmls.SelectSingleNode("Name").InnerText,
-                    xmls.SelectSingleNode("Description") == null ? "" : xmls.SelectSingleNode("Description").InnerText,
-                    float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Sharp")[0].InnerText),
-                    float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Blunt")[0].InnerText),
-                    float.Parse(xmls.SelectSingleNode("MovementSpeedAffect").InnerText),
-                    float.Parse(xmls.SelectSingleNode("BaseBlockChance").InnerText),
-                    float.Parse(xmls.SelectSingleNode("Size").InnerText));
+                Shield.Create(filepath, xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
+                    xmls.Q<XmlNode>("Protection").Q<float>("Sharp"),
+                    xmls.Q<XmlNode>("Protection").Q<float>("Blunt"),
+                    xmls.Q<float>("MovementSpeedAffect"),
+                    xmls.Q<float>("BaseBlockChance"),
+                    xmls.Q<float>("Size"));
             }
             else
             {
@@ -279,25 +280,25 @@ namespace XMLLoader
             if (isGeneric)
             {
                 List<List<Armor>> list = new List<List<Armor>>();
-                list.AddRange(ParseFuncs.parseArmor(xmls.SelectSingleNode("List")));
+                list.AddRange(xmls.Q<List<List<Armor>>>("List"));
 
-                GenericManager.CreateGenericList(xmls.SelectSingleNode("List").Attributes.GetNamedItem("name").InnerText, list,
+                GenericManager.CreateGenericList(xmls.Q<XmlNode>("List").Q<string>("name", attribute: true), list,
                     typeof(Armor));
 
                 return;
             }
 
-            if (xmls.SelectSingleNode("Type").InnerText == "Armor")
+            if (xmls.Q<string>("Type") == "Armor")
             {
-                Armor.Create(filepath, xmls.SelectSingleNode("Name").InnerText,
-                    xmls.SelectSingleNode("Description")==null ? "" : xmls.SelectSingleNode("Description").InnerText,
-                    int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
-                    float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Sharp")[0].InnerText),
-                    float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Blunt")[0].InnerText),
-                    float.Parse(xmls.SelectSingleNode("MovementSpeedAffect").InnerText),
-                    (Layer)Enum.Parse(typeof(Layer), xmls.SelectSingleNode("Layer").InnerText),
-                    xmls.SelectSingleNode("Utility").InnerText.strToBool(),
-                    ParseFuncs.parseAllowedBodyparts(xmls.SelectSingleNode("CoversList")));
+                Armor.Create(filepath, xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
+                    xmls.Q<int>("Hitpoints"),
+                    xmls.Q<XmlNode>("Protection").Q<float>("Sharp"),
+                    xmls.Q<XmlNode>("Protection").Q<float>("Blunt"),
+                    xmls.Q<float>("MovementSpeedAffect"),
+                    xmls.Enum<Layer>(xmls.Q<string>("Layer")),
+                    xmls.Q<bool>("Utility"),
+                    xmls.Q<List<Bodypart>>("CoversList"));
             }
             else
             {
@@ -310,30 +311,30 @@ namespace XMLLoader
         {
             XmlElement xmls = LoadXML(filepath); // todo: this will be WC when we need archer icons and stuff hopefully
 
-            bool usedByAll = xmls.SelectNodes("Soldier")[0].ParentNode.Attributes.GetNamedItem("country").InnerText == "all";
+            bool usedByAll = xmls.Q<XmlNode>("Soldier").ParentNode.Q<string>("country", true) == "all";
             
             int currentLoop = 0;
-            foreach (XmlElement LOLWHYISTHISHERE in xmls.SelectNodes("Soldier"))
+            foreach (XmlElement LOLWHYISTHISHERE in xmls.Qs("Soldier"))
             {
-                var t = xmls.SelectNodes("Soldier")[currentLoop];
-                bool riding = t.SelectSingleNode("RidingAnimal").InnerText == "false";
+                var t = xmls.Qs("Soldier")[currentLoop];
+                bool riding = t.Q<string>("RidingAnimal") == "false";
 
-                var x = TroopType.Create(t.Attributes.GetNamedItem("name").InnerText,
-                    t.SelectSingleNode("Description") == null ? "" : t.SelectSingleNode("Description").InnerText,
+                var x = TroopType.Create(t.Q<string>("name", attribute:true),
+                    t.Q<string>("Description"),
                     filepath,   
-                    usedByAll ? null : Country.Get(t.ParentNode.Attributes.GetNamedItem("country").Value),
-                    ParseFuncs.parseWeapons(t.SelectSingleNode("Weapons")),
-                    ParseFuncs.parseWeapons(t.SelectSingleNode("Sidearms")),
-                    ParseFuncs.parseArmor(t.SelectSingleNode("Armor")),
-                    ParseFuncs.parseShields(t.SelectSingleNode("Shields")),
-                    ParseFuncs.parseSkill(0, t.SelectSingleNode("SkillsRange").ChildNodes.Item(0).InnerText),
-                    ParseFuncs.parseSkill(1, t.SelectSingleNode("SkillsRange").ChildNodes.Item(0).InnerText),
-                    ParseFuncs.parseSkill(0, t.SelectSingleNode("SkillsRange").ChildNodes.Item(1).InnerText),
-                    ParseFuncs.parseSkill(1, t.SelectSingleNode("SkillsRange").ChildNodes.Item(1).InnerText),
+                    usedByAll ? null : Country.Get(t.ParentNode.Q<string>("country", attribute:true)),
+                    t.Q<List<Weapon>>("Weapons"),
+                    t.Q<List<Weapon>>("Sidearms"),
+                    t.Q<List<List<Armor>>>("Armor"),
+                    t.Q<List<Shield>>("Shields"),
+                    ParseFuncs.parseSkill(0, t.Q<XmlNode>("SkillsRange").ChildNodes[0].InnerText),
+                    ParseFuncs.parseSkill(1, t.Q<XmlNode>("SkillsRange").ChildNodes[0].InnerText),
+                    ParseFuncs.parseSkill(0, t.Q<XmlNode>("SkillsRange").ChildNodes[1].InnerText),
+                    ParseFuncs.parseSkill(1, t.Q<XmlNode>("SkillsRange").ChildNodes[1].InnerText),
                     !riding,
-                    !riding ? Animal.Get(t.SelectSingleNode("RidingAnimal").InnerText) : null,
-                    !riding ? ParseFuncs.parseAnimalArmor(t.SelectSingleNode("RidingAnimal").InnerText) : null,
-                    t.SelectSingleNode("Icon").InnerText);
+                    !riding ? Animal.Get(t.Q<string>("RidingAnimal")) : null,
+                    !riding ? ParseFuncs.parseAnimalArmor(t.Q<string>("RidingAnimal")) : null,
+                    t.Q<string>("Icon"));
 
                 if(usedByAll)
                     foreach(Country c in Country.List)
@@ -346,10 +347,10 @@ namespace XMLLoader
         public static void LoadCountry(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
-            if (xmls.SelectSingleNode("MemberName") != null)
+            if (xmls.Q<XmlNode>("MemberName") != null)
             {
-                var x = Country.Create(xmls.SelectSingleNode("MemberName").ParentNode.Attributes.GetNamedItem("name").Value,
-                    xmls.SelectSingleNode("MemberName").InnerText);
+                var x = Country.Create(xmls.Q<XmlNode>("MemberName").ParentNode.Q<string>("name", attribute:true),
+                    xmls.Q<string>("MemberName"));
                 CachedItems.renderedCountries.Add(new RenderedCountry(LoadSprite(filepath), x.Name));
             }
             else
@@ -362,23 +363,23 @@ namespace XMLLoader
         public static void LoadBodyparts(string filepath)
         {
             XmlElement xmls = LoadXML(filepath);
-            if (xmls.SelectSingleNode("//BodyParts")!=null)
+            if (xmls.Q<XmlNode>("//BodyParts")!=null)
             {
-                foreach (XmlNode x in xmls.SelectSingleNode("//BodyParts").SelectNodes("BodyPart"))
+                foreach (XmlNode x in xmls.Q<XmlNode>("//BodyParts").Qs("BodyPart"))
                 {
-                    Bodypart.Create(x.Attributes.GetNamedItem("name").InnerText,
-                        int.Parse(x.SelectSingleNode("HP").InnerText),
-                        (PartType)Enum.Parse(typeof(PartType), x.SelectSingleNode("Type").InnerText),
-                        x.SelectSingleNode("PartOf") == null ? "" : x.SelectSingleNode("PartOf").InnerText/*BodypartManager.Get(x.SelectSingleNode("PartOf").InnerText)*/,
-                        float.Parse(x.SelectSingleNode("PainFactor").InnerText),
-                        float.Parse(x.SelectSingleNode("BleedingFactor").InnerText),
-                        float.Parse(x.SelectSingleNode("DamageMultiplier").InnerText),
-                        int.Parse(x.SelectSingleNode("Count").InnerText),
-                        (VitalSystem)Enum.Parse(typeof(VitalSystem), x.SelectSingleNode("Effects").InnerText),
-                        (EffectAmount)Enum.Parse(typeof(EffectAmount), x.SelectSingleNode("EffectAmount").InnerText),
-                        (HitChance)Enum.Parse(typeof(HitChance), x.SelectSingleNode("HitChance").InnerText),
-                        (CountType)Enum.Parse(typeof(CountType), x.SelectSingleNode("CountType").InnerText),
-                        x.SelectSingleNode("Group") == null ? "" : x.SelectSingleNode("Group").InnerText);
+                    Bodypart.Create(x.Q<string>("name", attribute:true),
+                        x.Q<int>("HP"),
+                        x.Enum<PartType>(x.Q<string>("Type")),
+                        x.Q<string>("PartOf")/*BodypartManager.Get(x.SelectSingleNode("PartOf").InnerText)*/,
+                        x.Q<float>("PainFactor"),
+                        x.Q<float>("BleedingFactor"),
+                        x.Q<float>("DamageMultiplier"),
+                        x.Q<int>("Count"),
+                        x.Enum<VitalSystem>(x.Q<string>("Effects")),
+                        x.Enum<EffectAmount>(x.Q<string>("EffectAmount")),
+                        x.Enum<HitChance>(x.Q<string>("HitChance")),
+                        x.Enum<CountType>(x.Q<string>("CountType")),
+                        x.Q<string>("Group"));
                 }
                 List<Bodypart> list = new List<Bodypart>();
                 foreach(Bodypart B in Bodypart.List)
@@ -420,16 +421,16 @@ namespace XMLLoader
         public static void LoadBuilding(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
-            if (xmls.SelectSingleNode("Type").InnerText.Equals("Building"))
+            if (xmls.Q<string>("Type").Equals("Building"))
             {
-                Building.Create(xmls.SelectSingleNode("Name").InnerText,
-                    int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
-                    int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
-                    int.Parse(xmls.SelectSingleNode("CoverQuality").InnerText),
-                    xmls.SelectSingleNode("Lean").InnerText.strToBool(),
-                    xmls.SelectSingleNode("SpecialPlace").InnerText.strToBool(),
-                    xmls.SelectSingleNode("Rubble").InnerText.strToBool(),
-                    (RubbleType)Enum.Parse(typeof(RubbleType), xmls.SelectSingleNode("RubbleType").InnerText));
+                Building.Create(xmls.Q<string>("Name"),
+                    xmls.Q<int>("Hitpoints"),
+                    xmls.Q<int>("Flammability"),
+                    xmls.Q<int>("CoverQuality"),
+                    xmls.Q<bool>("Lean"),
+                    xmls.Q<bool>("SpecialPlace"),
+                    xmls.Q<bool>("Rubble"),
+                    xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")));
             }
             else
             {
@@ -442,14 +443,14 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Prop"))
             {
-                Furniture.Create(xmls.SelectSingleNode("Name").InnerText,
-                    xmls.SelectSingleNode("Tilable").InnerText.strToBool(),
-                    int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
-                    xmls.SelectSingleNode("Rubble").InnerText.strToBool(),
-                    (RubbleType)Enum.Parse(typeof(RubbleType), xmls.SelectSingleNode("RubbleType").InnerText),
-                    int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
-                    int.Parse(xmls.SelectSingleNode("CoverQuality").InnerText),
-                    xmls.SelectSingleNode("Lean").InnerText.strToBool());
+                Furniture.Create(xmls.Q<string>("Name"),
+                    xmls.Q<bool>("Tilable"),
+                    xmls.Q<int>("Hitpoints"),
+                    xmls.Q<bool>("Rubble"),
+                    xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")),
+                    xmls.Q<int>("Flammability"),
+                    xmls.Q<int>("CoverQuality"),
+                    xmls.Q<bool>("Lean"));
             }
             else
             {
@@ -460,11 +461,11 @@ namespace XMLLoader
         public static void LoadFloor(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
-            if (xmls.SelectSingleNode("Type").InnerText.Equals("Floor"))
+            if (xmls.Q<string>("Type").Equals("Floor"))
             {
-                Floor.Create(xmls.SelectSingleNode("Name").InnerText,
-                    int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
-                    int.Parse(xmls.SelectSingleNode("Flammability").InnerText));
+                Floor.Create(xmls.Q<string>("Name"),
+                    xmls.Q<int>("Hitpoints"),
+                    xmls.Q<int>("Flammability"));
             }
             else
             {
@@ -477,11 +478,11 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Roof"))
             {
-                Roof.Create(xmls.SelectSingleNode("Name").InnerText,
-                    int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
-                    int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
-                    new RoofStats(int.Parse(xmls.SelectSingleNode("RoofStats").SelectSingleNode("SmallProjectileBlock").InnerText),
-                    int.Parse(xmls.SelectSingleNode("RoofStats").SelectSingleNode("LargeProjectileBlock").InnerText)));
+                Roof.Create(xmls.Q<string>("Name"),
+                    xmls.Q<int>("Hitpoints"),
+                    xmls.Q<int>("Flammability"),
+                    new RoofStats(xmls.Q<XmlNode>("RoofStats").Q<int>("SmallProjectileBlock"),
+                        xmls.Q<XmlNode>("RoofStats").Q<int>("LargeProjectileBlock")));
             }
             else
             {
@@ -492,36 +493,35 @@ namespace XMLLoader
         public static void LoadNature(string filepath)
         {
             XmlElement xmls = LoadXML(filepath);
-            if (xmls.SelectSingleNode("Type").InnerText.Equals("Nature"))
+            if (xmls.Q<string>("Type").Equals("Nature"))
             {
-                Buildings.Plant.Create(xmls.SelectSingleNode("Name").InnerText,
-                    int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
-                    int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
-                    int.Parse(xmls.SelectSingleNode("CoverQuality").InnerText),
-                    xmls.SelectSingleNode("Lean").InnerText.strToBool(),
+                Buildings.Plant.Create(xmls.Q<string>("Name"),
+                    xmls.Q<int>("Hitpoints"),
+                    xmls.Q<int>("Flammability"),
+                    xmls.Q<int>("CoverQuality"),
+                    xmls.Q<bool>("Lean"),
                     ParseFuncs.parseSpriteSheetFromName(filepath, 512));
             }
             else
             {
                 Debug.Log("Not a nature. lol wtf");
-                Debug.Log(":: " + xmls.SelectSingleNode("Type").InnerText);
                 return;
             }
         }
         public static void LoadTrap(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
-            if (xmls.SelectSingleNode("Type").InnerText.Equals("Trap"))
+            if (xmls.Q<string>("Type").Equals("Trap"))
             {
-                Trap.Create(xmls.SelectSingleNode("Name").InnerText,
-                    int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
-                    int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
-                    int.Parse(xmls.SelectSingleNode("Damage").InnerText),
-                    xmls.SelectSingleNode("SpecialPlace").InnerText.strToBool(),
-                    xmls.SelectSingleNode("Rubble").InnerText.strToBool(),
-                    (RubbleType)Enum.Parse(typeof(RubbleType), xmls.SelectSingleNode("RubbleType").InnerText),
-                    int.Parse(xmls.SelectSingleNode("CoverQuality").InnerText),
-                    xmls.SelectSingleNode("Lean").InnerText.strToBool());
+                Trap.Create(xmls.Q<string>("Name"),
+                    xmls.Q<int>("Hitpoints"),
+                    xmls.Q<int>("Flammability"),
+                    xmls.Q<int>("Damage"),
+                    xmls.Q<bool>("SpecialPlace"),
+                    xmls.Q<bool>("Rubble"),
+                    xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")),
+                    xmls.Q<int>("CoverQuality"),
+                    xmls.Q<bool>("Lean"));
             }
             else
             {
@@ -533,15 +533,15 @@ namespace XMLLoader
         public static void LoadTerrainType(string filepath)
         {
             XmlNode xmls = LoadWC(filepath);
-            if (xmls.SelectSingleNode("Type").InnerText == "TerrainType")
+            if (xmls.Q<string>("Type") == "TerrainType")
             {
                 TerrainType temp = 
-                TerrainType.Create(xmls.SelectSingleNode("Name").InnerText,
-                    float.Parse(xmls.SelectSingleNode("Height").InnerText),
-                    ParseFuncs.parseColor(xmls.SelectSingleNode("Color").InnerText),
+                TerrainType.Create(xmls.Q<string>("Name"),
+                    xmls.Q<float>("Height"),
+                    xmls.Q<Color>("Color"),
                     null,
-                    (SpecialType)Enum.Parse(typeof(SpecialType), xmls.SelectSingleNode("SpecialType").InnerText),
-                    ParseFuncs.strToBool(xmls.SelectSingleNode("SupportsNature").InnerText));
+                    xmls.Enum<SpecialType>(xmls.Q<string>("SpecialType")),
+                    xmls.Q<bool>("SupportsNature"));
 
                     SpriteSheetCreator.I.createTerrainTileFromSheet(
                         LoadImage(filepath), ref temp);
@@ -556,17 +556,17 @@ namespace XMLLoader
         {
             XmlElement xmls = LoadXML(filepath);
 
-            if (xmls.SelectSingleNode("Type").InnerText=="Biome")
+            if (xmls.Q<string>("Type")=="Biome")
             {
-                Biome.Create(xmls.SelectSingleNode("Name").InnerText,
-                    xmls.SelectSingleNode("Description").InnerText,
-                    new LocationData(float.Parse(xmls.SelectSingleNode("Location").SelectSingleNode("Temperature").InnerText),
-                    (FlatnessPreference)Enum.Parse(typeof(FlatnessPreference), xmls.SelectSingleNode("Location").SelectSingleNode("Prefers").InnerText)),
-                    ParseFuncs.parseWeatherFrequencies(xmls.SelectSingleNode("WeatherFrequencies")),
-                    ParseFuncs.parseTerrainFrequencies(xmls.SelectSingleNode("Terrains")),
-                    ParseFuncs.parseFlora(xmls.SelectSingleNode("Plants").InnerText),
-                    ParseFuncs.parseColor(xmls.SelectSingleNode("Color").InnerText),
-                    float.Parse(xmls.SelectSingleNode("PlantDensity").InnerText));
+                Biome.Create(xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
+                    new LocationData(xmls.Q<XmlNode>("Location").Q<float>("Temperature"),
+                        xmls.Q<XmlNode>("Location").Enum<FlatnessPreference>(xmls.Q<XmlNode>("Location").Q<string>("Prefers"))),
+                    xmls.Q<List<Weather>>("WeatherFrequencies"),
+                    xmls.Q<TerrainFrequencies>("Terrains"),
+                    xmls.Q<List<Plant>>("Plants"),
+                    xmls.Q<Color>("Color"),
+                    xmls.Q<float>("PlantDensity"));
             }
             else
             {
@@ -578,15 +578,15 @@ namespace XMLLoader
         public static void LoadAnimal(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
-            if (xmls.SelectSingleNode("Ridable") != null)
+            if (xmls.Q<XmlNode>("Ridable") != null)
             {
-                var x = Animal.Create(xmls.SelectSingleNode("Name").InnerText,
-                    xmls.SelectSingleNode("Description").InnerText,
+                var x = Animal.Create(xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
                     filepath,
-                    xmls.SelectSingleNode("Ridable").InnerText.strToBool(),
-                    xmls.SelectSingleNode("SpeedEffect").InnerText.parseFloat(),
-                    int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
-                    int.Parse(xmls.SelectSingleNode("HitChance").InnerText));
+                    xmls.Q<bool>("Ridable"),
+                    xmls.Q<float>("SpeedEffect"),
+                    xmls.Q<int>("Hitpoints"),
+                    xmls.Q<int>("HitChance"));
                 DB.ClassString(x);
             }
             else
@@ -598,14 +598,14 @@ namespace XMLLoader
         public static void LoadAnimalArmor(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
-            if (xmls.SelectSingleNode("ForAnimal") != null)
+            if (xmls.Q<XmlNode>("ForAnimal") != null)
             {
-                AnimalArmor.Create(xmls.SelectSingleNode("Name").InnerText,
-                    xmls.SelectSingleNode("Description").InnerText,
+                AnimalArmor.Create(xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
                     filepath,
-                    int.Parse(xmls.SelectSingleNode("Protection").InnerText),
-                    Animal.Get(xmls.SelectSingleNode("ForAnimal").InnerText),
-                    xmls.SelectSingleNode("MoveSpeedEffect").InnerText.parseFloat());
+                    xmls.Q<int>("Protection"),
+                    Animal.Get(xmls.Q<string>("ForAnimal")),
+                    xmls.Q<float>("MoveSpeedEffect"));
             }
             else
             {
@@ -654,8 +654,8 @@ namespace XMLLoader
 
             List<Weapon> weapons = new List<Weapon>();
 
-            if(xmls.SelectSingleNode("GenericSpecial") != null)
-                foreach(XmlElement x in xmls.SelectNodes("GenericSpecial"))
+            if(xmls.Q<XmlNode>("GenericSpecial") != null)
+                foreach(XmlElement x in xmls.Qs("GenericSpecial"))
                 {
                     if (x.InnerText == "Any")
                         weapons.AddRange(Weapon.List);
@@ -672,7 +672,7 @@ namespace XMLLoader
         {
             List<Projectile> weapons = new List<Projectile>();
 
-            foreach (XmlElement x in xmls.SelectNodes("GenericSpecial"))
+            foreach (XmlElement x in xmls.Qs("GenericSpecial"))
             {
                 if (x.InnerText == "Any")
                     weapons.AddRange(Projectile.List);
@@ -694,7 +694,7 @@ namespace XMLLoader
             List<List<Armor>> armor = new List<List<Armor>>();
             List<Armor> normalRequired = new List<Armor>();
 
-            foreach (XmlElement x in xmls.SelectNodes("PickFrom"))
+            foreach (XmlElement x in xmls.Qs("PickFrom"))
             {
                 List<Armor> tempChoice = new List<Armor>();
                 foreach (string s in x.InnerText.Split(','))
@@ -714,8 +714,8 @@ namespace XMLLoader
                 return null; // no shields
             List<Shield> shields = new List<Shield>();
 
-            if (xmls.SelectSingleNode("GenericSpecial") != null)
-                foreach (XmlElement x in xmls.SelectNodes("GenericSpecial"))
+            if (xmls.Q<XmlNode>("GenericSpecial") != null)
+                foreach (XmlElement x in xmls.Qs("GenericSpecial"))
                 {
                     if (x.InnerText == "Any")
                         shields.AddRange(Shield.List);
@@ -774,8 +774,8 @@ namespace XMLLoader
             foreach(XmlNode node in x.ChildNodes)
             {
                 if(node.NodeType!=XmlNodeType.Comment)
-                weatherFrequencies.Add(new Weather((WeatherType)Enum.Parse(typeof(WeatherType),node.InnerText), 
-                    float.Parse(node.Attributes.GetNamedItem("frequency").InnerText)));
+                weatherFrequencies.Add(new Weather(Enum<WeatherType>(null, node.InnerText), 
+                    node.Q<float>("frequency", attribute:true)));
             }
 
             return weatherFrequencies;
@@ -790,8 +790,9 @@ namespace XMLLoader
                 terrain.Add(TerrainType.Get(node.InnerText)); // remember this doesnt work yet because i havent created any yet
                 float amount;
 
-                if (node.Attributes.GetNamedItem("frequency") == null) amount = 1;
-                else amount = float.Parse(node.Attributes.GetNamedItem("frequency").InnerText);
+                if (node.Q<XmlNode>("frequency", attribute:true) == null) amount = 1;
+
+                else amount = node.Q<float>("frequency", attribute:true);
 
                 frequencies.Add(amount);
             }
@@ -894,6 +895,107 @@ namespace XMLLoader
         public static T randomElement<T>(this T[] list)
         {
             return list[Random.Range(0, list.Length)];
+        }
+        
+        public static T Q<T>(this XmlNode x, string t, bool attribute=false, bool childNodes=false)
+        {
+            if(!attribute && x.SelectSingleNode(t) == null)
+            {
+                if(t != "Description" || t != "WeaponClass")
+                    DB.Attention($"No node : {t}");
+                return default(T);
+            }
+
+            if(attribute && x.Attributes.GetNamedItem(t) == null)
+            {
+                if (t != "Description")
+                    DB.Attention($"No attribute : {t}");
+                return default(T);
+            }
+
+            string innerText = !attribute ? x.SelectSingleNode(t).InnerText : x.Attributes.GetNamedItem(t).InnerText;
+            XmlNode innerNode = x.SelectSingleNode(t);
+
+            if (typeof(T) == typeof(string))
+                return (T)(object)innerText;
+            if (typeof(T) == typeof(bool))
+                return (T)(object)innerText.strToBool();
+            if (typeof(T) == typeof(Color))
+                return (T)(object)parseColor(innerText);
+            if (typeof(T) == typeof(float))
+                if (float.TryParse(innerText, out float retf))
+                    return (T)(object)retf;
+                else
+                {
+                    DB.Attention("Not a float"); return default(T);
+                }
+            if (typeof(T) == typeof(int))
+                if (int.TryParse(innerText, out int retf))
+                    return (T)(object)retf;
+                else
+                {
+                    DB.Attention("Not an int"); return default(T);
+                }
+            if (typeof(T) == typeof(List<AnimalArmor>))
+                return (T)(object)parseAnimalArmor(innerText);
+            if (typeof(T) == typeof(TerrainFrequencies))
+                return (T)(object)parseTerrainFrequencies(innerNode);
+            if (typeof(T) == typeof(List<Weather>))
+                return (T)(object)parseWeatherFrequencies(innerNode);
+            if (typeof(T) == typeof(List<Plant>))
+                return (T)(object)parseFlora(innerText);
+            if (typeof(T) == typeof(List<Bodypart>))
+                return (T)(object)parseAllowedBodyparts(innerNode);
+            if (typeof(T) == typeof(List<Shield>))
+                return (T)(object)parseShields(innerNode);
+            if (typeof(T) == typeof(List<List<Armor>>))
+                return (T)(object)parseArmor(innerNode);
+            if (typeof(T) == typeof(List<Projectile>))
+                return (T)(object)parseProjectiles(innerNode);
+            if (typeof(T) == typeof(List<Weapon>))
+                return (T)(object)parseWeapons(innerNode);
+            if (typeof(T) == typeof(XmlNode) && childNodes)
+                return (T)(object)innerNode.ChildNodes;
+            if (typeof(T) == typeof(XmlNode) && !childNodes)
+                return (T)(object)innerNode;
+
+            throw new ArgumentException("Invalid T parameter.");
+            return default(T);
+        }
+        public static XmlNodeList Qs(this XmlNode x, string text)
+        {
+            if (x.SelectSingleNode(text) == null)
+            {
+                DB.Attention("Invalid group select");
+                return null;
+            }
+            else
+                return x.SelectNodes(text);
+        }
+
+        public static string Attrib(this XmlNode x, int id)
+        {
+            if (x.Attributes[id] == null)
+            {
+                DB.Attention($"No attribute ID : {id}");
+                return "";
+            }
+            else
+                return x.Attributes[id].InnerText;
+        }
+
+        public static T Enum<T>(this XmlNode x, string t) where T : struct, IConvertible
+        {
+            if (!typeof(T).IsEnum)
+                throw new ArgumentException("T must be an enum type");
+
+            if(System.Enum.TryParse(t, out T enu))
+                return enu;
+            else
+            {
+                DB.Attention($"Invalid {nameof(T)}. '{t}' is not valid.");
+                return default(T);
+            }    
         }
     }
 }
