@@ -141,7 +141,7 @@
     <Compile Include="Assets\Scripts\Player\WCMngr.cs" />
     <Compile Include="Assets\Scripts\RNG\EditorMapGen.cs" />
     <Compile Include="Assets\test.cs" />
-    <Compile Include="Assets\Scripts\Type\Nature.cs" />
+    <Compile Include="Assets\Scripts\Type\Plant.cs" />
     <Compile Include="Assets\Scripts\CachedItems.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\Item.cs" />
     <Compile Include="Assets\Scripts\Skills.cs" />

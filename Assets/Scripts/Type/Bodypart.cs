@@ -39,42 +39,7 @@ namespace Body
         Normal,                                                                               
         Elevated                                                                              
     }                                                                                         
-                                                                                              
-    public static class BodypartManager                                                       
-    {                                                                                         
-        public static List<Bodypart> BodypartList { get; private set; } = new List<Bodypart>();
-
-        public static Bodypart Create(string name, float hp, PartType pt, string parent, float pfactor, float bfactor,
-            float dfactor, int cunt, VitalSystem effectz, EffectAmount eamont, HitChance hchance, CountType counttype, string group)
-        {
-            //Debug.Log($"I'm making a {name}");
-            if (!BodypartList.Any(x => x.Name == name))
-            {
-                Bodypart c = new Bodypart(name, hp, pt, parent, pfactor, bfactor, dfactor, cunt, effectz, eamont, hchance, counttype, group);
-                BodypartList.Add(c);
-                return c;
-            }
-            else
-            {
-                //Debug.Log("Tried to create multiple of: "+name);
-                return null;
-            }
-        }
-        public static Bodypart Get(string name)
-        {
-            try
-            {
-                return new Bodypart(BodypartList.Find(x => x.Name == name)); // so no modifiying bc no readonly classes
-            }
-            catch (NullReferenceException)
-            {
-                //Create(name);
-                DB.Attention($"Couldn't find Bodypart of name {name}");
-                return null;
-                //return CountryList.Find(x => x.Name == name);
-            }
-        }
-    }
+                                                                                             
     public class Bodypart
     {
         public string Name;
@@ -83,7 +48,7 @@ namespace Body
         public float bleedingRate;
         public PartType type;
         private string _partOf;
-        public Bodypart partOf { get { return BodypartManager.Get(_partOf); } }
+        public Bodypart partOf { get { return Get(_partOf); } }
         public List<Wound> wounds = new List<Wound>();
         public string group;
 
@@ -136,6 +101,39 @@ namespace Body
             hitChance = bp.hitChance;
             countType = bp.countType;
             this.group = bp.group;
+        }
+
+        public static List<Bodypart> List { get; private set; } = new List<Bodypart>();
+
+        public static Bodypart Create(string name, float hp, PartType pt, string parent, float pfactor, float bfactor,
+            float dfactor, int cunt, VitalSystem effectz, EffectAmount eamont, HitChance hchance, CountType counttype, string group)
+        {
+            //Debug.Log($"I'm making a {name}");
+            if (!List.Any(x => x.Name == name))
+            {
+                Bodypart c = new Bodypart(name, hp, pt, parent, pfactor, bfactor, dfactor, cunt, effectz, eamont, hchance, counttype, group);
+                List.Add(c);
+                return c;
+            }
+            else
+            {
+                //Debug.Log("Tried to create multiple of: "+name);
+                return null;
+            }
+        }
+        public static Bodypart Get(string name)
+        {
+            try
+            {
+                return new Bodypart(List.Find(x => x.Name == name)); // so no modifiying bc no readonly classes
+            }
+            catch (NullReferenceException)
+            {
+                //Create(name);
+                DB.Attention($"Couldn't find Bodypart of name {name}");
+                return null;
+                //return CountryList.Find(x => x.Name == name);
+            }
         }
     }
 }

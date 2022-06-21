@@ -43,18 +43,37 @@ namespace Nature
         }
     }
 
-    public static class BiomeManager
+    public class Biome : Item
     {
-        public static List<Biome> BiomeList = new List<Biome>();
+        public LocationData locationData;
+        public List<Weather> weatherFrequencies;
+        public TerrainFrequencies terrainFrequencies;
+        public List<Buildings.Plant> flora;
+
+        public Color color;
+        public float plantDensity;
+
+        public Biome(string name, string description, LocationData locationData, List<Weather> weatherFrequencies,
+            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity) : base(name, description, "")
+        {
+            this.locationData = locationData;
+            this.weatherFrequencies = weatherFrequencies;
+            this.terrainFrequencies = terrainFrequencies;
+            this.flora = flora;
+            this.color = color;
+            this.plantDensity = plantDensity;
+        }
+
+        public static List<Biome> List = new List<Biome>();
 
         public static Biome Create(string name, string description, LocationData locationData, List<Weather> weatherFrequencies,
-            TerrainFrequencies terrainFrequencies, List<Buildings.Nature> flora, Color color, float plantDensity)
+            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity)
         {
             //if(!BiomeList.Any(x => x.Name == name))
             //{
-                Biome c = new Biome(name, description, locationData, weatherFrequencies, terrainFrequencies, flora, color, plantDensity);
-                BiomeList.Add(c);
-                return c;
+            Biome c = new Biome(name, description, locationData, weatherFrequencies, terrainFrequencies, flora, color, plantDensity);
+            List.Add(c);
+            return c;
             //}
             //else
             //{
@@ -64,36 +83,15 @@ namespace Nature
         }
         public static Biome Get(string name) // does this really need ids because if you have 2 different of the same it's not like it matters anyway
         {
-            if(BiomeList.Exists(x => x.Name == name))
+            if (List.Exists(x => x.Name == name))
             {
-                return BiomeList.Find(x => x.Name == name);
+                return List.Find(x => x.Name == name);
             }
             else
             {
                 DB.Attention($"Couldn't find Biome of name {name}");
                 return null;
             }
-        }
-    }
-    public class Biome : Item
-    {
-        public LocationData locationData;
-        public List<Weather> weatherFrequencies;
-        public TerrainFrequencies terrainFrequencies;
-        public List<Buildings.Nature> flora;
-
-        public Color color;
-        public float plantDensity;
-
-        public Biome(string name, string description, LocationData locationData, List<Weather> weatherFrequencies,
-            TerrainFrequencies terrainFrequencies, List<Buildings.Nature> flora, Color color, float plantDensity) : base(name, description, "")
-        {
-            this.locationData = locationData;
-            this.weatherFrequencies = weatherFrequencies;
-            this.terrainFrequencies = terrainFrequencies;
-            this.flora = flora;
-            this.color = color;
-            this.plantDensity = plantDensity;
         }
     }
 }

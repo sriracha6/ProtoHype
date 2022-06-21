@@ -41,12 +41,12 @@ public class PawnManager : MonoBehaviour
             for (int i = 0; i < country.regimentsCount; i++)
             {
                 var troopType = RandomTroopType(country.country);
-                RegimentManager.Create(troopType, country.country);
+                Regiment.Create(troopType, country.country);
 
                 for (int j = 0; j < Mathf.Max(Random.Range(0.75f, 1.25f) * regimentSize, 2); j++)
                 {
                     Pawn p = CreatePawn(country.country, CachedItems.RandomName, troopType,
-                        RegimentManager.Get(i), new Vector2(Random.Range(0, MapGenerator.I.mapW), Random.Range(0, MapGenerator.I.mapH)) /* TODO : RANDOM POSITION? WHY?? FIX! */); // make sure this id is right!
+                        Regiment.Get(i), new Vector2(Random.Range(0, MapGenerator.I.mapW), Random.Range(0, MapGenerator.I.mapH)) /* TODO : RANDOM POSITION? WHY?? FIX! */); // make sure this id is right!
                     if(troopType.ridingAnimal)
                     {
                         GameObject go = Instantiate(horsePrefab); // im so sorry
@@ -61,7 +61,7 @@ public class PawnManager : MonoBehaviour
 
     public static TroopType RandomTroopType(Country c)
     {
-        List<TroopType> t = TroopTypeManager.TroopTypeList.FindAll(x => x.country == c);
+        List<TroopType> t = TroopType.List.FindAll(x => x.country == c);
         return t[Random.Range(0, t.Count)];
     }
 
@@ -79,7 +79,7 @@ public class PawnManager : MonoBehaviour
         newPawn.regiment = r;
         r.Add(newPawn);
 
-        foreach (Country co in CountryManager.CountryList)
+        foreach (Country co in Country.List)
         {
             if (co != newPawn.country)
             {

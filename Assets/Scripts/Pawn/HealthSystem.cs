@@ -75,7 +75,7 @@ public class HealthSystem : MonoBehaviour
 	private void Awake()
 	{
 		p = ___p;
-		foreach(Bodypart sex in BodypartManager.BodypartList)
+		foreach(Bodypart sex in Bodypart.List)
         {
 			// fuck this :(
 			bodyparts.Add(new Bodypart(sex));

@@ -23,39 +23,6 @@ namespace Buildings
         None
     }
 
-    public static class FurnitureManager
-    {
-        public static List<Furniture> FurnitureList = new List<Furniture>();
-
-        public static Furniture Create(string name, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse)
-        {
-            if (!FurnitureList.Any(x => x.Name == name))
-            {
-                Furniture c = new Furniture(name, isTileable, hitpoints, hasRubble, rubbleType, flammability, coverQuality, leanToUse);
-                FurnitureList.Add(c);
-                return c;
-            }
-            else
-            {
-                //Debug.Log("Tried to create multiple of: "+name);
-                return null;
-            }
-        }
-        public static Furniture Get(string name)
-        {
-            try
-            {
-                return FurnitureList.Find(x => x.Name == name);
-            }
-            catch (NullReferenceException)
-            {
-                //Create(name);
-                DB.Attention($"Couldn't find Furniture of name {name}");
-                return null;
-                //return CountryList.Find(x => x.Name == name);
-            }
-        }
-    }
     public class Furniture
     {
         public string Name;
@@ -79,6 +46,37 @@ namespace Buildings
             this.flammability = flammability;
             this.coverQuality = coverQuality;
             this.leanToUse = leanToUse;
+        }
+
+        public static List<Furniture> List = new List<Furniture>();
+
+        public static Furniture Create(string name, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse)
+        {
+            if (!List.Any(x => x.Name == name))
+            {
+                Furniture c = new Furniture(name, isTileable, hitpoints, hasRubble, rubbleType, flammability, coverQuality, leanToUse);
+                List.Add(c);
+                return c;
+            }
+            else
+            {
+                //Debug.Log("Tried to create multiple of: "+name);
+                return null;
+            }
+        }
+        public static Furniture Get(string name)
+        {
+            try
+            {
+                return List.Find(x => x.Name == name);
+            }
+            catch (NullReferenceException)
+            {
+                //Create(name);
+                DB.Attention($"Couldn't find Furniture of name {name}");
+                return null;
+                //return CountryList.Find(x => x.Name == name);
+            }
         }
     }
 }

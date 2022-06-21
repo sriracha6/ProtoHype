@@ -6,16 +6,23 @@ using UnityEngine;
 
 namespace Buildings
 {
-    public static class FloorManager
+    public class Floor : Build
     {
-        public static List<Floor> FloorList = new List<Floor>();
+        public BuildingType buildingType { get; }
+
+        public Floor(string name, int hitpoints, int flammability) : base(name, "", false,false,RubbleType.None,hitpoints,flammability)
+        {
+            this.buildingType = BuildingType.Floor;
+        }
+
+        public static List<Floor> List = new List<Floor>();
 
         public static Floor Create(string name, int hitpoints, int flammability)
         {
-            if (!FloorList.Any(x => x.Name == name))
+            if (!List.Any(x => x.Name == name))
             {
                 Floor c = new Floor(name, hitpoints, flammability);
-                FloorList.Add(c);
+                List.Add(c);
                 return c;
             }
             else
@@ -28,7 +35,7 @@ namespace Buildings
         {
             try
             {
-                return FloorList.Find(x => x.Name == name);
+                return List.Find(x => x.Name == name);
             }
             catch (NullReferenceException)
             {
@@ -42,7 +49,7 @@ namespace Buildings
         {
             try
             {
-                return FloorList.Find(x => x.ID == id);
+                return List.Find(x => x.ID == id);
             }
             catch (NullReferenceException)
             {
@@ -51,15 +58,6 @@ namespace Buildings
                 return null;
                 //return CountryList.Find(x => x.Name == name);
             }
-        }
-    }
-    public class Floor : Build
-    {
-        public BuildingType buildingType;
-
-        public Floor(string name, int hitpoints, int flammability) : base(name, "", false,false,RubbleType.None,hitpoints,flammability)
-        {
-            this.buildingType = BuildingType.Floor;
         }
     }
 }

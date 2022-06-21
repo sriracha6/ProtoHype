@@ -14,38 +14,6 @@ namespace Armors
         middle = 1,
         outer = 2
     }
-    public static class ArmorManager
-    {
-        public static List<Armor> ArmorList = new List<Armor>();
-
-        public static Armor Create(string filepath, string name, string desc, int healthpoints, float sharppot, float bluntpot, float movespeedeffect, Layer laye, bool isUtil, List<Bodypart> coverList) // creates if it DOESNT exist
-        {
-            Armor c = new Armor(filepath, name, desc, healthpoints, sharppot, bluntpot, movespeedeffect, laye, isUtil, coverList);
-            ArmorList.Add(c);
-            return c;
-        }
-        public static Armor Get(int id)
-        {
-            try
-            {
-                return ArmorList.Find(x => x.ID == id);
-            }
-            catch (Exception e)
-            {
-                //Create(name);
-                DB.Attention($"Couldn't find Armor of id {id}");
-                return null; //lol
-            }
-        }
-        public static Armor Get(string name)
-        {
-            if(ArmorList.Exists(x => x.Name == name))
-                return ArmorList.Find(x => x.Name == name);
-            else
-                DB.Attention($"Couldn't find Armor of name {name}");
-            return null;
-        }
-    }
     public class Armor : Item
     {
         public float sharpProtection;
@@ -76,6 +44,36 @@ namespace Armors
                 return bluntProtection;
             else
                 throw new NullReferenceException();
+        }
+
+        public static List<Armor> List = new List<Armor>();
+
+        public static Armor Create(string filepath, string name, string desc, int healthpoints, float sharppot, float bluntpot, float movespeedeffect, Layer laye, bool isUtil, List<Bodypart> coverList) // creates if it DOESNT exist
+        {
+            Armor c = new Armor(filepath, name, desc, healthpoints, sharppot, bluntpot, movespeedeffect, laye, isUtil, coverList);
+            List.Add(c);
+            return c;
+        }
+        public static Armor Get(int id)
+        {
+            try
+            {
+                return List.Find(x => x.ID == id);
+            }
+            catch (Exception e)
+            {
+                //Create(name);
+                DB.Attention($"Couldn't find Armor of id {id}");
+                return null; //lol
+            }
+        }
+        public static Armor Get(string name)
+        {
+            if (List.Exists(x => x.Name == name))
+                return List.Find(x => x.Name == name);
+            else
+                DB.Attention($"Couldn't find Armor of name {name}");
+            return null;
         }
     }
 }

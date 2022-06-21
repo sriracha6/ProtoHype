@@ -78,7 +78,7 @@ public class MapGenerator : MonoBehaviour
 
         if (!isTestMap)
         {
-            currentBiome = BiomeManager.Get("Plains");
+            currentBiome = Biome.Get("Plains");
             treeHeight = currentBiome.plantDensity;
         }
 
@@ -194,7 +194,7 @@ public class MapGenerator : MonoBehaviour
         }
         else if (drawMode == DrawMode.Place)
         {
-            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
+            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             generateWater();
             mapBounds.resizeBounds(mapWidth, mapHeight);
             //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
@@ -233,7 +233,7 @@ public class MapGenerator : MonoBehaviour
         {
             for(int y = 0; y < height; y++)
             {
-                TilemapPlace.tilemap[x, y] = TerrainTypeManager.Get("Test Tile");
+                TilemapPlace.tilemap[x, y] = TerrainType.Get("Test Tile");
             }
         }
 

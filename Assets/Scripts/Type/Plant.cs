@@ -3,39 +3,34 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using static CachedItems;
 
 namespace Buildings
 {
-    public struct RoofStats
-    {
-        public int SmallProjectileBlockChance;
-        public int LargeProjectileBlockChance;
-        
-        public RoofStats(int Small, int Large)
-        {
-            SmallProjectileBlockChance = Small;
-            LargeProjectileBlockChance = Large;
-        }
-    }
-    public class Roof : Build
+    public class Plant : Build
     {
         public BuildingType buildingType;
-        public RoofStats roofStats;
+        public int coverQuality;
+        public bool isLean;
+        public List<Sprite> sprites;
 
-        public Roof(string name, int hitpoints, int flammability, RoofStats roofStats) 
+        public Plant(string name, int hitpoints, int flammability, int coverQuality, bool isLean, List<Sprite> sprites)
             : base(name,"",false,false,RubbleType.None,hitpoints,flammability)
         {
-            this.buildingType = BuildingType.Roof;
-            this.roofStats = roofStats;
+            this.buildingType = BuildingType.Nature;
+            this.coverQuality = coverQuality;
+            this.isLean = isLean;
+            this.sprites = sprites;
         }
 
-        public static List<Roof> List = new List<Roof>();
+        public static List<Plant> List = new List<Plant>();
 
-        public static Roof Create(string name, int hitpoints, int flammability, RoofStats roofStats)
+        public static Plant Create(string name, int hitpoints, int flammability, int coverQuality, bool isLean, List<Sprite> tbase)
         {
             if (!List.Any(x => x.Name == name))
             {
-                Roof c = new Roof(name, hitpoints, flammability, roofStats);
+                Plant c = new Plant(name, hitpoints, flammability, coverQuality, isLean, tbase);
                 List.Add(c);
                 return c;
             }
@@ -45,7 +40,7 @@ namespace Buildings
                 return null;
             }
         }
-        public static Roof Get(string name)
+        public static Plant Get(string name)
         {
             try
             {
@@ -54,7 +49,7 @@ namespace Buildings
             catch (NullReferenceException)
             {
                 //Create(name);
-                DB.Attention($"Couldn't find Roof of name {name}");
+                DB.Attention($"Couldn't find Nature(building) of name {name}");
                 return null;
                 //return CountryList.Find(x => x.Name == name);
             }

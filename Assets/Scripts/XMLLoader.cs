@@ -112,7 +112,7 @@ namespace XMLLoader
                 List<Weapon> meleeWeapons = new List<Weapon>();
                 foreach(Item item in items)
                 {
-                    meleeWeapons.Add(WeaponManager.Get(item.ID));
+                    meleeWeapons.Add(Weapon.Get(item.ID));
                 }
 
                 list.AddRange(meleeWeapons);
@@ -137,7 +137,7 @@ namespace XMLLoader
                             int.Parse(x.SelectSingleNode("Damage").InnerText)));
                     }
                 }
-                WeaponManager.CreateMelee(filepath, xmls.SelectSingleNode("Name").InnerText, WeaponType.Melee,
+                Weapon.CreateMelee(filepath, xmls.SelectSingleNode("Name").InnerText, WeaponType.Melee,
                     xmls.SelectSingleNode("WeaponClass") == null ? "" : xmls.SelectSingleNode("WeaponClass").InnerText, 
                     xmls.SelectSingleNode("Description") == null ? "" : xmls.SelectSingleNode("Description").InnerText,
                     MeleeRange.getByName(xmls.SelectSingleNode("MeleeRange").InnerText),
@@ -165,7 +165,7 @@ namespace XMLLoader
                 List<Weapon> rangedWeapons = new List<Weapon>();
                 foreach(Item item in items)
                 {
-                    rangedWeapons.Add(WeaponManager.Get(item.ID)); // so glad i made this
+                    rangedWeapons.Add(Weapon.Get(item.ID)); // so glad i made this
                 }
                 list.AddRange(rangedWeapons);
 
@@ -185,7 +185,7 @@ namespace XMLLoader
 
                 if(!float.TryParse(ff, out float meleeDamage))
                     meleeDamage = 0;
-                WeaponManager.CreateRanged(filepath, xmls.SelectSingleNode("Name").InnerText,
+                Weapon.CreateRanged(filepath, xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description") == null ? "" : xmls.SelectSingleNode("Description").InnerText, WeaponType.Ranged, 
                     xmls.SelectSingleNode("WeaponClass") == null ? "" : xmls.SelectSingleNode("WeaponClass").InnerText,
                     int.Parse(xmls.SelectSingleNode("Range").InnerText),
@@ -224,7 +224,7 @@ namespace XMLLoader
             }
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Projectile"))
             {
-                ProjectileManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                Projectile.Create(xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description")==null ? "" : xmls.SelectSingleNode("Description").InnerText, 
                     filepath,
                     xmls.SelectSingleNode("ForWeapon").InnerText,
@@ -258,7 +258,7 @@ namespace XMLLoader
             
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Shield"))
             {
-                ShieldManager.Create(filepath, xmls.SelectSingleNode("Name").InnerText,
+                Shield.Create(filepath, xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description") == null ? "" : xmls.SelectSingleNode("Description").InnerText,
                     float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Sharp")[0].InnerText),
                     float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Blunt")[0].InnerText),
@@ -289,7 +289,7 @@ namespace XMLLoader
 
             if (xmls.SelectSingleNode("Type").InnerText == "Armor")
             {
-                ArmorManager.Create(filepath, xmls.SelectSingleNode("Name").InnerText,
+                Armor.Create(filepath, xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description")==null ? "" : xmls.SelectSingleNode("Description").InnerText,
                     int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
                     float.Parse(xmls.SelectSingleNode("Protection").SelectNodes("Sharp")[0].InnerText),
@@ -310,16 +310,18 @@ namespace XMLLoader
         {
             XmlElement xmls = LoadXML(filepath); // todo: this will be WC when we need archer icons and stuff hopefully
 
+            bool usedByAll = xmls.SelectNodes("Soldier")[0].ParentNode.Attributes.GetNamedItem("country").InnerText == "all";
+            
             int currentLoop = 0;
-            foreach (XmlElement x in xmls.SelectNodes("Soldier"))
+            foreach (XmlElement LOLWHYISTHISHERE in xmls.SelectNodes("Soldier"))
             {
                 var t = xmls.SelectNodes("Soldier")[currentLoop];
                 bool riding = t.SelectSingleNode("RidingAnimal").InnerText == "false";
 
-                TroopTypeManager.Create(t.Attributes.GetNamedItem("name").InnerText,
+                var x = TroopType.Create(t.Attributes.GetNamedItem("name").InnerText,
                     t.SelectSingleNode("Description") == null ? "" : t.SelectSingleNode("Description").InnerText,
-                    filepath,
-                    CountryManager.Get(t.ParentNode.Attributes.GetNamedItem("country").Value),
+                    filepath,   
+                    usedByAll ? null : Country.Get(t.ParentNode.Attributes.GetNamedItem("country").Value),
                     ParseFuncs.parseWeapons(t.SelectSingleNode("Weapons")),
                     ParseFuncs.parseWeapons(t.SelectSingleNode("Sidearms")),
                     ParseFuncs.parseArmor(t.SelectSingleNode("Armor")),
@@ -329,8 +331,14 @@ namespace XMLLoader
                     ParseFuncs.parseSkill(0, t.SelectSingleNode("SkillsRange").ChildNodes.Item(1).InnerText),
                     ParseFuncs.parseSkill(1, t.SelectSingleNode("SkillsRange").ChildNodes.Item(1).InnerText),
                     !riding,
-                    !riding ? AnimalManager.Get(t.SelectSingleNode("RidingAnimal").InnerText) : null,
-                    !riding ? ParseFuncs.parseAnimalArmor(t.SelectSingleNode("RidingAnimal").InnerText) : null);
+                    !riding ? Animal.Get(t.SelectSingleNode("RidingAnimal").InnerText) : null,
+                    !riding ? ParseFuncs.parseAnimalArmor(t.SelectSingleNode("RidingAnimal").InnerText) : null,
+                    t.SelectSingleNode("Icon").InnerText);
+
+                if(usedByAll)
+                    foreach(Country c in Country.List)
+                        TroopType.List.Add(new TroopType(x.Name, x.Description, x.SourceFile, c, x.weapons, x.sidearms, x.armor, x.shields, x.meleeSkillMin, x.meleeSkillMax, x.rangeSkillMin, x.rangeSkillMax, x.ridingAnimal, x.riddenAnimal, x.animalArmor, x.Icon));
+
                 currentLoop++;
             }
         }
@@ -340,7 +348,7 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("MemberName") != null)
             {
-                var x = CountryManager.Create(xmls.SelectSingleNode("MemberName").ParentNode.Attributes.GetNamedItem("name").Value,
+                var x = Country.Create(xmls.SelectSingleNode("MemberName").ParentNode.Attributes.GetNamedItem("name").Value,
                     xmls.SelectSingleNode("MemberName").InnerText);
                 CachedItems.renderedCountries.Add(new RenderedCountry(LoadSprite(filepath), x.Name));
             }
@@ -358,7 +366,7 @@ namespace XMLLoader
             {
                 foreach (XmlNode x in xmls.SelectSingleNode("//BodyParts").SelectNodes("BodyPart"))
                 {
-                    BodypartManager.Create(x.Attributes.GetNamedItem("name").InnerText,
+                    Bodypart.Create(x.Attributes.GetNamedItem("name").InnerText,
                         int.Parse(x.SelectSingleNode("HP").InnerText),
                         (PartType)Enum.Parse(typeof(PartType), x.SelectSingleNode("Type").InnerText),
                         x.SelectSingleNode("PartOf") == null ? "" : x.SelectSingleNode("PartOf").InnerText/*BodypartManager.Get(x.SelectSingleNode("PartOf").InnerText)*/,
@@ -373,7 +381,7 @@ namespace XMLLoader
                         x.SelectSingleNode("Group") == null ? "" : x.SelectSingleNode("Group").InnerText);
                 }
                 List<Bodypart> list = new List<Bodypart>();
-                foreach(Bodypart B in BodypartManager.BodypartList)
+                foreach(Bodypart B in Bodypart.List)
                 {
                     list.Add(new Bodypart(B));
                 }
@@ -382,20 +390,20 @@ namespace XMLLoader
                 {
                     if (b.count > 1)
                     {
-                        BodypartManager.BodypartList.Remove(b);  // so we dont have arm, left arm, right arm
+                        Bodypart.List.Remove(b);  // so we dont have arm, left arm, right arm
                         //for (int i = 0; i < b.count; i++)
                         //{
                         if (b.countType == CountType.Sides)
                         {
-                            BodypartManager.Create("Left " + b.Name, b.TotalHP, b.type, b.partOf == null ? "" : b.partOf.Name, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
-                            BodypartManager.Create("Right " + b.Name, b.TotalHP, b.type, b.partOf == null ? "" : b.partOf.Name, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
+                            Bodypart.Create("Left " + b.Name, b.TotalHP, b.type, b.partOf == null ? "" : b.partOf.Name, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
+                            Bodypart.Create("Right " + b.Name, b.TotalHP, b.type, b.partOf == null ? "" : b.partOf.Name, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
                         }
                         else if (b.countType == CountType.Numbered)
                         {
                             for (int i = 0; i < b.count; i++)
                             {
                                 string newname = ParseFuncs.AddOrdinal(i + 1) + " " + b.Name;
-                                BodypartManager.Create(newname, b.TotalHP, b.type, b.partOf == null ? "" : b.partOf.Name, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
+                                Bodypart.Create(newname, b.TotalHP, b.type, b.partOf == null ? "" : b.partOf.Name, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
                             }
                         }
                         //}
@@ -414,7 +422,7 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Building"))
             {
-                BuildingManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                Building.Create(xmls.SelectSingleNode("Name").InnerText,
                     int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
                     int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
                     int.Parse(xmls.SelectSingleNode("CoverQuality").InnerText),
@@ -434,7 +442,7 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Prop"))
             {
-                FurnitureManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                Furniture.Create(xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Tilable").InnerText.strToBool(),
                     int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
                     xmls.SelectSingleNode("Rubble").InnerText.strToBool(),
@@ -454,7 +462,7 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Floor"))
             {
-                FloorManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                Floor.Create(xmls.SelectSingleNode("Name").InnerText,
                     int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
                     int.Parse(xmls.SelectSingleNode("Flammability").InnerText));
             }
@@ -469,7 +477,7 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Roof"))
             {
-                RoofManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                Roof.Create(xmls.SelectSingleNode("Name").InnerText,
                     int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
                     int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
                     new RoofStats(int.Parse(xmls.SelectSingleNode("RoofStats").SelectSingleNode("SmallProjectileBlock").InnerText),
@@ -486,7 +494,7 @@ namespace XMLLoader
             XmlElement xmls = LoadXML(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Nature"))
             {
-                NatureManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                Buildings.Plant.Create(xmls.SelectSingleNode("Name").InnerText,
                     int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
                     int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
                     int.Parse(xmls.SelectSingleNode("CoverQuality").InnerText),
@@ -505,7 +513,7 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Trap"))
             {
-                TrapManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                Trap.Create(xmls.SelectSingleNode("Name").InnerText,
                     int.Parse(xmls.SelectSingleNode("Hitpoints").InnerText),
                     int.Parse(xmls.SelectSingleNode("Flammability").InnerText),
                     int.Parse(xmls.SelectSingleNode("Damage").InnerText),
@@ -528,7 +536,7 @@ namespace XMLLoader
             if (xmls.SelectSingleNode("Type").InnerText == "TerrainType")
             {
                 TerrainType temp = 
-                TerrainTypeManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                TerrainType.Create(xmls.SelectSingleNode("Name").InnerText,
                     float.Parse(xmls.SelectSingleNode("Height").InnerText),
                     ParseFuncs.parseColor(xmls.SelectSingleNode("Color").InnerText),
                     null,
@@ -550,7 +558,7 @@ namespace XMLLoader
 
             if (xmls.SelectSingleNode("Type").InnerText=="Biome")
             {
-                BiomeManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                Biome.Create(xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description").InnerText,
                     new LocationData(float.Parse(xmls.SelectSingleNode("Location").SelectSingleNode("Temperature").InnerText),
                     (FlatnessPreference)Enum.Parse(typeof(FlatnessPreference), xmls.SelectSingleNode("Location").SelectSingleNode("Prefers").InnerText)),
@@ -572,7 +580,7 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Ridable") != null)
             {
-                var x = AnimalManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                var x = Animal.Create(xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description").InnerText,
                     filepath,
                     xmls.SelectSingleNode("Ridable").InnerText.strToBool(),
@@ -592,11 +600,11 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("ForAnimal") != null)
             {
-                AnimalArmorManager.Create(xmls.SelectSingleNode("Name").InnerText,
+                AnimalArmor.Create(xmls.SelectSingleNode("Name").InnerText,
                     xmls.SelectSingleNode("Description").InnerText,
                     filepath,
                     int.Parse(xmls.SelectSingleNode("Protection").InnerText),
-                    AnimalManager.Get(xmls.SelectSingleNode("ForAnimal").InnerText),
+                    Animal.Get(xmls.SelectSingleNode("ForAnimal").InnerText),
                     xmls.SelectSingleNode("MoveSpeedEffect").InnerText.parseFloat());
             }
             else
@@ -604,6 +612,11 @@ namespace XMLLoader
                 Debug.Log("Not an animalarmor file.");
                 return;
             }
+        }
+    
+        public static void LoadTroopTypeIcon(string filepath)
+        {
+            renderedTroopTypes.Add(new RenderedTroopType(LoadTex(filepath), Path.GetFileNameWithoutExtension(filepath)));
         }
 
         public static void loadBlood()
@@ -645,13 +658,13 @@ namespace XMLLoader
                 foreach(XmlElement x in xmls.SelectNodes("GenericSpecial"))
                 {
                     if (x.InnerText == "Any")
-                        weapons.AddRange(WeaponManager.WeaponList);
+                        weapons.AddRange(Weapon.List);
                     else if (x.InnerText == "None")
                         weapons.Clear();
                 }
 
             foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
-                weapons.Add(WeaponManager.Get(s.removeWS()));
+                weapons.Add(Weapon.Get(s.removeWS()));
 
             return weapons;
         }
@@ -662,14 +675,14 @@ namespace XMLLoader
             foreach (XmlElement x in xmls.SelectNodes("GenericSpecial"))
             {
                 if (x.InnerText == "Any")
-                    weapons.AddRange(ProjectileManager.ProjectileList);
+                    weapons.AddRange(Projectile.List);
                 else if (x.InnerText == "None")
                     weapons.Clear();
             }
 
             foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
             {
-                weapons.Add(ProjectileManager.Get(s.removeWS()));
+                weapons.Add(Projectile.Get(s.removeWS()));
             }
 
             return weapons;
@@ -685,12 +698,12 @@ namespace XMLLoader
             {
                 List<Armor> tempChoice = new List<Armor>();
                 foreach (string s in x.InnerText.Split(','))
-                    tempChoice.Add(ArmorManager.Get(s.removeWS()));
+                    tempChoice.Add(Armor.Get(s.removeWS()));
                 armor.Add(tempChoice);
             }
             foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
             {
-                normalRequired.Add(ArmorManager.Get(s.removeWS()));
+                normalRequired.Add(Armor.Get(s.removeWS()));
             }
             armor.Add(normalRequired);
             return armor;
@@ -705,14 +718,14 @@ namespace XMLLoader
                 foreach (XmlElement x in xmls.SelectNodes("GenericSpecial"))
                 {
                     if (x.InnerText == "Any")
-                        shields.AddRange(ShieldManager.ShieldList);
+                        shields.AddRange(Shield.List);
                     else if (x.InnerText == "None")
                         shields.Clear();
                 }
 
             foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
             {
-                shields.Add(ShieldManager.Get(s.removeWS()));
+                shields.Add(Shield.Get(s.removeWS()));
             }
             return shields;
         }
@@ -723,15 +736,15 @@ namespace XMLLoader
             foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
             {
                 //bps.Add(BodypartManager.Get(s.removeWS().toTitleCase()));
-                if (BodypartManager.Get(s.removeWS().toTitleCase()) == null)
+                if (Bodypart.Get(s.removeWS().toTitleCase()) == null)
                 {
                     DB.Attention("ain't no tellin why THIS SHIT DOESNT WORK");
                     continue;
                 }
-                if (string.IsNullOrEmpty(BodypartManager.Get(s.removeWS().toTitleCase()).group))
-                    bps.Add(BodypartManager.Get(s.removeWS().toTitleCase()));
+                if (string.IsNullOrEmpty(Bodypart.Get(s.removeWS().toTitleCase()).group))
+                    bps.Add(Bodypart.Get(s.removeWS().toTitleCase()));
                 else
-                    bps.AddRange(BodypartManager.BodypartList.FindAll(x=>x.group == BodypartManager.Get(s.removeWS().toTitleCase()).group));
+                    bps.AddRange(Bodypart.List.FindAll(x=>x.group == Bodypart.Get(s.removeWS().toTitleCase()).group));
             }
             return bps;
         }
@@ -739,17 +752,17 @@ namespace XMLLoader
         {
             List<AnimalArmor> a = new List<AnimalArmor>();
             foreach (string x in text.Split(','))
-                a.Add(AnimalArmorManager.Get(x.removeWS()));
+                a.Add(AnimalArmor.Get(x.removeWS()));
             return a;
         }
 
-        public static List<Buildings.Nature> parseFlora(string input)
+        public static List<Buildings.Plant> parseFlora(string input)
         {
-            List<Buildings.Nature> flora = new List<Buildings.Nature>();
+            List<Buildings.Plant> flora = new List<Buildings.Plant>();
 
             foreach (string s in input.Split(',')) // only this tag's text. not children
             {
-                flora.Add(NatureManager.Get(s.removeWS()));
+                flora.Add(Buildings.Plant.Get(s.removeWS()));
             }
 
             return flora;
@@ -774,7 +787,7 @@ namespace XMLLoader
 
             foreach(XmlElement node in x.ChildNodes)
             {
-                terrain.Add(TerrainTypeManager.Get(node.InnerText)); // remember this doesnt work yet because i havent created any yet
+                terrain.Add(TerrainType.Get(node.InnerText)); // remember this doesnt work yet because i havent created any yet
                 float amount;
 
                 if (node.Attributes.GetNamedItem("frequency") == null) amount = 1;

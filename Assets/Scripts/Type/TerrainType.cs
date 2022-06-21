@@ -41,31 +41,28 @@ public class TerrainType
         this.type = special;
         this.supportsNature = supportedNature;
     }
-}
 
-public static class TerrainTypeManager // todo: id this?
-{
-    public static List<TerrainType> TerrainTypeList = new List<TerrainType>();  
+    public static List<TerrainType> List = new List<TerrainType>();
 
     public static TerrainType Create(string name, float height, Color color, FuckBitchTile tbase, SpecialType special, bool supportedNature)
     {
         //if (!TerrainTypeList.Any(x => x.name == name))
         //{
-            TerrainType c = new TerrainType(name, height, color, tbase, special, supportedNature);
-            TerrainTypeList.Add(c);
-            return c;
+        TerrainType c = new TerrainType(name, height, color, tbase, special, supportedNature);
+        List.Add(c);
+        return c;
         //}
         //else
         //{
-            //Debug.Log("Tried to create multiple of: "+name);
-            return null;
+        //Debug.Log("Tried to create multiple of: "+name);
+        return null;
         //}
     }
     public static TerrainType Get(string name)
     {
         try
         {
-            return TerrainTypeList.Find(x => x.name == name);
+            return List.Find(x => x.name == name);
         }
         catch (NullReferenceException)
         {

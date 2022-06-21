@@ -81,7 +81,7 @@ public class Loader : MonoBehaviour
         Loaders.LoadAnimalArmor(@"C:\Users\frenz\Music\aamor\barding.wc");
         Loaders.LoadAnimalArmor(@"C:\Users\frenz\Music\aamor\cataphract.wc");
 
-        TerrainTypeManager.Create("Test Tile", 1f, Color.magenta, null, SpecialType.None, false);
+        TerrainType.Create("Test Tile", 1f, Color.magenta, null, SpecialType.None, false);
         Loaders.loadBlood();
         Loaders.loadNames();
 
@@ -95,6 +95,9 @@ public class Loader : MonoBehaviour
             Loaders.LoadArmor(file);
         foreach (string file in Directory.GetFiles(@"D:\medgame\wcfile\WC File Creator\WC File Creator\bin\Release\net6.0\pack\shields"))
             Loaders.LoadShield(file);
+
+        foreach(string file in Directory.GetFiles(@"C:\Users\frenz\Music\trt\sigh"))
+            Loaders.LoadTroopTypeIcon(file);
 
         Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\germany.xml");
         Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\france.xml");

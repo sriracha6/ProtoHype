@@ -33,7 +33,7 @@ namespace Weapons
                 return Short;
             if (n == "medium" || n == "med" || n == "m")
                 return Medium;
-            if (n == "far")
+            if (n == "far" || n == "long" || n == "l")
                 return Far;
             if (n == "vfar" || n == "veryfar")
                 return VeryFar;
@@ -46,50 +46,7 @@ namespace Weapons
         Shooter,
         Thrown
     }
-    public static class WeaponManager
-    {
-        public static List<Weapon> WeaponList = new List<Weapon>();
 
-        public static Weapon CreateMelee(string sourcefile, string name, WeaponType type, string weaponclass, string desc, float mrange, bool warmup,
-            int armorpens, int armorpenb, float Size, List<Attack> attks)
-        {
-            Weapon c = new Weapon(sourcefile, name, type, weaponclass, desc, mrange, warmup, armorpens, armorpenb, Size, attks);
-            WeaponList.Add(c);
-            return c;
-        }
-
-        public static Weapon CreateRanged(string sourcefile, string name, string desc, WeaponType type, string weaponclass, int range, float armorPen, RangeType rt, float meleeDamage, float warmupTime,
-            string meleeDamageType, int dmg, float size,
-            float longAccuracy, float mediumAccuracy, float shortAccuracy)
-        {
-            Weapon c = new Weapon(sourcefile, name, desc, type, weaponclass, range, armorPen, rt, meleeDamage, warmupTime, meleeDamageType, dmg, size, longAccuracy, mediumAccuracy, shortAccuracy);
-            WeaponList.Add(c);
-            return c;
-        }
-
-        public static Weapon Get(int id)
-        {
-            try
-            {
-                return WeaponList.Find(x => x.ID == id);
-            }
-            catch (NullReferenceException)
-            {
-                //Create(name);
-                DB.Attention($"Couldn't find Weapon of id {id}");
-                return null; //lol
-            }
-        }
-
-        public static Weapon Get(string name)
-        {
-            if(WeaponList.Exists(x=>x.Name==name))
-                return WeaponList.Find(x => x.Name == name);
-            else
-                DB.Attention($"Couldn't find Weapon of name {name}");
-                return null; //lol
-        }
-    }
     public class Weapon : Item
     {
         public WeaponType Type { get; }
@@ -147,6 +104,48 @@ namespace Weapons
             longAccuracy = lAccuracy;
             mediumAccuracy = mAccuracy;
             shortAccuracy = sAccuracy;
+        }
+
+        public static List<Weapon> List = new List<Weapon>();
+
+        public static Weapon CreateMelee(string sourcefile, string name, WeaponType type, string weaponclass, string desc, float mrange, bool warmup,
+            int armorpens, int armorpenb, float Size, List<Attack> attks)
+        {
+            Weapon c = new Weapon(sourcefile, name, type, weaponclass, desc, mrange, warmup, armorpens, armorpenb, Size, attks);
+            List.Add(c);
+            return c;
+        }
+
+        public static Weapon CreateRanged(string sourcefile, string name, string desc, WeaponType type, string weaponclass, int range, float armorPen, RangeType rt, float meleeDamage, float warmupTime,
+            string meleeDamageType, int dmg, float size,
+            float longAccuracy, float mediumAccuracy, float shortAccuracy)
+        {
+            Weapon c = new Weapon(sourcefile, name, desc, type, weaponclass, range, armorPen, rt, meleeDamage, warmupTime, meleeDamageType, dmg, size, longAccuracy, mediumAccuracy, shortAccuracy);
+            List.Add(c);
+            return c;
+        }
+
+        public static Weapon Get(int id)
+        {
+            try
+            {
+                return List.Find(x => x.ID == id);
+            }
+            catch (NullReferenceException)
+            {
+                //Create(name);
+                DB.Attention($"Couldn't find Weapon of id {id}");
+                return null; //lol
+            }
+        }
+
+        public static Weapon Get(string name)
+        {
+            if (List.Exists(x => x.Name == name))
+                return List.Find(x => x.Name == name);
+            else
+                DB.Attention($"Couldn't find Weapon of name {name}");
+            return null; //lol
         }
     }
 }

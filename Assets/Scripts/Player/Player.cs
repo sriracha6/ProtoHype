@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        playerCountry = CountryManager.Get("France"); // AAAA! todo! make dyanimc. this is the source of bugs if i dont remember
+        playerCountry = Country.Get("France"); // AAAA! todo! make dyanimc. this is the source of bugs if i dont remember
     }
 
     private void Update()

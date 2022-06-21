@@ -18,7 +18,7 @@ public static class HealthFunctions
 		List<Armor> temp = new List<Armor>();
 		for (int i = 0; i < p.armor.Count; i++)
 		{
-			if (p.armor[i].covers.Contains(BodypartManager.Get(name)))
+			if (p.armor[i].covers.Contains(Bodypart.Get(name)))
 				temp.Add(p.armor[i]);
 		}
 		return temp;

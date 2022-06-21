@@ -6,16 +6,28 @@ using UnityEngine;
 
 namespace Buildings
 {
-    public static class BuildingManager
+    public class Building : Build // i probably shouldve made this derive from a single building class tbh
     {
-        public static List<Building> BuildingList = new List<Building>();
+        public BuildingType buildingType;
+        public int coverQuality;
+        public bool isLean;
+
+        public Building(string name, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)
+            : base(name,"",isSpecialPlace,rubble,rubbleType,hitpoints,flammability)
+        {
+            this.buildingType = BuildingType.Building;
+            this.coverQuality = coverQuality;
+            this.isLean = isLean;
+        }
+
+        public static List<Building> List = new List<Building>();
 
         public static Building Create(string name, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)
         {
-            if (!BuildingList.Any(x => x.Name == name))
+            if (!List.Any(x => x.Name == name))
             {
                 Building c = new Building(name, hitpoints, flammability, coverQuality, isLean, isSpecialPlace, rubble, rubbleType);
-                BuildingList.Add(c);
+                List.Add(c);
                 return c;
             }
             else
@@ -28,7 +40,7 @@ namespace Buildings
         {
             try
             {
-                return BuildingList.Find(x => x.ID == id);
+                return List.Find(x => x.ID == id);
             }
             catch (NullReferenceException)
             {
@@ -42,7 +54,7 @@ namespace Buildings
         {
             try
             {
-                return BuildingList.Find(x => x.Name == name);
+                return List.Find(x => x.Name == name);
             }
             catch (NullReferenceException)
             {
@@ -51,20 +63,6 @@ namespace Buildings
                 return null;
                 //return CountryList.Find(x => x.Name == name);
             }
-        }
-    }
-    public class Building : Build // i probably shouldve made this derive from a single building class tbh
-    {
-        public BuildingType buildingType;
-        public int coverQuality;
-        public bool isLean;
-
-        public Building(string name, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)
-            : base(name,"",isSpecialPlace,rubble,rubbleType,hitpoints,flammability)
-        {
-            this.buildingType = BuildingType.Building;
-            this.coverQuality = coverQuality;
-            this.isLean = isLean;
         }
     }
 }

@@ -6,39 +6,6 @@ using UnityEngine;
 
 namespace Buildings
 {
-    public static class TrapManager
-    {
-        public static List<Trap> TrapList = new List<Trap>();
-
-        public static Trap Create(string name, int hitpoints, int flammability, int damage, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int coverQuality, bool isLean)
-        {
-            if (!TrapList.Any(x => x.Name == name))
-            {
-                Trap c = new Trap(name, hitpoints, flammability, damage, isSpecialPlace, hasRubble, rubbleType, coverQuality, isLean);
-                TrapList.Add(c);
-                return c;
-            }
-            else
-            {
-                //Debug.Log("Tried to create multiple of: "+name);
-                return null;
-            }
-        }
-        public static Trap Get(string name)
-        {
-            try
-            {
-                return TrapList.Find(x => x.Name == name);
-            }
-            catch (NullReferenceException)
-            {
-                //Create(name);
-                DB.Attention($"Couldn't find Trap of name {name}");
-                return null;
-                //return CountryList.Find(x => x.Name == name);
-            }
-        }
-    }
     public class Trap : Build
     {
         public BuildingType buildingType;
@@ -53,6 +20,37 @@ namespace Buildings
             this.damage = damage;
             this.coverQuality = coverQuality;
             this.isLean = isLean;
+        }
+
+        public static List<Trap> List = new List<Trap>();
+
+        public static Trap Create(string name, int hitpoints, int flammability, int damage, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int coverQuality, bool isLean)
+        {
+            if (!List.Any(x => x.Name == name))
+            {
+                Trap c = new Trap(name, hitpoints, flammability, damage, isSpecialPlace, hasRubble, rubbleType, coverQuality, isLean);
+                List.Add(c);
+                return c;
+            }
+            else
+            {
+                //Debug.Log("Tried to create multiple of: "+name);
+                return null;
+            }
+        }
+        public static Trap Get(string name)
+        {
+            try
+            {
+                return List.Find(x => x.Name == name);
+            }
+            catch (NullReferenceException)
+            {
+                //Create(name);
+                DB.Attention($"Couldn't find Trap of name {name}");
+                return null;
+                //return CountryList.Find(x => x.Name == name);
+            }
         }
     }
 }

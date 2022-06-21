@@ -10,40 +10,6 @@ using Countries;
 
 namespace TroopTypes
 {
-    public static class TroopTypeManager
-    {
-        public static List<TroopType> TroopTypeList = new List<TroopType>();
-
-        public static void Create(string name, string description, string sourcefile, Country country, List<Weapon> weapons, List<Weapon> sidearms, List<List<Armor>> armor, List<Shield> shields, int Mskillmin, int Mskillmax, int Rskillmin, int Rskillmax, bool ridingAnimal, Animal animal, List<AnimalArmor> animalarmor) // creates if it DOESNT exist
-        {
-            TroopType c = new TroopType(name, description, sourcefile, country, weapons, sidearms, armor, shields, Mskillmin, Mskillmax, Rskillmin, Rskillmax, ridingAnimal, animal, animalarmor);
-            TroopTypeList.Add(c);
-        }
-        public static TroopType Get(string name)
-        {
-            try
-            {
-                return TroopTypeList.Find(x => x.Name == name);
-            }
-            catch (NullReferenceException)
-            {
-                DB.Attention($"Couldn't find TroopType of name {name}");
-                return null;
-            }
-        }
-        public static TroopType Get(int id)
-        {
-            try
-            {
-                return TroopTypeList.Find(x => x.ID == id);
-            }
-            catch (NullReferenceException)
-            {
-                DB.Attention($"Couldn't find TroopType of id {id}");
-                return null;
-            }
-        }
-    }
     public class TroopType : Item
     {
         public Country country;
@@ -57,6 +23,7 @@ namespace TroopTypes
 
         public int rangeSkillMin;
         public int rangeSkillMax;
+        public string Icon;
 
         public bool ridingAnimal;
         public Animal riddenAnimal;
@@ -68,7 +35,7 @@ namespace TroopTypes
         }
 
         public TroopType(string name, string description, string sourcefile, Country countr, List<Weapon> wea, List<Weapon> sidearmz, List<List<Armor>> armo, List<Shield> shelds, int Mskillmin, int Mskillmax, int rskillmin, int rskillmax, 
-            bool ridingAnimal, Animal riddenAnimal, List<AnimalArmor> animalArmor) // same for this
+            bool ridingAnimal, Animal riddenAnimal, List<AnimalArmor> animalArmor, string Icon) // same for this
             : base(name, description, sourcefile)
         {
             if (wea != null)
@@ -113,6 +80,40 @@ namespace TroopTypes
             rangeSkillMax = rskillmax;
             this.ridingAnimal = ridingAnimal;
             this.animalArmor = animalArmor;
+            this.Icon = Icon;
+        }
+
+        public static List<TroopType> List = new List<TroopType>();
+
+        public static TroopType Create(string name, string description, string sourcefile, Country country, List<Weapon> weapons, List<Weapon> sidearms, List<List<Armor>> armor, List<Shield> shields, int Mskillmin, int Mskillmax, int Rskillmin, int Rskillmax, bool ridingAnimal, Animal animal, List<AnimalArmor> animalarmor, string Icon) // creates if it DOESNT exist
+        {
+            TroopType c = new TroopType(name, description, sourcefile, country, weapons, sidearms, armor, shields, Mskillmin, Mskillmax, Rskillmin, Rskillmax, ridingAnimal, animal, animalarmor, Icon);
+            List.Add(c);
+            return c;
+        }
+        public static TroopType Get(string name)
+        {
+            try
+            {
+                return List.Find(x => x.Name == name);
+            }
+            catch (NullReferenceException)
+            {
+                DB.Attention($"Couldn't find TroopType of name {name}");
+                return null;
+            }
+        }
+        public static TroopType Get(int id)
+        {
+            try
+            {
+                return List.Find(x => x.ID == id);
+            }
+            catch (NullReferenceException)
+            {
+                DB.Attention($"Couldn't find TroopType of id {id}");
+                return null;
+            }
         }
 
         /*public string ToString(this TroopType i)

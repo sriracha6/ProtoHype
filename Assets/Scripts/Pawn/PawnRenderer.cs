@@ -112,7 +112,7 @@ public class PawnRenderer : MonoBehaviour
         {
             if (!CachedItems.renderedWeapons.Exists(x => x.id == id))
             {
-                Texture2D tex = XMLLoader.Loaders.LoadTex(Weapons.WeaponManager.Get(id).SourceFile);
+                Texture2D tex = XMLLoader.Loaders.LoadTex(Weapons.Weapon.Get(id).SourceFile);
                 Sprite spr = Loaders.LoadSprite(tex, tex.height * size * SIXFEETMETERS);
                 CachedItems.renderedWeapons.Add(new RenderedWeapon(spr, id));
                 return spr;
@@ -133,7 +133,7 @@ public class PawnRenderer : MonoBehaviour
         {
             if (!CachedItems.renderedShields.Exists(x => x.id == id))
             {
-                Texture2D tex = Loaders.LoadTex(Shields.ShieldManager.Get(id).SourceFile);
+                Texture2D tex = Loaders.LoadTex(Shields.Shield.Get(id).SourceFile);
                 Sprite spr = Loaders.LoadSprite(tex, tex.height * size * SIXFEETMETERS);
                 CachedItems.renderedShields.Add(new RenderedShield(spr, id));
                 return spr;
@@ -155,7 +155,7 @@ public class PawnRenderer : MonoBehaviour
         {
             if (!CachedItems.renderedArmors.Exists(x => x.id == id))
             {
-                Texture2D tex = Loaders.LoadTex(Armors.ArmorManager.Get(id).SourceFile);
+                Texture2D tex = Loaders.LoadTex(Armors.Armor.Get(id).SourceFile);
                 Sprite spr = Loaders.LoadSprite(tex, 1);
                 CachedItems.renderedArmors.Add(new RenderedArmor(spr, id));
                 return spr;
@@ -180,8 +180,8 @@ public class PawnRenderer : MonoBehaviour
                 return CachedItems.renderedProjectiles.Find(x=>x.id==id).sprite;
             else
             {
-                Debug.Log($"{Projectiles.ProjectileManager.Get(id).Name}");
-                Texture2D tex = Loaders.LoadTex(Projectiles.ProjectileManager.Get(id).SourceFile);
+                Debug.Log($"{Projectiles.Projectile.Get(id).Name}");
+                Texture2D tex = Loaders.LoadTex(Projectiles.Projectile.Get(id).SourceFile);
                 Sprite spr = Loaders.LoadSprite(tex, 1);
                 CachedItems.renderedProjectiles.Add(new RenderedProjectile(spr, id));
                 return spr;

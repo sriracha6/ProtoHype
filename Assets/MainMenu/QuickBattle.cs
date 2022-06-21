@@ -63,7 +63,7 @@ public class QuickBattle : MonoBehaviour
             UpdatePreview();
         });
         root.Q<DropdownField>("Biome").RegisterValueChangedCallback(delegate{
-            MapGenerator.I.currentBiome = BiomeManager.Get(root.Q<DropdownField>("Biome").value);
+            MapGenerator.I.currentBiome = Biome.Get(root.Q<DropdownField>("Biome").value);
             UpdatePreview();
         });
         root.Q<DropdownField>("Difficulty").RegisterValueChangedCallback(delegate{
@@ -140,7 +140,7 @@ public class QuickBattle : MonoBehaviour
     private List<string> getBiomes()
     {
         List<string> b = new List<string>();
-        foreach(Biome a in BiomeManager.BiomeList)
+        foreach(Biome a in Biome.List)
             b.Add(a.Name);
         return b;
     }
@@ -165,9 +165,9 @@ public class QuickBattle : MonoBehaviour
     private void AddCountry(bool isFriendly)
     {
         UpdateEstimatedPawnCount();
-        if (friends.Count + enemies.Count >= CountryManager.CountryList.Count) return;
-        if (isFriendly && friends.Count == CountryManager.CountryList.Count - 1) return;
-        if (!isFriendly && enemies.Count == CountryManager.CountryList.Count - 1) return;
+        if (friends.Count + enemies.Count >= Country.List.Count) return;
+        if (isFriendly && friends.Count == Country.List.Count - 1) return;
+        if (!isFriendly && enemies.Count == Country.List.Count - 1) return;
 
         VisualElement v = Menus.I.prefab_country.visualTreeAsset.CloneTree();
 
@@ -179,11 +179,11 @@ public class QuickBattle : MonoBehaviour
 
         v.Q<DropdownField>("Country").choices = updateCountryList();
         v.Q<DropdownField>("Country").value = v.Q<DropdownField>("Country").choices[0];
-        cinfo.country = CountryManager.Get(v.Q<DropdownField>("Country").choices[0]);
+        cinfo.country = Country.Get(v.Q<DropdownField>("Country").choices[0]);
 
         v.Q<Button>("Minus").clicked += delegate { removeCountry(cinfo); };
         v.Q<DropdownField>("Country").RegisterValueChangedCallback(delegate {
-            cinfo.country = CountryManager.Get(v.Q<DropdownField>("Country").value);
+            cinfo.country = Country.Get(v.Q<DropdownField>("Country").value);
             updateAllCountries();
         });
         v.Q<TextField>("Count").RegisterValueChangedCallback(
@@ -206,7 +206,7 @@ public class QuickBattle : MonoBehaviour
     private List<string> updateCountryList()
     {
         List<string> v = new List<string>();
-        foreach(Country c in CountryManager.CountryList)
+        foreach(Country c in Country.List)
         {
             if (enemies.Exists(x => x.country == c) || friends.Exists(x => x.country == c)) continue;
             else

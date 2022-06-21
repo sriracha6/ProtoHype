@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static MapGenerator;
 using Buildings;
+using Nature;
 
 public class TilemapPlace : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class TilemapPlace : MonoBehaviour
         TileBase[] tiles = tilemap.GetTilesBlock(tilemap.cellBounds);
         return tiles.Where(x => x != null).ToArray().Length;
     }
-    public static void UpdateTilemap(float[,] noiseMap, TerrainType[] tTypesUnsorted, bool place)
+    public static void UpdateTilemap(float[,] noiseMap, TerrainType[] tTypesUnsorted, bool place, Biome biome)
     {
         TerrainType[] tTypes = tTypesUnsorted.OrderBy(x => x.height).ToArray(); // this line of code makes the entire game good, i'll make it a puzzle! figure out why! ;)
         
@@ -44,9 +45,10 @@ public class TilemapPlace : MonoBehaviour
                 {
                     if (noiseMap[x, y] <= tTypes[i].height)
                     {
-                        switch (tTypes[i].type)
+                        /* no*/switch (tTypes[i].type)
                         {
                             case SpecialType.None:
+                                TerrainType ttype = tTypes[i];
                                 if(place)
                                     WCMngr.I.groundTilemap.SetTile(new Vector3Int(x, y, 0), tTypes[i].tile);
                                 tilemap[x, y] = tTypes[i];

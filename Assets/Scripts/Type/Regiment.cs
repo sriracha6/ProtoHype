@@ -8,26 +8,6 @@ using Countries;
 
 namespace Regiments
 {
-    public static class RegimentManager
-    {
-        public static List<Regiment> RegimentList = new List<Regiment>();
-
-        public static void Create(TroopType trooptype, Country origin) // creates if it DOESNT exist
-        {
-            Regiment c = new Regiment(trooptype, origin, RegimentList.Count);
-            RegimentList.Add(c);
-        }
-        public static Regiment Get(int id)
-        {
-            if (RegimentList.Exists(x => x.id == id))
-            {
-                return RegimentList.Find(x => x.id == id);
-            }
-            else
-                DB.Attention("Bad regiment ID");
-                return null; // lol
-        }
-    }
     public class Regiment
     {
         public TroopType type; // like archer, swordsman, etc.
@@ -65,6 +45,24 @@ namespace Regiments
                 members.Add(p);
                 memberTransforms.Add(p.gameObject.transform);
             }
+        }
+
+        public static List<Regiment> List = new List<Regiment>();
+
+        public static void Create(TroopType trooptype, Country origin) // creates if it DOESNT exist
+        {
+            Regiment c = new Regiment(trooptype, origin, List.Count);
+            List.Add(c);
+        }
+        public static Regiment Get(int id)
+        {
+            if (List.Exists(x => x.id == id))
+            {
+                return List.Find(x => x.id == id);
+            }
+            else
+                DB.Attention("Bad regiment ID");
+            return null; // lol
         }
     }
 }
