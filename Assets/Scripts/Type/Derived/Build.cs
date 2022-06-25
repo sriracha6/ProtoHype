@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Buildings;
+using UnityEngine.Tilemaps;
 
 static class BuildList
 {
@@ -20,6 +21,7 @@ public class Build
     public int maxHitpoints;
     public int hitpoints;
     public int flammability;
+    public RuleTile tile;
 
     public Build(string name, string description, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int hitpoints, int flammability)
     {

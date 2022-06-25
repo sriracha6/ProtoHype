@@ -132,6 +132,17 @@ public class CachedItems
             this.name = name;
         }
     }
+    public struct RenderedWall
+    {
+        public int ID;
+        public Sprite[] sprites;
+
+        public RenderedWall(int iD, Sprite[] sprites)
+        {
+            ID = iD;
+            this.sprites = sprites;
+        }
+    }
 
     public static List<RenderedWeapon> renderedWeapons = new List<RenderedWeapon>();
     public static List<RenderedShield> renderedShields = new List<RenderedShield>();
@@ -144,6 +155,7 @@ public class CachedItems
     public static List<RenderedAnimalArmor> renderedAnimalArmors = new List<RenderedAnimalArmor>();
     public static List<RenderedAnimalPick> renderedAnimalPicks = new List<RenderedAnimalPick>();
     public static List<RenderedTroopType> renderedTroopTypes = new List<RenderedTroopType>();
+    public static List<RenderedWall> renderedWalls = new List<RenderedWall>();
 
     public static List<Sprite> bloodSplatters = new List<Sprite>();
     public static List<string> firstNames = new List<string>();

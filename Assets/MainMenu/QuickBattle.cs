@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Countries;
 using Nature;
+using Structures;
+using XMLLoader;
 using UnityEngine.UIElements;
 
 public class CountryInfo
@@ -32,7 +34,7 @@ public class QuickBattle : MonoBehaviour
 
     public static QuickBattle I;
 
-    public int regimentSize;
+    public int regimentSize = 30;
 
     void Start()
     {
@@ -108,7 +110,11 @@ public class QuickBattle : MonoBehaviour
         };
 
         root.Q<SliderInt>("RegimentSize").value = 30;
+        UpdateEstimatedPawnCount();
         root.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
+        root.Q<Button>("RandomBuilding").clicked += delegate{
+            StructureGenerator.GenerateStructure(Structure.List.randomElement(), MapGenerator.I.rand);
+        };
     }
 
     private void Back() =>

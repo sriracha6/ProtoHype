@@ -25,7 +25,8 @@ public class Loading : MonoBehaviour
         tips.AddRange(new string[] { "You can change keybinds in settings.", "Generals have personalities.", "You can select pawns and then drag on one for it to follow a path.", 
         "If you don't want to baby a group of pawns, you can have an AI make moves for them. You can also choose the personality of the AI.", "You can hide the UI.", 
         "Melee attacks from an animal going full speed will multiply damage.", "You can't go through doors if you're on an animal.",
-        "Attacks from stationary animals do 25% less damage.", "Different terraintypes have different walkspeeds. Use this to plan a fast route around your enemy."});
+        "Attacks from stationary animals do 25% less damage.", "Different terraintypes have different walkspeeds. Use this to plan a fast route around your enemy.",
+        "You can drag around many GUI elements.", "You can add to your current pawn selection, subtract, or remove it."});
         
         StartCoroutine(Tips());
     }
@@ -33,7 +34,7 @@ public class Loading : MonoBehaviour
     public IEnumerator Tips()
     {
         tip.text = "<b>TIP: </b>" + tips[Random.Range(0,tips.Count)];
-        yield return new WaitForSecondsRealtime(10);
+        yield return new WaitForSecondsRealtime(7);
         StartCoroutine(Tips());
     }
 

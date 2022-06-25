@@ -20,6 +20,7 @@ using Buildings;
 using Generics;
 using UnityEngine.Tilemaps;
 using Nature;
+using Structures;
 using static TilemapPlace;
 using static CachedItems;
 using static WeatherManager;
@@ -50,6 +51,7 @@ namespace XMLLoader
             }
             catch (Exception ex)
             {
+                Debug.LogWarning($"{filepath}\n{ex}");
                 readUntil++; // some reason
                 xmlDocument.LoadXml(file.Substring(readStart, readUntil - readStart));
             }
@@ -80,6 +82,16 @@ namespace XMLLoader
         public static Texture2D LoadTex(string filepath)
         {
             byte[] image = LoadImage(filepath);
+            if (image == null) return null;
+
+            Texture2D tex = new Texture2D(0, 0);
+            tex.LoadImage(image);
+            tex.Apply();
+            return tex;
+        }
+        public static Texture2D LoadTexNonWC(string filepath)
+        {
+            byte[] image = File.ReadAllBytes(filepath);
             if (image == null) return null;
 
             Texture2D tex = new Texture2D(0, 0);
@@ -127,7 +139,7 @@ namespace XMLLoader
             {
                 List<Attack> attacks = new List<Attack>();
 
-                foreach(XmlNode x in xmls.Q<XmlNode>("Attacks", false, childNodes:true))
+                foreach(XmlNode x in xmls.Q<XmlNodeList>("Attacks", false, childNodes:true))
                 {
                     if (x.InnerXml.Equals("Attack"))
                     {
@@ -420,10 +432,12 @@ namespace XMLLoader
 
         public static void LoadBuilding(string filepath)
         {
+            if (!Path.GetFileName(filepath).EndsWith(".wc"))
+                return;
             XmlElement xmls = LoadWC(filepath);
             if (xmls.Q<string>("Type").Equals("Building"))
             {
-                Building.Create(xmls.Q<string>("Name"),
+                var q = Building.Create(xmls.Q<string>("Name"),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"),
                     xmls.Q<int>("CoverQuality"),
@@ -431,6 +445,9 @@ namespace XMLLoader
                     xmls.Q<bool>("SpecialPlace"),
                     xmls.Q<bool>("Rubble"),
                     xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")));
+                                                                            // always of size 17
+                renderedWalls.Add(new RenderedWall(q.ID, SpriteSheetCreator.createSpritesFromSheet(LoadImage(filepath), 512).ToArray()));
+                q.tile = SpriteSheetCreator.I.createRuleTile(q);
             }
             else
             {
@@ -450,7 +467,10 @@ namespace XMLLoader
                     xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")),
                     xmls.Q<int>("Flammability"),
                     xmls.Q<int>("CoverQuality"),
-                    xmls.Q<bool>("Lean"));
+                    xmls.Q<bool>("Lean"),
+                    xmls.Q<bool>("PrefersTouchingWall"),
+                    null,
+                    xmls.Q<bool>("IsCarpet"));
             }
             else
             {
@@ -463,9 +483,11 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.Q<string>("Type").Equals("Floor"))
             {
-                Floor.Create(xmls.Q<string>("Name"),
+                var temp = Floor.Create(xmls.Q<string>("Name"),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"));
+
+                temp.tile = SpriteSheetCreator.I.createTerrainTileFromSheet(LoadImage(filepath));
             }
             else
             {
@@ -529,6 +551,23 @@ namespace XMLLoader
                 return;
             }
         }
+        public static void LoadDoor(string filepath)
+        {
+            XmlElement xmls = LoadWC(filepath);
+            if (xmls.Q<string>("Type").Equals("Door"))
+            {
+                Door.Create(xmls.Q<string>("Name"),
+                    xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")),
+                    xmls.Q<int>("Hitpoints"),
+                    xmls.Q<int>("Flammability"),
+                    xmls.Q<float>("OpeningSpeed"));
+            }
+            else
+            {
+                Debug.Log("Not a door.");
+                return;
+            }
+        }
 
         public static void LoadTerrainType(string filepath)
         {
@@ -543,8 +582,7 @@ namespace XMLLoader
                     xmls.Enum<SpecialType>(xmls.Q<string>("SpecialType")),
                     xmls.Q<bool>("SupportsNature"));
 
-                    SpriteSheetCreator.I.createTerrainTileFromSheet(
-                        LoadImage(filepath), ref temp);
+                    temp.tile = SpriteSheetCreator.I.createTerrainTileFromSheet(LoadImage(filepath));
             }
             else
             {
@@ -616,7 +654,52 @@ namespace XMLLoader
     
         public static void LoadTroopTypeIcon(string filepath)
         {
-            renderedTroopTypes.Add(new RenderedTroopType(LoadTex(filepath), Path.GetFileNameWithoutExtension(filepath)));
+            renderedTroopTypes.Add(new RenderedTroopType(LoadTexNonWC(filepath), Path.GetFileNameWithoutExtension(filepath)));
+        }
+
+        public static void LoadRoom(string filepath)
+        {
+            XmlElement xmls = LoadXML(filepath);
+            if (xmls.HasNode("SurfaceArea"))
+            {
+                Room.Create(xmls.Q<string>("Name"),
+                    xmls.Q<FurnitureStats>("Furniture"),
+                    xmls.Q<XmlNode>("SurfaceArea").Q<int>("Min"),
+                    xmls.Q<XmlNode>("SurfaceArea").Q<int>("Max"),
+                    xmls.Q<List<Floor>>("Floor"));
+            }
+            else
+            {
+                Debug.Log("Not a room file.");
+                return;
+            }
+        }
+        public static void LoadStructure(string filepath)
+        {
+            XmlElement xmls = LoadXML(filepath);
+            if (xmls.HasNode("InfluenceRange"))
+            {
+                Structure.Create(xmls.Q<string>("Name"), 
+                    xmls.Q<string>("Description"), 
+                    xmls.Q<int>("InfluenceRange"),
+                    ParseFuncs.parseMinMax(xmls.Q<string>("RoomCount")), 
+                    xmls.Q<float>("RoomScale"),
+                    ParseFuncs.parseRooms(xmls.Q<XmlNode>("Rooms")), // .
+                    Building.Get(xmls.Q<string>("ExteriorWalls")),
+                    Building.Get(xmls.Q<string>("InteriorWalls")),
+                    xmls.Q<XmlNode>("Entrance").Q<int>("Count"),
+                    xmls.Q<XmlNode>("Entrance").Q<List<Door>>("Door"), 
+                    xmls.Q<bool>("HasCourtyard"),
+                    xmls.Enum<WorldFeature>(xmls.Q<string>("PrefersFeature")),
+                    Room.Get(xmls.Q<string>("CornerRooms")),
+                    xmls.Q<List<Door>>("Doors"), 
+                    Roof.Get(xmls.Q<string>("Roof")));
+            }
+            else
+            {
+                Debug.Log("Not a structure file.");
+                return;
+            }
         }
 
         public static void loadBlood()
@@ -694,6 +777,7 @@ namespace XMLLoader
             List<List<Armor>> armor = new List<List<Armor>>();
             List<Armor> normalRequired = new List<Armor>();
 
+            if(xmls.Q<XmlNode>("PickFrom") != null)
             foreach (XmlElement x in xmls.Qs("PickFrom"))
             {
                 List<Armor> tempChoice = new List<Armor>();
@@ -736,11 +820,8 @@ namespace XMLLoader
             foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
             {
                 //bps.Add(BodypartManager.Get(s.removeWS().toTitleCase()));
-                if (Bodypart.Get(s.removeWS().toTitleCase()) == null)
-                {
-                    DB.Attention("ain't no tellin why THIS SHIT DOESNT WORK");
+                if (Bodypart.List.Find(x=>x.Name == s.removeWS().toTitleCase()) == null)
                     continue;
-                }
                 if (string.IsNullOrEmpty(Bodypart.Get(s.removeWS().toTitleCase()).group))
                     bps.Add(Bodypart.Get(s.removeWS().toTitleCase()));
                 else
@@ -811,6 +892,76 @@ namespace XMLLoader
             byte[] file = Loaders.LoadImage(filepath);
             sprites = SpriteSheetCreator.createSpritesFromSheet(file, size);
             return sprites;
+        }
+        /// <summary>
+        /// click if you wanna die
+        /// </summary>
+        public static FurnitureStats parseFurniture(XmlNode x)
+        {
+            List<(Furniture f, (int min, int max) c)> required = new List<(Furniture f, (int min, int max) c)>();
+            List<List<(Furniture f, (int min, int max))>> groups = new List<List<(Furniture f, (int min, int max))>>();
+
+            if (x.HasNode("F"))
+                foreach(XmlNode node in x.Qs("F"))
+                    required.Add(
+                        (Furniture.Get(node.InnerText), 
+                        parseMinMax(x.Q<string>("count", true)) ));
+
+            if (x.HasNode("Group"))
+                foreach (XmlNode node2 in x.Qs("Group"))
+                    if (node2.HasNode("F"))
+                    {
+                        var lol = new List<(Furniture f, (int min, int max))>();
+                        foreach (XmlNode node in x.Qs("F"))
+                            lol.Add((Furniture.Get(node.InnerText), parseMinMax(x.Q<string>("count", true))));
+                        groups.Add(lol);
+                    }
+
+            return new FurnitureStats(required, groups);
+        }
+        public static List<Floor> parseFloors(string s)
+        {
+            List<Floor> list = new List<Floor>();
+            foreach(string ss in s.Split(','))
+                list.Add(Floor.Get(ss));
+            return list;
+        }
+        public static List<Door> parseDoors(string s)
+        {
+            List<Door> list = new List<Door>();
+            foreach (string str in s.Split(','))
+                list.Add(Door.Get(str));
+            return list;
+        }
+        public static List<RoomInfo> parseRooms(XmlNode x)
+        {
+            List<RoomInfo> roomInfo = new List<RoomInfo>();
+            if (x.HasNode("Required"))
+                foreach (string s in x.Q<string>("Required").Split(','))
+                    roomInfo.Add(new RoomInfo(Room.Get(s.removeWS()), true, false));
+            if (x.HasNode("Common"))
+                foreach (string s in x.Q<string>("Common").Split(','))
+                    roomInfo.Add(new RoomInfo(Room.Get(s.removeWS()), false, true));
+
+            return roomInfo;
+        }
+
+        public static (int min, int max) parseMinMax(string x)
+        {
+            if (string.IsNullOrEmpty(x))
+                return (1,1);
+
+            (int min, int max) lol;
+
+            try
+            {
+                lol.min = int.Parse(x.Split('-')[0].ToString());
+                if (x.Split('-').Length > 1)
+                    lol.max = int.Parse(x.Split('-')[1].ToString());
+                else lol.max = lol.min;
+            }
+            catch (FormatException) { DB.Attention("XMLERROR:Non number count"); return (0,0); }
+            return lol;
         }
 
         public static string removeWS(this string s)
@@ -897,19 +1048,23 @@ namespace XMLLoader
             return list[Random.Range(0, list.Length)];
         }
         
+        public static bool HasNode(this XmlNode x, string text)
+        {
+            return x.SelectSingleNode(text) != null;
+        }
         public static T Q<T>(this XmlNode x, string t, bool attribute=false, bool childNodes=false)
         {
             if(!attribute && x.SelectSingleNode(t) == null)
             {
-                if(t != "Description" || t != "WeaponClass")
-                    DB.Attention($"No node : {t}");
+                if(t != "Description" && t != "WeaponClass" && t != "Group" && t != "Long" && t != "Medium" && t != "Short" && t != "GenericSpecial" && t != "Sidearms" && t != "PickFrom" && t != "Shields" && t != "IsCarpet" && t!="PrefersFeature")
+                    DB.Attention($"XMLERROR: No node : {t}");
                 return default(T);
             }
 
             if(attribute && x.Attributes.GetNamedItem(t) == null)
             {
-                if (t != "Description")
-                    DB.Attention($"No attribute : {t}");
+                if (t != "count")
+                    DB.Attention($"XMLERROR: No attribute : {t}");
                 return default(T);
             }
 
@@ -936,37 +1091,29 @@ namespace XMLLoader
                 {
                     DB.Attention("Not an int"); return default(T);
                 }
-            if (typeof(T) == typeof(List<AnimalArmor>))
-                return (T)(object)parseAnimalArmor(innerText);
-            if (typeof(T) == typeof(TerrainFrequencies))
-                return (T)(object)parseTerrainFrequencies(innerNode);
-            if (typeof(T) == typeof(List<Weather>))
-                return (T)(object)parseWeatherFrequencies(innerNode);
-            if (typeof(T) == typeof(List<Plant>))
-                return (T)(object)parseFlora(innerText);
-            if (typeof(T) == typeof(List<Bodypart>))
-                return (T)(object)parseAllowedBodyparts(innerNode);
-            if (typeof(T) == typeof(List<Shield>))
-                return (T)(object)parseShields(innerNode);
-            if (typeof(T) == typeof(List<List<Armor>>))
-                return (T)(object)parseArmor(innerNode);
-            if (typeof(T) == typeof(List<Projectile>))
-                return (T)(object)parseProjectiles(innerNode);
-            if (typeof(T) == typeof(List<Weapon>))
-                return (T)(object)parseWeapons(innerNode);
-            if (typeof(T) == typeof(XmlNode) && childNodes)
-                return (T)(object)innerNode.ChildNodes;
-            if (typeof(T) == typeof(XmlNode) && !childNodes)
-                return (T)(object)innerNode;
+            var tt = typeof(T);
+            if (tt == typeof(List<AnimalArmor>)) return (T)(object)parseAnimalArmor(innerText);
+            if (tt == typeof(TerrainFrequencies))  return (T)(object)parseTerrainFrequencies(innerNode);
+            if (tt == typeof(List<Weather>))  return (T)(object)parseWeatherFrequencies(innerNode);
+            if (tt == typeof(List<Plant>))  return (T)(object)parseFlora(innerText);
+            if (tt == typeof(List<Bodypart>))  return (T)(object)parseAllowedBodyparts(innerNode);
+            if (tt == typeof(List<Shield>))  return (T)(object)parseShields(innerNode);
+            if (tt == typeof(List<List<Armor>>))  return (T)(object)parseArmor(innerNode);
+            if (tt == typeof(List<Projectile>))  return (T)(object)parseProjectiles(innerNode);
+            if (tt == typeof(List<Weapon>))  return (T)(object)parseWeapons(innerNode);
+            if (tt == typeof(XmlNodeList) && childNodes)  return (T)(object)innerNode.ChildNodes;
+            if (tt == typeof(XmlNode) && !childNodes)  return (T)(object)innerNode;
+            if (tt == typeof(FurnitureStats))  return (T)(object)parseFurniture(innerNode);
+            if (tt == typeof(List<Floor>))  return (T)(object)parseFloors(innerText);
+            if (tt == typeof(List<Door>)) return (T)(object)parseDoors(innerText);
 
-            throw new ArgumentException("Invalid T parameter.");
-            return default(T);
+            throw new ArgumentException("Invalid T parameter. : "+typeof(T).Name);
         }
         public static XmlNodeList Qs(this XmlNode x, string text)
         {
             if (x.SelectSingleNode(text) == null)
             {
-                DB.Attention("Invalid group select");
+                DB.Attention("XMLERROR: Invalid group");
                 return null;
             }
             else
@@ -977,7 +1124,7 @@ namespace XMLLoader
         {
             if (x.Attributes[id] == null)
             {
-                DB.Attention($"No attribute ID : {id}");
+                DB.Attention($"XMLERROR: No attribute ID : {id}");
                 return "";
             }
             else
@@ -988,12 +1135,14 @@ namespace XMLLoader
         {
             if (!typeof(T).IsEnum)
                 throw new ArgumentException("T must be an enum type");
+            if (string.IsNullOrEmpty(t) || t=="false")
+                return default(T);
 
             if(System.Enum.TryParse(t, out T enu))
                 return enu;
             else
             {
-                DB.Attention($"Invalid {nameof(T)}. '{t}' is not valid.");
+                DB.Attention($"Couldn't parse {typeof(T)}. Input: {t}");
                 return default(T);
             }    
         }

@@ -78,9 +78,9 @@ public class BoxSelection : MonoBehaviour
             transform.position = (currentMousePos + initialMousePos) /2;
             transform.position = new Vector3(transform.position.x, transform.position.y, -5);
 
-            bcollider.size = new Vector2(
-                Mathf.Abs(initialMousePos.x - currentMousePos.x),
-                Mathf.Abs(initialMousePos.y - currentMousePos.y));
+            //bcollider.size = new Vector2(
+            //    Mathf.Abs(initialMousePos.x - currentMousePos.x),
+            //    Mathf.Abs(initialMousePos.y - currentMousePos.y));
         }
 
         if (Input.GetMouseButtonUp(Keybinds.LeftMouse) && !UIManager.mouseOverUI && started)
@@ -90,21 +90,21 @@ public class BoxSelection : MonoBehaviour
             Destroy(bcollider);
             boxFill.forceRenderingOff = true;
 
-            transform.position = new Vector3(0, 0, -5);
+            transform.position = new Vector3(0, 0, -1);
             if (!Pawn.mouseOverPawn)
                 letGo = true;
 
             if (newSelectedPawns.Count > 0)
             {
-                if (Input.GetKey(Keybinds.SelectAdd)) // over write
+                if (Input.GetKey(Keybinds.SelectAdd))
                 {
                     Player.selectedPawns.AddRange(newSelectedPawns);
-                    Player.ourSelectedPawns.AddRange(newSelectedPawns.Where(x => x.country == Player.playerCountry).ToList());
+                    Player.ourSelectedPawns.AddRange(newSelectedPawns.FindAll(x => x.country == Player.playerCountry).ToList());
                 }
                 else                                                          // over write
                 {
-                    Player.selectedPawns = newSelectedPawns;
-                    Player.ourSelectedPawns = newSelectedPawns.Where(x => x.country == Player.playerCountry).ToList();
+                    Player.selectedPawns = new List<Pawn>(newSelectedPawns);
+                    Player.ourSelectedPawns = newSelectedPawns.FindAll(x => x.country == Player.playerCountry).ToList();
                 }
                 MoveControls.showPanel();
             }

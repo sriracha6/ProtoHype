@@ -54,9 +54,6 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private GameObject waterPrefab;
     [SerializeField] private GameObject treeFab; // GET IT??? TREEFAB???? AHAAHAHAHAHAHAAHAHAHAHAHA
 
-    public int mapW;
-    public int mapH;
-
     public int riverCount;
     public int seasidesCount;
 
@@ -71,11 +68,10 @@ public class MapGenerator : MonoBehaviour
     public static float[,] noiseMap;
     public static List<TerrainType> terrainTypes;
 
+    public System.Random rand;
+
     protected void Awake()
     {
-        mapW = mapWidth;
-        mapH = mapHeight;
-
         if (!isTestMap)
         {
             currentBiome = Biome.Get("Plains");
@@ -93,7 +89,6 @@ public class MapGenerator : MonoBehaviour
             I.mapBounds = mapBounds;
             I.sun = sun;
             drawMode = DrawMode.Place;
-            DB.Attention("WATCHOUTFORRIVERCOUNT: " + riverCount);
             DrawMap();
         }
     }
@@ -136,18 +131,15 @@ public class MapGenerator : MonoBehaviour
         terrainTypes = currentBiome.terrainFrequencies.terrain;
         erosionAmount = Mathf.CeilToInt(mapWidth / 100);
 
-        mapH = mapHeight;
-        mapW = mapWidth;
-
         //long _seed = ParseSeed(seed);
         if (!int.TryParse(seed, out int _seed))
             _seed = seed.GetHashCode();
 
-        System.Random rand = new System.Random(_seed);
+        rand = new System.Random(_seed);
 
         noiseMap = RandomMap.genNoise(mapWidth, mapHeight, _seed, noiseScale, octaves, persistence, lacunarity, offset)
-            .carveRiver(deepSeaLevel, rand, riverPerturbation)
-            .carveWaterBody(deepSeaLevel, rand);
+            .carveRiver(deepSeaLevel, rand, riverPerturbation, false)
+            .carveWaterBody(deepSeaLevel, rand, false);
 
         for (int i = 0; i < riverCount; i++)
             noiseMap.carveRiver(deepSeaLevel, rand, riverPerturbation, always:true);
@@ -215,7 +207,7 @@ public class MapGenerator : MonoBehaviour
         float zScale = (mapHeight * 2) / meshSize.z;
 
         water.transform.localScale = new Vector3(xScale*2, 1, zScale*2);
-        water.transform.position = new Vector3(mapWidth+1, mapHeight+1, -11);
+        water.transform.position = new Vector3(mapWidth+1, mapHeight+1, 11);
     }
 
     public static void generateTestRoom(int width, int height)
@@ -225,17 +217,13 @@ public class MapGenerator : MonoBehaviour
         go.transform.position = new Vector3(width/2,height/2,0);
         go.transform.localScale = new Vector3(width, height, 1);
 
-        I.mapW = width;
-        I.mapH = height;
+        I.mapWidth = width;
+        I.mapHeight = height;
 
         TilemapPlace.tilemap = new TerrainType[width, height];
         for(int x = 0; x < width; x++)
-        {
             for(int y = 0; y < height; y++)
-            {
                 TilemapPlace.tilemap[x, y] = TerrainType.Get("Test Tile");
-            }
-        }
 
         new PathfindExtra();
     }

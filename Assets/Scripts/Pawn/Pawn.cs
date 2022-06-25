@@ -86,7 +86,6 @@ namespace PawnFunctions
                     BoxSelection.newSelectedPawns.Remove(this);
                 if (BoxSelection.mode == SelectionMode.ClearAll)
                 {
-                    Debug.Log($"[*]CLEAR");
                     BoxSelection.newSelectedPawns = null;
                     Player.selectedPawns = null; // this way itll shit out a fucking error when isee my bad programming
                     Player.ourSelectedPawns = null;

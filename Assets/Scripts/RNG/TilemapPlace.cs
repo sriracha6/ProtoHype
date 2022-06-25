@@ -12,6 +12,8 @@ public class TilemapPlace : MonoBehaviour
     public static TilemapPlace I;
     public static TerrainType[,] tilemap;
     public static Build[,] buildings;
+    public static Floor[,] floors;
+
     [SerializeField] AstarPath pfinder;
     [SerializeField] Transform treeParent;
 
@@ -26,12 +28,34 @@ public class TilemapPlace : MonoBehaviour
         }
     }
 
+    public static void SetFloor(Floor f, int x, int y)
+    {
+        floors[x,y] = f;
+        WCMngr.I.groundTilemap.SetTile(new Vector3Int(x,y,0), f.tile);
+    }    
+
+    public static void SetBuild(Build f, int x, int y)
+    {
+        DB.Null(buildings);
+        DB.Null(f);
+        buildings[x,y] = f;
+        WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), f.tile);
+    }
+
+    public static void SetDoor(Door d, int x, int y, float rotation)
+    {
+        SetBuild(d, x, y);
+        Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f,0f,rotation), Vector3.one);
+        WCMngr.I.solidTilemap.SetTransformMatrix(new Vector3Int(x,y,0), matrix);
+    }
+
     public static int GetNumberOfTiles(Tilemap tilemap)
     {
         tilemap.CompressBounds();
         TileBase[] tiles = tilemap.GetTilesBlock(tilemap.cellBounds);
         return tiles.Where(x => x != null).ToArray().Length;
     }
+
     public static void UpdateTilemap(float[,] noiseMap, TerrainType[] tTypesUnsorted, bool place, Biome biome)
     {
         TerrainType[] tTypes = tTypesUnsorted.OrderBy(x => x.height).ToArray(); // this line of code makes the entire game good, i'll make it a puzzle! figure out why! ;)
@@ -70,7 +94,8 @@ public class TilemapPlace : MonoBehaviour
                 }
             }
         }
-        buildings = new Build[MapGenerator.I.mapW, MapGenerator.I.mapH];
+        buildings = new Build[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
+        floors = new Floor[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
 
         if(place)
         {

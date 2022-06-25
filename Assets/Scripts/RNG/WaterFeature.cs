@@ -39,7 +39,7 @@ public static class WaterFeature
     public static float[,] carveRiver(this float[,] ogMap, float waterLevel, System.Random seed, float perturbation, bool always = false)
     {
         if(!always)
-            if (seed.Next(0, 100) >= 100-RIVER_CHANCE)
+            if (seed.Next(0, 100) <= 100-RIVER_CHANCE)
                 return ogMap;
 
         float[,] newMap = ogMap;
@@ -98,8 +98,8 @@ public static class WaterFeature
 
             for(int i = 0; i < river.radius * 2; i++)
             {
-                newMap[(int)direction.x, (direction.y + i).ClampInMap(height)] = waterLevel - 0.01f;
-                newMap[(int)direction.x, (direction.y - i).ClampInMap(height)] = waterLevel - 0.01f;
+                newMap[(int)direction.x.ClampInMap(width), (direction.y + i).ClampInMap(height)] = waterLevel - 0.01f;
+                newMap[(int)direction.x.ClampInMap(width), (direction.y - i).ClampInMap(height)] = waterLevel - 0.01f;
             }
             if (seed.Next(0, 100) >= 100 - CHANGE_SIZE_CHANCE)
             {

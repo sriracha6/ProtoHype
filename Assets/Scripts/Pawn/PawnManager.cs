@@ -46,7 +46,7 @@ public class PawnManager : MonoBehaviour
                 for (int j = 0; j < Mathf.Max(Random.Range(0.75f, 1.25f) * regimentSize, 2); j++)
                 {
                     Pawn p = CreatePawn(country.country, CachedItems.RandomName, troopType,
-                        Regiment.Get(i), new Vector2(Random.Range(0, MapGenerator.I.mapW), Random.Range(0, MapGenerator.I.mapH)) /* TODO : RANDOM POSITION? WHY?? FIX! */); // make sure this id is right!
+                        Regiment.Get(i), new Vector2(Random.Range(0, MapGenerator.I.mapWidth), Random.Range(0, MapGenerator.I.mapHeight)) /* TODO : RANDOM POSITION? WHY?? FIX! */); // make sure this id is right!
                     if(troopType.ridingAnimal)
                     {
                         GameObject go = Instantiate(horsePrefab); // im so sorry

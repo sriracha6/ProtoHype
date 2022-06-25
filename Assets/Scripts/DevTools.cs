@@ -19,10 +19,6 @@ using Nature;
 
 public class DevTools : MonoBehaviour
 {
-    public Camera cam;
-
-    public PawnManager pManager;
-
     List<Weapon> sampleweapons = new List<Weapon>();
     List<Armor> armors = new List<Armor>();
     List<Projectile> sampleProjectiles = new List<Projectile>();
@@ -76,22 +72,24 @@ public class DevTools : MonoBehaviour
 #endif
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        /*if (Input.GetKeyDown(KeyCode.Q))
         {
-            pManager.CreatePawn(Country.Get("Germany"), CachedItems.RandomName, TroopType.Get("Swordsman"),
-                         Regiment.Get(0), cam.ScreenToWorldPoint(Input.mousePosition)); // make sure this id is right!
+            PawnManager.I.CreatePawn(Country.Get("Germany"), CachedItems.RandomName, TroopType.Get("Swordsman"),
+                         Regiment.Get(0), WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition)); // make sure this id is right!
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            pManager.CreatePawn(Country.Get("France"), CachedItems.RandomName, TroopType.Get("Archer"), 
-                        Regiment.Get(1), cam.ScreenToWorldPoint(Input.mousePosition), sampleProjectiles);
-        }
+            PawnManager.I.CreatePawn(Country.Get("France"), CachedItems.RandomName, TroopType.Get("Archer"), 
+                        Regiment.Get(1), WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition), sampleProjectiles);
+        }*/
 
         if (Input.GetKeyDown(KeyCode.M))
         {
             var go = Instantiate(WCMngr.I.firePrefab);
-            Vector2Int p = Vector2Int.FloorToInt(cam.ScreenToWorldPoint(Input.mousePosition));
+            Vector2Int p = Vector2Int.FloorToInt(WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition));
             go.transform.position = new Vector3(p.x, p.y, -2);
         }
+        if (Input.GetKeyDown(KeyCode.F))
+            Messages.I.Add("You pressed F. Respects have been paid.");
     }
 }

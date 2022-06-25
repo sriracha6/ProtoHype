@@ -3,12 +3,14 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Buildings
 {
     public class Floor : Build
     {
         public BuildingType buildingType { get; }
+        public FuckBitchTile tile;
 
         public Floor(string name, int hitpoints, int flammability) : base(name, "", false,false,RubbleType.None,hitpoints,flammability)
         {

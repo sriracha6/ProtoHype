@@ -34,7 +34,7 @@ public class CameraMove : MonoBehaviour
     {
         if (I == null)
             I = this;
-        camObject.transform.position = new Vector3(MapGenerator.I.mapW/2,MapGenerator.I.mapH /2,-10); // position the camera in middle of scene
+        camObject.transform.position = new Vector3(MapGenerator.I.mapWidth/2,MapGenerator.I.mapHeight /2,-10); // position the camera in middle of scene
 
         thecam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().enabled = false;
         camtransform = transform;
@@ -42,7 +42,7 @@ public class CameraMove : MonoBehaviour
 
     public void resizeBounds(int width, int height)
     {
-        bounds.gameObject.transform.localScale = new Vector2(width, height)*2;
+        bounds.gameObject.transform.localScale = new Vector2(width-1, height-1)*2;
         bounds.gameObject.transform.position = Vector2.zero;
         // we also need to relimit max fov so its not out of bounds somefucking how.
         maxFov = width / 5 + (width/50); // this was my first guess and it's pretty fuckin spot on

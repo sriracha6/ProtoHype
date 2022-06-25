@@ -40,10 +40,10 @@ public class TileSelection : MonoBehaviour
         {
             currentMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
 
-            lineRenderer.SetPosition(0, new Vector3(Mathf.Round(initialMousePos.x), Mathf.Round(initialMousePos.y),-5));
-            lineRenderer.SetPosition(1, new Vector3(Mathf.Round(initialMousePos.x), Mathf.Round(currentMousePos.y),-5));
-            lineRenderer.SetPosition(2, new Vector3(Mathf.Round(currentMousePos.x), Mathf.Round(currentMousePos.y),-5));
-            lineRenderer.SetPosition(3, new Vector3(Mathf.Round(currentMousePos.x), Mathf.Round(initialMousePos.y),-5));
+            lineRenderer.SetPosition(0, new Vector3(Mathf.Round(initialMousePos.x)*2, Mathf.Round(initialMousePos.y)*2,-5));
+            lineRenderer.SetPosition(1, new Vector3(Mathf.Round(initialMousePos.x)*2, Mathf.Round(currentMousePos.y)*2,-5));
+            lineRenderer.SetPosition(2, new Vector3(Mathf.Round(currentMousePos.x)*2, Mathf.Round(currentMousePos.y)*2,-5));
+            lineRenderer.SetPosition(3, new Vector3(Mathf.Round(currentMousePos.x)*2, Mathf.Round(initialMousePos.y)*2,-5));
 
             transform.position = (currentMousePos + initialMousePos)/2;
             transform.position = new Vector3(transform.position.x,transform.position.y,-5);

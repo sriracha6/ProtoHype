@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Buildings
 {
@@ -21,6 +22,7 @@ namespace Buildings
     {
         public BuildingType buildingType;
         public RoofStats roofStats;
+        public new FuckBitchTile tile;
 
         public Roof(string name, int hitpoints, int flammability, RoofStats roofStats) 
             : base(name,"",false,false,RubbleType.None,hitpoints,flammability)

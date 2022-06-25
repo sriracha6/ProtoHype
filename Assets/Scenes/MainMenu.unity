@@ -351,6 +351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TEMP_: {fileID: 0}
+  defaultRuleTile: {fileID: 11400000, guid: b239a6cb28d77ab499c7593af6546dab, type: 2}
 --- !u!114 &902525631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,8 +392,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eeec39cc72231e48b9a32d2d0c61691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
-  pManager: {fileID: 0}
 --- !u!1 &932197535
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ namespace Buildings
         woodrubble,
         stonerubble,
         miscrubble,
-        None
+        None=0
     }
 
     public class Furniture
@@ -34,8 +34,11 @@ namespace Buildings
         public float flammability; // percent
         public int coverQuality;
         public bool leanToUse;
+        public bool PrefersTouchingWall;
+        public List<Furniture> PrefersTouchingFurnitures;
+        public bool isCarpet;
 
-        public Furniture(string name, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse)
+        public Furniture(string name, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse, bool PrefersTouchingWall, List<Furniture> PrefersTouchingFurniture, bool isCarpet)
         {
             this.Name = name;
             this.buildingType = BuildingType.Prop;
@@ -46,15 +49,18 @@ namespace Buildings
             this.flammability = flammability;
             this.coverQuality = coverQuality;
             this.leanToUse = leanToUse;
+            this.PrefersTouchingFurnitures = PrefersTouchingFurniture;
+            this.PrefersTouchingWall = PrefersTouchingWall;
+            this.isCarpet = isCarpet;
         }
 
         public static List<Furniture> List = new List<Furniture>();
 
-        public static Furniture Create(string name, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse)
+        public static Furniture Create(string name, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse, bool prefertouchwall, List<Furniture> preferTouchFurniture, bool isCarpet)
         {
             if (!List.Any(x => x.Name == name))
             {
-                Furniture c = new Furniture(name, isTileable, hitpoints, hasRubble, rubbleType, flammability, coverQuality, leanToUse);
+                Furniture c = new Furniture(name, isTileable, hitpoints, hasRubble, rubbleType, flammability, coverQuality, leanToUse, prefertouchwall, preferTouchFurniture, isCarpet);
                 List.Add(c);
                 return c;
             }

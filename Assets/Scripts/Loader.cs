@@ -31,10 +31,10 @@ public class Loader : MonoBehaviour
 
         string bit = Environment.Is64BitOperatingSystem ? "64 bit" : "32 bit";
         string bit2 = Environment.Is64BitProcess ? "-64" : "-32";
-
+        
         Logger.Clear();
-        Logger.Log(DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
         Logger.Log($@"
+            Codename
  _  _  _, __,  _, _,_  _, _, _ ___
  |  | / \ |_) / ` |_| / \ |\ |  | 
  |/\| |~| | \ \ , | | |~| | \|  | 
@@ -47,9 +47,15 @@ public class Loader : MonoBehaviour
   CS: {md5checksum}
   CD: {Directory.GetCurrentDirectory()}
   OS: {bit}{bit2} {Environment.OSVersion}
+  TIME: {DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()}
+  MEM: {SystemInfo.systemMemorySize}
+  VMEM: {SystemInfo.graphicsMemorySize}
+  CPU: {SystemInfo.processorType} : {SystemInfo.processorFrequency}MHz : {SystemInfo.processorCount}x
+  GPU: {SystemInfo.graphicsDeviceName} : {SystemInfo.graphicsDeviceVersion}
        {"NO MODS DETECTED"}                          
         ");
 
+        Logger.Divide("START XML LOAD");
         Loaders.LoadBodyparts("C:\\Users\\frenz\\Music\\bodyparts.xml");
 
         Loaders.LoadMeleeWeapon("C:\\Users\\frenz\\Music\\ahlspiess.wc");
@@ -102,6 +108,20 @@ public class Loader : MonoBehaviour
         Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\germany.xml");
         Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\france.xml");
 
+        foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\furn"))
+            Loaders.LoadFurniture(file);
+        foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\roof"))
+            Loaders.LoadRoof(file);
+        foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\door"))
+            Loaders.LoadDoor(file);
+        foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\wall"))
+            Loaders.LoadBuilding(file);
+        foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\room"))
+            Loaders.LoadRoom(file);
+        foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\ture"))
+            Loaders.LoadStructure(file);
+
+        Logger.EndDivide();
         //Loaders.LoadCountryOutfit("C:\\Users\\frenz\\Music\\germany.xml");
 
         defaultVitals.Add(new Vital(VitalSystem.Dexterity, 1f));

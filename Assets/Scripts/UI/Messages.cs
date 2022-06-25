@@ -6,22 +6,22 @@ using UnityEngine.UIElements;
 public class Messages : MonoBehaviour
 {
     public VisualElement root;
-    public TextField messageBox;
+    public VisualElement box;
 
     [SerializeField]
     float timeToFade;
 
     private List<string> messages = new List<string>();
 
-    protected static Messages instance;
+    public static Messages I;
 
     private void Start()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
-        messageBox = root.Q<VisualElement>("MessageSystem").Q<TextField>("Messages");
-        messageBox.style.display = DisplayStyle.None;
+        box = root.Q<VisualElement>("MessageSystem");
+        box.style.display = DisplayStyle.None;
 
-        instance = this;
+        I = this;
     }
 
     public void Add(string message)
@@ -38,21 +38,19 @@ public class Messages : MonoBehaviour
     /// <param name="obj"></param>
     public static void AddMessage(object obj)
     {
-        instance.Add(obj.ToString()); // giggity giggity goo
+        I.Add(obj.ToString()); // giggity giggity goo
     }
 
     private void UpdateMsgs()
     {
-        messageBox.SetValueWithoutNotify("");
+        I.box.Clear();
         foreach (string msg in messages)
-        {
-            messageBox.SetValueWithoutNotify(messageBox.text + msg + "\n");
-        }
-
+            I.box.Add(new Label(msg));
+        
         if (messages.Count == 0)
-            messageBox.style.display = DisplayStyle.None;
+            I.box.style.display = DisplayStyle.None;
         else
-            messageBox.style.display = DisplayStyle.Flex;
+            I.box.style.display = DisplayStyle.Flex;
     }
 
     IEnumerator autoRemoveText(int index)

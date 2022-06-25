@@ -56,7 +56,7 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\HardLight2D\Editor\HardLight2DEditor.cs" />
+    <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\Editor\FlagEnumAttributeDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -310,9 +310,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="HardLight2D">
-      <HintPath>Assets\HardLight2D\Scripts\HardLight2D.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
@@ -683,6 +680,9 @@
     <Reference Include="Unity.RenderPipelines.Universal.Shaders">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
     </Reference>
+    <Reference Include="com.unity.quicksearch">
+      <HintPath>Library\ScriptAssemblies\com.unity.quicksearch.dll</HintPath>
+    </Reference>
     <Reference Include="PsdPlugin">
       <HintPath>Library\ScriptAssemblies\PsdPlugin.dll</HintPath>
     </Reference>
@@ -707,11 +707,11 @@
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.UIBuilderModule">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.UIBuilderModule.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UIBuilderModule">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.UIBuilderModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsInputSystemModule">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UIElementsInputSystemModule.dll</HintPath>
@@ -743,6 +743,9 @@
     <Reference Include="Unity.2D.Common.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Tilemap.Extras">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Animation.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
     </Reference>
@@ -761,20 +764,23 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.2D.Psdimporter.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.001">
       <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PlasticSCM.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Tilemap.Extras.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
@@ -819,9 +825,41 @@
       <Project>{13C74137-E3B5-365C-06BA-0E672A621516}</Project>
       <Name>PackageToolsEditor</Name>
     </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Monitoring.csproj">
+      <Project>{972A66B7-03CE-F1B3-5368-61AABEA5573E}</Project>
+      <Name>Assembly-Baracuda-Monitoring</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Threading.csproj">
+      <Project>{CD6CFFD5-B4A4-69EF-CF20-B85336E5B7AF}</Project>
+      <Name>Assembly-Baracuda-Threading</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Pooling.csproj">
+      <Project>{0D2EC563-CAC8-E2BA-7B87-A655B33E8256}</Project>
+      <Name>Assembly-Baracuda-Pooling</Name>
+    </ProjectReference>
     <ProjectReference Include="AstarPathfindingProjectEditor.csproj">
       <Project>{2247E6E4-6690-75BB-E5F0-4F30BC5A1C5D}</Project>
       <Name>AstarPathfindingProjectEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Reflection.csproj">
+      <Project>{24C270D6-C2A9-5C0F-3168-D3A7FF59DE1B}</Project>
+      <Name>Assembly-Baracuda-Reflection</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Threading-Editor.csproj">
+      <Project>{2CD4FFC1-049A-15C3-E920-B166343FF2A6}</Project>
+      <Name>Assembly-Baracuda-Threading-Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Monitoring.GUI.csproj">
+      <Project>{945A19EA-B8DA-8E8A-5C05-2BD80E2410F6}</Project>
+      <Name>Assembly-Baracuda-Monitoring.GUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Monitoring-Editor.csproj">
+      <Project>{0D114B8F-464E-DF6C-50B3-7111BE85A563}</Project>
+      <Name>Assembly-Baracuda-Monitoring-Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assembly-Baracuda-Monitoring.Example.csproj">
+      <Project>{D3293A88-31AE-C57F-1341-750617C73CC1}</Project>
+      <Name>Assembly-Baracuda-Monitoring.Example</Name>
     </ProjectReference>
     <ProjectReference Include="AstarPathfindingProject.csproj">
       <Project>{EBAB5EB1-2583-5632-1905-4465622CB3FE}</Project>

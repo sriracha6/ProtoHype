@@ -9,8 +9,8 @@ public class WCMngr : MonoBehaviour // thsi class name gets a cool icon
 {
     public static WCMngr I { get; private set; }
 
-    [HideInInspector] public Camera mainCam;
-    [HideInInspector] public Weapon flagWeapon { get; private set; }
+    public Camera mainCam;
+    public Weapon flagWeapon { get; private set; }
     [SerializeField] Sprite flagSprite;
     public Difficulty difficulty;
 
@@ -50,6 +50,7 @@ public class WCMngr : MonoBehaviour // thsi class name gets a cool icon
             I.projectileParent = projectileParent;
             I.bloodParent = bloodParent;
             I.pawnInfo = pawnInfo;
+            I.mainCam = Camera.main;
         }
 
         bluntWoundNames.AddRange(new string[] { "Crack", "Fracture", "Fissure" });

@@ -8,9 +8,10 @@ namespace Buildings
 {
     public class Building : Build // i probably shouldve made this derive from a single building class tbh
     {
-        public BuildingType buildingType;
+        public BuildingType buildingType { get; }
         public int coverQuality;
         public bool isLean;
+        public new RuleTile tile;
 
         public Building(string name, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)
             : base(name,"",isSpecialPlace,rubble,rubbleType,hitpoints,flammability)

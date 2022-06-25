@@ -71,8 +71,8 @@ namespace PawnFunctions
         public PathfindExtra() // we need this so this class can remain static
         {                                                                           // !!!!!!!!
                                                                                     // ALL OBJSTACLES (MOUNTAIN, WALL, FURNITURE) ARE 1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            sizeX = MapGenerator.I.mapW;
-            sizeY = MapGenerator.I.mapH;
+            sizeX = MapGenerator.I.mapWidth;
+            sizeY = MapGenerator.I.mapHeight;
 
             tiles = new List<Pos>();
 
@@ -96,8 +96,8 @@ namespace PawnFunctions
                 {
                     if (TilemapPlace.tilemap[tx, ty].type == SpecialType.None)
                         tiles.Add(new Pos(tx, ty, false));
-                    else
-                        tiles.Add(new Pos(tx, ty, true));
+                    else if (TilemapPlace.tilemap[tx, ty].type == SpecialType.Mountain) 
+                        tiles.Add(new Pos(tx, ty, true)); // you can walk over water.
                 }
             }
         }

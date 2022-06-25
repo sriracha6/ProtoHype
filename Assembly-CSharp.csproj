@@ -64,11 +64,13 @@
     <Compile Include="Assets\Scripts\KeyboardShortcuts.cs" />
     <Compile Include="Assets\Scripts\Type\Trap.cs" />
     <Compile Include="Assets\Scripts\GenericLists.cs" />
+    <Compile Include="Assets\Scripts\Type\Structure.cs" />
     <Compile Include="Assets\Scripts\RNG\WaterFeature.cs" />
     <Compile Include="Assets\Scripts\FuckBitchTile.cs" />
     <Compile Include="Assets\Scripts\Type\Regiment.cs" />
     <Compile Include="Assets\Scripts\Type\Shield.cs" />
     <Compile Include="Assets\MainMenu\Menus.cs" />
+    <Compile Include="Assets\Scripts\RNG\BaseGen\RoomGenerator.cs" />
     <Compile Include="Assets\Scripts\Pawn\FlagBehaviour.cs" />
     <Compile Include="Assets\Scripts\XMLLoader.cs" />
     <Compile Include="Assets\Baracuda\IL2CPP\IL2CPP_AOT.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Assets\Scripts\Type\Floor.cs" />
     <Compile Include="Assets\Scripts\Type\Furniture.cs" />
     <Compile Include="Assets\Scripts\UI\Messages.cs" />
+    <Compile Include="Assets\Scripts\RNG\BaseGen\StructureGenerator.cs" />
     <Compile Include="Assets\Scripts\HealthFunctions.cs" />
     <Compile Include="Assets\Scripts\Blood.cs" />
     <Compile Include="Assets\Scripts\Pawn\PawnPathfind.cs" />
@@ -101,6 +104,7 @@
     <Compile Include="Assets\Scripts\UI\PawnInfo.cs" />
     <Compile Include="Assets\Scripts\Player\TileSelection.cs" />
     <Compile Include="Assets\Scripts\Type\TroopType.cs" />
+    <Compile Include="Assets\Scripts\Type\Room.cs" />
     <Compile Include="Assets\Scripts\Type\Animal.cs" />
     <Compile Include="Assets\Scripts\Type\Building.cs" />
     <Compile Include="Assets\Scripts\Type\BiomeArea.cs" />
@@ -141,6 +145,7 @@
     <Compile Include="Assets\Scripts\Player\WCMngr.cs" />
     <Compile Include="Assets\Scripts\RNG\EditorMapGen.cs" />
     <Compile Include="Assets\test.cs" />
+    <Compile Include="Assets\Scripts\Type\Door.cs" />
     <Compile Include="Assets\Scripts\Type\Plant.cs" />
     <Compile Include="Assets\Scripts\CachedItems.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\Item.cs" />
@@ -163,6 +168,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain_Add.shader" />
     <None Include="Assets\MainMenu\play.uxml" />
+    <None Include="Assets\Scripts\Shaders\conversion.cginc" />
     <None Include="Assets\css.uss" />
     <None Include="Assets\MainMenu\loading.uxml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
@@ -171,6 +177,7 @@
     <None Include="Assets\MainMenu\MainMenu.uxml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\Scripts\Shaders\Watter.shader" />
     <None Include="Assets\Scripts\Shaders\Water.shader" />
     <None Include="Assets\Resources\Prefabs\UI\Bodypart2ElectricBoogaloo.uxml" />
     <None Include="Assets\UIDoc.uxml" />

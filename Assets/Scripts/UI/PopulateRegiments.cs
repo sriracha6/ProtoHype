@@ -104,7 +104,7 @@ public class PopulateRegiments : MonoBehaviour
             else
                 Player.ourSelectedPawns = Regiment.Get(id).members;
             if (Player.ourSelectedPawns.Count == 0)
-                Messages.AddMessage("No pawns selected");
+                Messages.I.Add("No pawns selected");
         }
         else
         {
@@ -130,7 +130,7 @@ public class PopulateRegiments : MonoBehaviour
             else
                 Player.ourSelectedPawns = Regiment.Get(regimentIDOrder[visualPosition]).members;
             if (Player.ourSelectedPawns.Count == 0)
-                Messages.AddMessage("No pawns selected");
+                Messages.I.Add("No pawns selected");
         }
         else
         {

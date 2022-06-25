@@ -48,7 +48,7 @@ namespace Body
         public float bleedingRate;
         public PartType type;
         private string _partOf;
-        public Bodypart partOf { get { return Get(_partOf); } }
+        public Bodypart partOf { get { if (_partOf != "false") return Get(_partOf); else return null; } }
         public List<Wound> wounds = new List<Wound>();
         public string group;
 
