@@ -45,7 +45,7 @@ public class Loader : MonoBehaviour
   to do and not what I want it to do.'
 
   CS: {md5checksum}
-  CD: {Directory.GetCurrentDirectory()}
+  CD: {removeUsername(Directory.GetCurrentDirectory())}
   OS: {bit}{bit2} {Environment.OSVersion}
   TIME: {DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()}
   MEM: {SystemInfo.systemMemorySize}
@@ -55,6 +55,9 @@ public class Loader : MonoBehaviour
        {"NO MODS DETECTED"}                          
         ");
 
+        Application.logMessageReceived += Logger.LogUnityMsg;
+        Application.lowMemory += WCMngr.ClearCache;//delegate { Messages.I.Add("Your device is low on memory. Clearing cached items. This may result in slower loading times."); };
+        
         Logger.Divide("START XML LOAD");
         Loaders.LoadBodyparts("C:\\Users\\frenz\\Music\\bodyparts.xml");
 
@@ -130,5 +133,10 @@ public class Loader : MonoBehaviour
         defaultVitals.Add(new Vital(VitalSystem.Conciousness, 1f));
         defaultVitals.Add(new Vital(VitalSystem.BloodPumping, 1f));
         defaultVitals.Add(new Vital(VitalSystem.Moving, 1f));
+    }
+
+    private string removeUsername(string s)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(s, @"([A-Z]{1}\:*\\Users\\)(\w+\\)(.*)", "$1*\\$3");
     }
 }

@@ -50,9 +50,9 @@ public class FireBehaviour : MonoBehaviour
 
         var currentBuilding = TilemapPlace.buildings[(int)transform.position.x, (int)transform.position.y];
 
-        if (Size <= 0                                                                                    // no fire
-           || currentBuilding == null                                                                    // we destroyed it
-           || currentBuilding.flammability <= 0)                                                         // weird edge case
+        if (Size <= 0                                                                 // no fire
+           || currentBuilding == null                                                 // we destroyed it
+           || currentBuilding.flammability <= 0)                                      // weird edge case
         {
             FireManager.firePositions.Remove(transform.position);
             PathfindExtra.SetFree((int)transform.position.x, (int)transform.position.y);

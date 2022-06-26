@@ -57,6 +57,25 @@ public class WCMngr : MonoBehaviour // thsi class name gets a cool icon
         bluntWoundNames.AddRange(new string[] { "Dislocation", "Break" });
     }
 
+    /// <summary>
+    /// Do not call this to save memory. This is automatically called when the device is low on memory. Clearing cache results in much slower load times.
+    /// </summary>
+    public static void ClearCache()
+    {
+        long oldMem = System.GC.GetTotalMemory(true);
+        DB.Attention($"Clearing cache due to low memory. Current memory used: {oldMem}");
+        CachedItems.renderedAnimals.Clear();
+        CachedItems.renderedWeapons.Clear();
+        CachedItems.renderedShields.Clear();
+        CachedItems.renderedArmors.Clear();
+        CachedItems.renderedAnimalArmors.Clear();
+        CachedItems.renderedFlora.Clear();
+        CachedItems.renderedPawns.Clear();
+        CachedItems.renderedProjectiles.Clear();
+        CachedItems.renderedAnimalPicks.Clear();
+        DB.Attention($"Memory cleared: {oldMem - System.GC.GetTotalMemory(true)}");
+    }
+
     protected void Start()
     {
         PathfindExtra _ = new PathfindExtra(); // singleton :)

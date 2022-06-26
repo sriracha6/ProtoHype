@@ -11,8 +11,10 @@ public class TilemapPlace : MonoBehaviour
 {
     public static TilemapPlace I;
     public static TerrainType[,] tilemap;
-    public static Build[,] buildings;
+
+    public static Building[,] buildings;
     public static Floor[,] floors;
+    public static (Door door, float rotation)[,] doors;
 
     [SerializeField] AstarPath pfinder;
     [SerializeField] Transform treeParent;
@@ -31,22 +33,25 @@ public class TilemapPlace : MonoBehaviour
     public static void SetFloor(Floor f, int x, int y)
     {
         floors[x,y] = f;
-        WCMngr.I.groundTilemap.SetTile(new Vector3Int(x,y,0), f.tile);
+        if (MapGenerator.I.drawMode == DrawMode.Place)
+            WCMngr.I.groundTilemap.SetTile(new Vector3Int(x,y,0), f.tile);
     }    
 
-    public static void SetBuild(Build f, int x, int y)
+    public static void SetWall(Building f, int x, int y)
     {
-        DB.Null(buildings);
-        DB.Null(f);
         buildings[x,y] = f;
-        WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), f.tile);
+        if (MapGenerator.I.drawMode == DrawMode.Place)
+            WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), f.tile);
     }
-
+    
     public static void SetDoor(Door d, int x, int y, float rotation)
     {
-        SetBuild(d, x, y);
-        Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f,0f,rotation), Vector3.one);
-        WCMngr.I.solidTilemap.SetTransformMatrix(new Vector3Int(x,y,0), matrix);
+        doors[x, y] = (d, rotation);
+        if (MapGenerator.I.drawMode == DrawMode.Place)
+        {
+            Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, rotation), Vector3.one);
+            WCMngr.I.solidTilemap.SetTransformMatrix(new Vector3Int(x, y, 0), matrix);
+        }
     }
 
     public static int GetNumberOfTiles(Tilemap tilemap)
@@ -56,11 +61,18 @@ public class TilemapPlace : MonoBehaviour
         return tiles.Where(x => x != null).ToArray().Length;
     }
 
+    public static void UpdateBuildings()
+    {
+        buildings = new Building[noiseMap.GetLength(0), noiseMap.GetLength(1)];
+        floors = new Floor[noiseMap.GetLength(0), noiseMap.GetLength(1)];
+        doors = new (Door, float)[noiseMap.GetLength(0), noiseMap.GetLength(1)]; // this really sucks
+    }
+
     public static void UpdateTilemap(float[,] noiseMap, TerrainType[] tTypesUnsorted, bool place, Biome biome)
     {
-        TerrainType[] tTypes = tTypesUnsorted.OrderBy(x => x.height).ToArray(); // this line of code makes the entire game good, i'll make it a puzzle! figure out why! ;)
-        
+        TerrainType[] tTypes = tTypesUnsorted.OrderBy(x => x.height).ToArray(); // this line of code makes the entire game, i'll make it a puzzle! figure out why! ;)
         tilemap = new TerrainType[noiseMap.GetLength(0), noiseMap.GetLength(1)];
+        
         for (int x = 0; x < noiseMap.GetLength(0); x++)
         {
             for (int y = 0; y < noiseMap.GetLength(1); y++)
@@ -94,13 +106,10 @@ public class TilemapPlace : MonoBehaviour
                 }
             }
         }
-        buildings = new Build[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
-        floors = new Floor[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
-
         if(place)
         {
-            WCMngr.I.solidTilemap.RefreshAllTiles();
-            WCMngr.I.groundTilemap.RefreshAllTiles();
+        //    WCMngr.I.solidTilemap.RefreshAllTiles();
+        //    WCMngr.I.groundTilemap.RefreshAllTiles();
             I.pfinder.Scan();
         }
     }

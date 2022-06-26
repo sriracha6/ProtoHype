@@ -8,7 +8,7 @@ public static class Logger
     public static readonly string fileLocation = Application.persistentDataPath + "\\.log";
     private static string lastDivide;
 
-    private static System.Exception lastError;
+    private static string lastMessage;
 
     public static void Log(string text)
     {
@@ -16,13 +16,13 @@ public static class Logger
         File.AppendAllText(fileLocation, line);
     }
 
-    public static void Log(System.Exception err)
+    public static void LogError(string err)
     {
-        if (err == lastError) // prevent spam!
+        if (err == lastMessage) // prevent spam!
             return;
         string line = $"\n[\\]({Time.time}) Error: \n{err}\n\n\n";
         File.AppendAllText(fileLocation, line);
-        lastError = err;
+        lastMessage = err;
     }
 
     public static void Divide(string text)
@@ -35,11 +35,17 @@ public static class Logger
     public static void EndDivide()
     {
         string txt = new string('=', 30+lastDivide.Length);
-        File.AppendAllText(fileLocation, txt);
+        File.AppendAllText(fileLocation, "\n"+txt);
     }
 
     public static void Clear()
     {
         File.Delete(fileLocation);
+    }
+
+    public static void LogUnityMsg(string condition, string stackTrace, LogType type)
+    {
+        if(type == LogType.Error || type == LogType.Exception)
+            Logger.LogError($"{type.ToString()} | {condition} : \n       {stackTrace}");
     }
 }

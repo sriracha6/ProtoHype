@@ -139,7 +139,7 @@ public class CachedItems
 
         public RenderedWall(int iD, Sprite[] sprites)
         {
-            ID = iD;
+            this.ID = iD;
             this.sprites = sprites;
         }
     }

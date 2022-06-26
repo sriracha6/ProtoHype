@@ -8,21 +8,26 @@ public class RoofPlacer : MonoBehaviour
     [SerializeField] Tilemap roofTmap;
     [SerializeField] TileBase invisibleTile;
 
+    public Buildings.Roof[,] rooves;
+
     public static RoofPlacer I;
 
-    protected void Awake() =>
-        I = this;
-
-    public void placeRooves(List<Vector2Int> positions)
+    protected void Awake()
     {
-        foreach(Vector3Int p in positions)// simple explanation : we can intercept the shadows if we place this tmap in between the other two
-        {
-            roofTmap.SetTile(p,invisibleTile); // set tile a billion times is slow. too bad!
-        }
+        if(I == null)
+            I = this;
+        else
+            I.roofTmap = roofTmap;
+    }
+    public void Setup(int width, int height)
+    {
+        rooves = new Buildings.Roof[width, height];
     }
 
     public void PlaceRoof(Buildings.Roof r, int x, int y)
     {
-        roofTmap.SetTile(new Vector3Int(x, y, 0), r.tile);
+        rooves[x, y] = r;
+        if(MapGenerator.I.drawMode == MapGenerator.DrawMode.Place)
+            roofTmap.SetTile(new Vector3Int(x, y, 0), r.tile);
     }
 }

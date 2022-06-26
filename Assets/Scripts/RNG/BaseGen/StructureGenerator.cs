@@ -1,13 +1,15 @@
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Structures;
 using System.Collections.Generic;
 using XMLLoader;
+using Buildings;
 
 public static class StructureGenerator
 {
 
-    public static void GenerateStructure(Structure s, System.Random rng)
+    public static void GenerateStructure(Structure s, System.Random rng, SliderInt mapSizeSlider)
     {
         List<RoomInfo> rooms = new List<RoomInfo>();
         List<(int, int)> sizes = new List<(int, int)>();
@@ -25,43 +27,48 @@ public static class StructureGenerator
         int structureWidth = 0;
         int structureHeight = 0;
 
+        List<Room> roomOrder = new List<Room>();
+
         foreach (RoomInfo r in rooms)
         {
-            DB.Null(r);
-            DB.Null(s);
-            int sizeT = rng.Next((int)(r.room.minArea * s.RoomScale), (int)(r.room.maxArea * s.RoomScale + 1));
+            Vector2Int sizeT = r.room.possibleSizes.randomElement();
             
-            List<int> factors = Factor(sizeT);
-            int index = rng.Next(0, factors.Count - 1/*-1 because factors and groups*/);
-            int width = factors[index];
-            int height = factors[index + 1];
-            
+            int width = sizeT.x;
+            int height = sizeT.y;
+
             structureWidth += width;
             structureHeight += height;
             sizes.Add((width, height));
+            roomOrder.Add(r.room);
+        }
+        if (structureWidth >= MapGenerator.I.mapWidth - 20 || structureHeight >= MapGenerator.I.mapHeight - 20)
+        {
+            MapGenerator.I.ResizeMapToFit(new Vector2Int(structureWidth, structureHeight));
+            mapSizeSlider.value = MapGenerator.I.mapWidth;
         }
 
         (int x, int y) structurePosition = (rng.Next(0, MapGenerator.I.mapWidth - structureWidth), rng.Next(0, MapGenerator.I.mapHeight - structureHeight));
         // !!! ^ this doesn't consider corner rooms
         List<Vector2Int> exteriorWallPoints = new List<Vector2Int>();
+        Building exteriorWall = s.ExteriorWalls.randomElement();
 
-        for(int x = structurePosition.x; x < MapGenerator.I.mapWidth-structureWidth; x++)
+        for (int x = structurePosition.x; x < MapGenerator.I.mapWidth-structureWidth; x++)
         {
             for (int y = structurePosition.y; y < MapGenerator.I.mapHeight - structureHeight; y++)
             {
                 if (x == structurePosition.x || y == structurePosition.y || y == structurePosition.y + structureHeight || x == structurePosition.x + structureWidth)
                 {
-                    TilemapPlace.SetBuild(s.ExteriorWalls, x, y);
+                    TilemapPlace.SetWall(exteriorWall, x, y);
                     exteriorWallPoints.Add(new Vector2Int(x, y));
                 }
             }
         }
 
-        foreach (RoomInfo ri in rooms)
+        foreach (Room ri in roomOrder)
         {
-            var room = ri.room;
+            var room = ri;
             
-            int findex = rooms.IndexOf(ri);
+            int findex = roomOrder.IndexOf(ri);
             
             int width = sizes[findex].Item1;
             int height = sizes[findex].Item2;

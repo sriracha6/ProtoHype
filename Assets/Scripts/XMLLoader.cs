@@ -432,8 +432,6 @@ namespace XMLLoader
 
         public static void LoadBuilding(string filepath)
         {
-            if (!Path.GetFileName(filepath).EndsWith(".wc"))
-                return;
             XmlElement xmls = LoadWC(filepath);
             if (xmls.Q<string>("Type").Equals("Building"))
             {
@@ -445,7 +443,8 @@ namespace XMLLoader
                     xmls.Q<bool>("SpecialPlace"),
                     xmls.Q<bool>("Rubble"),
                     xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")));
-                                                                            // always of size 17
+
+                                                                            // always of size 16
                 renderedWalls.Add(new RenderedWall(q.ID, SpriteSheetCreator.createSpritesFromSheet(LoadImage(filepath), 512).ToArray()));
                 q.tile = SpriteSheetCreator.I.createRuleTile(q);
             }
@@ -664,8 +663,7 @@ namespace XMLLoader
             {
                 Room.Create(xmls.Q<string>("Name"),
                     xmls.Q<FurnitureStats>("Furniture"),
-                    xmls.Q<XmlNode>("SurfaceArea").Q<int>("Min"),
-                    xmls.Q<XmlNode>("SurfaceArea").Q<int>("Max"),
+                    ParseFuncs.parseRoomSizes(xmls.Q<XmlNode>("SurfaceArea")),
                     xmls.Q<List<Floor>>("Floor"));
             }
             else
@@ -685,11 +683,11 @@ namespace XMLLoader
                     ParseFuncs.parseMinMax(xmls.Q<string>("RoomCount")), 
                     xmls.Q<float>("RoomScale"),
                     ParseFuncs.parseRooms(xmls.Q<XmlNode>("Rooms")), // .
-                    Building.Get(xmls.Q<string>("ExteriorWalls")),
+                    ParseFuncs.parseBuildings(xmls.Q<string>("ExteriorWalls")),
                     Building.Get(xmls.Q<string>("InteriorWalls")),
                     xmls.Q<XmlNode>("Entrance").Q<int>("Count"),
                     xmls.Q<XmlNode>("Entrance").Q<List<Door>>("Door"), 
-                    xmls.Q<bool>("HasCourtyard"),
+                    xmls.Q<bool>("HasCourtyard"),   
                     xmls.Enum<WorldFeature>(xmls.Q<string>("PrefersFeature")),
                     Room.Get(xmls.Q<string>("CornerRooms")),
                     xmls.Q<List<Door>>("Doors"), 
@@ -837,7 +835,7 @@ namespace XMLLoader
             return a;
         }
 
-        public static List<Buildings.Plant> parseFlora(string input)
+        public static List<Plant> parseFlora(string input)
         {
             List<Buildings.Plant> flora = new List<Buildings.Plant>();
 
@@ -944,6 +942,32 @@ namespace XMLLoader
                     roomInfo.Add(new RoomInfo(Room.Get(s.removeWS()), false, true));
 
             return roomInfo;
+        }
+        public static List<Vector2Int> parseRoomSizes(XmlNode x)
+        {
+            List<Vector2Int> list = new List<Vector2Int>();
+            if (x.HasNode("Size"))
+                foreach (XmlNode a in x.SelectNodes("Size"))
+                {
+                    var ss = a.InnerText.Split(',');
+                    try
+                    {
+                        list.Add(new Vector2Int(int.Parse(ss[0]), int.Parse(ss[1])));
+                        list.Add(new Vector2Int(int.Parse(ss[1]), int.Parse(ss[0])));
+                    }
+                    catch(Exception e)
+                    {
+                        DB.Attention($"Couldn't parse room size. \"{a.InnerText}\"");
+                    }
+                }
+            return list;
+        }
+        public static List<Building> parseBuildings(string text)
+        {
+            List<Building> b = new List<Building>();
+            foreach (string s in text.Split(','))
+                b.Add(Building.Get(s.removeWS()));
+            return b;
         }
 
         public static (int min, int max) parseMinMax(string x)

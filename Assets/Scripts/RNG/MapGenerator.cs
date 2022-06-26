@@ -147,7 +147,7 @@ public class MapGenerator : MonoBehaviour
             noiseMap.carveWaterBody(deepSeaLevel, rand, overrideRandom: true);
 
         //noiseMap.erodeNearWater(shallowSeaLevel, erosionAmount);
-
+        RoofPlacer.I.Setup(mapWidth, mapHeight);
         new PathfindExtra();
         DrawMap();
     }
@@ -157,6 +157,7 @@ public class MapGenerator : MonoBehaviour
         if (drawMode == DrawMode.NoiseMap)
         {
             currentTexture = TextureGenerator.textureFromHeightMap(noiseMap);
+            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), false, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
         }
         else if (drawMode == DrawMode.ColorMap)
         {
@@ -182,6 +183,7 @@ public class MapGenerator : MonoBehaviour
                     }
                 }
             }
+            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), false, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             currentTexture = TextureGenerator.texturePreviewFromMap(colorMap, mapWidth, mapHeight);
         }
         else if (drawMode == DrawMode.Place)
@@ -189,6 +191,22 @@ public class MapGenerator : MonoBehaviour
             TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             generateWater();
             mapBounds.resizeBounds(mapWidth, mapHeight);
+            
+            for (int x = 0; x < mapWidth; x++)
+                for (int y = 0; y < mapHeight; y++)
+                {
+                    if (buildings[x, y] != null)
+                        TilemapPlace.SetWall(buildings[x, y], x, y);
+                    if (floors[x, y] != null)
+                        TilemapPlace.SetFloor(floors[x, y], x, y);
+                    if (doors[x, y].door != null)
+                        TilemapPlace.SetDoor(doors[x, y].door, x, y, doors[x, y].rotation);
+                    if (RoofPlacer.I.rooves[x, y] != null)
+                        RoofPlacer.I.PlaceRoof(RoofPlacer.I.rooves[x, y], x, y);
+                }
+
+            WCMngr.I.solidTilemap.RefreshAllTiles();
+            WCMngr.I.groundTilemap.RefreshAllTiles();
             //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
         }
     }
@@ -265,4 +283,10 @@ public class MapGenerator : MonoBehaviour
         }
         return points;
     }
+
+    public void ResizeMapToFit(Vector2Int size)
+    {
+        I.mapWidth = size.x + 45 + rand.Next(0, 25);
+        I.mapHeight = size.y + 45 + rand.Next(0, 25);
+    }    
 }

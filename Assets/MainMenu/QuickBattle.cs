@@ -39,6 +39,7 @@ public class QuickBattle : MonoBehaviour
     void Start()
     {
         I = this;
+        MapGenerator.I.currentTexture = null;
         root = Menus.I.quickstart.rootVisualElement;
         root.Q<Button>("BackButton").clicked += Back;
         root.Q<Button>("AddCountryLeft").clicked += delegate { AddCountry(true); };
@@ -113,7 +114,8 @@ public class QuickBattle : MonoBehaviour
         UpdateEstimatedPawnCount();
         root.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
         root.Q<Button>("RandomBuilding").clicked += delegate{
-            StructureGenerator.GenerateStructure(Structure.List.randomElement(), MapGenerator.I.rand);
+            TilemapPlace.UpdateBuildings();
+            StructureGenerator.GenerateStructure(Structure.List.randomElement(), MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
         };
     }
 

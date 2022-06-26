@@ -27,7 +27,7 @@ public class RoomGenerator : MonoBehaviour
             for (int y = Pos.y; y < size.height; y++)
             {
                 if (x == 0 || y == 0 || y == size.height - 1 || x == size.width - 1)
-                    TilemapPlace.SetBuild(structure.InteriorWalls, x, y);
+                    TilemapPlace.SetWall(structure.InteriorWalls, x, y);
                 else
                     TilemapPlace.SetFloor(floor, x, y);
                 RoofPlacer.I.PlaceRoof(structure.Roof, x, y);

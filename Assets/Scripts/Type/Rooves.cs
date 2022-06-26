@@ -49,17 +49,11 @@ namespace Buildings
         }
         public static Roof Get(string name)
         {
-            try
-            {
+            if(List.Exists(x=>x.Name==name))
                 return List.Find(x => x.Name == name);
-            }
-            catch (NullReferenceException)
-            {
-                //Create(name);
-                DB.Attention($"Couldn't find Roof of name {name}");
+            else
+                DB.Attention($"Couldn't find Roof of name \"{name}\"");
                 return null;
-                //return CountryList.Find(x => x.Name == name);
-            }
         }
     }
 }

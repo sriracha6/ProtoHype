@@ -20,26 +20,24 @@ namespace Structures
     {
         public string Name;
         public FurnitureStats Furniture;
-        public int minArea;
-        public int maxArea;
+        public List<Vector2Int> possibleSizes = new List<Vector2Int>();
         public List<Floor> possibleFloors;
 
-        public Room(string name, FurnitureStats furniture, int minArea, int maxArea, List<Floor> possibleFloors)
+        public Room(string name, FurnitureStats furniture, List<Vector2Int> possibleSizes, List<Floor> possibleFloors)
         {
             Name = name;
             Furniture = furniture;
-            this.minArea = minArea;
-            this.maxArea = maxArea;
+            this.possibleSizes = possibleSizes;
             this.possibleFloors = possibleFloors;
         }
 
         public static List<Room> List = new List<Room>();
 
-        public static Room Create(string name, FurnitureStats furniture, int minArea, int maxArea, List<Floor> possibleFloors)
+        public static Room Create(string name, FurnitureStats furniture, List<Vector2Int> possibleSizes, List<Floor> possibleFloors)
         {
             if (!List.Exists(x => x.Name == name))
             {
-                Room c = new Room(name, furniture, minArea, maxArea, possibleFloors);
+                Room c = new Room(name, furniture, possibleSizes, possibleFloors);
                 List.Add(c);
                 return c;
             }
@@ -58,7 +56,8 @@ namespace Structures
             else
             {
                 //Create(name);
-                DB.Attention($"Couldn't find Room of name \"{name}\"");
+                if(name != "false")
+                    DB.Attention($"Couldn't find Room of name \"{name}\"");
                 return null;
                 //return CountryList.Find(x => x.Name == name);
             }

@@ -75,7 +75,6 @@ public class SpriteSheetCreator : MonoBehaviour
                 penisList.Add(spr); // null
             }
         }
-
         return penisList; // this line of code here returns the penis list by returning the penis list. THe penis list is then returned
     }
     

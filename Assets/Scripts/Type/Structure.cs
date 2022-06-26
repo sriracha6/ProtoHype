@@ -31,7 +31,7 @@ namespace Structures
         public (int Min, int Max) RoomCount;
         public float RoomScale;
         public List<RoomInfo> RoomInfo;
-        public Building ExteriorWalls;
+        public List<Building> ExteriorWalls;
         public Building InteriorWalls;
         public int EntranceCount;
         public List<Door> EntranceDoorPick;
@@ -41,7 +41,7 @@ namespace Structures
         public List<Door> Doors;
         public Roof Roof;
 
-        public Structure(string name, string description, int influenceRange, (int Min, int Max) roomCount, float roomScale, List<RoomInfo> roomInfo, Building exteriorWalls, Building interiorWalls, int entranceCount, List<Door> entranceDoor, bool hasCourtyard, WorldFeature prefersFeature, Room cornerRoom, List<Door> doors, Roof roof)
+        public Structure(string name, string description, int influenceRange, (int Min, int Max) roomCount, float roomScale, List<RoomInfo> roomInfo, List<Building> exteriorWalls, Building interiorWalls, int entranceCount, List<Door> entranceDoor, bool hasCourtyard, WorldFeature prefersFeature, Room cornerRoom, List<Door> doors, Roof roof)
         {
             Name = name;
             Description = description;
@@ -62,7 +62,7 @@ namespace Structures
 
         public static List<Structure> List = new List<Structure>();
 
-        public static Structure Create(string name, string description, int influenceRange, (int Min, int Max) roomCount, float roomScale, List<RoomInfo> roomInfo, Building exteriorWalls, Building interiorWalls, int entranceCount, List<Door> entranceDoor, bool hasCourtyard, WorldFeature prefersFeature, Room cornerRoom, List<Door> doors, Roof roof)
+        public static Structure Create(string name, string description, int influenceRange, (int Min, int Max) roomCount, float roomScale, List<RoomInfo> roomInfo, List<Building> exteriorWalls, Building interiorWalls, int entranceCount, List<Door> entranceDoor, bool hasCourtyard, WorldFeature prefersFeature, Room cornerRoom, List<Door> doors, Roof roof)
         {
             Structure s = new Structure(name, description, influenceRange, roomCount, roomScale, roomInfo, exteriorWalls, interiorWalls, entranceCount, entranceDoor, hasCourtyard, prefersFeature, cornerRoom, doors, roof);
             List.Add(s);
