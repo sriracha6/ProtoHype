@@ -88,7 +88,7 @@ public class MapGenerator : MonoBehaviour
         {
             I.mapBounds = mapBounds;
             I.sun = sun;
-            drawMode = DrawMode.Place;
+            I.drawMode = DrawMode.Place;
             DrawMap();
         }
     }
@@ -137,7 +137,7 @@ public class MapGenerator : MonoBehaviour
 
         rand = new System.Random(_seed);
 
-        noiseMap = RandomMap.genNoise(mapWidth, mapHeight, _seed, noiseScale, octaves, persistence, lacunarity, offset)
+        noiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, _seed, noiseScale, octaves, persistence, lacunarity, offset)
             .carveRiver(deepSeaLevel, rand, riverPerturbation, false)
             .carveWaterBody(deepSeaLevel, rand, false);
 
@@ -154,12 +154,12 @@ public class MapGenerator : MonoBehaviour
 
     private void DrawMap()
     {
-        if (drawMode == DrawMode.NoiseMap)
+        if (I.drawMode == DrawMode.NoiseMap)
         {
             currentTexture = TextureGenerator.textureFromHeightMap(noiseMap);
             TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), false, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
         }
-        else if (drawMode == DrawMode.ColorMap)
+        else if (I.drawMode == DrawMode.ColorMap)
         {
             int width = noiseMap.GetLength(0);
             int height = noiseMap.GetLength(1);
@@ -186,7 +186,7 @@ public class MapGenerator : MonoBehaviour
             TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), false, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             currentTexture = TextureGenerator.texturePreviewFromMap(colorMap, mapWidth, mapHeight);
         }
-        else if (drawMode == DrawMode.Place)
+        else if (I.drawMode == DrawMode.Place)
         {
             TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             generateWater();
@@ -195,13 +195,13 @@ public class MapGenerator : MonoBehaviour
             for (int x = 0; x < mapWidth; x++)
                 for (int y = 0; y < mapHeight; y++)
                 {
-                    if (buildings[x, y] != null)
+                    if (buildings != null && buildings[x, y] != null)
                         TilemapPlace.SetWall(buildings[x, y], x, y);
-                    if (floors[x, y] != null)
+                    if (floors != null && floors[x, y] != null)
                         TilemapPlace.SetFloor(floors[x, y], x, y);
-                    if (doors[x, y].door != null)
+                    if (doors != null && doors[x, y].door != null)
                         TilemapPlace.SetDoor(doors[x, y].door, x, y, doors[x, y].rotation);
-                    if (RoofPlacer.I.rooves[x, y] != null)
+                    if (RoofPlacer.I.rooves != null && RoofPlacer.I.rooves[x, y] != null)
                         RoofPlacer.I.PlaceRoof(RoofPlacer.I.rooves[x, y], x, y);
                 }
 
@@ -221,11 +221,11 @@ public class MapGenerator : MonoBehaviour
         Mesh m = water.GetComponent<MeshFilter>().sharedMesh;
         Vector3 meshSize = m.bounds.size * 2;
         
-        float xScale = (mapWidth * 2) / meshSize.x;
-        float zScale = (mapHeight * 2) / meshSize.z;
+        float xScale = (I.mapWidth * 2) / meshSize.x;
+        float zScale = (I.mapHeight * 2) / meshSize.z;
 
         water.transform.localScale = new Vector3(xScale*2, 1, zScale*2);
-        water.transform.position = new Vector3(mapWidth+1, mapHeight+1, 11);
+        water.transform.position = new Vector3(I.mapWidth+1, I.mapHeight+1, 11);
     }
 
     public static void generateTestRoom(int width, int height)
@@ -286,7 +286,12 @@ public class MapGenerator : MonoBehaviour
 
     public void ResizeMapToFit(Vector2Int size)
     {
-        I.mapWidth = size.x + 45 + rand.Next(0, 25);
-        I.mapHeight = size.y + 45 + rand.Next(0, 25);
+        int ra = rand.Next(0, 25);
+        I.mapWidth = size.x + 45 + ra;
+        I.mapHeight = size.y + 45 + ra;
+        if (I.mapWidth > I.mapHeight) I.mapHeight = I.mapWidth;
+        else I.mapWidth = I.mapHeight;
+        I.GenMap();
+        TilemapPlace.UpdateBuildings();
     }    
 }

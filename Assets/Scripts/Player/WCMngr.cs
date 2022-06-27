@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Weapons;
 
-public class WCMngr : MonoBehaviour // thsi class name gets a cool icon
+public class WCMngr : MonoBehaviour
 {
     public static WCMngr I { get; private set; }
 
@@ -54,7 +54,7 @@ public class WCMngr : MonoBehaviour // thsi class name gets a cool icon
         }
 
         bluntWoundNames.AddRange(new string[] { "Crack", "Fracture", "Fissure" });
-        bluntWoundNames.AddRange(new string[] { "Dislocation", "Break" });
+        seriousBluntWoundNames.AddRange(new string[] { "Dislocation", "Break" });
     }
 
     /// <summary>

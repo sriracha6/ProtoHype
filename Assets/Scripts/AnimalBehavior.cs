@@ -88,7 +88,7 @@ public class AnimalBehavior : MonoBehaviour
                 fullImage.LoadImage(pickTex);
                 fullImage.Apply();
 
-                picks = SpriteSheetCreator.createSpritesFromSheet(pickTex, 512);
+                picks = SpriteSheetCreator.createSpritesFromSheet(pickTex, 512, 512);
 
                 srcAnimalSprite = picks[Random.Range(0, picks.Count)];
                 sourceAnimal.spriteHash = fullImage.imageContentsHash;

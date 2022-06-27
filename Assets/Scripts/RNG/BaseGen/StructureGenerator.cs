@@ -41,28 +41,54 @@ public static class StructureGenerator
             sizes.Add((width, height));
             roomOrder.Add(r.room);
         }
-        if (structureWidth >= MapGenerator.I.mapWidth - 20 || structureHeight >= MapGenerator.I.mapHeight - 20)
+
+        Vector2Int cornerRoomSize = s.CornerRoom != null ? s.CornerRoom.possibleSizes.randomElement() : Vector2Int.zero;
+        (int x, int y) structurePosition = (rng.Next(0, Mathf.Abs(MapGenerator.I.mapWidth - structureWidth) + cornerRoomSize.x),
+                                            rng.Next(0, Mathf.Abs(MapGenerator.I.mapHeight - structureHeight) + cornerRoomSize.y));
+        
+        if (structurePosition.x + structureWidth + cornerRoomSize.x >= MapGenerator.I.mapWidth - 20 
+            || structurePosition.y + structureHeight + cornerRoomSize.y >= MapGenerator.I.mapHeight - 20)
         {
-            MapGenerator.I.ResizeMapToFit(new Vector2Int(structureWidth, structureHeight));
+            MapGenerator.I.ResizeMapToFit(new Vector2Int(structurePosition.x + structureWidth + cornerRoomSize.x, structurePosition.y + structureHeight + cornerRoomSize.y));
             mapSizeSlider.value = MapGenerator.I.mapWidth;
+            mapSizeSlider.lowValue = MapGenerator.I.mapWidth;
         }
 
-        (int x, int y) structurePosition = (rng.Next(0, MapGenerator.I.mapWidth - structureWidth), rng.Next(0, MapGenerator.I.mapHeight - structureHeight));
-        // !!! ^ this doesn't consider corner rooms
+        
         List<Vector2Int> exteriorWallPoints = new List<Vector2Int>();
         Building exteriorWall = s.ExteriorWalls.randomElement();
+        Debug.Log($"STRUCTURE: {structureWidth},{structureHeight} @ {structurePosition.x},{structurePosition.y}");
 
-        for (int x = structurePosition.x; x < MapGenerator.I.mapWidth-structureWidth; x++)
+        for (int x = structurePosition.x; x <= 1 + structurePosition.x + structureWidth; x++) // i have no fucking idea why i have to add 1 to these. but it works. this caused me a lot of pain
         {
-            for (int y = structurePosition.y; y < MapGenerator.I.mapHeight - structureHeight; y++)
+            for (int y = structurePosition.y; y <= 1 + structurePosition.y + structureHeight; y++) // seriously wtf if i have <= why tf wtf???
             {
-                if (x == structurePosition.x || y == structurePosition.y || y == structurePosition.y + structureHeight || x == structurePosition.x + structureWidth)
+                if (x == structurePosition.x || y == structurePosition.y 
+                    || x == structurePosition.x + structureWidth || y == structurePosition.y + structureHeight)
                 {
                     TilemapPlace.SetWall(exteriorWall, x, y);
                     exteriorWallPoints.Add(new Vector2Int(x, y));
                 }
             }
         }
+
+        if(s.CornerRoom != null)
+        {
+            Debug.Log($"makign corner rooms");
+            // bottom left
+            Vector2Int pos = new Vector2Int(structurePosition.x - (cornerRoomSize.x / 2), structurePosition.y - (cornerRoomSize.y / 2)); 
+            RoomGenerator.I.GenerateRoom(s.CornerRoom, pos, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, true);
+            // bottom right
+            Vector2Int pos2 = new Vector2Int(structurePosition.x + structureWidth - (cornerRoomSize.x / 2), structurePosition.y - (cornerRoomSize.y / 2));
+            RoomGenerator.I.GenerateRoom(s.CornerRoom, pos2, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, true);
+            // top left
+            Vector2Int pos3 = new Vector2Int(structurePosition.x - (cornerRoomSize.x / 2), structurePosition.y + structureHeight - (cornerRoomSize.y / 2));
+            RoomGenerator.I.GenerateRoom(s.CornerRoom, pos3, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, true);
+            // top right
+            Vector2Int pos4 = new Vector2Int(structurePosition.x + structureWidth - (cornerRoomSize.x / 2), structurePosition.y + structureHeight - (cornerRoomSize.y / 2));
+            RoomGenerator.I.GenerateRoom(s.CornerRoom, pos4, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, true);
+        }
+        
 
         foreach (Room ri in roomOrder)
         {

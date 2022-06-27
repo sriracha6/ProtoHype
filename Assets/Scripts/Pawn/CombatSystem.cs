@@ -173,11 +173,21 @@ public class CombatSystem : MonoBehaviour
     public void onChangeWeapon()
     {
         // its the weapons that's causing issues
-        meleeRange = p.activeWeapon.meleeRange;
-        rangeRange = p.activeWeapon.range; 
-        weaponSprite.gameObject.transform.rotation = Quaternion.identity;
+        try
+        {
+            meleeRange = p.activeWeapon.meleeRange;
+            rangeRange = p.activeWeapon.range;
+            weaponSprite.gameObject.transform.rotation = Quaternion.identity;
 
-        extraRangeTime = Skills.EffectToAimTime(p.rangeSkill);
+            extraRangeTime = Skills.EffectToAimTime(p.rangeSkill);
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"WARNING: This weird shit is happening with combat systemonchange weapon error and animalbehavior.");
+            DB.NullCount(Weapon.List);
+            DB.Null(p);
+            DB.Null(p.activeWeapon);
+        }
     }
 
     void Checks()

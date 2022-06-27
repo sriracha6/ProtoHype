@@ -445,7 +445,7 @@ namespace XMLLoader
                     xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")));
 
                                                                             // always of size 16
-                renderedWalls.Add(new RenderedWall(q.ID, SpriteSheetCreator.createSpritesFromSheet(LoadImage(filepath), 512).ToArray()));
+                renderedWalls.Add(new RenderedWall(q.ID, SpriteSheetCreator.createSpritesFromSheet(LoadImage(filepath), 512, 256).ToArray()));
                 q.tile = SpriteSheetCreator.I.createRuleTile(q);
             }
             else
@@ -521,7 +521,7 @@ namespace XMLLoader
                     xmls.Q<int>("Flammability"),
                     xmls.Q<int>("CoverQuality"),
                     xmls.Q<bool>("Lean"),
-                    ParseFuncs.parseSpriteSheetFromName(filepath, 512));
+                    ParseFuncs.parseSpriteSheetFromName(filepath, 512, 512));
             }
             else
             {
@@ -884,11 +884,11 @@ namespace XMLLoader
                                                                  // REPLY: it's not. what if you want two at the same height? let's make it optional FOR NOW UNTIL I ADD IT
         }
 
-        public static List<Sprite> parseSpriteSheetFromName(string filepath, int size)
+        public static List<Sprite> parseSpriteSheetFromName(string filepath, int size, int ppu)
         {
             List<Sprite> sprites = new List<Sprite>();
             byte[] file = Loaders.LoadImage(filepath);
-            sprites = SpriteSheetCreator.createSpritesFromSheet(file, size);
+            sprites = SpriteSheetCreator.createSpritesFromSheet(file, size, ppu);
             return sprites;
         }
         /// <summary>

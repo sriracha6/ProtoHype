@@ -30,15 +30,11 @@ namespace PawnFunctions
 
         public override string ToString()
         {
-            return (Taken ? 1 : 0).ToString();
+            return Taken ? "1" : "0";
         }
     }
     public class PathfindExtra
     {
-        //public static int[][] tileUsed = new int[0][];
-        //public static Tiles<int> tileUsed = new Tiles<int>();
-        //public static Dictionary<int,Pos> tileUsed = new Dictionary<int,Pos>();
-        //public static List<Pos> tileUsed = new List<Pos>();
         public static List<Pos> tiles;
 
         public static int sizeX;
@@ -46,11 +42,11 @@ namespace PawnFunctions
         
         public static void SetUsed(int x, int y)
         {
-            tiles[x+y] = new Pos(x,y,true);
+            tiles[x+y] = new Pos(x,y, true); 
         }
         public static void SetFree(int x, int y)
         {
-            tiles[x+y] = new Pos(x,y,false);
+            tiles[x+y] = new Pos(x, y, false);
         }
 
         /// <summary>
@@ -76,18 +72,10 @@ namespace PawnFunctions
 
             tiles = new List<Pos>();
 
-            if (MapGenerator.I.isTestMap)
-            {
-                for (int tx = 0; tx < sizeX; tx++)
-                {
-                    for (int ty = 0; ty < sizeY; ty++)
-                    {
-                        tiles.Add(new Pos(tx, ty, true));
-                    }
-                }
-                return;
-            }
-            
+            for (int tx = 0; tx < sizeX; tx++)
+                for (int ty = 0; ty < sizeY; ty++)
+                    tiles.Add(new Pos(tx, ty, false));
+
             if (MapGenerator.I.drawMode != MapGenerator.DrawMode.Place) return;
 
             for (int tx = 0; tx < sizeX; tx++)

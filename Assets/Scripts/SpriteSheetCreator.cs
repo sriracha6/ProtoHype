@@ -56,7 +56,7 @@ public class SpriteSheetCreator : MonoBehaviour
         return bitchBase;
     }
 
-    public static List<Sprite> createSpritesFromSheet(byte[] image, int size)
+    public static List<Sprite> createSpritesFromSheet(byte[] image, int size, int ppu)
     {
         Texture2D sheet = new Texture2D(1, 1);
         sheet.LoadImage(image);
@@ -71,7 +71,7 @@ public class SpriteSheetCreator : MonoBehaviour
                 tex.SetPixels(sheet.GetPixels(i * size, j * size, size, size));
                 tex.Apply();
                 
-                Sprite spr = Sprite.Create(tex, new Rect(Vector2.zero, new Vector2(size, size)), Vector2.zero);
+                Sprite spr = Sprite.Create(tex, new Rect(Vector2.zero, new Vector2(size, size)), Vector2.zero, ppu);
                 penisList.Add(spr); // null
             }
         }

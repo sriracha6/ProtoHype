@@ -6,6 +6,8 @@ using UnityEngine.Tilemaps;
 using static MapGenerator;
 using Buildings;
 using Nature;
+using Pathfinding;
+using PawnFunctions;
 
 public class TilemapPlace : MonoBehaviour
 {
@@ -39,14 +41,26 @@ public class TilemapPlace : MonoBehaviour
 
     public static void SetWall(Building f, int x, int y)
     {
-        buildings[x,y] = f;
-        if (MapGenerator.I.drawMode == DrawMode.Place)
-            WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), f.tile);
+        try
+        {
+            buildings[x, y] = f;
+            PathfindExtra.SetUsed(x, y);
+            if (MapGenerator.I.drawMode == DrawMode.Place)
+                WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), f.tile);
+        }
+        catch(System.Exception e)
+        { Debug.Log($"ERROR @ {x},{y}"); }
     }
-    
+
+    public static void RemoveWall(int x, int y)
+    {
+        buildings[x, y] = null;
+        PathfindExtra.SetFree(x, y);
+    }
+
     public static void SetDoor(Door d, int x, int y, float rotation)
     {
-        doors[x, y] = (d, rotation);
+        doors[x, y] = (d, rotation); // DO NOT SET DOORS AS USED!! YOU CAN GO THROUGH THEM!!
         if (MapGenerator.I.drawMode == DrawMode.Place)
         {
             Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, rotation), Vector3.one);
@@ -56,16 +70,16 @@ public class TilemapPlace : MonoBehaviour
 
     public static int GetNumberOfTiles(Tilemap tilemap)
     {
-        tilemap.CompressBounds();
+        //tilemap.CompressBounds();
         TileBase[] tiles = tilemap.GetTilesBlock(tilemap.cellBounds);
         return tiles.Where(x => x != null).ToArray().Length;
     }
 
     public static void UpdateBuildings()
     {
-        buildings = new Building[noiseMap.GetLength(0), noiseMap.GetLength(1)];
-        floors = new Floor[noiseMap.GetLength(0), noiseMap.GetLength(1)];
-        doors = new (Door, float)[noiseMap.GetLength(0), noiseMap.GetLength(1)]; // this really sucks
+        buildings = new Building[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
+        floors = new Floor[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
+        doors = new (Door, float)[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight]; // this really sucks
     }
 
     public static void UpdateTilemap(float[,] noiseMap, TerrainType[] tTypesUnsorted, bool place, Biome biome)

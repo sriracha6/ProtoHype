@@ -31,7 +31,7 @@ public class PawnManager : MonoBehaviour
     }
 
     public void CreatePawns(int regimentSize, List<CountryInfo> friendlies, List<CountryInfo> enemies)
-    {
+    { // this is somehow the cause for that dumb bug with animals, array size must be .... and onchange weapon
         List<CountryInfo> cs = new List<CountryInfo>();
         cs.AddRange(friendlies);
         cs.AddRange(enemies);
