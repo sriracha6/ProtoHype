@@ -17,30 +17,40 @@ public class RoomGenerator : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
                                        //     V        V          V   from structure
-    public void GenerateRoom(Room room, Vector2Int Pos, (int width, int height) size, Structure structure, List<(int x, int y)> doorPoints, System.Random rng, bool resetArea=false)
+    public List<Vector2Int> GenerateRoom(Room room, Vector2Int Pos, (int width, int height) size, Structure structure, List<(int x, int y)> doorPoints, System.Random rng, List<Vector2Int> ignorePoints, bool cornerRoom=false, Building cornerWall=null)
     {
+        List<Vector2Int> roomPoints = new List<Vector2Int>();
         Floor floor = room.possibleFloors[rng.Next(0, room.possibleFloors.Count)];
         Door door = structure.Doors[rng.Next(0, structure.Doors.Count)];
+        Building wall = cornerRoom ? cornerWall : structure.InteriorWalls;
 
-        for (int x = Pos.x; x < size.width; x++)
+        DB.Null(floor);
+        for (int x = Pos.x; x <= Pos.x + size.width; x++)
         {
-            for (int y = Pos.y; y < size.height; y++)
+            for (int y = Pos.y; y <= Pos.y + size.height; y++)
             {
-                if(resetArea)
+                if (ignorePoints.Contains(new Vector2Int(x, y)))
+                    continue;
+                if(cornerRoom)
                 {
                     TilemapPlace.RemoveWall(x, y);
                     TilemapPlace.SetFloor(null, x, y);
                     TilemapPlace.SetDoor(null, x, y, 0);
                     RoofPlacer.I.PlaceRoof(null, x, y);
                 }
-                if (x == Pos.x || y == Pos.y || y == Pos.y + size.height || x == Pos.x + size.width)
-                    TilemapPlace.SetWall(structure.InteriorWalls, x, y);
+                if (x == Pos.x || y == Pos.y || y == Pos.y + size.height || x == Pos.x + size.width 
+                    && TilemapPlace.buildings[x,y] == null)
+                    TilemapPlace.SetWall(wall, x, y);
                 else
-                    TilemapPlace.SetFloor(floor, x, y);
+                   TilemapPlace.SetFloor(floor, x, y);
+
                 RoofPlacer.I.PlaceRoof(structure.Roof, x, y);
+                roomPoints.Add(new Vector2Int(x,y));
+
                 if(doorPoints.Contains((x,y)))
                     TilemapPlace.SetDoor(door, x, y, 90);
             }
         }
+        return roomPoints;
     }
 }

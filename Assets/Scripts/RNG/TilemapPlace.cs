@@ -49,7 +49,9 @@ public class TilemapPlace : MonoBehaviour
                 WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), f.tile);
         }
         catch(System.Exception e)
-        { Debug.Log($"ERROR @ {x},{y}"); }
+        {
+            Debug.Log($"ERROR @ {x},{y}");
+        }
     }
 
     public static void RemoveWall(int x, int y)

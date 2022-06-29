@@ -45,6 +45,11 @@ public class AnimalBehavior : MonoBehaviour
 
     void Start()
     {
+        if(sourceAnimal == null)
+        {
+            DB.Attention("Null source animal, somehow");
+            return;
+        }
         isWarAnimal = sourceAnimal.ridable; // if not ridable, just wander around
         trueSpeed = sourceAnimal.speedEffect;
 

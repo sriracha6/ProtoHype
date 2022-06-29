@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Structures;
@@ -12,56 +13,79 @@ public static class StructureGenerator
     public static void GenerateStructure(Structure s, System.Random rng, SliderInt mapSizeSlider)
     {
         List<RoomInfo> rooms = new List<RoomInfo>();
-        List<(int, int)> sizes = new List<(int, int)>();
+        List<(int width, int height)> sizes = new List<(int, int)>();
+        List<Vector2Int> positions = new List<Vector2Int>();
 
         foreach(RoomInfo r in s.RoomInfo)
         {
             if (rooms.Count >= s.RoomCount.Max)
-                continue;
+                break;
             rooms.Add(r);
         }
         if (rooms.Count < s.RoomCount.Min)
             for (int i = 0; i < s.RoomCount.Min - rooms.Count; i++)
-                rooms.Add(s.RoomInfo.randomElement());
+                rooms.Add(s.RoomInfo.randomElement(rng));
 
         int structureWidth = 0;
         int structureHeight = 0;
 
         List<Room> roomOrder = new List<Room>();
-
+        int destinedRowCount = rng.Next(3,5); // todo make this in xml or something
+        int roomIndex = 0;
+        int currentRow = 0;
+        int currentHighest = 0;
+        int curX = 0;
+        int curY = 0;
+        List<int> rowLengths = new List<int>();
+        rowLengths.Add(0);
         foreach (RoomInfo r in rooms)
-        {
-            Vector2Int sizeT = r.room.possibleSizes.randomElement();
-            
-            int width = sizeT.x;
-            int height = sizeT.y;
+        {// we can resize rooms to fill in the missing space bc different length rooms
+            Vector2 sizeT = (Vector2)r.room.possibleSizes.randomElement(rng) * s.RoomScale;
+        
+            int width = (int)sizeT.x;
+            int height = (int)sizeT.y;
+            rowLengths[currentRow] += width;
 
-            structureWidth += width;
-            structureHeight += height;
+            if(rowLengths[currentRow] > SumUpTo(rowLengths, currentRow))
+                structureWidth += width;
+            if (roomIndex % destinedRowCount == 0)
+            {
+                rowLengths.Add(0);
+                currentRow++;
+                curY += currentHighest;
+                curX = 0;
+                structureHeight += currentHighest;
+                currentHighest = 0;
+            }
+
+            if (height > currentHighest)
+                currentHighest = height;
             sizes.Add((width, height));
             roomOrder.Add(r.room);
+            positions.Add(new Vector2Int(curX, curY));
+            curX += width;
+            roomIndex++;
         }
 
-        Vector2Int cornerRoomSize = s.CornerRoom != null ? s.CornerRoom.possibleSizes.randomElement() : Vector2Int.zero;
-        (int x, int y) structurePosition = (rng.Next(0, Mathf.Abs(MapGenerator.I.mapWidth - structureWidth) + cornerRoomSize.x),
-                                            rng.Next(0, Mathf.Abs(MapGenerator.I.mapHeight - structureHeight) + cornerRoomSize.y));
-        
+        Vector2Int cornerRoomSize = s.CornerRoom != null ? s.CornerRoom.possibleSizes.randomElement(rng) : Vector2Int.zero;
+        (int x, int y) structurePosition = (rng.Next(cornerRoomSize.x+1, cornerRoomSize.x+1 + Mathf.Abs(MapGenerator.I.mapWidth - structureWidth)),
+                                            rng.Next(cornerRoomSize.y+1, cornerRoomSize.y+1 + Mathf.Abs(MapGenerator.I.mapHeight - structureHeight)));
         if (structurePosition.x + structureWidth + cornerRoomSize.x >= MapGenerator.I.mapWidth - 20 
             || structurePosition.y + structureHeight + cornerRoomSize.y >= MapGenerator.I.mapHeight - 20)
         {
+            Debug.Log($"I feel the need to resize the map.");
             MapGenerator.I.ResizeMapToFit(new Vector2Int(structurePosition.x + structureWidth + cornerRoomSize.x, structurePosition.y + structureHeight + cornerRoomSize.y));
             mapSizeSlider.value = MapGenerator.I.mapWidth;
             mapSizeSlider.lowValue = MapGenerator.I.mapWidth;
         }
 
-        
         List<Vector2Int> exteriorWallPoints = new List<Vector2Int>();
-        Building exteriorWall = s.ExteriorWalls.randomElement();
+        Building exteriorWall = s.ExteriorWalls.randomElement(rng);
         Debug.Log($"STRUCTURE: {structureWidth},{structureHeight} @ {structurePosition.x},{structurePosition.y}");
 
-        for (int x = structurePosition.x; x <= 1 + structurePosition.x + structureWidth; x++) // i have no fucking idea why i have to add 1 to these. but it works. this caused me a lot of pain
+        for (int x = structurePosition.x; x <= structurePosition.x + structureWidth; x++)
         {
-            for (int y = structurePosition.y; y <= 1 + structurePosition.y + structureHeight; y++) // seriously wtf if i have <= why tf wtf???
+            for (int y = structurePosition.y; y <= structurePosition.y + structureHeight; y++) 
             {
                 if (x == structurePosition.x || y == structurePosition.y 
                     || x == structurePosition.x + structureWidth || y == structurePosition.y + structureHeight)
@@ -71,34 +95,27 @@ public static class StructureGenerator
                 }
             }
         }
-
+        List<Vector2Int> cornerRoomPoints = new List<Vector2Int>();
         if(s.CornerRoom != null)
         {
-            Debug.Log($"makign corner rooms");
             // bottom left
-            Vector2Int pos = new Vector2Int(structurePosition.x - (cornerRoomSize.x / 2), structurePosition.y - (cornerRoomSize.y / 2)); 
-            RoomGenerator.I.GenerateRoom(s.CornerRoom, pos, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, true);
+            Vector2Int pos = new Vector2Int(structurePosition.x - (cornerRoomSize.x / 2), structurePosition.y - (cornerRoomSize.y / 2));
+            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
             // bottom right
             Vector2Int pos2 = new Vector2Int(structurePosition.x + structureWidth - (cornerRoomSize.x / 2), structurePosition.y - (cornerRoomSize.y / 2));
-            RoomGenerator.I.GenerateRoom(s.CornerRoom, pos2, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, true);
+            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos2, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
             // top left
             Vector2Int pos3 = new Vector2Int(structurePosition.x - (cornerRoomSize.x / 2), structurePosition.y + structureHeight - (cornerRoomSize.y / 2));
-            RoomGenerator.I.GenerateRoom(s.CornerRoom, pos3, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, true);
+            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos3, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
             // top right
             Vector2Int pos4 = new Vector2Int(structurePosition.x + structureWidth - (cornerRoomSize.x / 2), structurePosition.y + structureHeight - (cornerRoomSize.y / 2));
-            RoomGenerator.I.GenerateRoom(s.CornerRoom, pos4, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, true);
+            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos4, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
         }
-        
-
+        cornerRoomPoints.AddRange(exteriorWallPoints);
         foreach (Room ri in roomOrder)
         {
-            var room = ri;
-            
             int findex = roomOrder.IndexOf(ri);
             
-            int width = sizes[findex].Item1;
-            int height = sizes[findex].Item2;
-
             List<(int x, int y)> doorPoints = new List<(int x, int y)>();
 
             /*if ((doors & (int)Side.Top) == (int)Side.Top)          doorPoints.Add((Pos.x + rng.Next(1, width), Pos.y + height - 1));
@@ -109,23 +126,24 @@ public static class StructureGenerator
 
             RoomGenerator.I.GenerateRoom(room, SystemException, SystemException, (width, height), s, doorPoints, rng);
         */
+            Vector2Int pos = new Vector2Int(positions[findex].x + structurePosition.x, positions[findex].y + structurePosition.y);
+            RoomGenerator.I.GenerateRoom(ri, pos, sizes[findex], s, doorPoints, rng, cornerRoomPoints);
         }
     }
 
-    public static List<int> Factor(int number)
+    public static int SumUpTo(List<int> list, int index)
     {
-        var factors = new List<int>();
-        int max = (int)Mathf.Sqrt(number);  // Round down. uh oh sqrt
+        int s = 0;
+        for(int i = 0; i < index; i++)
+            s += list[i];
+        return s;
+    }
 
-        for (int factor = 1; factor <= max; ++factor) // Test from 1 to the square root, or the int below it, inclusive.
-        {
-            if (number % factor == 0)
-            {
-                factors.Add(factor);
-                if (factor != number / factor) // Don't add the square root twice!  Thanks Jon
-                    factors.Add(number / factor);
-            }
-        }
-        return factors;
+    public static int SumUp(List<int> list)
+    {
+        int s = 0;
+        for (int i = 0; i < list.Count; i++)
+            s += list[i];
+        return s;
     }
 }

@@ -111,6 +111,8 @@ public class Loader : MonoBehaviour
         Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\germany.xml");
         Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\france.xml");
 
+        foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\floor"))
+            Loaders.LoadFloor(file);
         foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\furn"))
             Loaders.LoadFurniture(file);
         foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\roof"))

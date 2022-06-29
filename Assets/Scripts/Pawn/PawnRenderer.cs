@@ -235,8 +235,10 @@ public class PawnRenderer : MonoBehaviour
     public static Texture2D CombineTextures(Texture2D _textureA, Texture2D _textureB, Countries.Country country)
     {
         //Create new textures
-        Texture2D textureResult = new Texture2D(_textureA.width, _textureA.height, TextureFormat.ARGB32, true);
+        //                                          V using textureb instead of a may cause issues and spawning in wrong spot
+        Texture2D textureResult = new Texture2D(_textureB.width, _textureB.height, TextureFormat.ARGB32, true);
         //create clone form texture
+        //if(_textureB.width * _textureB.height < textureResult.A)
         textureResult.SetPixels(_textureB.GetPixels());
         //Now copy texture B in texutre A
         int co = 0;

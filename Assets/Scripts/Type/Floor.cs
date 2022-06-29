@@ -21,45 +21,25 @@ namespace Buildings
 
         public static Floor Create(string name, int hitpoints, int flammability)
         {
-            if (!List.Any(x => x.Name == name))
-            {
-                Floor c = new Floor(name, hitpoints, flammability);
-                List.Add(c);
-                return c;
-            }
-            else
-            {
-                //Debug.Log("Tried to create multiple of: "+name);
-                return null;
-            }
+            Floor c = new Floor(name, hitpoints, flammability);
+            List.Add(c);
+            return c;
         }
         public static Floor Get(string name)
         {
-            try
-            {
+            if(List.Exists(x => x.Name == name))
                 return List.Find(x => x.Name == name);
-            }
-            catch (NullReferenceException)
-            {
-                //Create(name);
+            else
                 DB.Attention($"Couldn't find Floor of name {name}");
                 return null;
-                //return CountryList.Find(x => x.Name == name);
-            }
         }
         public static Floor Get(int id)
         {
-            try
-            {
+            if(List.Exists(x=>x.ID==id))
                 return List.Find(x => x.ID == id);
-            }
-            catch (NullReferenceException)
-            {
-                //Create(name);
+            else
                 DB.Attention($"Couldn't find Floor of id {id}");
                 return null;
-                //return CountryList.Find(x => x.Name == name);
-            }
         }
     }
 }

@@ -26,8 +26,15 @@ public class RoofPlacer : MonoBehaviour
 
     public void PlaceRoof(Buildings.Roof r, int x, int y)
     {
-        rooves[x, y] = r;
-        if(MapGenerator.I.drawMode == MapGenerator.DrawMode.Place)
-            roofTmap.SetTile(new Vector3Int(x, y, 0), r.tile);
+        try
+        {
+            rooves[x, y] = r;
+            if (MapGenerator.I.drawMode == MapGenerator.DrawMode.Place)
+                roofTmap.SetTile(new Vector3Int(x, y, 0), r.tile);
+        }
+        catch(System.Exception)
+        {
+            Debug.Log($"ROOF ERROR @ {x},{y}");
+        }
     }
 }

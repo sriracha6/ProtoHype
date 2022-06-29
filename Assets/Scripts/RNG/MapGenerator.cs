@@ -129,7 +129,7 @@ public class MapGenerator : MonoBehaviour
     public void GenMap()
     {
         terrainTypes = currentBiome.terrainFrequencies.terrain;
-        erosionAmount = Mathf.CeilToInt(mapWidth / 100);
+        erosionAmount = Mathf.CeilToInt(I.mapWidth / 100);
 
         //long _seed = ParseSeed(seed);
         if (!int.TryParse(seed, out int _seed))
@@ -147,7 +147,7 @@ public class MapGenerator : MonoBehaviour
             noiseMap.carveWaterBody(deepSeaLevel, rand, overrideRandom: true);
 
         //noiseMap.erodeNearWater(shallowSeaLevel, erosionAmount);
-        RoofPlacer.I.Setup(mapWidth, mapHeight);
+        RoofPlacer.I.Setup(I.mapWidth, I.mapHeight);
         new PathfindExtra();
         DrawMap();
     }
@@ -164,7 +164,7 @@ public class MapGenerator : MonoBehaviour
             int width = noiseMap.GetLength(0);
             int height = noiseMap.GetLength(1);
 
-            Color[] colorMap = new Color[mapWidth * mapHeight];
+            Color[] colorMap = new Color[I.mapWidth * I.mapHeight];
 
             TerrainType[] tts = terrainTypes.OrderBy(x => x.height).ToArray();
 
@@ -177,23 +177,24 @@ public class MapGenerator : MonoBehaviour
                     {
                         if (currentHeight <= tts[i].height)
                         {
-                            colorMap[y * mapWidth + x] = tts[i].color;
+                            colorMap[y * I.mapWidth + x] = tts[i].color;
                             break;
                         }
                     }
                 }
             }
             TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), false, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
-            currentTexture = TextureGenerator.texturePreviewFromMap(colorMap, mapWidth, mapHeight);
+            currentTexture = TextureGenerator.texturePreviewFromMap(colorMap, I.mapWidth, I.mapHeight);
         }
         else if (I.drawMode == DrawMode.Place)
         {
             TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             generateWater();
-            mapBounds.resizeBounds(mapWidth, mapHeight);
-            
-            for (int x = 0; x < mapWidth; x++)
-                for (int y = 0; y < mapHeight; y++)
+            mapBounds.resizeBounds(I.mapWidth, I.mapHeight);
+            WCMngr.I.solidTilemap.size = new Vector3Int(I.mapWidth, I.mapHeight, 1);
+            WCMngr.I.solidTilemap.ResizeBounds();
+            for (int x = 0; x < I.mapWidth; x++)
+                for (int y = 0; y < I.mapHeight; y++)
                 {
                     if (buildings != null && buildings[x, y] != null)
                         TilemapPlace.SetWall(buildings[x, y], x, y);
@@ -246,18 +247,6 @@ public class MapGenerator : MonoBehaviour
         new PathfindExtra();
     }
 
-    private void OnValidate() // i love this
-    {
-        if (mapWidth<1)
-            mapWidth = 1;
-        if(mapHeight<1)
-            mapHeight = 1;
-        if(lacunarity<1)
-            lacunarity = 1;
-        if (octaves < 0)
-            octaves = 0;
-    }
-
     // todo: this is so ineffcient for some reasonn
     /// <summary>
     /// this shit fucking sucks. im not doing this. doesnt really fit the game anyway. maybe another update bc fuck
@@ -265,14 +254,14 @@ public class MapGenerator : MonoBehaviour
     /// <returns></returns>
     public List<Vector3Int> generateTrees() // i promies this is the most inefficient algorithm in the entire project
     {
-        float[,] treeNoiseMap = RandomMap.genNoise(mapWidth, mapHeight, treesSeed.GetHashCode().GetHashCode(), noiseScale, octaves, persistence, lacunarity, offset);
-        treePoints = TreeSampling.generatePoints(radius, new Vector2(mapWidth,mapHeight), rejectionSamples);
+        float[,] treeNoiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, treesSeed.GetHashCode().GetHashCode(), noiseScale, octaves, persistence, lacunarity, offset);
+        treePoints = TreeSampling.generatePoints(radius, new Vector2(I.mapWidth,I.mapHeight), rejectionSamples);
         //Debug.Break();
         List<Vector3Int> points = new List<Vector3Int>();
 
-        for (int x = 0; x < mapWidth; x++)
+        for (int x = 0; x < I.mapWidth; x++)
         {
-            for(int y = 0; y < mapHeight;y++)
+            for(int y = 0; y < I.mapHeight;y++)
             {
                 if(treeNoiseMap[x, y] <= treeHeight && treePoints.Contains(new Vector2(x,y)) 
                     )//&& Player.tmap.GetTile(new Vector3Int(x,y,0)) != null) // sex moment

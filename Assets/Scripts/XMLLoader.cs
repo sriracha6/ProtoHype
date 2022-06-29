@@ -36,10 +36,12 @@ namespace XMLLoader
 {
     public static class Loaders
     {
+        public static string currentFile;
         public static XmlElement LoadWC(string filepath)
         {
             //try
             //{
+                currentFile = filepath;
                 string file = File.ReadAllText(filepath);
                 XmlDocument xmlDocument = new XmlDocument();
                 string num = file.Substring(0, file.Split('\n')[0].IndexOf('W'));
@@ -65,12 +67,14 @@ namespace XMLLoader
         }
         public static XmlElement LoadXML(string filepath)
         {
+            currentFile = filepath;
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(filepath);
             return xmlDocument.DocumentElement;
         }
         public static byte[] LoadImage(string filepath) // ALWAYS WC
         {
+            currentFile = filepath;
             if (string.IsNullOrEmpty(filepath))
                 return null;
             string line1 = File.ReadAllLines(filepath)[0];
@@ -81,6 +85,7 @@ namespace XMLLoader
         }
         public static Texture2D LoadTex(string filepath)
         {
+            currentFile = filepath;
             byte[] image = LoadImage(filepath);
             if (image == null) return null;
 
@@ -91,6 +96,7 @@ namespace XMLLoader
         }
         public static Texture2D LoadTexNonWC(string filepath)
         {
+            currentFile = filepath;
             byte[] image = File.ReadAllBytes(filepath);
             if (image == null) return null;
 
@@ -101,6 +107,7 @@ namespace XMLLoader
         }
         public static Sprite LoadSprite(string filepath)
         {
+            currentFile = filepath;
             Texture2D tex = LoadTex(filepath);
             if(tex== null) return null;
             float ppu = tex.width;
@@ -921,7 +928,7 @@ namespace XMLLoader
         {
             List<Floor> list = new List<Floor>();
             foreach(string ss in s.Split(','))
-                list.Add(Floor.Get(ss));
+                list.Add(Floor.Get(ss.removeWS()));
             return list;
         }
         public static List<Door> parseDoors(string s)
@@ -952,12 +959,12 @@ namespace XMLLoader
                     var ss = a.InnerText.Split(',');
                     try
                     {
-                        list.Add(new Vector2Int(int.Parse(ss[0]), int.Parse(ss[1])));
-                        list.Add(new Vector2Int(int.Parse(ss[1]), int.Parse(ss[0])));
+                        list.Add(new Vector2Int(int.Parse(ss[0].removeWS()), int.Parse(ss[1].removeWS())));
+                        //list.Add(new Vector2Int(int.Parse(ss[1].removeWS()), int.Parse(ss[0].removeWS())));
                     }
                     catch(Exception e)
                     {
-                        DB.Attention($"Couldn't parse room size. \"{a.InnerText}\"");
+                        DB.Attention($"Couldn't parse room size. Input: \"{a.InnerText}\" : {Loaders.currentFile}");
                     }
                 }
             return list;
@@ -984,7 +991,7 @@ namespace XMLLoader
                     lol.max = int.Parse(x.Split('-')[1].ToString());
                 else lol.max = lol.min;
             }
-            catch (FormatException) { DB.Attention("XMLERROR:Non number count"); return (0,0); }
+            catch (FormatException) { DB.Attention($"XMLERROR:Non number count. Input:{x} : {Loaders.currentFile}"); return (0,0); }
             return lol;
         }
 
@@ -1071,7 +1078,11 @@ namespace XMLLoader
         {
             return list[Random.Range(0, list.Length)];
         }
-        
+        public static T randomElement<T>(this List<T> list, System.Random rand)
+        {
+            return list[rand.Next(0, list.Count)];
+        }
+
         public static bool HasNode(this XmlNode x, string text)
         {
             return x.SelectSingleNode(text) != null;
@@ -1081,14 +1092,14 @@ namespace XMLLoader
             if(!attribute && x.SelectSingleNode(t) == null)
             {
                 if(t != "Description" && t != "WeaponClass" && t != "Group" && t != "Long" && t != "Medium" && t != "Short" && t != "GenericSpecial" && t != "Sidearms" && t != "PickFrom" && t != "Shields" && t != "IsCarpet" && t!="PrefersFeature")
-                    DB.Attention($"XMLERROR: No node : {t}");
+                    DB.Attention($"XMLERROR: No node : {t} : {Loaders.currentFile}");
                 return default(T);
             }
 
             if(attribute && x.Attributes.GetNamedItem(t) == null)
             {
                 if (t != "count")
-                    DB.Attention($"XMLERROR: No attribute : {t}");
+                    DB.Attention($"XMLERROR: No attribute : {t} : {Loaders.currentFile}");
                 return default(T);
             }
 
@@ -1106,14 +1117,14 @@ namespace XMLLoader
                     return (T)(object)retf;
                 else
                 {
-                    DB.Attention("Not a float"); return default(T);
+                    DB.Attention($"Not a float, Input:{innerText} : {Loaders.currentFile}"); return default(T);
                 }
             if (typeof(T) == typeof(int))
                 if (int.TryParse(innerText, out int retf))
                     return (T)(object)retf;
                 else
                 {
-                    DB.Attention("Not an int"); return default(T);
+                    DB.Attention($"Not an int. Input:{innerText} : {Loaders.currentFile}"); return default(T);
                 }
             var tt = typeof(T);
             if (tt == typeof(List<AnimalArmor>)) return (T)(object)parseAnimalArmor(innerText);
@@ -1137,7 +1148,7 @@ namespace XMLLoader
         {
             if (x.SelectSingleNode(text) == null)
             {
-                DB.Attention("XMLERROR: Invalid group");
+                DB.Attention($"XMLERROR: Invalid group. Input:{text} : {Loaders.currentFile}");
                 return null;
             }
             else
@@ -1148,7 +1159,7 @@ namespace XMLLoader
         {
             if (x.Attributes[id] == null)
             {
-                DB.Attention($"XMLERROR: No attribute ID : {id}");
+                DB.Attention($"XMLERROR: No attribute ID : {id} : {Loaders.currentFile}");
                 return "";
             }
             else
@@ -1166,7 +1177,7 @@ namespace XMLLoader
                 return enu;
             else
             {
-                DB.Attention($"Couldn't parse {typeof(T)}. Input: {t}");
+                DB.Attention($"Couldn't parse {typeof(T)}. Input: {t} : {Loaders.currentFile}");
                 return default(T);
             }    
         }

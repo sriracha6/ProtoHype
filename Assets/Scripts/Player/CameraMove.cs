@@ -42,8 +42,8 @@ public class CameraMove : MonoBehaviour
 
     public void resizeBounds(int width, int height)
     {
-        bounds.gameObject.transform.localScale = new Vector2(width-1, height-1)*2;
-        bounds.gameObject.transform.position = Vector2.zero;
+        bounds.gameObject.transform.localScale = new Vector2((width*2)-1, (height*2)-1);
+        bounds.gameObject.transform.position = new Vector2(1,1);
         // we also need to relimit max fov so its not out of bounds somefucking how.
         maxFov = width / 5 + (width/50); // this was my first guess and it's pretty fuckin spot on
     }
