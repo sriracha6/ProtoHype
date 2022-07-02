@@ -127,16 +127,13 @@ namespace Weapons
 
         public static Weapon Get(int id)
         {
-            try
+            if(List.Exists(x=>x.ID==id))
             {
                 return List.Find(x => x.ID == id);
             }
-            catch (NullReferenceException)
-            {
-                //Create(name);
+            else
                 DB.Attention($"Couldn't find Weapon of id {id}");
                 return null; //lol
-            }
         }
 
         public static Weapon Get(string name)

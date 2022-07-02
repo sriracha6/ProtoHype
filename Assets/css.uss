@@ -34,22 +34,17 @@
     font-size: 25px;
 }
 
-.unity-button {
-    border-radius: 0;
-    background-color: var(--gray-3);
-}
-
 .icon {
     width: 25px;
     height: 25px;
     background-color: white;
 }
 
-.timebutton {
+/*.timebutton {
     background-color: var(--gray-2-9);
     border-radius: 0;
     border-color: var(--gray-0);
-}
+}*/
 
 #TimeControls {
     background-color: var(--gray-3);
@@ -64,22 +59,14 @@
     color: white;
 }
 
-.unity-scroller {
-    width: 15px;
-}
-
-.unity-scroller * {
-    width: 15px;
-}
-
-.unity-toggle__input #unity-checkmark {
+/*.unity-toggle__input #unity-checkmark {
     background-color: var(--gray-9);
 }
 
 .unity-toggle__checkmark:enabled {
     -unity-background-image-tint-color: white;
     background-image: resource('ui/check');
-}
+}*/
 
 #PawnInfoParent {
     background-color: var(--gray-9);

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using TroopTypes;
 using Armors;
 using UnityEngine;
+using XMLLoader;
 
 using Random = UnityEngine.Random;
 
@@ -18,6 +19,13 @@ public class PawnManager : MonoBehaviour
     public GameObject horsePrefab;
     private static List<Pawn> allPawns = new List<Pawn>();
 
+    public static bool doneLoading = false;
+    List<Vector2Int> usedPoints = new List<Vector2Int>();
+
+    public float minDistance;
+    public const int AROUND_BASE_DISTANCE = 30;
+    public const int OUTSIDE_BASE_DISTANCE = 50;
+
     protected void Start()
     {
         if (I == null)
@@ -27,27 +35,47 @@ public class PawnManager : MonoBehaviour
         }
         else
             if (Player.loadedFrom == LoadFrom.Quickbattle)
-                CreatePawns(QuickBattle.I.regimentSize, QuickBattle.I.friends, QuickBattle.I.enemies);
+                I.CreatePawns(QuickBattle.I.regimentSize, QuickBattle.I.friends, QuickBattle.I.enemies);
     }
-
+    
     public void CreatePawns(int regimentSize, List<CountryInfo> friendlies, List<CountryInfo> enemies)
     { // this is somehow the cause for that dumb bug with animals, array size must be .... and onchange weapon
+        Loading.I.Status = "Creating people...";
         List<CountryInfo> cs = new List<CountryInfo>();
         cs.AddRange(friendlies);
         cs.AddRange(enemies);
+        var map = MapGenerator.I;
 
-        foreach(CountryInfo country in friendlies)
+        foreach(CountryInfo country in cs)
         {
-            for (int i = 0; i < country.regimentsCount; i++)
+            for (int currentRegiment = 0; currentRegiment < country.regimentsCount; currentRegiment++)
             {
                 var troopType = RandomTroopType(country.country);
                 Regiment.Create(troopType, country.country);
 
-                for (int j = 0; j < Mathf.Max(Random.Range(0.75f, 1.25f) * regimentSize, 2); j++)
+                Vector2Int regimentPos = Vector2Int.zero;
+                if (map.structure != null)
+                    if (troopType.preferSpawn == PreferSpawn.AroundBase)
+                        regimentPos = new Vector2Int(Random.Range(map.mapWidth - AROUND_BASE_DISTANCE, map.mapWidth), Random.Range(map.mapHeight - AROUND_BASE_DISTANCE, map.mapHeight));
+                    else if (troopType.preferSpawn == PreferSpawn.OutsideBase)
+                        regimentPos = new Vector2Int(Random.Range(map.structurePos.x + map.structureSize.x, map.structurePos.x + map.structureSize.x + OUTSIDE_BASE_DISTANCE), Random.Range(map.structurePos.y + map.structureSize.y, map.structurePos.y + map.structureSize.y + OUTSIDE_BASE_DISTANCE));
+                    else
+                        regimentPos = new Vector2Int(Random.Range(map.structurePos.x, map.structurePos.x+map.structureSize.x), Random.Range(map.structurePos.y, map.structurePos.y+map.structureSize.y));
+                else
+                    regimentPos = new Vector2Int(Random.Range(0, map.mapWidth), Random.Range(0, map.mapHeight));
+
+                float regimentMemberCount = Mathf.Max(Random.Range(0.75f, 1.25f) * regimentSize, 2);
+                for (int j = 0; j < regimentMemberCount; j++)
                 {
-                    Pawn p = CreatePawn(country.country, CachedItems.RandomName, troopType,
-                        Regiment.Get(i), new Vector2(Random.Range(0, MapGenerator.I.mapWidth), Random.Range(0, MapGenerator.I.mapHeight)) /* TODO : RANDOM POSITION? WHY?? FIX! */); // make sure this id is right!
-                    if(troopType.ridingAnimal)
+                    Vector2Int pos = PathfindExtra.FindNearest(regimentPos, I.usedPoints);
+                    pos = new Vector2Int(pos.x + Random.Range(-7,8), pos.y + Random.Range(-1, 2)).clampVector();
+                    PathfindExtra.SetUsed(pos.x, pos.y);
+                    I.usedPoints.Add(pos);
+
+                    Pawn p = I.CreatePawn(country.country, CachedItems.RandomName, troopType,
+                        Regiment.Get(currentRegiment), pos); // make sure this id is right!
+                    
+                    if (troopType.ridingAnimal)
                     {
                         GameObject go = Instantiate(horsePrefab); // im so sorry
                         var supersorryforthisone = go.GetComponent<AnimalBehavior>();
@@ -57,6 +85,11 @@ public class PawnManager : MonoBehaviour
                 }
             }
         }
+        doneLoading = true;
+        for(int i = 0; i < I.usedPoints.Count; i++)
+            PathfindExtra.SetFree(I.usedPoints[i].x, I.usedPoints[i].y);
+        I.usedPoints = null;
+        PopulateRegiments.updateAllRegimentsSelectNumber(Player.regimentSelectNumber);
     }
 
     public static TroopType RandomTroopType(Country c)
@@ -65,13 +98,18 @@ public class PawnManager : MonoBehaviour
         return t[Random.Range(0, t.Count)];
     }
 
-    public Pawn CreatePawn(Country c, string n, TroopType tt, Regiment r, Vector2 pos, List<Projectile> projectiles = null)
+    public Pawn CreatePawn(Country c, string n, TroopType tt, Regiment r, Vector2 pos)
     {
         // USE POOLING!!!!!!!!!!!!!!!!!!!! TODO
         GameObject newPawnObj = Instantiate(pawnPrefab);//gameObject.AddComponent<Pawn>();
         Pawn newPawn = newPawnObj.GetComponent<Pawn>();
 
         newPawnObj.transform.position = new Vector3(pos.x, pos.y, -0.5f);
+
+        /*tt.weapons = tt.weapons.StripNulls();
+        tt.shields = tt.shields.StripNulls();
+        tt.sidearms = tt.sidearms.StripNulls();
+        tt.armor = tt.armor.StripNulls();*/
 
         newPawn.country = c;
         newPawn.pname = n;
@@ -80,22 +118,22 @@ public class PawnManager : MonoBehaviour
         r.Add(newPawn);
 
         foreach (Country co in Country.List)
-        {
             if (co != newPawn.country)
-            {
                 newPawn.enemyCountries.Add(co);
-            }
-        }
 
-        newPawn.inventory = projectiles;
         if(tt.weapons.Count > 0) {
             newPawn.heldPrimary = tt.weapons[UnityEngine.Random.Range(0, tt.weapons.Count)];
-            newPawn.activeWeapon = newPawn.heldPrimary;
+            
+            if(newPawn.heldPrimary.Type == Weapons.WeaponType.Ranged)
+                newPawn.inventory = Projectile.List.FindAll(x => x.forWeaponClass == newPawn.heldPrimary.weaponClass).randomElements(2);
+
             newPawn.hasPrimary = true;
         }
         else
             newPawn.hasPrimary = false;
 
+        if (newPawn.hasPrimary == false)
+            Debug.Log($"{tt.Name} has no primaries? is that right? : {tt.weapons.Count}");
         newPawn.activeWeapon = newPawn.heldPrimary;
 
         newPawn.activeWeaponSlot = ActiveWeapon.Primary;
@@ -118,8 +156,8 @@ public class PawnManager : MonoBehaviour
         else
             newPawn.hasShield = false;
 
-        newPawn.meleeSkill = UnityEngine.Random.Range(tt.meleeSkillMin, tt.meleeSkillMax + 1);
-        newPawn.rangeSkill = UnityEngine.Random.Range(tt.rangeSkillMin, tt.rangeSkillMax + 1);
+        newPawn.meleeSkill = Random.Range(tt.meleeSkillMin, tt.meleeSkillMax + 1);
+        newPawn.rangeSkill = Random.Range(tt.rangeSkillMin, tt.rangeSkillMax + 1);
 
         if (tt.sidearms.Count > 0)
         {
@@ -130,10 +168,9 @@ public class PawnManager : MonoBehaviour
             newPawn.hasSidearm = false;
 
         newPawn.country.Add(newPawn);
-        newPawn.sprite.material.color = generateSkinColor();
+        newPawn.sprite.material.color = GenerateSkinColor();
         allPawns.Add(newPawn);
         // todo
-        PopulateRegiments.updateAllRegimentsSelectNumber(Player.regimentSelectNumber);
         if (newPawn.armor != null)
             foreach (Armor a in newPawn.armor)
                 newPawn.pawnPathfind.speed += (a.MovementSpeedAffect / 100); // almost made this a multiplily wonder how many other times ive fucked up a calculation
@@ -165,11 +202,11 @@ public class PawnManager : MonoBehaviour
     }
     #endregion
 
-    public static Color generateSkinColor()
+    public static Color GenerateSkinColor()
     {
         return Color.Lerp(new Color(241 / 255f, 194 / 255f, 125 / 255f), new Color(141 / 255f, 85 / 255f, 36 / 255f), Random.Range(0f, 1f));
     }
-    public static Color generateSkinColor(int darkness)
+    public static Color GenerateSkinColor(int darkness)
     {
         return Color.Lerp(new Color(241 / 255f, 194 / 255f, 125 / 255f), new Color(141 / 255f, 85 / 255f, 36 / 255f), Random.Range(0f, 1f));
     }

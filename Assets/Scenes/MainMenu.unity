@@ -381,6 +381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pawnPrefab: {fileID: 5087462624300014132, guid: 7dca6210adf57ff4f85892cbac82a876, type: 3}
   horsePrefab: {fileID: 5160680763312628427, guid: de23306fa431e1e4c90c4652bf9ec83a, type: 3}
+  minDistance: 0
 --- !u!114 &902525633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,6 +532,9 @@ MonoBehaviour:
   minRiverWidth: 0
   maxRiverWidth: 0
   isTestMap: 0
+  structurePos: {x: 0, y: 0}
+  structureSize: {x: 0, y: 0}
+  finishedLoading: 0
 --- !u!4 &1003303749
 Transform:
   m_ObjectHideFlags: 0

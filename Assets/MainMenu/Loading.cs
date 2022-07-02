@@ -8,6 +8,17 @@ public class Loading : MonoBehaviour
 {
     public static Loading I = null;
 
+    private string _status;
+    public string Status 
+    {
+        get { return _status; } 
+        set 
+        { 
+            _status = value;
+            progress.title = value;
+        } 
+    }
+
     AbstractProgressBar progress;
     Label tip;
     [SerializeField] UIDocument thisdoc;
@@ -26,7 +37,8 @@ public class Loading : MonoBehaviour
         "If you don't want to baby a group of pawns, you can have an AI make moves for them. You can also choose the personality of the AI.", "You can hide the UI.", 
         "Melee attacks from an animal going full speed will multiply damage.", "You can't go through doors if you're on an animal.",
         "Attacks from stationary animals do 25% less damage.", "Different terraintypes have different walkspeeds. Use this to plan a fast route around your enemy.",
-        "You can drag around many GUI elements.", "You can add to your current pawn selection, subtract, or remove it."});
+        "You can drag around many GUI elements.", "You can add to your current pawn selection, subtract, or remove it.", 
+        "Troops can spawn inside a base, around it, or just outside it. Watch out!"});
         
         StartCoroutine(Tips());
     }
@@ -45,7 +57,7 @@ public class Loading : MonoBehaviour
         //Begin to load the Scene you specify
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(scene);
         //Don't let the Scene activate until you allow it to
-        asyncOperation.allowSceneActivation = true;
+        asyncOperation.allowSceneActivation = true; 
         //When the load is still in progress, output the Text and progress bar
         while (!asyncOperation.isDone)
         {

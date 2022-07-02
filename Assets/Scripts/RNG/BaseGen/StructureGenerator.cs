@@ -9,7 +9,13 @@ using Buildings;
 
 public static class StructureGenerator
 {
-
+    public const int ROOMSIZE = 16;
+    public static void PlaceStructure(Structure s, System.Random rng, SliderInt mapSizeSlider)
+    {
+        // set the mapgenerator.structurepos and size
+    }
+    [System.Obsolete]
+    /// <summary>This is a relic from when I want procedurally generated structures. It's here in case I need it sometime.</summary>
     public static void GenerateStructure(Structure s, System.Random rng, SliderInt mapSizeSlider)
     {
         List<RoomInfo> rooms = new List<RoomInfo>();
@@ -38,23 +44,31 @@ public static class StructureGenerator
         int curY = 0;
         List<int> rowLengths = new List<int>();
         rowLengths.Add(0);
+        List<List<bool>> roomMap = new List<List<bool>>();// use chunks of 16x16 rooms scaled up in some way. makes perfect rooms. looks sexy
+        for (int i = 0; i < 25; i++) // start off with some size. bc no one would ever want a 320x320 room
+        {
+            roomMap.Add(new List<bool>());
+            for (int j = 0; j < 25; j++)
+                roomMap[i].Add(false);
+        }
         foreach (RoomInfo r in rooms)
         {// we can resize rooms to fill in the missing space bc different length rooms
-            Vector2 sizeT = (Vector2)r.room.possibleSizes.randomElement(rng) * s.RoomScale;
-        
-            int width = (int)sizeT.x;
-            int height = (int)sizeT.y;
-            rowLengths[currentRow] += width;
 
-            if(rowLengths[currentRow] > SumUpTo(rowLengths, currentRow))
-                structureWidth += width;
+            (int x, int y, int width, int height) roomPos = roomMap.FindClosestOfSize(r.room.possibleSizes, s.RoomScale);
+            int width = roomPos.width;
+            int height = roomPos.height;
+
+            roomMap.FillUp(width, height, roomPos.x, roomPos.y);
+            rowLengths[currentRow] += width;
+            //if(rowLengths[currentRow] > SumUpTo(rowLengths, currentRow))
+            //    structureWidth += width;
             if (roomIndex % destinedRowCount == 0)
             {
                 rowLengths.Add(0);
                 currentRow++;
-                curY += currentHighest;
+                curY += currentHighest * ROOMSIZE;
                 curX = 0;
-                structureHeight += currentHighest;
+                structureHeight += currentHighest * ROOMSIZE;
                 currentHighest = 0;
             }
 
@@ -63,18 +77,20 @@ public static class StructureGenerator
             sizes.Add((width, height));
             roomOrder.Add(r.room);
             positions.Add(new Vector2Int(curX, curY));
-            curX += width;
+            curX += width * ROOMSIZE;
             roomIndex++;
         }
 
+        structureWidth = rowLengths.Max() * ROOMSIZE;
+
         Vector2Int cornerRoomSize = s.CornerRoom != null ? s.CornerRoom.possibleSizes.randomElement(rng) : Vector2Int.zero;
-        (int x, int y) structurePosition = (rng.Next(cornerRoomSize.x+1, cornerRoomSize.x+1 + Mathf.Abs(MapGenerator.I.mapWidth - structureWidth)),
-                                            rng.Next(cornerRoomSize.y+1, cornerRoomSize.y+1 + Mathf.Abs(MapGenerator.I.mapHeight - structureHeight)));
-        if (structurePosition.x + structureWidth + cornerRoomSize.x >= MapGenerator.I.mapWidth - 20 
-            || structurePosition.y + structureHeight + cornerRoomSize.y >= MapGenerator.I.mapHeight - 20)
+        (int x, int y) structurePosition = (rng.Next(cornerRoomSize.x*ROOMSIZE+1, cornerRoomSize.x*ROOMSIZE+1 + Mathf.Abs(MapGenerator.I.mapWidth - structureWidth)),
+                                            rng.Next(cornerRoomSize.y*ROOMSIZE+1, cornerRoomSize.y*ROOMSIZE+1 + Mathf.Abs(MapGenerator.I.mapHeight - structureHeight)));
+        if (structurePosition.x + structureWidth + cornerRoomSize.x * ROOMSIZE >= MapGenerator.I.mapWidth - 20 
+            || structurePosition.y + structureHeight + cornerRoomSize.y * ROOMSIZE >= MapGenerator.I.mapHeight - 20)
         {
             Debug.Log($"I feel the need to resize the map.");
-            MapGenerator.I.ResizeMapToFit(new Vector2Int(structurePosition.x + structureWidth + cornerRoomSize.x, structurePosition.y + structureHeight + cornerRoomSize.y));
+            MapGenerator.I.ResizeMapToFit(new Vector2Int(structurePosition.x + structureWidth + (cornerRoomSize.x * ROOMSIZE), structurePosition.y + structureHeight + (cornerRoomSize.y * ROOMSIZE)));
             mapSizeSlider.value = MapGenerator.I.mapWidth;
             mapSizeSlider.lowValue = MapGenerator.I.mapWidth;
         }
@@ -99,17 +115,17 @@ public static class StructureGenerator
         if(s.CornerRoom != null)
         {
             // bottom left
-            Vector2Int pos = new Vector2Int(structurePosition.x - (cornerRoomSize.x / 2), structurePosition.y - (cornerRoomSize.y / 2));
-            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
+            Vector2Int pos = new Vector2Int(structurePosition.x - (cornerRoomSize.x * (ROOMSIZE / 2)), structurePosition.y - (cornerRoomSize.y * (ROOMSIZE / 2)));
+            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos, (cornerRoomSize.x * ROOMSIZE, cornerRoomSize.y * ROOMSIZE), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
             // bottom right
-            Vector2Int pos2 = new Vector2Int(structurePosition.x + structureWidth - (cornerRoomSize.x / 2), structurePosition.y - (cornerRoomSize.y / 2));
-            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos2, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
+            Vector2Int pos2 = new Vector2Int(structurePosition.x + structureWidth - (cornerRoomSize.x * (ROOMSIZE/2)), structurePosition.y - (cornerRoomSize.y * (ROOMSIZE / 2)));
+            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos2, (cornerRoomSize.x * ROOMSIZE, cornerRoomSize.y * ROOMSIZE), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
             // top left
-            Vector2Int pos3 = new Vector2Int(structurePosition.x - (cornerRoomSize.x / 2), structurePosition.y + structureHeight - (cornerRoomSize.y / 2));
-            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos3, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
+            Vector2Int pos3 = new Vector2Int(structurePosition.x - (cornerRoomSize.x * (ROOMSIZE / 2)), structurePosition.y + structureHeight - (cornerRoomSize.y * (ROOMSIZE / 2)));
+            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos3, (cornerRoomSize.x * ROOMSIZE, cornerRoomSize.y * ROOMSIZE), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
             // top right
-            Vector2Int pos4 = new Vector2Int(structurePosition.x + structureWidth - (cornerRoomSize.x / 2), structurePosition.y + structureHeight - (cornerRoomSize.y / 2));
-            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos4, (cornerRoomSize.x, cornerRoomSize.y), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
+            Vector2Int pos4 = new Vector2Int(structurePosition.x + structureWidth - (cornerRoomSize.x * (ROOMSIZE / 2)), structurePosition.y + structureHeight - (cornerRoomSize.y * 8));
+            cornerRoomPoints.AddRange(RoomGenerator.I.GenerateRoom(s.CornerRoom, pos4, (cornerRoomSize.x * ROOMSIZE, cornerRoomSize.y * ROOMSIZE), s, new List<(int, int)>(), rng, new List<Vector2Int>(), true, exteriorWall));
         }
         cornerRoomPoints.AddRange(exteriorWallPoints);
         foreach (Room ri in roomOrder)
@@ -118,16 +134,9 @@ public static class StructureGenerator
             
             List<(int x, int y)> doorPoints = new List<(int x, int y)>();
 
-            /*if ((doors & (int)Side.Top) == (int)Side.Top)          doorPoints.Add((Pos.x + rng.Next(1, width), Pos.y + height - 1));
-            if ((doors & (int)Side.Bottom) == (int)Side.Bottom)    doorPoints.Add((Pos.x + rng.Next(1, width), Pos.y));
-            if ((doors & (int)Side.Left) == (int)Side.Left)        doorPoints.Add((Pos.x, Pos.y + rng.Next(1, height)));
-            if ((doors & (int)Side.Right) == (int)Side.Right)      doorPoints.Add((Pos.x + width, Pos.y + rng.Next(1, height)));
-
-
-            RoomGenerator.I.GenerateRoom(room, SystemException, SystemException, (width, height), s, doorPoints, rng);
-        */
+            var size = (sizes[findex].width * 16, sizes[findex].height * 16);
             Vector2Int pos = new Vector2Int(positions[findex].x + structurePosition.x, positions[findex].y + structurePosition.y);
-            RoomGenerator.I.GenerateRoom(ri, pos, sizes[findex], s, doorPoints, rng, cornerRoomPoints);
+            RoomGenerator.I.GenerateRoom(ri, pos, size, s, doorPoints, rng, cornerRoomPoints);
         }
     }
 
@@ -145,5 +154,75 @@ public static class StructureGenerator
         for (int i = 0; i < list.Count; i++)
             s += list[i];
         return s;
+    }
+
+    public static void FillUp(this List<List<bool>> list, int width, int height, int x, int y)
+    {
+        if (x == int.MinValue || y == int.MinValue)
+            return;
+        for (int i = x; i < x+width; i++)
+        {
+            for (int j = y; j < y + height; j++)
+            {
+                if (i >= list.Count)
+                    for(int asd = 0; asd < i - list.Count; asd++)
+                        list.Add(new List<bool>());
+                if (j >= list[i].Count)
+                    for(int asd = 0; asd < j - list[i].Count; asd++)
+                        list[i].Add(false);
+
+                Debug.Log($"{i}, {j}");
+                list[i][j] = true;
+            }
+        }
+    }
+
+    public static (int x, int y, int width, int height) FindClosestOfSize(this List<List<bool>> list, List<Vector2Int> possibleSizes, float RoomScale)
+    {
+        (int x, int y, int width, int height) pos = (int.MinValue, int.MinValue, 0, 0);
+        for (int D = 0; D < possibleSizes.Count; D++)
+        {
+            Vector2 sizeT = (Vector2)possibleSizes[D] * RoomScale;
+
+            int consecutiveX = 0;
+            int consecutiveY = 0;
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = 0; j < list[i].Count; j++)
+                {
+                    if (list[i][j])
+                    {
+                        if (consecutiveX >= Mathf.Ceil(sizeT.x) && consecutiveY >= Mathf.Ceil(sizeT.y))
+                        {
+                            pos.width = Mathf.CeilToInt(sizeT.x);
+                            pos.height = Mathf.CeilToInt(sizeT.y);
+                            return pos;
+                        }
+                        consecutiveX = 0;
+                        consecutiveY = 0;
+                        pos = (int.MinValue, int.MinValue, 0, 0);
+                        continue;
+                    }
+                    if (consecutiveX == 0)
+                    {
+                        pos.x = i;
+                        pos.y = j;
+                    }
+
+                    if (j == pos.y)
+                        consecutiveY++;
+                    consecutiveX++;
+                }
+            }
+            Debug.Log($"{consecutiveX}, {consecutiveY}   ::      {sizeT}");
+            if (consecutiveX >= Mathf.Ceil(sizeT.x) && consecutiveY >= Mathf.Ceil(sizeT.y))
+            {
+                pos.width = Mathf.CeilToInt(sizeT.x);
+                pos.height = Mathf.CeilToInt(sizeT.y);
+                return pos;
+            }
+        }
+        DB.Attention("Returning default room. Error");
+        return pos;
     }
 }

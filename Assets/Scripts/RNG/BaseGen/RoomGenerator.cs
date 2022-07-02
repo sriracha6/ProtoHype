@@ -24,7 +24,6 @@ public class RoomGenerator : MonoBehaviour
         Door door = structure.Doors[rng.Next(0, structure.Doors.Count)];
         Building wall = cornerRoom ? cornerWall : structure.InteriorWalls;
 
-        DB.Null(floor);
         for (int x = Pos.x; x <= Pos.x + size.width; x++)
         {
             for (int y = Pos.y; y <= Pos.y + size.height; y++)

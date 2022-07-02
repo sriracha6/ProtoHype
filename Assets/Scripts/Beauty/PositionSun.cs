@@ -11,7 +11,7 @@ using UnityEngine;
 /// NEVER FUCING MIND YOU CAN USE A DIRECTIONAL LIGHT FUCK !!
 /// 
 /// CHEESE IN MY POCKETS VELVEETA ..
-/// IM A GORILLA IN A FUCKING COOP!! 
+/// IM A GORILLA IN A FUCKING COUPE!! 
 /// 
 /// </summary>
 public class PositionSun : MonoBehaviour

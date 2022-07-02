@@ -45,6 +45,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public static void SetupTooltips(VisualElement uidoc)
+    {
+        foreach (VisualElement v in uidoc.Children())
+        {
+            if (v.name == "Membrane")
+                continue;
+            if (!string.IsNullOrEmpty(v.tooltip))
+                v.AddManipulator(new ToolTipManipulator());
+        }
+    }
+
     public static void MakeDraggable(VisualElement dragbody, VisualElement handle)
     {
         handle.RegisterCallback<MouseDownEvent>(x => startDrag(dragbody)/*x=>drag(dragbody)*/);

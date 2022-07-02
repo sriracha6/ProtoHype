@@ -1,0 +1,139 @@
+:root
+{
+    --color-dark: #1E2732;
+    --color-darkbrown: #393836;
+    --color-lightred: #99776A;
+    --color-lightyellow: #DAC5A2;
+    --color-light: #F1E8C8;
+
+    --bgcolor-lightbrown: #524740;
+    --bgcolor-lightorange: #D9AE84;
+    --bgcolor-lightyellow: #D9C06D;
+}
+#BG{
+    background-image: resource("ui/background") !important;
+}
+.body, .body * 
+{
+    -unity-font: resource("garamond");
+}
+
+.unimportant
+{
+    -unity-font: resource("italicgaramond");
+}
+
+/* ----- UNITY ----- */
+
+.unity-button
+{
+    -unity-font-style: bold !important;
+    background-color: var(--color-darkbrown) !important;
+    border-width: 5px !important;
+    border-color: var(--color-lightred);
+    border-radius: 3px !important;
+    color:white !important; 
+}
+
+.unity-toggle__input #unity-checkmark
+{
+    background-color: var(--color-dark) !important;
+}
+.unity-toggle__checkmark:enabled {
+    -unity-background-image-tint-color: var(--color-light);
+    background-image: resource('ui/check') !important;
+}
+
+.unity-base-slider__dragger
+{
+    border-color: var(--color-light);
+    background-image: resource('ui/dragger') !important;
+    border-radius:2px !important;
+}
+
+.unity-base-slider__tracker
+{
+    background-color: var(--color-darkbrown) !important;
+    border-color: var(--color-dark) !important;
+}
+
+.unity-base-popup-field__arrow
+{
+    -unity-background-image-tint-color: var(--color-lightyellow);
+    margin-right: 5px;
+}
+
+.unity-base-popup-field__text
+{
+    color: var(--color-light);
+}
+
+.unity-base-popup-field__input
+{
+    background-color: var(--color-dark);
+    border-color: var(--color-lightyellow);
+}
+
+.unity-text-field__input
+{
+    color:  var(--color-darkbrown);
+    background-color: var(--color-light);
+}
+
+.unity-scroller, .unity-scroller * {
+    width: 15px !important;
+}
+
+.unity-progress-bar__progress
+{
+    background-color: var(--color-lightyellow) !important;
+}
+.unity-progress-bar__title{color: var(--color-light)}
+.unity-progress-bar__background
+{
+    background-color: var(--color-darkbrown);
+}
+.unity-base-dropdown__item
+{
+    background-color: var(--color-dark);
+    color: var(--color-light);
+}
+.unity-base-dropdown__item:hover
+{
+    background-color: var(--color-darkbrown);
+    color: var(--color-light);
+}
+.unity-base-dropdown__checkmark
+{
+    -unity-background-image-tint-color: var(--color-light);
+}
+.unity-base-dropdown__container-inner
+{
+    padding: 0; margin:0;
+    border-width: 0px;
+}
+.unity-base-popup-field__text
+{
+    padding-left: 5px;
+    color: var(--color-light);
+}
+/* ----- BGS ----- */
+.brown-bg
+{
+    background-color: var(--bgcolor-lightbrown) !important; 
+}
+.brown-bg .unity-label{
+    color: var(--color-light) !important;
+}
+.orange-bg
+{
+    background-color: var(--bgcolor-lightorange) !important;
+}
+
+.yellow-bg
+{
+    background-color: var(--bgcolor-lightyellow) !important;
+}
+.orange-bg .unity-label, .yellow-bg .unity-label{
+    color: var(--color-dark);
+}

@@ -33,7 +33,6 @@
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 0;
-    color: rgb(255, 255, 255);
 }
 
 .unity-text-field__input {
@@ -75,11 +74,9 @@
     width: 0;
     min-width: 130px;
     font-size: 18px;
-    color: rgb(255, 255, 255);
 }
 
 #DynamicTime .unity-label {
-    color: rgb(255, 255, 255);
     padding-left: 0;
     padding-right: 0;
     padding-top: 0;
@@ -115,5 +112,10 @@
     width: 0;
     min-width: 130px;
     font-size: 18px;
-    color: rgb(255, 255, 255);
+}
+
+#Preview
+{
+    border-width: 4px;
+    border-color: var(--color-dark);
 }

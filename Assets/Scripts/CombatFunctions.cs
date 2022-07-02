@@ -100,7 +100,8 @@ public static class CombatFunctions
         else // i just know this is going to cause some kind of index error sometmie
         {
             List<Attack> nonrares = attks.FindAll(x => x.isRare == false);
-            Debug.Log($"{nonrares.Count}");
+            if (nonrares.Count == 0)
+                return null; 
             currentAttack = nonrares[Random.Range(0, nonrares.Count)];
             return currentAttack;
         }

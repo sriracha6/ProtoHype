@@ -148,13 +148,10 @@ namespace XMLLoader
 
                 foreach(XmlNode x in xmls.Q<XmlNodeList>("Attacks", false, childNodes:true))
                 {
-                    if (x.InnerXml.Equals("Attack"))
-                    {
-                        attacks.Add(new Attack(x.Attrib(0),
-                            x.Enum<DamageType>(x.Q<string>("DamageType")),
-                            x.Q<bool>("Rare"),
-                            x.Q<int>("Damage")));
-                    }
+                    attacks.Add(new Attack(x.Attrib(0),
+                        x.Enum<DamageType>(x.Q<string>("DamageType")),
+                        x.Q<bool>("Rare"),
+                        x.Q<int>("Damage")));
                 }
                 Weapon.CreateMelee(filepath, xmls.Q<string>("Name"), WeaponType.Melee,
                     xmls.Q<string>("WeaponClass"), 
@@ -336,7 +333,7 @@ namespace XMLLoader
             foreach (XmlElement LOLWHYISTHISHERE in xmls.Qs("Soldier"))
             {
                 var t = xmls.Qs("Soldier")[currentLoop];
-                bool riding = t.Q<string>("RidingAnimal") == "false";
+                bool riding = t.Q<bool>("RidingAnimal");
 
                 var x = TroopType.Create(t.Q<string>("name", attribute:true),
                     t.Q<string>("Description"),
@@ -350,14 +347,15 @@ namespace XMLLoader
                     ParseFuncs.parseSkill(1, t.Q<XmlNode>("SkillsRange").ChildNodes[0].InnerText),
                     ParseFuncs.parseSkill(0, t.Q<XmlNode>("SkillsRange").ChildNodes[1].InnerText),
                     ParseFuncs.parseSkill(1, t.Q<XmlNode>("SkillsRange").ChildNodes[1].InnerText),
-                    !riding,
-                    !riding ? Animal.Get(t.Q<string>("RidingAnimal")) : null,
-                    !riding ? ParseFuncs.parseAnimalArmor(t.Q<string>("RidingAnimal")) : null,
-                    t.Q<string>("Icon"));
+                    riding,
+                    riding ? Animal.Get(t.Q<string>("RidingAnimal")) : null,
+                    riding ? ParseFuncs.parseAnimalArmor(t.Q<string>("RidingAnimal")) : null,
+                    t.Q<string>("Icon"),
+                    xmls.Enum<PreferSpawn>(t.Q<string>("PreferSpawn")));
 
                 if(usedByAll)
                     foreach(Country c in Country.List)
-                        TroopType.List.Add(new TroopType(x.Name, x.Description, x.SourceFile, c, x.weapons, x.sidearms, x.armor, x.shields, x.meleeSkillMin, x.meleeSkillMax, x.rangeSkillMin, x.rangeSkillMax, x.ridingAnimal, x.riddenAnimal, x.animalArmor, x.Icon));
+                        TroopType.List.Add(new TroopType(x.Name, x.Description, x.SourceFile, c, x.weapons, x.sidearms, x.armor, x.shields, x.meleeSkillMin, x.meleeSkillMax, x.rangeSkillMin, x.rangeSkillMax, x.ridingAnimal, x.riddenAnimal, x.animalArmor, x.Icon, x.preferSpawn));
 
                 currentLoop++;
             }
@@ -415,15 +413,15 @@ namespace XMLLoader
                         //{
                         if (b.countType == CountType.Sides)
                         {
-                            Bodypart.Create("Left " + b.Name, b.TotalHP, b.type, b.partOf == null ? "" : b.partOf.Name, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
-                            Bodypart.Create("Right " + b.Name, b.TotalHP, b.type, b.partOf == null ? "" : b.partOf.Name, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
+                            Bodypart.Create("Left " + b.Name, b.TotalHP, b.type, b._partOf, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
+                            Bodypart.Create("Right " + b.Name, b.TotalHP, b.type, b._partOf, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
                         }
                         else if (b.countType == CountType.Numbered)
                         {
                             for (int i = 0; i < b.count; i++)
                             {
                                 string newname = ParseFuncs.AddOrdinal(i + 1) + " " + b.Name;
-                                Bodypart.Create(newname, b.TotalHP, b.type, b.partOf == null ? "" : b.partOf.Name, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
+                                Bodypart.Create(newname, b.TotalHP, b.type, b._partOf, b.painFactor, b.bleedingFactor, b.damageMultiplier, b.count, b.effects, b.effectAmount, b.hitChance, b.countType, b.group);
                             }
                         }
                         //}
@@ -737,12 +735,12 @@ namespace XMLLoader
         }
         public static List<Weapon> parseWeapons(XmlNode xmls) // instead of getting by name, i could save the hashcode of the item
         {
-            if (xmls == null)
-                return null; // uh oh : no sidearms
+            //if (xmls == null)
+            //    return null; // uh oh : no sidearms
 
             List<Weapon> weapons = new List<Weapon>();
 
-            if(xmls.Q<XmlNode>("GenericSpecial") != null)
+            if(xmls.HasNode("GenericSpecial"))
                 foreach(XmlElement x in xmls.Qs("GenericSpecial"))
                 {
                     if (x.InnerText == "Any")
@@ -752,8 +750,7 @@ namespace XMLLoader
                 }
 
             foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
-                weapons.Add(Weapon.Get(s.removeWS()));
-
+                    weapons.Add(Weapon.Get(s.removeWS()));
             return weapons;
         }
         public static List<Projectile> parseProjectiles(XmlNode xmls)
@@ -959,8 +956,10 @@ namespace XMLLoader
                     var ss = a.InnerText.Split(',');
                     try
                     {
+                        if (int.Parse(ss[0].removeWS()) > 12)
+                            DB.Attention($"{Loaders.currentFile} | Potential misinput for room size. All values for room size are x16. This may cause issues. i'll fix it in a later update i swear ON GOD fo sho");
                         list.Add(new Vector2Int(int.Parse(ss[0].removeWS()), int.Parse(ss[1].removeWS())));
-                        //list.Add(new Vector2Int(int.Parse(ss[1].removeWS()), int.Parse(ss[0].removeWS())));
+                        list.Add(new Vector2Int(int.Parse(ss[1].removeWS()), int.Parse(ss[0].removeWS())));
                     }
                     catch(Exception e)
                     {
@@ -1060,19 +1059,43 @@ namespace XMLLoader
         }
         public static bool strToBool(this string input)
         {
-            if (input.Equals("true",StringComparison.CurrentCultureIgnoreCase)
+            if (input.Equals("true", StringComparison.CurrentCultureIgnoreCase)
                 || input.Equals("yes", StringComparison.CurrentCultureIgnoreCase))
                 return true;
             else if (input.Equals("false", StringComparison.CurrentCultureIgnoreCase)
                 || input.Equals("no", StringComparison.CurrentCultureIgnoreCase))
                 return false;
             else
-                throw new XmlException("Not true or false. : "+input);
+                return false;
         }
 
+        public static List<T> StripNulls<T>(this IEnumerable<T> list)
+        {
+            List<T> tt = new List<T>();
+            foreach(T t in list)
+                if(t != null)
+                    tt.Add(t);
+            return tt;
+        }
+        public static Vector2Int clampVector(this Vector2Int @in)
+        {
+            return new Vector2Int(Mathf.Clamp(@in.x, 0, MapGenerator.I.mapWidth), Mathf.Clamp(@in.y, 0, MapGenerator.I.mapHeight));
+        }
         public static T randomElement<T>(this List<T> list)
         {
             return list[Random.Range(0, list.Count)];
+        }
+        public static List<T> randomElements<T>(this List<T> list, int aroundCount)
+        {
+            List<T> elements = new List<T>();
+
+            for(int i = 0; i < list.Count; i++)
+            {
+                if(Random.Range(0, 101) >= 50)
+                    elements.Add(list[i]);
+            }
+
+            return elements.Take(Mathf.Clamp(aroundCount, 0, elements.Count)).ToList();
         }
         public static T randomElement<T>(this T[] list)
         {
@@ -1091,7 +1114,7 @@ namespace XMLLoader
         {
             if(!attribute && x.SelectSingleNode(t) == null)
             {
-                if(t != "Description" && t != "WeaponClass" && t != "Group" && t != "Long" && t != "Medium" && t != "Short" && t != "GenericSpecial" && t != "Sidearms" && t != "PickFrom" && t != "Shields" && t != "IsCarpet" && t!="PrefersFeature")
+                if(t != "Description" && t != "WeaponClass" && t != "Group" && t != "Long" && t != "Medium" && t != "Short" && t != "GenericSpecial" && t != "Sidearms" && t != "PickFrom" && t != "Shields" && t != "IsCarpet" && t!="PrefersFeature" && t != "PartOf")
                     DB.Attention($"XMLERROR: No node : {t} : {Loaders.currentFile}");
                 return default(T);
             }

@@ -178,7 +178,7 @@ public class HealthSystem : MonoBehaviour
 		if(p.partOf != null)
         {
 			Wound neww = new Wound(w.type, w.sourceWeapon, w.damage / partOfTransmission, w.sourceAttack, w.bleedRate);
-			DoDamage(bodyparts.Find(x=>x.Name==p.partOf.Name),neww); // auto-recursion!
+			DoDamage(bodyparts.Find(x=>x.Name==p.partOf.Name), neww); // auto-recursion!
 																	 // also it's required bc we have different health stats
         }
 		p.HP -= Mathf.Clamp(p.damageMultiplier * w.damage,0,float.MaxValue);

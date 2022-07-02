@@ -2,22 +2,22 @@
     <Style src="css.uss" />
     <ui:VisualElement name="Membrane" tabindex="9999999" style="position: absolute; width: 100%; height: 100%; visibility: visible; display: none;" />
     <ui:VisualElement style="height: 100%; flex-grow: 1; width: 25%; right: 0; flex-direction: column; position: absolute; justify-content: flex-end; align-items: stretch;">
-        <ui:VisualElement name="RegimentControlStuff" style="height: 5%;">
+        <ui:VisualElement name="RegimentControlStuff" class="brown-bg" style="height: 5%;">
             <ui:SliderInt picking-mode="Ignore" value="100" high-value="100" name="Slider" class="slider" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
         </ui:VisualElement>
-        <ui:VisualElement name="MoveControls" style="height: 33%; background-color: rgb(96, 96, 96); justify-content: flex-start; align-items: stretch; flex-direction: column; flex-wrap: wrap-reverse; flex-grow: 0;">
-            <ui:VisualElement name="Buttons" style="height: 90%; flex-wrap: wrap; flex-direction: row;">
-                <ui:Button text="Move" display-tooltip-when-elided="true" name="MoveButton" class="actionbutton" style="width: 30%; height: 25%; font-size: 8%;" />
-                <ui:Button text="Stand\nGround" display-tooltip-when-elided="true" name="StandGroundButton" class="actionbutton" style="width: 60%; font-size: 8%; height: 25%;" />
-                <ui:Button text="Search And Destroy" display-tooltip-when-elided="true" name="SearchDestroyButton" class="actionbutton" style="width: 50%; font-size: 8%; height: 50%;" />
+        <ui:VisualElement name="MoveControls" class="brown-bg" style="height: 33%; justify-content: flex-start; align-items: stretch; flex-direction: column; flex-wrap: wrap-reverse; flex-grow: 0;">
+            <ui:VisualElement name="Buttons" class="body" style="height: 90%; flex-wrap: wrap; flex-direction: row;">
+                <ui:Button text="Move" display-tooltip-when-elided="true" name="MoveButton" style="width: 30%; height: 25%; font-size: 8%;" />
+                <ui:Button text="Stand\nGround" display-tooltip-when-elided="true" name="StandGroundButton" style="width: 60%; font-size: 8%; height: 25%;" />
+                <ui:Button text="Search And Destroy" display-tooltip-when-elided="true" name="SearchDestroyButton" style="width: 50%; font-size: 8%; height: 50%;" />
                 <ui:VisualElement style="width: 40%; height: 48.5%;">
-                    <ui:Button text="Attack" display-tooltip-when-elided="true" name="AttackButton" class="actionbutton" style="width: 100%; font-size: 8%; height: 50%;" />
-                    <ui:Button text="Follow\nCursor" display-tooltip-when-elided="true" name="FollowCursorButton" class="actionbutton" style="width: 100%; font-size: 8%; height: 50%;" />
+                    <ui:Button text="Attack" display-tooltip-when-elided="true" name="AttackButton" style="width: 100%; font-size: 8%; height: 50%;" />
+                    <ui:Button text="Follow\nCursor" display-tooltip-when-elided="true" name="FollowCursorButton" style="width: 100%; font-size: 8%; height: 50%;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:Toggle label="Secondary" name="SecondaryToggle" style="position: absolute; bottom: 0; flex-direction: row-reverse; font-size: 10px; left: 50%; width: auto;" />
             <ui:Button text="X" display-tooltip-when-elided="true" name="CancelButton" style="width: 5%; font-size: 8px; height: 5%; position: absolute; bottom: 0; left: 86%; right: 0; top: 81%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
-            <ui:Toggle label="Run and Gun" name="RunGunToggle" style="position: absolute; bottom: 0; flex-direction: row-reverse; font-size: 10px; left: 2px; width: auto;" />
+            <ui:Toggle label="Run and Gun" name="RunGunToggle" value="false" style="position: absolute; bottom: 0; flex-direction: row-reverse; font-size: 10px; left: 2px; width: auto;" />
         </ui:VisualElement>
         <ui:VisualElement name="MessageSystem" style="top: -1px; bottom: 408px; background-color: rgba(89, 89, 89, 0); position: absolute; left: -5px; right: 6px; height: 164px;" />
     </ui:VisualElement>
@@ -33,7 +33,7 @@
     <ui:VisualElement style="position: absolute; width: 100%; height: 15%;">
         <ui:VisualElement name="RegimentShiz" style="position: absolute; width: 40%; height: 100%; left: 20%; right: 0;">
             <ui:VisualElement name="RegimentSelect" style="position: relative; left: 0; width: 100%; height: 90%; background-color: rgb(182, 179, 172);">
-                <ui:ScrollView vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Auto" mode="Horizontal" name="ScrollView" horizontal-page-size="-0.5" style="height: 100%; width: 100%; min-height: 100%;" />
+                <ui:ScrollView vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Auto" mode="Horizontal" name="ScrollView" horizontal-page-size="-0.5" class="orange-bg" style="height: 100%; width: 100%; min-height: 100%;" />
             </ui:VisualElement>
             <ui:VisualElement name="Controls" style="height: 24%;">
                 <ui:Button text="^" display-tooltip-when-elided="true" name="HideButton" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 5%; left: 50%;" />
@@ -46,7 +46,7 @@
             <ui:Button text="&lt;b&gt;i&lt;/b&gt;" display-tooltip-when-elided="true" name="MoreInfo" style="width: 15px; bottom: 0; position: absolute;" />
             <ui:Label text="Quandale Dingle | French Archer | - 4 - 5" display-tooltip-when-elided="true" name="QuickInfo" class="consistentLabel" style="height: 55%; width: 85%; -unity-text-align: middle-left; font-size: 10%; bottom: 0; top: 0; position: absolute; left: 15px;" />
         </ui:VisualElement>
-        <ui:VisualElement name="Body" style="height: 93%;">
+        <ui:VisualElement name="Body" class="body" style="height: 93%;">
             <ui:VisualElement name="ShockPanel" style="height: 5%; bottom: 0; top: 95%; background-color: rgb(46, 192, 88);">
                 <ui:Label text="Concussed because hit in the head with a pan" display-tooltip-when-elided="true" name="ShockLabel" style="height: 100%; font-size: 5px; -unity-text-align: middle-left; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 3px; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
             </ui:VisualElement>

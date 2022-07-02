@@ -32,9 +32,9 @@ public static class DB
         foreach(T t in o)
             if (t == null) ch++;
         if (ch == 0)
-            Debug.Log($"<color=green> List of {o.Count()} "+o.GetType().Name+" has no NULLS. </color>");
+            Debug.Log($"<color=green> List of {o.Count()} "+o.GetType().GetGenericArguments()[0] + " has no NULLS. </color>");
         else
-            Debug.Log($"<color=red> List of {o.Count()} "+o.GetType().Name+" has "+ch+" NULLS. </color>");
+            Debug.Log($"<color=red> List of {o.Count()} "+o.GetType().GetGenericArguments()[0] + " has "+ch+" NULLS. </color>");
     }
 
     public static void NullCount<T>(T[,] o)

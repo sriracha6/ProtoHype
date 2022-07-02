@@ -113,7 +113,7 @@ public class PawnRenderer : MonoBehaviour
             if (!CachedItems.renderedWeapons.Exists(x => x.id == id))
             {
                 Texture2D tex = XMLLoader.Loaders.LoadTex(Weapons.Weapon.Get(id).SourceFile);
-                Sprite spr = Loaders.LoadSprite(tex, tex.height * size * SIXFEETMETERS);
+                Sprite spr = Loaders.LoadSprite(tex, tex.height * size / SIXFEETMETERS);
                 CachedItems.renderedWeapons.Add(new RenderedWeapon(spr, id));
                 return spr;
             }
@@ -134,7 +134,7 @@ public class PawnRenderer : MonoBehaviour
             if (!CachedItems.renderedShields.Exists(x => x.id == id))
             {
                 Texture2D tex = Loaders.LoadTex(Shields.Shield.Get(id).SourceFile);
-                Sprite spr = Loaders.LoadSprite(tex, tex.height * size * SIXFEETMETERS);
+                Sprite spr = Loaders.LoadSprite(tex, tex.height * size / SIXFEETMETERS);
                 CachedItems.renderedShields.Add(new RenderedShield(spr, id));
                 return spr;
             }

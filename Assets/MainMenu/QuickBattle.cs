@@ -117,8 +117,11 @@ public class QuickBattle : MonoBehaviour
         root.Q<Button>("RandomBuilding").clicked += delegate{
             TilemapPlace.UpdateBuildings();
             root.Q<SliderInt>("MapSize").lowValue = 100;
-                                            // todo: random
-            StructureGenerator.GenerateStructure(Structure.Get("Castle"), MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
+            // todo: random
+            Structure item = Structure.List.randomElement();
+            MapGenerator.I.structure = item;
+            StructureGenerator.PlaceStructure(item, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
+            //StructureGenerator.GenerateStructure(item, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
         };
     }
 

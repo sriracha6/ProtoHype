@@ -8,8 +8,6 @@ namespace PawnFunctions
 {
     /// <summary>
     /// Stores an array of the size of the tilemap. Each position can be a 0 or 1. This is only set when the pathfind is 
-    /// done (i think). 1 = pawn is there. 0 = free. This should be pretty fast. 
-    /// ALSO, INTS ARE 4 BYTES AND BOOLS ARE 1 SO DONT BE PROUD
     /// </summary>
     public struct Pos
     {
@@ -22,6 +20,14 @@ namespace PawnFunctions
         {
             return new Vector2Int(p.x, p.y);
         }
+        public static implicit operator Vector2(Pos p)
+        {
+            return new Vector2(p.x, p.y);
+        }
+        public static implicit operator Vector3(Pos p)
+        {
+            return new Vector3(p.x, p.y, 0);
+        }
 
         public Pos(int q, int e, bool taken)
         {
@@ -30,7 +36,7 @@ namespace PawnFunctions
 
         public override string ToString()
         {
-            return Taken ? "1" : "0";
+            return Taken ? "#" : " ";
         }
     }
     public class PathfindExtra
@@ -42,29 +48,29 @@ namespace PawnFunctions
         
         public static void SetUsed(int x, int y)
         {
-            tiles[x+y] = new Pos(x,y, true); 
+            tiles[x + y] = new Pos(x, y, true); 
         }
         public static void SetFree(int x, int y)
         {
             tiles[x+y] = new Pos(x, y, false);
         }
 
-        /// <summary>
-        /// ok so just put in the check position and the list of points. (the current selected tiles since it dies after every selection)<br></br>
-        /// </summary>
         /// <returns>a picture of a weewee</returns>
-        public static Pos FindNearest(Vector2Int check)
+        public static Pos FindNearest(Vector2Int check, List<Vector2Int> extraGayIgnore=null)
         {
+            Pos fuckingPoint;
+                fuckingPoint = PathfindExtra.tiles.AsReadOnly().OrderBy(p => Math.Abs(p.x - check.x) + Math.Abs(p.y - check.y)).FirstOrDefault(p => p.Taken == false);
             // ASREADONLY IS O(1) FUCK YES IM GONNA KISS SOMEONE THIS IS SO SEXY SEXY SEXY SEXY SEXY SEXY
-            return tiles.AsReadOnly().OrderBy(p => Math.Abs(p.x - check.x) + Math.Abs(p.y - check.y)).FirstOrDefault(p => p.Taken == false);
+            if(extraGayIgnore != null)
+                fuckingPoint = PathfindExtra.tiles.AsReadOnly().OrderBy(p => Math.Abs(p.x - check.x) + Math.Abs(p.y - check.y)).FirstOrDefault(p => p.Taken == false && !extraGayIgnore.Contains(new Vector2Int(p.x, p.y)));
+            return fuckingPoint;
         }
-
         public static bool PresentAt(int x, int y)
         {
-            return tiles[x + y].Taken;
+            return PathfindExtra.tiles[x + y].Taken;
         }
 
-        public PathfindExtra() // we need this so this class can remain static
+        public PathfindExtra()
         {                                                                           // !!!!!!!!
                                                                                     // ALL OBJSTACLES (MOUNTAIN, WALL, FURNITURE) ARE 1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             sizeX = MapGenerator.I.mapWidth;

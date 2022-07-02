@@ -8,6 +8,7 @@ using static TextureGenerator;
 using static WaterFeature;
 using static TilemapPlace;
 using Nature;
+using Structures;
 using PawnFunctions;
 using System.Linq;
 
@@ -69,6 +70,12 @@ public class MapGenerator : MonoBehaviour
     public static List<TerrainType> terrainTypes;
 
     public System.Random rand;
+
+    public Structure structure;
+    public Vector2Int structurePos;
+    public Vector2Int structureSize;
+
+    public bool finishedLoading;
 
     protected void Awake()
     {
@@ -188,6 +195,7 @@ public class MapGenerator : MonoBehaviour
         }
         else if (I.drawMode == DrawMode.Place)
         {
+            Loading.I.Status = "Creating the world...";
             TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             generateWater();
             mapBounds.resizeBounds(I.mapWidth, I.mapHeight);
@@ -210,6 +218,7 @@ public class MapGenerator : MonoBehaviour
             WCMngr.I.groundTilemap.RefreshAllTiles();
             //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
         }
+        I.finishedLoading = true;
     }
 
     private void generateWater()

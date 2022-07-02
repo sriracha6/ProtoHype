@@ -174,12 +174,13 @@
     <None Include="Assets\Scripts\Shaders\Watter.shader" />
     <None Include="Assets\Scripts\Shaders\Water.shader" />
     <None Include="Assets\Resources\Prefabs\UI\Bodypart2ElectricBoogaloo.uxml" />
-    <None Include="Assets\UIDoc.uxml" />
     <None Include="Assets\uxml.uxml" />
     <None Include="Assets\loading.uss" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain_First.shader" />
+    <None Include="Assets\Resources\Prefabs\UI\prefab.uss" />
     <None Include="Assets\MainMenu\mainmenucss.uss" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain.cginc" />
+    <None Include="Assets\root.uss" />
     <None Include="Assets\MainMenu\quickbattle.uxml" />
   </ItemGroup>
   <ItemGroup>

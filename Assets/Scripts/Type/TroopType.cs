@@ -10,6 +10,7 @@ using Countries;
 
 namespace TroopTypes
 {
+    public enum PreferSpawn { InsideBase, AroundBase, OutsideBase=0}
     public class TroopType : Item
     {
         public Country country;
@@ -28,6 +29,7 @@ namespace TroopTypes
         public bool ridingAnimal;
         public Animal riddenAnimal;
         public List<AnimalArmor> animalArmor = new List<AnimalArmor>(); // todo: chances of having and required and pick from groups and sex and FUCk
+        public PreferSpawn preferSpawn;
 
         public override string ToString()
         {
@@ -35,16 +37,17 @@ namespace TroopTypes
         }
 
         public TroopType(string name, string description, string sourcefile, Country countr, List<Weapon> wea, List<Weapon> sidearmz, List<List<Armor>> armo, List<Shield> shelds, int Mskillmin, int Mskillmax, int rskillmin, int rskillmax, 
-            bool ridingAnimal, Animal riddenAnimal, List<AnimalArmor> animalArmor, string Icon) // same for this
+            bool ridingAnimal, Animal riddenAnimal, List<AnimalArmor> animalArmor, string Icon, PreferSpawn preferSpawn) // same for this
             : base(name, description, sourcefile)
         {
-            if (wea != null)
+            /*if (wea != null)
                 foreach(Weapon w in wea)
                     if(w != null)
                         weapons.Add(w);
                     else
-                        DB.Attention("Null Prmiary Weapon");
-
+                        DB.Attention("Null Primary Weapon attempted to be added to trooptype");
+            */
+            weapons.AddRange(wea);
             /*if (armo != null)
                 foreach (List<Armor> a in armo)
                     foreach(Armor a2 in a)
@@ -54,25 +57,32 @@ namespace TroopTypes
                         DB.Attention("Null Armor");*/
             armor = armo;
 
-            if (shelds != null)
+            /*if (shelds != null)
                 foreach(Shield s in shelds)
                     if(s != null)
                         shields.Add(s);
                     else
                         DB.Attention("Null Shield");
-
+            */
+            if(shelds != null)
+            shields.AddRange(shelds);
+            /*
             if (sidearmz != null)
                 foreach(Weapon w in sidearmz)
                     if(w!=null)
                         sidearms.Add(w); // shut up
                     else
                         DB.Attention("Null Sidearm");
+            */
+            if(sidearmz != null)
+            sidearms.AddRange(sidearmz);
 
             if (riddenAnimal != null)
                 this.riddenAnimal = riddenAnimal;
             else
                 DB.Attention("Null animal");
                 
+            this.preferSpawn = preferSpawn;
             country = countr;
             meleeSkillMin = Mskillmin;
             meleeSkillMax = Mskillmax;
@@ -85,9 +95,9 @@ namespace TroopTypes
 
         public static List<TroopType> List = new List<TroopType>();
 
-        public static TroopType Create(string name, string description, string sourcefile, Country country, List<Weapon> weapons, List<Weapon> sidearms, List<List<Armor>> armor, List<Shield> shields, int Mskillmin, int Mskillmax, int Rskillmin, int Rskillmax, bool ridingAnimal, Animal animal, List<AnimalArmor> animalarmor, string Icon) // creates if it DOESNT exist
+        public static TroopType Create(string name, string description, string sourcefile, Country country, List<Weapon> weapons, List<Weapon> sidearms, List<List<Armor>> armor, List<Shield> shields, int Mskillmin, int Mskillmax, int Rskillmin, int Rskillmax, bool ridingAnimal, Animal animal, List<AnimalArmor> animalarmor, string Icon, PreferSpawn preferSpawn) // creates if it DOESNT exist
         {
-            TroopType c = new TroopType(name, description, sourcefile, country, weapons, sidearms, armor, shields, Mskillmin, Mskillmax, Rskillmin, Rskillmax, ridingAnimal, animal, animalarmor, Icon);
+            TroopType c = new TroopType(name, description, sourcefile, country, weapons, sidearms, armor, shields, Mskillmin, Mskillmax, Rskillmin, Rskillmax, ridingAnimal, animal, animalarmor, Icon, preferSpawn);
             List.Add(c);
             return c;
         }

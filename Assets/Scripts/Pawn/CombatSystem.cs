@@ -79,7 +79,8 @@ public class CombatSystem : MonoBehaviour
         int defaul = 1 << LayerMask.NameToLayer("Default");
         layerMask = walls | defaul;
 
-        InvokeRepeating(nameof(Checks), 0, 0.5f);
+        if(p.hasPrimary || p.hasSidearm)
+            InvokeRepeating(nameof(Checks), 0, 0.5f);
     }
 
     private void Update()
@@ -117,18 +118,14 @@ public class CombatSystem : MonoBehaviour
                         return;
                     }
                 }
-                float currentAttackDamage = 1;
-                if (p.animal == null)
-                    currentAttackDamage = currentAttack.Damage;
-                else
-                {
-                    currentAttackDamage = currentAttack.Damage;
+                currentAttack = CS.GetAttack(p.activeWeapon.attacks);
+                float currentAttackDamage = currentAttack.Damage;
+                if (p.animal != null)
                     if (p.pawnPathfind.isMoving)
                         currentAttackDamage *= p.animal.trueSpeed;
                     else
                         currentAttackDamage *= 0.75f;
-                }
-                currentAttack = CS.GetAttack(p.activeWeapon.attacks);
+
                 target.healthSystem.TakeMeleeDamage(CS.randomVariation(
                     currentAttackDamage),                                                   // + (damage.Damage * Skills.EffectToDamage(p.meleeSkill))
                     p.activeWeapon, p, currentAttack);

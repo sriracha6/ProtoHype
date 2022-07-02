@@ -47,8 +47,22 @@ namespace Body
         public float HP;
         public float bleedingRate;
         public PartType type;
-        private string _partOf;
-        public Bodypart partOf { get { if (_partOf != "false") return Get(_partOf); else return null; } }
+        public string _partOf;
+        public Bodypart partOf 
+        {
+            get
+            {
+                if (_partOf != "false" && !string.IsNullOrEmpty(_partOf))
+                    if (count == 1)
+                        return Get(_partOf);
+                    else
+                        if(Get(_partOf) != null && Get(_partOf).count > 1 && Get(_partOf).countType == CountType.Sides)
+                            return Get(Name.Split(' ')[0] + " " + _partOf);
+                        else
+                            return Get(_partOf);
+                else return null; 
+            } 
+        }
         public List<Wound> wounds = new List<Wound>();
         public string group;
 
@@ -130,7 +144,7 @@ namespace Body
             catch (NullReferenceException)
             {
                 //Create(name);
-                DB.Attention($"Couldn't find Bodypart of name {name}");
+                DB.Attention($"Couldn't find Bodypart of name \"{name}\"");
                 return null;
                 //return CountryList.Find(x => x.Name == name);
             }
