@@ -17,7 +17,7 @@ public class PawnManager : MonoBehaviour
     public static PawnManager I = null;
     public GameObject pawnPrefab; // lol this is the most important line of code in the game
     public GameObject horsePrefab;
-    private static List<Pawn> allPawns = new List<Pawn>();
+    private static readonly List<Pawn> allPawns = new List<Pawn>();
 
     public static bool doneLoading = false;
     List<Vector2Int> usedPoints = new List<Vector2Int>();
@@ -53,7 +53,7 @@ public class PawnManager : MonoBehaviour
                 var troopType = RandomTroopType(country.country);
                 Regiment.Create(troopType, country.country);
 
-                Vector2Int regimentPos = Vector2Int.zero;
+                Vector2Int regimentPos;
                 if (map.structure != null)
                     if (troopType.preferSpawn == PreferSpawn.AroundBase)
                         regimentPos = new Vector2Int(Random.Range(map.mapWidth - AROUND_BASE_DISTANCE, map.mapWidth), Random.Range(map.mapHeight - AROUND_BASE_DISTANCE, map.mapHeight));
@@ -98,7 +98,7 @@ public class PawnManager : MonoBehaviour
         return t[Random.Range(0, t.Count)];
     }
 
-    public Pawn CreatePawn(Country c, string n, TroopType tt, Regiment r, Vector2 pos)
+    public Pawn CreatePawn(Country c, string n, TroopType tt, Regiment r, Vector2 pos, Projectile projectile=null)
     {
         // USE POOLING!!!!!!!!!!!!!!!!!!!! TODO
         GameObject newPawnObj = Instantiate(pawnPrefab);//gameObject.AddComponent<Pawn>();
@@ -106,10 +106,10 @@ public class PawnManager : MonoBehaviour
 
         newPawnObj.transform.position = new Vector3(pos.x, pos.y, -0.5f);
 
-        /*tt.weapons = tt.weapons.StripNulls();
+        tt.weapons = tt.weapons.StripNulls();
         tt.shields = tt.shields.StripNulls();
         tt.sidearms = tt.sidearms.StripNulls();
-        tt.armor = tt.armor.StripNulls();*/
+        tt.armor = tt.armor.StripNulls();
 
         newPawn.country = c;
         newPawn.pname = n;
@@ -123,9 +123,17 @@ public class PawnManager : MonoBehaviour
 
         if(tt.weapons.Count > 0) {
             newPawn.heldPrimary = tt.weapons[UnityEngine.Random.Range(0, tt.weapons.Count)];
-            
-            if(newPawn.heldPrimary.Type == Weapons.WeaponType.Ranged)
-                newPawn.inventory = Projectile.List.FindAll(x => x.forWeaponClass == newPawn.heldPrimary.weaponClass).randomElements(2);
+
+            if (newPawn.heldPrimary.Type == Weapons.WeaponType.Ranged)
+                if (projectile == null)
+                {
+                    var forThisPawn = Projectile.List.FindAll(x => x.forWeaponClass == newPawn.heldPrimary.weaponClass);
+                    
+                    if(forThisPawn.Count > 0)
+                        newPawn.inventory = forThisPawn.randomElement();
+                }
+                else
+                    newPawn.inventory = projectile;
 
             newPawn.hasPrimary = true;
         }

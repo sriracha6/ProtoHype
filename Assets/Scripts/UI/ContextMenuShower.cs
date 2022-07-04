@@ -1,61 +1,51 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-/// <summary>
-/// Beware line 90.
-/// </summary>
 public class ContextMenuShower : MonoBehaviour
 {
-    public VisualElement root;
+    [SerializeField] UIDocument root;
     public VisualElement menu;
 
-    public Button moveHereButton;
-    public Button showSelectionButton;
-    public Button clearSelectionButton;
-
-    public LineRenderer lineRenderer;
+    public static ContextMenuShower I;
 
     bool canClose;
 
-    private void Start()
+    public bool watchOut = false;
+
+    protected void Awake() {
+        if (I == null)
+            I = this;
+        else
+        {
+            var oldRoot = root;
+            VisualElement mm = root.rootVisualElement.Q<VisualElement>("contextmenu");
+            root = UIManager.ui;
+            root.rootVisualElement.Add(mm);
+            oldRoot.rootVisualElement.Remove(mm);
+        }
+        DontDestroyOnLoad(gameObject);
+    }
+
+    protected void Start()
     {
         //
-        root = GetComponent<UIDocument>().rootVisualElement;//
-        menu = root.Q<VisualElement>("contextmenu");
+        menu = root.rootVisualElement.Q<VisualElement>("contextmenu");
 
         menu.RegisterCallback<MouseEnterEvent>(x => canClose = false);
         menu.RegisterCallback<MouseLeaveEvent>(x => canClose = true);
-
-        moveHereButton = menu.Q<Button>("MoveHereButton");
-        showSelectionButton = menu.Q<Button>("ShowSelectionButton");
-        clearSelectionButton = menu.Q<Button>("ClearSelectionButton");
-
-        moveHereButton.clicked += delegate { MenuItemPressed("Move"); };
-        showSelectionButton.clicked += delegate { MenuItemPressed("ShowSelection"); };
-        clearSelectionButton.clicked += delegate { MenuItemPressed("ClearSelection"); };
+        menu.RegisterCallback<MouseDownEvent>(x=>Debug.Log($"Monkey testicles"));
 
         menu.style.display = DisplayStyle.None;
         //menu.parent.style.display = DisplayStyle.None;
     }
-    /*private void Update()
-    {
-        if (Input.GetMouseButtonUp(Keybinds.RightMouse) && !UIManager.mouseOverUI)
-        {
-            Vector2 pos;
-            pos.y = Screen.height - Input.mousePosition.y - menu.style.height.value.value;
-            pos.x = Input.mousePosition.x - menu.style.width.value.value;
-            
-            menu.style.left = pos.x;
-            menu.style.top = pos.y;
-            menu.style.display = DisplayStyle.Flex; 
-        }
-    }*/
 
-    public void Position(MouseUpEvent e)
+    public void Show(MouseUpEvent e, bool UI)
     {
-        if(Input.GetMouseButtonUp(Keybinds.RightMouse) && !UIManager.mouseOverUI)
+        bool shouldShow = UI || !UIManager.mouseOverUI;
+        if(Input.GetMouseButtonUp(Keybinds.RightMouse) && shouldShow)
         {
             Vector2 pos;
             //pos.y = Screen.height - e.originalMousePosition.y - menu.style.height.value.value;
@@ -66,65 +56,69 @@ public class ContextMenuShower : MonoBehaviour
             menu.style.left = pos.x;
             menu.style.top = pos.y;
             menu.style.display = DisplayStyle.Flex;
+            menu.style.visibility = Visibility.Visible;
+            menu.BringToFront();
         }
     }
 
-    private void LateUpdate()
+    protected void Update()
+    {
+        if(watchOut)
+        {
+            if (Input.GetMouseButtonUp(Keybinds.RightMouse))
+            {
+                root.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Ignore;
+                root.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Hidden;
+                root.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.None;
+                Show(new MouseUpEvent(), false);
+            }
+        }
+    }
+
+    public void ClearItems()
+    {
+        menu.Clear();
+    }
+
+    protected void LateUpdate()
     {
         HideIfClickedOutside(menu);
     }
 
-    void MenuItemPressed(string name)
+    public void AddButton(ContextMenuItem item)
     {
-        if (name == "ClearSelection")
+        var button = new Button(item.onClick);
+        button.AddToClassList("contextmenubutton");
+        button.text = item.ItemName;
+        button.clicked += delegate
         {
-            Player.ourSelectedPawns.Clear();
-            Player.selectedPawns.Clear();
-            Player.selectedTileBounds.Clear();
-            Player.selectedTilePoses.Clear();
-        }
-        else if (name == "ShowSelection")
-        {
-            int currentLoop = 1;
-            lineRenderer.positionCount = 0;
-            lineRenderer.positionCount = Player.selectedTileBounds.Count * 5;
-            for (int i = 0; i < Player.selectedTileBounds.Count; i++)
-            {
-                lineRenderer.transform.position = new Vector2(Player.selectedTileBounds[i].xMax, Player.selectedTileBounds[i].yMax);//(new Vector2(Player.selectedTileBounds[i].xMin, Player.selectedTileBounds[i].yMin) + new Vector2(Player.selectedTileBounds[i].xMax, Player.selectedTileBounds[i].yMax)) / 2;
-                lineRenderer.SetPosition(i * currentLoop, new Vector3(Player.selectedTileBounds[i].xMin, Player.selectedTileBounds[i].yMax, 0));
-                lineRenderer.SetPosition(i * currentLoop + 1, new Vector3(Player.selectedTileBounds[i].xMax, Player.selectedTileBounds[i].yMax, 0));
-                lineRenderer.SetPosition(i * currentLoop + 2, new Vector3(Player.selectedTileBounds[i].xMax, Player.selectedTileBounds[i].yMin, 0));
-                lineRenderer.SetPosition(i * currentLoop + 3, new Vector3(Player.selectedTileBounds[i].xMin, Player.selectedTileBounds[i].yMin, 0));
-                lineRenderer.SetPosition(i * currentLoop + 4, new Vector3(Player.selectedTileBounds[i].xMin, Player.selectedTileBounds[i].yMax, 0));
-                currentLoop++;
-            }
-        }
-        else if (name == "MoveHere")
-        {
-            //Player.selectedTiles.Clear();
-            Player.selectedTileBounds.Clear();
-            Player.selectedTilePoses.Clear();
+            item.onClick();
+            menu.style.display = DisplayStyle.None;
+            root.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Position;
+            root.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Visible;
+            root.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.Flex;
+        };
+        menu.Add(button);
+    }
 
-            Debug.Log(WCMngr.I.groundTilemap.WorldToCell(WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition)));
-            // wtf
-            Player.selectedTilePoses.Add(WCMngr.I.groundTilemap.WorldToCell(WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition)));
+    public void RemoveButton(ContextMenuItem item)
+    {
+        Button b = null;
+        foreach (Button v in menu.Children())
+            if (v.text == item.ItemName)
+                b = v;
 
-            ActionType item = new ActionType("Move", true);
-            foreach (PawnFunctions.Pawn p in Player.ourSelectedPawns) 
-            {
-                p.actionTypes.Add(item);
-            }
-            print("Doing ActionType: " + "MoveHere");
-        }
-        menu.style.display = DisplayStyle.None;
-        //menu.parent.style.display = DisplayStyle.None;
+        menu.Remove(b);
     }
 
     void HideIfClickedOutside(VisualElement menu)
     {
-        if (Input.GetMouseButtonDown(0) && menu.style.display==DisplayStyle.Flex && canClose)
+        if (Input.GetMouseButtonDown(Keybinds.LeftMouse) && menu.style.display == DisplayStyle.Flex && canClose)
         {
-            menu.style.display=DisplayStyle.None;
+            menu.style.display = DisplayStyle.None;
+            root.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Position;
+            root.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Visible;
+            root.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.Flex;
         }
     }
 }

@@ -1,4 +1,4 @@
-.bigbutton {
+/*.bigbutton {
     border-color: rgb(51, 51, 51);
     border-width: 3px;
     border-radius: 5px;
@@ -7,7 +7,7 @@
 
 .bigbutton:hover {
 }
-
+*/
 .bigimg {
     width: 25%;
     height: 50%;
@@ -18,4 +18,8 @@
 .optionbutton {
     background-color: rgba(130, 130, 130, 255);
     position: absolute;
+}
+#DivLab, #LeftBox
+{
+    border-color: var(--color-dark);
 }

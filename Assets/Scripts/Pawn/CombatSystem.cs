@@ -69,7 +69,7 @@ public class CombatSystem : MonoBehaviour
 
     // ------------------------------------------------------------ //
 
-    void Start()
+    protected void Start()
     {
         projectileCollection = WCMngr.I.projectileParent; // this is no  RESPONSE: it's alright. I mean, it organizes
 
@@ -83,7 +83,7 @@ public class CombatSystem : MonoBehaviour
             InvokeRepeating(nameof(Checks), 0, 0.5f);
     }
 
-    private void Update()
+    protected void Update()
     {
         if (attackTimer <= 0f)
             canAttack = true;
@@ -136,16 +136,16 @@ public class CombatSystem : MonoBehaviour
 
     void doRangeShootaAttack(Pawn target)
     {
-        if (p.inventory == null || p.inventory.Count == 0)
+        if (p.inventory == null)
             return; // we have no fucking bullets??? what?? i still dont know why this happens??? i hate this file on god
         animator.Play("Recoil");
 
         weaponSprite.gameObject.transform.Rotate(transform.position - target.transform.position);
         // ^ point to target
-        GameObject arrow = Instantiate(projectile, projectileCollection.transform);
+        GameObject arrow = Instantiate(projectile);
         float xpos = pawnPathfind.orientation == PawnOrientation.Right ? firePoint.transform.position.x + 0.5f : firePoint.transform.position.x - 0.5f;
 
-        var projectilef = CS.getRandomProjectile(p.inventory);
+        var projectilef = p.inventory;
 
         arrow.transform.position = new Vector2(xpos, firePoint.transform.position.y); // no idea why i need to do this because the firepoint is rotated too but ok!
         arrow.GetComponent<ProjectileBehaviour>()
@@ -160,7 +160,7 @@ public class CombatSystem : MonoBehaviour
 
         weaponSprite.gameObject.transform.Rotate(new Vector3(0,0,(transform.position - target.transform.position).z));
         // ^ we need this to point to the target
-        GameObject arrow = Instantiate(projectile, projectileCollection.transform);
+        GameObject arrow = Instantiate(projectile);
         arrow.transform.position = firePoint.transform.position; // this is fairly bad
         arrow.GetComponent<ProjectileBehaviour>()
             .DoThrow(target.gameObject.transform, CS.calculateInaccuracy(shouldRunAndGun, p, runAndGunInaccuracy), p.activeWeapon,
@@ -178,7 +178,7 @@ public class CombatSystem : MonoBehaviour
 
             extraRangeTime = Skills.EffectToAimTime(p.rangeSkill);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Debug.Log($"WARNING: This weird shit is happening with combat systemonchange weapon error and animalbehavior.");
             DB.NullCount(Weapon.List);

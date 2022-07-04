@@ -46,7 +46,7 @@ public class HealthSystem : MonoBehaviour
 	[SerializeField] float totalBleedRate;
 	public List<Vital> vitals = new List<Vital>();
 	public List<Bodypart> bodyparts = new List<Bodypart>();
-	List<Bodypart> bleedingBodyparts = new List<Bodypart>(); // so we dont have to search all bodyparts
+    readonly List<Bodypart> bleedingBodyparts = new List<Bodypart>(); // so we dont have to search all bodyparts
 	private float __pain;
 	public float pain { get { return __pain; } set { __pain = Mathf.Clamp01(value); } }
 	public float lastDamageTime { get; private set; }
@@ -72,7 +72,7 @@ public class HealthSystem : MonoBehaviour
 
 	public List<Wound> wounds = new List<Wound>();
 
-	private void Awake()
+	protected void Awake()
 	{
 		p = ___p;
 		foreach(Bodypart sex in Bodypart.List)
@@ -86,11 +86,11 @@ public class HealthSystem : MonoBehaviour
         }
 	}
 
-    private void UpdateBodyparts(List<Bodypart> bps, float pain) { }
-    private void UpdateShock(string reason) { }
-    private void UpdateVitals(List<Vital> wounds, float pain) { }
+	//private void UpdateBodyparts(List<Bodypart> bps, float pain) { }
+	//private void UpdateShock(string reason) {  }
+	//private void UpdateVitals(List<Vital> wounds, float pain) { }
 
-    private void Start()
+	protected void Start()
 	{
 		StartCoroutine(Bleed());
 		bloodParent = WCMngr.I.bloodParent;
@@ -255,9 +255,9 @@ public class HealthSystem : MonoBehaviour
 
 	public void Down(string reason)
 	{
-		if (PawnInfo.currentSelectedPawn == this.p)
-			UpdateVitals(vitals, pain);
-
+		//if (PawnInfo.currentSelectedPawn == this.p)
+		//	UpdateVitals(vitals, pain);
+		lastAttacker.killCount++;
 		userFriendlyStatus = reason;
 		statusType = PawnShockRating.Warning;
 		p.pawnDowned = true;
@@ -270,14 +270,15 @@ public class HealthSystem : MonoBehaviour
 		weaponSprite.forceRenderingOff = true; // destroy's expensive so this should be like a 0.5% improvement. also it means we can EASILY get it back at any time
 		shieldSprite.forceRenderingOff = true;
 
-		if (PawnInfo.currentSelectedPawn == this.p)
-			UpdateShock(reason);
+		//if (PawnInfo.currentSelectedPawn == this.p)
+		//	UpdateShock(reason);
 	}
 
 	public void Die(string reason) // todo: benchmark destroy vs just setting the parts inactive
 	{							   // todo: make a destroy manager that manages destroying? (first set active, then destroy when ______)
 		TryUpdatePawnInfo();
 		userFriendlyStatus = reason;
+		lastAttacker.killCount++;
 
 		CancelInvoke();
 		anim.StopPlayback();//s

@@ -56,7 +56,7 @@ namespace PawnFunctions
 
         public bool isFlagBearer = false;
 
-        public List<Projectile> inventory = new List<Projectile>();
+        public Projectile inventory;
 
         public List<Armor> armor = new List<Armor>(); // probably gonna regret doing it like this
 
@@ -72,8 +72,10 @@ namespace PawnFunctions
         public AnimalBehavior animal;
 
         public List<Country> enemyCountries = new List<Country>();
+        
+        public int killCount;
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        protected void OnTriggerEnter2D(Collider2D collision)
         {
             if (!BoxSelection.letGo && collision.gameObject.CompareTag("BoxSelect")) // fairly sure this is better to do by just checking the name
             {
@@ -93,7 +95,7 @@ namespace PawnFunctions
             }
         }
 
-        private void OnTriggerExit2D(Collider2D collision)
+        protected void OnTriggerExit2D(Collider2D collision)
         {
             if (BoxSelection.letGo && collision.gameObject.CompareTag("BoxSelect"))
             {
@@ -105,12 +107,12 @@ namespace PawnFunctions
             }
         }
 
-        private void OnMouseEnter()
+        protected void OnMouseEnter()
         {
             mouseOverPawn = true;
             thisPawnMouseOver = true;
         }
-        private void OnMouseExit()
+        protected void OnMouseExit()
         {
             mouseOverPawn = false;
             thisPawnMouseOver = false;

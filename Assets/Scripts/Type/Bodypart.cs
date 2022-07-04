@@ -56,10 +56,13 @@ namespace Body
                     if (count == 1)
                         return Get(_partOf);
                     else
-                        if(Get(_partOf) != null && Get(_partOf).count > 1 && Get(_partOf).countType == CountType.Sides)
+                    {
+                        var get = Get(_partOf);
+                        if (get.countType != CountType.Numbered)
                             return Get(Name.Split(' ')[0] + " " + _partOf);
                         else
                             return Get(_partOf);
+                    }
                 else return null; 
             } 
         }

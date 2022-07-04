@@ -1,24 +1,4 @@
 :root {
-    --gray-0: rgb(250, 249, 249);
-    --gray-1: rgb(238, 237, 236);
-    --gray-2: rgb(226, 224, 222);
-    --gray-3: rgb(213, 211, 207);
-    --gray-4: rgb(198, 195, 190);
-    --gray-5: rgb(182, 179, 172);
-    --gray-6: rgb(164, 159, 151);
-    --gray-7: rgb(142, 136, 126);
-    --gray-8: rgb(115, 107, 94);
-    --gray-9: rgb(68, 63, 53);
-    --gray-2-0: rgb(251, 249, 248);
-    --gray-2-1: rgb(243, 236, 235);
-    --gray-2-2: rgb(235, 222, 220);
-    --gray-2-3: rgb(226, 207, 204);
-    --gray-2-4: rgb(216, 190, 186);
-    --gray-2-5: rgb(204, 172, 166);
-    --gray-2-6: rgb(191, 150, 144);
-    --gray-2-7: rgb(176, 124, 116);
-    --gray-2-8: rgb(155, 91, 81);
-    --gray-2-9: rgb(106, 45, 35);
     --cursor-point: resource('ui/cursors/point');
 }
 
@@ -52,11 +32,11 @@
 
 #pi-closebutton {
     border-width: 0;
-    color: white;
+    color: var(--color-light);
 }
 
 .unity-label {
-    color: white;
+    color: var(--color-light);
 }
 
 /*.unity-toggle__input #unity-checkmark {
@@ -69,11 +49,19 @@
 }*/
 
 #PawnInfoParent {
-    background-color: var(--gray-9);
+    background-color: var(--color-dark);
+}
+#PawnInfoParent #Health
+{
+    color: var(--color-light);
+}
+#PawnInfoParent #ShockLabel
+{
+    color: var(--color-light);
 }
 
 #TitleBar {
-    background-color: var(--gray-7);
+    background-color: var(--color-darkbrown);
 }
 
 #TitleBar #CloseButton {
@@ -86,7 +74,7 @@
     border-radius: 10px;
     width: 15px;
     color: white;
-    background-color: var(--gray-2-6);
+    background-color: var(--color-lightyellow);
     padding: 0;
     margin: 0;
 }
@@ -104,7 +92,7 @@
 }
 
 #Vitals {
-    background-color: var(--gray-6);
+    background-color: var(--bgcolor-lightbrown);
 }
 
 #RegimentSelect {
@@ -128,10 +116,10 @@
 }
 
 #RegimentControlStuff {
-    background-color: var(--gray-5);
+    background-color: var(--bgcolor-lightbrown);
 }
 
-#RegimentControlStuff #unity-tracker {
+/*#RegimentControlStuff #unity-tracker {
     border-radius: 0;
     width: 7px;
     height: 24px;
@@ -142,10 +130,16 @@
     background-color: var(--gray-2-6);
     height: 15px;
     top: 30%;
-}
+}*/
 
 #RegimentSelect #ScrollView .unity-scroller * {
     max-height: 20px;
     min-height: 20px;
     height: 20px;
+}
+
+#ExtraPawnInfoParent #Left
+{
+    border-right-width: 3px;
+    border-color: var(--color-light);
 }

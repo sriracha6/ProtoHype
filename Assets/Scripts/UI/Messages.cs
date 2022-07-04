@@ -20,6 +20,7 @@ public class Messages : MonoBehaviour
         root = GetComponent<UIDocument>().rootVisualElement;
         box = root.Q<VisualElement>("MessageSystem");
         box.style.display = DisplayStyle.None;
+        box.parent.pickingMode = PickingMode.Ignore;
 
         I = this;
     }
@@ -45,8 +46,13 @@ public class Messages : MonoBehaviour
     {
         I.box.Clear();
         foreach (string msg in messages)
-            I.box.Add(new Label(msg));
-        
+        {
+            Label label = new Label(msg);
+            label.style.color = new Color(241/255f, 232/255f, 200/255f);
+            label.style.overflow = Overflow.Visible;
+            label.style.flexWrap = Wrap.Wrap;
+            I.box.Add(label);
+        }
         if (messages.Count == 0)
             I.box.style.display = DisplayStyle.None;
         else

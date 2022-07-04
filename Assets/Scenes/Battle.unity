@@ -284,7 +284,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &436389831
 GameObject:
@@ -10070,7 +10070,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 68.2556, y: 31, z: -10.785994}
+  m_LocalPosition: {x: 68.32511, y: 31, z: -10.785994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -10090,8 +10090,6 @@ GameObject:
   - component: {fileID: 567369077}
   - component: {fileID: 567369078}
   - component: {fileID: 567369079}
-  - component: {fileID: 567369080}
-  - component: {fileID: 567369081}
   - component: {fileID: 567369082}
   m_Layer: 5
   m_Name: UIDocument
@@ -10128,7 +10126,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &567369077
 MonoBehaviour:
@@ -10167,32 +10165,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   regiment: {fileID: 9197481963319205126, guid: 61255be7dcdbf894da9f6371e3a5bddf, type: 3}
---- !u!114 &567369080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 567369074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2559ce6f223e854418d8c8f6edeb9769, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lineRenderer: {fileID: 1367618423}
---- !u!114 &567369081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 567369074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78658efc307d46c48b85c556f2ae5f50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeToFade: 3
+  upArrow: {fileID: 21300000, guid: c7190805a9875544abca1c60c4b3387d, type: 3}
+  downArrow: {fileID: 21300000, guid: ff3f1622284a2f140aefa5e8e09afbfc, type: 3}
 --- !u!114 &567369082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10220,7 +10194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   __ui: {fileID: 567369075}
-  __menu: {fileID: 567369080}
+  __menu: {fileID: 0}
 --- !u!1 &645526908
 GameObject:
   m_ObjectHideFlags: 0
@@ -10774,7 +10748,7 @@ Transform:
   - {fileID: 35327482}
   - {fileID: 1618603649}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &833632790
 MonoBehaviour:
@@ -10820,6 +10794,7 @@ MonoBehaviour:
   isTestMap: 0
   structurePos: {x: 0, y: 0}
   structureSize: {x: 0, y: 0}
+  finishedLoading: 0
 --- !u!1 &855462934
 GameObject:
   m_ObjectHideFlags: 0
@@ -10995,7 +10970,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919040909}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 68.2556, y: 31, z: -10.785994}
+  m_LocalPosition: {x: 68.32511, y: 31, z: -10.785994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 775629363}
@@ -11567,7 +11542,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1292527309
 GameObject:
@@ -11867,7 +11842,7 @@ MonoBehaviour:
   difficulty: 0
   pawnInfo: {fileID: 567369082}
   bloodParent: {fileID: 398732226}
-  projectileParent: {fileID: 1397928959}
+  projectileParent: {fileID: 0}
   groundTilemap: {fileID: 655843814}
   solidTilemap: {fileID: 1618603651}
   defaultPawnTexture: {fileID: 0}
@@ -11878,36 +11853,6 @@ MonoBehaviour:
   testMat: {fileID: 0}
   bluntWoundNames: []
   seriousBluntWoundNames: []
---- !u!1 &1397928959
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1397928960}
-  m_Layer: 0
-  m_Name: Projectiles
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1397928960
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1397928959}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.975715, y: -5.356098, z: -324.3233}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 15
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1526208709
 GameObject:
   m_ObjectHideFlags: 0
@@ -11955,7 +11900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pawnPrefab: {fileID: 5087462624300014132, guid: 7dca6210adf57ff4f85892cbac82a876, type: 3}
   horsePrefab: {fileID: 5160680763312628427, guid: de23306fa431e1e4c90c4652bf9ec83a, type: 3}
-  maxRegimentDistance: 69.69
+  minDistance: 0
 --- !u!114 &1526208712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11973,7 +11918,7 @@ MonoBehaviour:
   difficulty: 0
   pawnInfo: {fileID: 567369082}
   bloodParent: {fileID: 398732226}
-  projectileParent: {fileID: 1397928959}
+  projectileParent: {fileID: 0}
   groundTilemap: {fileID: 655843814}
   solidTilemap: {fileID: 1618603651}
   defaultPawnTexture: {fileID: 2800000, guid: f3e9ba762a6e5d4439254fb968edb42d, type: 3}

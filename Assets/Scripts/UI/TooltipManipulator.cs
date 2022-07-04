@@ -29,12 +29,12 @@ public class ToolTipManipulator : Manipulator
         if (element == null)
         {
             element = new VisualElement();
-            element.style.backgroundColor = Color.blue;
+            element.style.backgroundColor = new Color(57/255f,56/255f,54/255f,1);
             element.style.position = Position.Absolute;
             element.style.left = this.target.worldBound.center.x;
             element.style.top = this.target.worldBound.yMin;
             var label = new Label(this.target.tooltip);
-            label.style.color = Color.white;
+            label.style.color = new Color(241 / 255f, 232 / 255f, 200 / 255f, 1);
 
             element.Add(label);
             var root = UIManager.ui.rootVisualElement;//(VisualElement)UiHelper.FindRootElement(this.target);

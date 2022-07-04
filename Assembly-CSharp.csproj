@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\RNG\BaseGen\StructureGenerator.cs" />
     <Compile Include="Assets\Scripts\HealthFunctions.cs" />
     <Compile Include="Assets\Scripts\Blood.cs" />
+    <Compile Include="Assets\Scripts\UI\ContextMenuManipulator.cs" />
     <Compile Include="Assets\Scripts\Pawn\PawnPathfind.cs" />
     <Compile Include="Assets\Scripts\Type\Weapon.cs" />
     <Compile Include="Assets\Scripts\RNG\MeshGenerator.cs" />
@@ -163,8 +164,10 @@
     <None Include="Assets\Resources\Prefabs\UI\Reggymint.uxml" />
     <None Include="Assets\MainMenu\Country.uxml" />
     <None Include="Assets\Scripts\Shaders\TerrainBlending.shader" />
+    <None Include="Assets\Resources\Prefabs\UI\ArmorPiece.uxml" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain_Add.shader" />
     <None Include="Assets\MainMenu\play.uxml" />
+    <None Include="Assets\UI Elements.uxml" />
     <None Include="Assets\Scripts\Shaders\conversion.cginc" />
     <None Include="Assets\css.uss" />
     <None Include="Assets\MainMenu\loading.uxml" />

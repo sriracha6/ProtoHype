@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="root.uss" />
+    <ui:VisualElement name="contextmenu" style="position: absolute; visibility: hidden; display: none; width: 235px;" />
+    <ui:VisualElement picking-mode="Ignore" style="flex-direction: row-reverse; width: 100%; height: 220px;">
+        <ui:VisualElement name="MessageSystem" style="background-color: rgba(89, 89, 89, 0); position: relative; height: 128px; width: 420px;" />
+    </ui:VisualElement>
+</ui:UXML>

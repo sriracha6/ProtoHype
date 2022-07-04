@@ -11,6 +11,8 @@ public class Menus : MonoBehaviour
     public UIDocument quickstart;
     public UIDocument loading;
 
+    public bool inBattle;
+
     public UIDocument prefab_country;
 
     public void SwitchTo(UIDocument u)
@@ -25,7 +27,7 @@ public class Menus : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         I = this;
         SwitchTo(mainMenu);

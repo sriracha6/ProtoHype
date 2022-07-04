@@ -39,7 +39,6 @@ public class QuickBattle : MonoBehaviour
     void Start()
     {
         I = this;
-        MapGenerator.I.currentTexture = null;
 
         root = Menus.I.quickstart.rootVisualElement;
         root.Q<Button>("BackButton").clicked += Back;
@@ -96,9 +95,10 @@ public class QuickBattle : MonoBehaviour
             if (friends.Count == 0 || enemies.Count == 0)
             {
                 if (friends.Count == 0)
-                    UIManager.I.Flash(root.Q<Button>("AddCountryLeft"), new Color(72, 135, 85));
+                    UIManager.I.Flash(root.Q<Button>("AddCountryLeft"));
                 if(enemies.Count == 0)
-                    UIManager.I.Flash(root.Q<Button>("AddCountryRight"), new Color(152, 43, 32));
+                    UIManager.I.Flash(root.Q<Button>("AddCountryRight"));
+                Messages.I.Add("You must have at least one country on each side");
                 return;
             }
             Player.playerCountry = friends[0].country;
@@ -109,10 +109,9 @@ public class QuickBattle : MonoBehaviour
             
             Menus.I.SwitchTo(Menus.I.loading);
             StartCoroutine(Loading.I.load("Battle"));
+            Menus.I.inBattle = true;
         };
 
-        root.Q<SliderInt>("RegimentSize").value = 30;
-        UpdateEstimatedPawnCount();
         root.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
         root.Q<Button>("RandomBuilding").clicked += delegate{
             TilemapPlace.UpdateBuildings();
@@ -128,6 +127,11 @@ public class QuickBattle : MonoBehaviour
     private void Back() =>
         Menus.I.SwitchTo(Menus.I.start);
 
+    protected void OnBecameVisible()
+    {
+        if(root != null)
+            root.Q<SliderInt>("RegimentSize").value = 30;
+    }
     private void UpdatePreview()
     {
         MapGenerator.I.drawMode = MapGenerator.DrawMode.ColorMap;
@@ -137,6 +141,11 @@ public class QuickBattle : MonoBehaviour
 
     private void UpdateEstimatedPawnCount()
     {
+        if (regimentSize <= 0)
+        {
+            root.Q<SliderInt>("RegimentSize").value = 30;
+            regimentSize = 30;
+        }
         string text = "Est. Pawns : ";
         int est = 0;
         foreach (CountryInfo c in friends)

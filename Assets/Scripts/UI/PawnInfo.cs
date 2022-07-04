@@ -1,4 +1,5 @@
 ﻿using Body;
+using Armors;
 using PawnFunctions;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,12 +22,12 @@ public class PawnInfo : MonoBehaviour
     public VisualTreeAsset bodypart;
     public VisualTreeAsset vital;
 
-    private void Start()
-    {
-        //HealthSystem.NotifyPawnBPs b = new HealthSystem.NotifyPawnBPs(UpdateHealth);
-        //HealthSystem.NotifyPawnInfo i = new HealthSystem.NotifyPawnInfo(UpdateVitals);
-        //HealthSystem.NotifyPawnShock s = new HealthSystem.NotifyPawnShock(UpdateShock);
+    public VisualTreeAsset armorPiece;
 
+    VisualElement exp;
+
+    protected void Start()
+    {
         root = GetComponent<UIDocument>().rootVisualElement;
         panel = root.Q<VisualElement>("PawnInfoParent");
         hpanel = panel.Q<VisualElement>("Body").Q<VisualElement>("Bodyadada").Q<VisualElement>("Health");
@@ -41,13 +42,12 @@ public class PawnInfo : MonoBehaviour
 
         UIManager.MakeDraggable(panel, panel.Q<VisualElement>("TitleBar"));
 
-        /*vitalsbox.Add(vital.CloneTree()); // for pain
-        for(int i = 0; i < Loader.loader.defaultVitals.Count; i++)
+        exp = root.Q<VisualElement>("ExtraPawnInfoParent");
+        exp.Q<Button>("CloseButton").clicked += delegate
         {
-            var v = vital.CloneTree();
-            vitalLabelsBCGAY.Add(v.Q<Label>("Text"));
-            vitalsbox.Add(v);
-        }*/
+            exp.style.visibility = Visibility.Hidden;
+        };
+        UIManager.MakeDraggable(exp, exp.Q<VisualElement>("Title"));
     }
 
     public void ShowPawnInfo(Pawn p)
@@ -64,11 +64,35 @@ public class PawnInfo : MonoBehaviour
         }
         panel.visible = true;
 
+        panel.Q<Button>("MoreInfo").clicked += delegate { ShowExtraPawnInfo(p); };
         hpanel.style.display = DisplayStyle.Flex;
         panel.Q<Label>("QuickInfo").text = $"{p.pname} | {p.country.memberName} {p.troopType.Name} | [sword] {p.meleeSkill} [bow] {p.rangeSkill}";
         UpdateHealth(p.healthSystem.bodyparts, p.healthSystem.pain);
         UpdateVitals(p.healthSystem.vitals, p.healthSystem.pain);
         UpdateShock(p.healthSystem.userFriendlyStatus, p.healthSystem.statusType);
+    }
+    
+    public void ShowExtraPawnInfo(Pawn p)
+    {
+        // TODO TODO TODO TODO 
+        // ITEM VIEWER SUPPORT
+        exp.style.visibility = Visibility.Visible;
+
+        string pname = p.hasPrimary ? p.heldPrimary.Name : "None";
+        string sname = p.hasSidearm ? p.heldSidearm.Name : "None";
+        string ssname = p.hasShield ? p.shield.Name : "None";
+
+        exp.Q<Label>("Weapon").text = $"<u>Weapon: {pname}</u>";
+        exp.Q<Label>("Sidearm").text = $"<u>Sidearm: {sname}</u>";
+        exp.Q<Label>("Shield").text = $"<u>Shield: {ssname}</u>";
+        exp.Q<Label>("Kills").text = $"Kills: {p.killCount}";
+
+        foreach(Armor a in p.armor)
+        {
+            VisualElement v = armorPiece.CloneTree();
+            v.Q<Label>("Armor").text = $"<u>{a.Name}</u>";
+            exp.Q<VisualElement>("Right").Add(v);
+        }
     }
 
     public void UpdateHealth(List<Bodypart> bps, float pain)
@@ -100,21 +124,14 @@ public class PawnInfo : MonoBehaviour
 
     public void UpdateShock(string type, PawnShockRating typeColor)
     {
-        Color color;
-        switch (typeColor)
+        var color = typeColor switch
         {
-            case PawnShockRating.Warning:
-                color = new Color(192,181,46);
-                break;
-            case PawnShockRating.Bad:
-                color = new Color(192,54,46);
-                break;
-            default:
-                color = new Color(46,192,88);
-                break;
-        }
-        var a = panel.Q<VisualElement>("ShockPanel").style.backgroundColor.value;
-        a = color;
+            PawnShockRating.Warning => new Color(192, 181, 46),
+            PawnShockRating.Bad => new Color(192, 54, 46),
+            PawnShockRating.Good => new Color(46, 192, 88),
+            _ => new Color(46, 192, 88),
+        };
+        panel.Q<VisualElement>("ShockPanel").style.backgroundColor = color;
         panel.Q<Label>("ShockLabel").text = type;
     }
 

@@ -14,6 +14,8 @@ public class PopulateRegiments : MonoBehaviour
     public VisualElement panel;
     public SliderInt sliderPercent;
     public Button hideButton;
+    public Sprite upArrow;
+    public Sprite downArrow;
 
     public static List<int> regimentIDOrder = new List<int>();
     public static bool hideState;
@@ -46,12 +48,14 @@ public class PopulateRegiments : MonoBehaviour
         if (hideState)
         {
             root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").style.display = DisplayStyle.None;
-            hideButton.text = "v";
+            root.Q<VisualElement>("RegimentControlStuff").style.display = DisplayStyle.None;
+            hideButton.style.backgroundImage = new StyleBackground(downArrow);
         }
         else
         {
             root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").style.display = DisplayStyle.Flex;
-            hideButton.text = "^";
+            root.Q<VisualElement>("RegimentControlStuff").style.display = DisplayStyle.Flex;
+            hideButton.style.backgroundImage = new StyleBackground(upArrow);
         }
     }
 
@@ -86,7 +90,8 @@ public class PopulateRegiments : MonoBehaviour
         VisualElement regimentnew = regiment;
         var r = Regiment.Get(id);
         regimentnew.Q<VisualElement>("Icon").style.backgroundImage = CachedItems.renderedTroopTypes.Find(x => x.name == r.type.Icon).texture;
-        regimentnew.Q<Label>("Regiment-Label").text = $"{r.type.Name}: {r.members.Count} members";
+        regimentnew.Q<Label>("Regiment-Name-ID").text = $"{r.type.Name} | {r.id+1}";
+        regimentnew.Q<Label>("MembersCount").text = $"{r.members.Count} Members";
         
         regimentnew.RegisterCallback<MouseDownEvent, int>(selectRegiment,id);
         panel.Add(regimentnew);

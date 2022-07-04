@@ -1069,12 +1069,14 @@ namespace XMLLoader
                 return false;
         }
 
-        public static List<T> StripNulls<T>(this IEnumerable<T> list)
+        public static List<T> StripNulls<T>(this List<T> list)
         {
             List<T> tt = new List<T>();
             foreach(T t in list)
                 if(t != null)
                     tt.Add(t);
+            if (tt.Count != list.Count)
+                DB.Attention($"Removed {list.Count - tt.Count} nulls");
             return tt;
         }
         public static Vector2Int clampVector(this Vector2Int @in)
@@ -1085,6 +1087,7 @@ namespace XMLLoader
         {
             return list[Random.Range(0, list.Count)];
         }
+        [System.Obsolete]
         public static List<T> randomElements<T>(this List<T> list, int aroundCount)
         {
             List<T> elements = new List<T>();

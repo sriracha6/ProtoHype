@@ -24,13 +24,12 @@ public class BoxSelection : MonoBehaviour
     private bool started;
     public static SelectionMode mode;
 
-    void Start()
+    protected void Start()
     {
-        lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 0;
     }
 
-    void Update()
+    protected void Update()
     {
         if (Input.GetKey(Keybinds.SubtractSelection))
             mode = SelectionMode.Subtract; 
@@ -62,7 +61,7 @@ public class BoxSelection : MonoBehaviour
             bcollider.offset = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         }
 
-        if (Input.GetMouseButton(Keybinds.LeftMouse) && !Pawn.mouseOverPawn && !Input.GetMouseButton(Keybinds.RightMouse) && started)
+        if (Input.GetMouseButton(Keybinds.LeftMouse) && !Pawn.mouseOverPawn && started)
         {
             currentMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
 
