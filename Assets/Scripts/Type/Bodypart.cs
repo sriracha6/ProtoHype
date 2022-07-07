@@ -55,14 +55,11 @@ namespace Body
                 if (_partOf != "false" && !string.IsNullOrEmpty(_partOf))
                     if (count == 1)
                         return Get(_partOf);
-                    else
+                    else if (Get(_partOf).countType == CountType.Numbered)
                     {
-                        var get = Get(_partOf);
-                        if (get.countType != CountType.Numbered)
-                            return Get(Name.Split(' ')[0] + " " + _partOf);
-                        else
-                            return Get(_partOf);
+                        return Get(Name.Split(' ')[0] + " " + _partOf);
                     }
+                    else return null;
                 else return null; 
             } 
         }

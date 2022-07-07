@@ -25,9 +25,10 @@ public class Menus : MonoBehaviour
             else
                 x.rootVisualElement.style.display = DisplayStyle.Flex;
         }
+        UIManager.ui = u;
     }
 
-    private void Awake()
+    protected void Start()
     {
         I = this;
         SwitchTo(mainMenu);

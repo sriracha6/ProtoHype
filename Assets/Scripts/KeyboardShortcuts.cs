@@ -54,8 +54,8 @@ public class KeyboardShortcuts : MonoBehaviour
             PopulateRegiments.selectRegiment(9);
 
         if (Input.GetKeyDown(Keybinds.rp_inc))
-            UIManager.ui.rootVisualElement.Q<VisualElement>("RegimentControlStuff").Q<SliderInt>("Slider").value += Keybinds.sliderStep;
+            UIManager.ui.rootVisualElement.Q<SliderInt>("RegimentControlStuff").value += Keybinds.sliderStep;
         if (Input.GetKeyDown(Keybinds.rp_dec))
-            UIManager.ui.rootVisualElement.Q<VisualElement>("RegimentControlStuff").Q<SliderInt>("Slider").value -= Keybinds.sliderStep;
+            UIManager.ui.rootVisualElement.Q<SliderInt>("RegimentControlStuff").value -= Keybinds.sliderStep;
     }
 }

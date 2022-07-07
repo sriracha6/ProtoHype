@@ -10,7 +10,6 @@ public class ProjectileBehaviour : MonoBehaviour
     [SerializeField]
     float projectileMaxLifetime;
 
-    [SerializeField]
     public float projectileForce;
 
     Projectile thisProjectile;
@@ -27,13 +26,16 @@ public class ProjectileBehaviour : MonoBehaviour
     Collider2D ourCollider;
 
     bool isFire;
+    float damage;
+    DamageType damageType;
 
     PawnFunctions.Pawn sourcePawn;
+    bool isThrow;
 
-    private void Start() =>
+    protected void Start() =>
         Destroy(gameObject, projectileMaxLifetime);
 
-    public void OnDestroy()
+    protected void OnDestroy()
     {
         if(isFire)
         {
@@ -53,6 +55,8 @@ public class ProjectileBehaviour : MonoBehaviour
         thisType = projectileType.damageType;
         this.sourcePawn = sourcePawn;
         this.thisWeapon = thisWeapon;
+        this.isFire = isFire;
+        this.damage = projectileType.damage;
 
         sprite.sprite = PawnRenderer.getProjectile(projectileType.ID);
 
@@ -74,10 +78,12 @@ public class ProjectileBehaviour : MonoBehaviour
         if (weapon.attacks.Count <= 0)
             return;                   // why are we even here>
         Destroy(gameObject, range * 1.25f);
-        
+
+        isThrow = true;
         weaponDamage = damage;
         thisType = weapon.attacks[(int)(Random.value * weapon.attacks.Count)].damageType;
         thisWeapon = weapon;
+        this.damage = damage;
 
         Vector3 targetNew = target.position;
         targetNew.x += Random.Range(-inaccuracy, inaccuracy);       // this is genius
@@ -92,7 +98,7 @@ public class ProjectileBehaviour : MonoBehaviour
         rb.AddForce(((targetNew - transform.position)) * projectileForce, ForceMode2D.Impulse);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) // put in healthsystem? REPLY: can't, have to get this projectile's damage so pick your poison : getcomponent here or there. better here than there
+    protected void OnTriggerEnter2D(Collider2D collision) // put in healthsystem? REPLY: can't, have to get this projectile's damage so pick your poison : getcomponent here or there. better here than there
     {
         if(isFire)
         {
@@ -112,9 +118,10 @@ public class ProjectileBehaviour : MonoBehaviour
                 return;
             }
             //thisWeapon = thisWeapon == null ? WeaponManager.Get("Empty") : thisWeapon;
-            h.TakeRangeDamage(thisProjectile.damage * weaponDamage, thisWeapon, sourcePawn,
+            float dmg = isThrow ? damage : damage * weaponDamage;
+            h.TakeRangeDamage(dmg, thisWeapon, sourcePawn,
                 thisType,
-                new Attack("Hit",thisProjectile.damageType,false,thisProjectile.damage*weaponDamage));
+                new Attack("Hit",damageType,false, damage*weaponDamage));
             Destroy(gameObject);
         }
     }

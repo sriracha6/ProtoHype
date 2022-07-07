@@ -23,6 +23,7 @@ public class Messages : MonoBehaviour
         box.parent.pickingMode = PickingMode.Ignore;
 
         I = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public void Add(string message)

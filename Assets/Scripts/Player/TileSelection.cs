@@ -14,16 +14,19 @@ public class TileSelection : MonoBehaviour
     public Tilemap tmap;
     private BoundsInt area;
 
+    public static bool started;
+
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = 0;
+        lineRenderer.positionCount = 4;
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(Keybinds.RightMouse) && !Pawn.mouseOverPawn && !Input.GetMouseButton(Keybinds.LeftMouse) && !UIManager.mouseOverUI)
+        if (Input.GetMouseButtonDown(Keybinds.RightMouse) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started)
         {
+            started = true;
             lineRenderer.positionCount = 4;
             initialMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
             lineRenderer.SetPosition(0, new Vector3(initialMousePos.x, initialMousePos.y, -5)); // this can be better, right?
@@ -36,7 +39,7 @@ public class TileSelection : MonoBehaviour
             bcollider.offset = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         }
 
-        if (Input.GetMouseButton(Keybinds.RightMouse) && !Pawn.mouseOverPawn && !Input.GetMouseButton(Keybinds.LeftMouse))
+        if (Input.GetMouseButton(Keybinds.RightMouse) && started)
         {
             currentMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -47,7 +50,6 @@ public class TileSelection : MonoBehaviour
 
             transform.position = (currentMousePos + initialMousePos)/2;
             transform.position = new Vector3(transform.position.x,transform.position.y,-5);
-            //transform.position = currentMousePos;
             bcollider.size = new Vector2(
                 Mathf.Abs(initialMousePos.x - currentMousePos.x),
                 Mathf.Abs(initialMousePos.y - currentMousePos.y));
@@ -55,13 +57,14 @@ public class TileSelection : MonoBehaviour
             area = new BoundsInt(Vector3Int.FloorToInt(transform.position), Vector3Int.FloorToInt(lineRenderer.bounds.size));
         }
 
-        if (Input.GetMouseButtonUp(Keybinds.RightMouse))
+        if (Input.GetMouseButtonUp(Keybinds.RightMouse) && started)
         {
+            started = false;
+                //lineRenderer.positionCount = 0;
             if (Player.selectedTiles.Count > 0)
             {
                 Player.selectedTileBounds.Add(area);
                 GetTilesInArea();
-                lineRenderer.positionCount = 0;
                 Destroy(bcollider);
                 transform.position = new Vector3(0, 0, 10);
                 MoveControls.toggleMoveButton(false);
@@ -73,7 +76,6 @@ public class TileSelection : MonoBehaviour
         void GetTilesInArea()
         {
             print("Selected Tiles: " + area);
-            //Player.selectedTiles = tmap.GetTilesBlock(area);
             for (int y = tmap.cellBounds.min.y; y < tmap.cellBounds.max.y; y++)
             {
                 for (int x = tmap.cellBounds.min.x; x < tmap.cellBounds.max.x; x++)
@@ -81,12 +83,9 @@ public class TileSelection : MonoBehaviour
                     Vector3Int p = new Vector3Int(x, y, 0);
                     if (bcollider.bounds.Contains(p))
                     
-                        //TileBase t = tmap.GetTile(tmap.WorldToCell(p));
-                        //Player.selectedTiles.Add(t);
                         Player.selectedTilePoses.Add(p);
                 }
             }
-            //print(Player.selectedTiles.Count);
         }
     }
 }

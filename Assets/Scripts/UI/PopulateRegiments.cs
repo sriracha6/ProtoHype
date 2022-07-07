@@ -26,7 +26,7 @@ public class PopulateRegiments : MonoBehaviour
     {
         root = GetComponent<UIDocument>().rootVisualElement;
         panel = root.Q<VisualElement>("RegimentSelect").Q<VisualElement>("unity-content-container");
-        sliderPercent = root.Q<VisualElement>("RegimentControlStuff").Q<SliderInt>("Slider");
+        sliderPercent = root.Q<SliderInt>("RegimentControlStuff");
         sliderPercent.RegisterValueChangedCallback(
             v => // THATS HWO YOU DO MULTILINE LAMBDAS AAAAAAH
             {
@@ -48,13 +48,13 @@ public class PopulateRegiments : MonoBehaviour
         if (hideState)
         {
             root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").style.display = DisplayStyle.None;
-            root.Q<VisualElement>("RegimentControlStuff").style.display = DisplayStyle.None;
+            root.Q<SliderInt>("RegimentControlStuff").style.display = DisplayStyle.None;
             hideButton.style.backgroundImage = new StyleBackground(downArrow);
         }
         else
         {
             root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").style.display = DisplayStyle.Flex;
-            root.Q<VisualElement>("RegimentControlStuff").style.display = DisplayStyle.Flex;
+            root.Q<SliderInt>("RegimentControlStuff").style.display = DisplayStyle.Flex;
             hideButton.style.backgroundImage = new StyleBackground(upArrow);
         }
     }

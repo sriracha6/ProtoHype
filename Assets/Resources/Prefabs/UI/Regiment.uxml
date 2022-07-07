@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="Regiment" style="position: relative; height: 95%; top: 0; width: 100%; left: 0; background-color: rgb(87, 87, 87); flex-direction: row; right: 0; bottom: 0;">
         <ui:VisualElement name="RegimentImage" style="width: 54px; height: 37px; background-color: rgb(60, 60, 60);" />
-        <ui:Label text="Type&#10;" display-tooltip-when-elided="true" name="RegimentTypeID" style="height: 22px;" />
-        <ui:Label text="5" display-tooltip-when-elided="true" name="RegimentMemberCount" style="bottom: -1px; right: 0; top: 37px; left: 0; -unity-text-align: upper-left; white-space: nowrap; position: absolute;" />
+        <ui:Label text="Type&#10;" display-tooltip-when-elided="true" name="RegimentTypeID" style="height: 22px; -unity-font: url(&apos;Library/unity default resources&apos;); -unity-font-definition: resource(&apos;italicgaramond SDF&apos;);" />
+        <ui:Label text="5" display-tooltip-when-elided="true" name="RegimentMemberCount" style="bottom: -1px; right: 0; top: 37px; left: 0; -unity-text-align: upper-left; white-space: nowrap; position: absolute; -unity-font-definition: resource(&apos;italicgaramond SDF&apos;); -unity-font: url(&apos;Library/unity default resources&apos;);" />
     </ui:VisualElement>
 </ui:UXML>

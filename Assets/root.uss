@@ -10,10 +10,13 @@
     --bgcolor-lightorange: #D9AE84;
     --bgcolor-lightyellow: #D9C06D;
 
-    --font: resource("garamond");                  
-    --italic-font: resource("italicgaramond"); 
+    --font: resource("garamond SDF");               
+    --font-GAY: resource("garamond");   
+    --italic-font: resource("italicgaramond SDF"); 
+    --italic-font-GAY: resource("italicgaramond");
 
-    --font-2: resource("helvetica");
+    --font-2-GAY: resource("helvetica");
+    --font-2: resource("helvetica SDF");
 
     /*add bold one pls*/
 }
@@ -22,16 +25,19 @@
 }
 .body, .body * 
 {
-    -unity-font: var(--font);
+    -unity-font: var(--font-GAY);
+    -unity-font-definition: var(--font);
 }
 
 .unimportant
 {
-    -unity-font: var(--italic-font);
+    -unity-font: var(--italic-font-GAY);
+    -unity-font-definition: var(--italic-font);
 }
 
 .title{
-    -unity-font: var(--font-2);
+    -unity-font: var(--font-2-GAY);
+    -unity-font-definition: var(--font-2);
 }
 .link
 {
@@ -42,7 +48,8 @@
 
 .unity-button
 {
-    -unity-font: var(--font);
+    -unity-font: var(--font-GAY);
+    -unity-font-definition: var(--font);
     -unity-font-style: bold !important;
     background-color: var(--color-darkbrown) !important;
     border-width: 5px !important;
@@ -111,7 +118,8 @@
 }
 .unity-progress-bar__title{
     color: var(--color-lightred);
-    -unity-font: var(--font);
+    -unity-font: var(--font-GAY);
+    -unity-font-definition: var(--font) !important;
 }
 .unity-progress-bar__background
 {

@@ -2,61 +2,89 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Baracuda.Monitoring;
 using UnityEngine.UIElements;
 
 /// <summary>
 /// Buddah bless this class
 /// </summary>
-public class UIManager : MonoBehaviour
+public class UIManager : MonitoredBehaviour
 {
     public static UIManager I = null;
-    [SerializeField] UIDocument __ui;
-    [SerializeField] ContextMenuShower __menu;
-    public static UIDocument ui; // this lne sucks
-    public static bool mouseOverUI { get; private set; }
-    private static readonly List<VisualElement> draggable = new List<VisualElement>();
-
-    private void mouseEnter(VisualElement v)
+    [SerializeField] internal UIDocument __ui;
+    private static UIDocument ___UI;
+    public static UIDocument ui
     {
-        if (v.style.display == DisplayStyle.Flex && v.name != "Membrane")
-            mouseOverUI = true;
-    }
-
-    protected void Start()
-    {
-        if (I == null)
-            I = this;
-        else
-        {
-            ui = __ui;
-            I.__menu = __menu;
-            var root = ui.rootVisualElement;
-            foreach (VisualElement v in root.Children())
-            {
-                if (v.name == "Membrane")
-                {
-                    List<ContextMenuItem> list = new List<ContextMenuItem>
-                    {
-                        new ContextMenuItem("Move Here", MoveRCMenu),
-                        new ContextMenuItem("Clear Selection", ClearRCMenu)
-                    };
-                    v.AddManipulator(new ContextMenuManipulator(list, false));
-                    v.pickingMode = PickingMode.Position;
-                    continue;
-                }
-                if (!string.IsNullOrEmpty(v.tooltip))
-                    v.AddManipulator(new ToolTipManipulator());
-
-                v.RegisterCallback<MouseEnterEvent>(x => mouseEnter(v)); // worked
-                v.RegisterCallback<MouseLeaveEvent>(x => mouseOverUI = false);
-
-            }
+        get { return ___UI; }
+        set {
+            ___UI = value;
+            if (I.OnUiChange != null)
+                I.OnUiChange();
         }
     }
 
+    public static MouseMoveEvent currentMouse;
+    [Monitor]
+    public static bool mouseOverUI { get; private set; }
+    private static readonly List<VisualElement> draggable = new List<VisualElement>();
+
+    public delegate void DelegateOnUIChange();
+    public event DelegateOnUIChange OnUiChange;
+
+    private static void mouseEnter(VisualElement v, MouseEnterEvent e)
+    {
+        if (v.style.visibility == Visibility.Visible && v.style.display == DisplayStyle.Flex && v.name != "Membrane")
+            mouseOverUI = true;
+    }
+
+    protected void Awake()
+    {
+        if (I == null)
+        {
+            I = this;
+            OnUiChange += I.RefreshUI;
+        }
+        else
+            ui = __ui;
+    }
+
+    void RefreshUI()
+    {
+        var root = ui.rootVisualElement;
+        if(Menus.I.inBattle)
+        {
+            List<ContextMenuItem> list = new List<ContextMenuItem>
+                {
+                    new ContextMenuItem("Move Here", MoveRCMenu),
+                    new ContextMenuItem("Clear Selection", ClearRCMenu)
+                };
+            root.AddManipulator(new ContextMenuManipulator(list, false));
+            root.pickingMode = PickingMode.Position;
+        }
+        root.RegisterCallback<MouseMoveEvent>(x => { currentMouse = x; });
+        foreach (VisualElement v in root.Children())
+        {
+            //v.RegisterCallback<MouseMoveEvent>(x => { currentMouse = x; });
+            if (v.name == "Membrane")
+                continue;
+
+            if (!string.IsNullOrEmpty(v.tooltip))
+                v.AddManipulator(new ToolTipManipulator());
+
+            v.RegisterCallback<MouseEnterEvent>(x => mouseEnter(v, x)); // worked
+            v.RegisterCallback<MouseLeaveEvent>(x => mouseOverUI = false);
+
+        }
+    }
+
+    public static void RegisterMouseOver(VisualElement v)
+    {
+        v.RegisterCallback<MouseEnterEvent>(x => mouseEnter(v, x)); // worked
+        v.RegisterCallback<MouseLeaveEvent>(x => mouseOverUI = false);
+    }    
+
     private void ClearRCMenu()
     {
-        Debug.Log("ITS THAT Z SHIT ITS THAT Z SHIT");
         Player.ourSelectedPawns.Clear();
         Player.selectedPawns.Clear();
         Player.selectedTileBounds.Clear();

@@ -4,12 +4,13 @@ using UnityEngine;
 using PawnFunctions;
 using System;
 using System.Linq;
+using Baracuda.Monitoring;
 
 /// <summary>
 /// This code is unbelievably poorly made. This will break something in the future. This will probably make the game slower.
 /// </summary>
 public enum SelectionMode { Default, Subtract, ClearAll }
-public class BoxSelection : MonoBehaviour
+public class BoxSelection : MonitoredBehaviour
 {
     public LineRenderer lineRenderer;
     private Vector2 initialMousePos;
@@ -17,28 +18,32 @@ public class BoxSelection : MonoBehaviour
     private BoxCollider2D bcollider;
     [SerializeField] private Camera maincam;
     [SerializeField] private SpriteRenderer boxFill;
+
+    [Monitor]
+    public int asd { get { return lineRenderer.positionCount; } }
     
+
     public static List<Pawn> newSelectedPawns = new List<Pawn>();
 
     public static bool letGo;
-    private bool started;
+    public static bool started;
     public static SelectionMode mode;
 
     protected void Start()
     {
-        lineRenderer.positionCount = 0;
+        lineRenderer.positionCount = 4;
     }
 
     protected void Update()
     {
         if (Input.GetKey(Keybinds.SubtractSelection))
             mode = SelectionMode.Subtract; 
-        else if (Input.GetMouseButtonDown(0) && Pawn.mouseOverPawn)
+        else if (Input.GetMouseButtonDown(Keybinds.LeftMouse) && Pawn.mouseOverPawn)
             mode = SelectionMode.ClearAll;
         else
             mode = SelectionMode.Default; // normal
         
-        if (Input.GetMouseButtonDown(0) && !Pawn.mouseOverPawn && !UIManager.mouseOverUI)
+        if (Input.GetMouseButtonDown(Keybinds.LeftMouse) && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !TileSelection.started)
         {
             Player.selectedTiles.Clear();
             // WHY THE FUCK WERE THESE EVEN HERE???S???? FUCK YOU!!
@@ -61,7 +66,7 @@ public class BoxSelection : MonoBehaviour
             bcollider.offset = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         }
 
-        if (Input.GetMouseButton(Keybinds.LeftMouse) && !Pawn.mouseOverPawn && started)
+        if ((Input.GetMouseButton(Keybinds.LeftMouse) || Input.GetMouseButtonDown(Keybinds.RightMouse)) && started )
         {
             currentMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -82,7 +87,7 @@ public class BoxSelection : MonoBehaviour
             //    Mathf.Abs(initialMousePos.y - currentMousePos.y));
         }
 
-        if (Input.GetMouseButtonUp(Keybinds.LeftMouse) && !UIManager.mouseOverUI && started)
+        if ((Input.GetMouseButtonUp(Keybinds.LeftMouse) || Input.GetMouseButtonDown(Keybinds.RightMouse)) && started)
         {
             started = false;
             lineRenderer.positionCount = 0;
@@ -90,8 +95,7 @@ public class BoxSelection : MonoBehaviour
             boxFill.forceRenderingOff = true;
 
             transform.position = new Vector3(0, 0, -1);
-            if (!Pawn.mouseOverPawn)
-                letGo = true;
+            letGo = true;
 
             if (newSelectedPawns.Count > 0)
             {
@@ -111,7 +115,6 @@ public class BoxSelection : MonoBehaviour
             
             print("Selected Pawns: " + Player.selectedPawns.Count +
     "\nOUR Seleted Pawns (haha funny USSR): " + Player.ourSelectedPawns.Count);
-            //Debug.Log($"<b>Mouse Up | Clear selected pawns</b> : {Player.ourSelectedPawns.Count}");
         }
     }
 }

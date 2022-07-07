@@ -259,6 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   root: {fileID: 180405058}
+  MENUASSET: {fileID: 9197481963319205126, guid: e5eed92e3146b9d44a146668a054c962, type: 3}
   watchOut: 0
 --- !u!1 &625993717
 GameObject:
@@ -443,7 +444,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   __ui: {fileID: 0}
-  __menu: {fileID: 0}
 --- !u!114 &902525632
 MonoBehaviour:
   m_ObjectHideFlags: 0

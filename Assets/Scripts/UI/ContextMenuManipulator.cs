@@ -25,7 +25,10 @@ public class ContextMenuManipulator : Manipulator
     {
         this.UI = UI;
         if (!UI)
+        {
             ContextMenuShower.I.watchOut = true;
+            ContextMenuShower.I.watchOutItems = menuItems;
+        }
         this.menuItems = menuItems;
     }
 

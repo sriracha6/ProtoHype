@@ -11,6 +11,7 @@ using UnityEngine;
 using XMLLoader;
 
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public class PawnManager : MonoBehaviour
 {
@@ -121,16 +122,21 @@ public class PawnManager : MonoBehaviour
             if (co != newPawn.country)
                 newPawn.enemyCountries.Add(co);
 
-        if(tt.weapons.Count > 0) {
+        if(tt.weapons.Count > 0)
+        {
             newPawn.heldPrimary = tt.weapons[UnityEngine.Random.Range(0, tt.weapons.Count)];
 
-            if (newPawn.heldPrimary.Type == Weapons.WeaponType.Ranged)
+            if (newPawn.heldPrimary.Type == Weapons.WeaponType.Ranged && newPawn.heldPrimary.rangeType == Weapons.RangeType.Shooter)
                 if (projectile == null)
                 {
                     var forThisPawn = Projectile.List.FindAll(x => x.forWeaponClass == newPawn.heldPrimary.weaponClass);
-                    
-                    if(forThisPawn.Count > 0)
+
+                    if (forThisPawn.Count > 0)
                         newPawn.inventory = forThisPawn.randomElement();
+                    else
+                    {
+                        Debug.Log($"MISSING WEAPONCLASS : {newPawn.heldPrimary.weaponClass} : {newPawn.heldPrimary.Name}");
+                    }
                 }
                 else
                     newPawn.inventory = projectile;

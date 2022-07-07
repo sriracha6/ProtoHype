@@ -174,6 +174,7 @@
     <None Include="Assets\ugh.uss" />
     <None Include="Assets\Resources\Prefabs\UI\Regiment.uxml" />
     <None Include="Assets\MainMenu\MainMenu.uxml" />
+    <None Include="Assets\Resources\Prefabs\UI\ContextMenu.uxml" />
     <None Include="Assets\Scripts\Shaders\Watter.shader" />
     <None Include="Assets\Scripts\Shaders\Water.shader" />
     <None Include="Assets\Resources\Prefabs\UI\Bodypart2ElectricBoogaloo.uxml" />

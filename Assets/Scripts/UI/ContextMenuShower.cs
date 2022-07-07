@@ -7,82 +7,97 @@ using UnityEngine.UIElements;
 public class ContextMenuShower : MonoBehaviour
 {
     [SerializeField] UIDocument root;
+    public VisualTreeAsset MENUASSET;
     public VisualElement menu;
 
     public static ContextMenuShower I;
 
     bool canClose;
-
+    bool open = false;
     public bool watchOut = false;
+    public List<ContextMenuItem> watchOutItems = new List<ContextMenuItem>();
 
-    protected void Awake() {
+    protected void Start() {
         if (I == null)
-            I = this;
-        else
         {
-            var oldRoot = root;
-            VisualElement mm = root.rootVisualElement.Q<VisualElement>("contextmenu");
-            root = UIManager.ui;
-            root.rootVisualElement.Add(mm);
-            oldRoot.rootVisualElement.Remove(mm);
+            I = this;
+            UIManager.I.OnUiChange += I.OnUiChange;
         }
-        DontDestroyOnLoad(gameObject);
     }
 
-    protected void Start()
+    public void OnUiChange() 
     {
-        //
-        menu = root.rootVisualElement.Q<VisualElement>("contextmenu");
+        //var oldRoot = root;
+        //VisualElement mm = root.rootVisualElement.Q<VisualElement>("contextmenu");
+        I.root = UIManager.ui;
+        var MM = I.MENUASSET.CloneTree().contentContainer.Q<VisualElement>("contextmenu");
+        if (!I.root.rootVisualElement.Contains(MM))
+            I.root.rootVisualElement.Add(MM);
 
-        menu.RegisterCallback<MouseEnterEvent>(x => canClose = false);
-        menu.RegisterCallback<MouseLeaveEvent>(x => canClose = true);
-        menu.RegisterCallback<MouseDownEvent>(x=>Debug.Log($"Monkey testicles"));
+        I.menu = I.root.rootVisualElement.Q<VisualElement>("contextmenu");
+        I.menu.BringToFront();
+        I.menu.RegisterCallback<MouseEnterEvent>(x => I.canClose = false);
+        I.menu.RegisterCallback<MouseLeaveEvent>(x => I.canClose = true);
+        I.menu.RegisterCallback<MouseDownEvent>(x => Debug.Log($"Monkey testicles"));
 
-        menu.style.display = DisplayStyle.None;
-        //menu.parent.style.display = DisplayStyle.None;
+        I.menu.style.display = DisplayStyle.None;
+        //oldRoot.rootVisualElement.Remove(mm);
     }
 
-    public void Show(MouseUpEvent e, bool UI)
+    public void Show(MouseUpEvent e, bool UI, bool IsGay=false)
     {
         bool shouldShow = UI || !UIManager.mouseOverUI;
-        if(Input.GetMouseButtonUp(Keybinds.RightMouse) && shouldShow)
-        {
-            Vector2 pos;
-            //pos.y = Screen.height - e.originalMousePosition.y - menu.style.height.value.value;
-            pos.y = e.originalMousePosition.y;
-            pos.x = e.originalMousePosition.x;
-            //pos.x = e.originalMousePosition.x - menu.style.width.value.value;
 
-            menu.style.left = pos.x;
-            menu.style.top = pos.y;
-            menu.style.display = DisplayStyle.Flex;
-            menu.style.visibility = Visibility.Visible;
-            menu.BringToFront();
+        if (Input.GetMouseButtonUp(Keybinds.RightMouse) && shouldShow && !TileSelection.started)
+        {
+            I.open = true;
+            Vector2 pos;
+            if (!IsGay)
+            {
+                pos.y = e.originalMousePosition.y;
+                pos.x = e.originalMousePosition.x;
+            }
+            else
+            {
+                float xxx = (Input.mousePosition.x / Screen.width) * I.menu.layout.width;
+                float yyy = (Input.mousePosition.y / Screen.height) * I.menu.layout.height;
+                
+                pos.y = Screen.height - Input.mousePosition.y + yyy;
+                pos.x = Input.mousePosition.x + xxx;
+            }
+            I.menu.style.left = pos.x;
+            I.menu.style.top = pos.y;
+            I.menu.style.display = DisplayStyle.Flex;
+            I.menu.style.visibility = Visibility.Visible;
+            I.menu.BringToFront();
         }
     }
 
     protected void Update()
     {
-        if(watchOut)
+        if(I.watchOut)
         {
             if (Input.GetMouseButtonUp(Keybinds.RightMouse))
             {
-                root.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Ignore;
-                root.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Hidden;
-                root.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.None;
-                Show(new MouseUpEvent(), false);
+                I.ClearItems();
+                /*UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Ignore;
+                UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Hidden;
+                UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.None;*/
+                foreach (ContextMenuItem item in I.watchOutItems)
+                    AddButton(item);
+                I.Show(new MouseUpEvent(), false, true);
             }
         }
     }
 
     public void ClearItems()
     {
-        menu.Clear();
+        I.menu.Clear();
     }
 
     protected void LateUpdate()
     {
-        HideIfClickedOutside(menu);
+        HideIfClickedOutside(I.menu);
     }
 
     public void AddButton(ContextMenuItem item)
@@ -93,32 +108,37 @@ public class ContextMenuShower : MonoBehaviour
         button.clicked += delegate
         {
             item.onClick();
-            menu.style.display = DisplayStyle.None;
-            root.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Position;
-            root.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Visible;
-            root.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.Flex;
+            I.menu.style.display = DisplayStyle.None;
+            I.open = false;
+            /*UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Position;
+            UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Visible;
+            UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.Flex;*/
         };
-        menu.Add(button);
+        I.menu.Add(button);
     }
 
     public void RemoveButton(ContextMenuItem item)
     {
         Button b = null;
-        foreach (Button v in menu.Children())
+        foreach (Button v in I.menu.Children())
             if (v.text == item.ItemName)
                 b = v;
 
-        menu.Remove(b);
+        I.menu.Remove(b);
     }
 
     void HideIfClickedOutside(VisualElement menu)
     {
-        if (Input.GetMouseButtonDown(Keybinds.LeftMouse) && menu.style.display == DisplayStyle.Flex && canClose)
+        if (I.open && 
+            (Input.GetMouseButtonDown(Keybinds.LeftMouse) || Input.GetMouseButton(Keybinds.LeftMouse) || Input.GetMouseButtonUp(Keybinds.LeftMouse)) 
+            && I.menu.style.display == DisplayStyle.Flex && canClose)
         {
-            menu.style.display = DisplayStyle.None;
-            root.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Position;
-            root.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Visible;
-            root.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.Flex;
+            I.menu.style.display = DisplayStyle.None;
+            /*UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Position;
+            UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Visible;
+            UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.Flex;*/
+
+            I.open = false;
         }
     }
 }

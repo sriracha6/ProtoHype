@@ -101,15 +101,14 @@ public class QuickBattle : MonoBehaviour
                 Messages.I.Add("You must have at least one country on each side");
                 return;
             }
+            Menus.I.inBattle = true;
             Player.playerCountry = friends[0].country;
             Player.loadedFrom = LoadFrom.Quickbattle;
 
             //if (string.IsNullOrEmpty(root.Q<TextField>("Seed").value))
             //    MapGenerator.I.seed = Random.Range(int.MinValue, int.MaxValue).ToString();
-            
             Menus.I.SwitchTo(Menus.I.loading);
             StartCoroutine(Loading.I.load("Battle"));
-            Menus.I.inBattle = true;
         };
 
         root.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
