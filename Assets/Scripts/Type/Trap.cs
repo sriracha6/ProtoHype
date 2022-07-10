@@ -8,12 +8,13 @@ namespace Buildings
 {
     public class Trap : Build
     {
-        public BuildingType buildingType;
-        public int damage;
-        public int coverQuality;
-        public bool isLean;
+        [XMLItem("Building Type")] public BuildingType buildingType;
+        [XMLItem("Damage")] public int damage;
+        [XMLItem("Cover Quality")] public int coverQuality;
+        [XMLItem("Lean To Use")] public bool isLean;
+        [XMLItem("Is One Use")] public bool oneUse;
 
-        public Trap(string name, int hitpoints, int flammability, int damage, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int coverQuality, bool isLean)
+        public Trap(string name, int hitpoints, int flammability, int damage, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int coverQuality, bool isLean, bool isOneUse)
             :base(name,"",isSpecialPlace,hasRubble,rubbleType,hitpoints,flammability)
         {
             this.buildingType = BuildingType.Trap;
@@ -24,11 +25,11 @@ namespace Buildings
 
         public static List<Trap> List = new List<Trap>();
 
-        public static Trap Create(string name, int hitpoints, int flammability, int damage, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int coverQuality, bool isLean)
+        public static Trap Create(string name, int hitpoints, int flammability, int damage, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int coverQuality, bool isLean, bool isOneUse)
         {
             if (!List.Any(x => x.Name == name))
             {
-                Trap c = new Trap(name, hitpoints, flammability, damage, isSpecialPlace, hasRubble, rubbleType, coverQuality, isLean);
+                Trap c = new Trap(name, hitpoints, flammability, damage, isSpecialPlace, hasRubble, rubbleType, coverQuality, isLean, isOneUse);
                 List.Add(c);
                 return c;
             }

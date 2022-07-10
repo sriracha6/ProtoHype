@@ -26,5 +26,10 @@ namespace Attacks
             isRare = rare;
             Damage = dmg;
         }
+
+        public override string ToString()
+        {
+            return $"{Name} | {(isRare ? "Rare" : "")} {damageType.ToString()} : {Damage} damage";
+        }
     }
 }

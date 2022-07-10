@@ -38,7 +38,7 @@ public class WCMngr : MonoBehaviour
     protected void Awake()
     {
         mainCam = Camera.main;
-        flagWeapon = new Weapon("", "Flag", WeaponType.Melee, "A flag carried by heroic flagbearers. Boosts troops when the bearer is still alive. Not an effective weapon.", "Flag", MeleeRange.Medium, false, 0, 0, 1.25f, null);
+        flagWeapon = new Weapon("", "Flag", WeaponType.Melee, "A flag carried by heroic flagbearers. Boosts troops when the bearer is still alive. Not an effective weapon.", "Flag", new MeleeRange(MeleeRange.Medium), false, 0, 0, 1.25f, null);
 
         CachedItems.renderedWeapons.Add(new CachedItems.RenderedWeapon(flagSprite, flagWeapon.ID));
         if (I == null)

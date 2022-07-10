@@ -155,12 +155,16 @@
     <Compile Include="Assets\Scripts\RNG\Direction.cs" />
     <Compile Include="Assets\Scripts\FireManager.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
+    <Compile Include="Assets\Scripts\Type\Attribute\XMLData.cs" />
+    <Compile Include="Assets\Scripts\Type\Derived\IItem.cs" />
+    <Compile Include="Assets\Scripts\UI\ItemViewer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />
     <None Include="Assets\Resources\Prefabs\UI\Bodypart.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\VitalStat.uxml" />
     <None Include="Assets\Scripts\Shaders\TilemapBlend.shader" />
+    <None Include="Assets\Resources\Prefabs\UI\Item Viewer\Box.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\Reggymint.uxml" />
     <None Include="Assets\MainMenu\Country.uxml" />
     <None Include="Assets\Scripts\Shaders\TerrainBlending.shader" />
@@ -175,16 +179,19 @@
     <None Include="Assets\Resources\Prefabs\UI\Regiment.uxml" />
     <None Include="Assets\MainMenu\MainMenu.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\ContextMenu.uxml" />
+    <None Include="Assets\Resources\Prefabs\UI\Item Viewer\SingleItem.uxml" />
     <None Include="Assets\Scripts\Shaders\Watter.shader" />
     <None Include="Assets\Scripts\Shaders\Water.shader" />
     <None Include="Assets\Resources\Prefabs\UI\Bodypart2ElectricBoogaloo.uxml" />
     <None Include="Assets\uxml.uxml" />
     <None Include="Assets\loading.uss" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain_First.shader" />
+    <None Include="Assets\uielements.uss" />
     <None Include="Assets\Resources\Prefabs\UI\prefab.uss" />
     <None Include="Assets\MainMenu\mainmenucss.uss" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain.cginc" />
     <None Include="Assets\root.uss" />
+    <None Include="Assets\Resources\Prefabs\UI\Item Viewer\Link.uxml" />
     <None Include="Assets\MainMenu\quickbattle.uxml" />
   </ItemGroup>
   <ItemGroup>

@@ -12,8 +12,8 @@ static class ItemsList
 }
 public class Item
 {
-    public string Name { get; }
-    public string Description { get; }
+    [XMLItem("Name")] public string Name { get; }
+    [XMLItem("Description")] public string Description { get; }
     public int ID { get; }
     public string SourceFile { get; }
     public string SourceFileName { get; }

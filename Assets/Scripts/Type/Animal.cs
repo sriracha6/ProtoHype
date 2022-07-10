@@ -5,12 +5,13 @@ using UnityEngine;
 
 namespace Animals
 {
+    [ImageList(typeof(CachedItems.RenderedAnimal))]
     public class Animal : Item
     {
-        public bool ridable;
-        public float speedEffect { get; }
-        public int hitpoints { get; }
-        public int hitChance;
+        [XMLItem("Is Ridable")] public bool ridable;
+        [XMLItem("Affect to Speed")] public float speedEffect { get; }
+        [XMLItem("Hitpoints")] public int hitpoints { get; }
+        [XMLItem("Hit Chance")] public int hitChance;
         public Hash128 spriteHash { get; set; }
 
         public Animal(string Name, string Description, string Sourcefile, bool ridable, float speedEffect, int hitpoints, int hitChance)

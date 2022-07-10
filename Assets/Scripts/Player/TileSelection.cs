@@ -29,10 +29,10 @@ public class TileSelection : MonoBehaviour
             started = true;
             lineRenderer.positionCount = 4;
             initialMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
-            lineRenderer.SetPosition(0, new Vector3(initialMousePos.x, initialMousePos.y, -5)); // this can be better, right?
-            lineRenderer.SetPosition(1, new Vector3(initialMousePos.x, initialMousePos.y, -5));
-            lineRenderer.SetPosition(2, new Vector3(initialMousePos.x, initialMousePos.y, -5));
-            lineRenderer.SetPosition(3, new Vector3(initialMousePos.x, initialMousePos.y, -5));
+            lineRenderer.SetPosition(0, new Vector3(initialMousePos.x, initialMousePos.y, -1)); // this can be better, right?
+            lineRenderer.SetPosition(1, new Vector3(initialMousePos.x, initialMousePos.y, -1));
+            lineRenderer.SetPosition(2, new Vector3(initialMousePos.x, initialMousePos.y, -1));
+            lineRenderer.SetPosition(3, new Vector3(initialMousePos.x, initialMousePos.y, -1));
 
             bcollider = gameObject.AddComponent<BoxCollider2D>();
             bcollider.isTrigger = true;
@@ -43,10 +43,10 @@ public class TileSelection : MonoBehaviour
         {
             currentMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
 
-            lineRenderer.SetPosition(0, new Vector3(Mathf.Round(initialMousePos.x)*2, Mathf.Round(initialMousePos.y)*2,-5));
-            lineRenderer.SetPosition(1, new Vector3(Mathf.Round(initialMousePos.x)*2, Mathf.Round(currentMousePos.y)*2,-5));
-            lineRenderer.SetPosition(2, new Vector3(Mathf.Round(currentMousePos.x)*2, Mathf.Round(currentMousePos.y)*2,-5));
-            lineRenderer.SetPosition(3, new Vector3(Mathf.Round(currentMousePos.x)*2, Mathf.Round(initialMousePos.y)*2,-5));
+            lineRenderer.SetPosition(0, new Vector3(Mathf.Round(initialMousePos.x), Mathf.Round(initialMousePos.y),-5));
+            lineRenderer.SetPosition(1, new Vector3(Mathf.Round(initialMousePos.x), Mathf.Round(currentMousePos.y),-5));
+            lineRenderer.SetPosition(2, new Vector3(Mathf.Round(currentMousePos.x), Mathf.Round(currentMousePos.y),-5));
+            lineRenderer.SetPosition(3, new Vector3(Mathf.Round(currentMousePos.x), Mathf.Round(initialMousePos.y),-5));
 
             transform.position = (currentMousePos + initialMousePos)/2;
             transform.position = new Vector3(transform.position.x,transform.position.y,-5);
@@ -60,32 +60,31 @@ public class TileSelection : MonoBehaviour
         if (Input.GetMouseButtonUp(Keybinds.RightMouse) && started)
         {
             started = false;
-                //lineRenderer.positionCount = 0;
-            if (Player.selectedTiles.Count > 0)
-            {
-                Player.selectedTileBounds.Add(area);
-                GetTilesInArea();
-                Destroy(bcollider);
-                transform.position = new Vector3(0, 0, 10);
-                MoveControls.toggleMoveButton(false);
-            }
-            else
-                MoveControls.toggleMoveButton(true);
+            transform.position = new Vector3(0, 0, -1);
+            Player.selectedTileBounds.Add(area);
+            GetTilesInArea();
+            Destroy(bcollider);
+            MoveControls.toggleMoveButton(Player.selectedTiles.Count > 1);
+            lineRenderer.positionCount = 0;
         }
 
         void GetTilesInArea()
         {
             print("Selected Tiles: " + area);
+            int it = 0;
             for (int y = tmap.cellBounds.min.y; y < tmap.cellBounds.max.y; y++)
             {
                 for (int x = tmap.cellBounds.min.x; x < tmap.cellBounds.max.x; x++)
                 {
                     Vector3Int p = new Vector3Int(x, y, 0);
-                    if (bcollider.bounds.Contains(p))
-                    
+                    if (bcollider.bounds.Contains(new Vector3(x, y, -1)))
+                    {
+                        it++;
                         Player.selectedTilePoses.Add(p);
+                    }
                 }
             }
+            Debug.Log($"IT:<color=magenta>{it}</color>");
         }
     }
 }

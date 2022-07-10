@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/Resources/Prefabs/UI/prefab.uss" />
+    <ui:VisualElement name="Box" style="width: 100%; height: auto; flex-direction: row; border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; background-color: rgb(30, 39, 50); border-left-color: rgb(241, 232, 200); border-right-color: rgb(241, 232, 200); border-top-color: rgb(241, 232, 200); border-bottom-color: rgb(241, 232, 200);">
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="Label" style="width: 25%; -unity-font: resource(&apos;garamond&apos;); -unity-font-definition: resource(&apos;garamond SDF&apos;); color: rgb(241, 232, 200);" />
+        <ui:ScrollView name="Contents" show-vertical-scroller="false" show-horizontal-scroller="false" style="width: 75%;" />
+    </ui:VisualElement>
+</ui:UXML>

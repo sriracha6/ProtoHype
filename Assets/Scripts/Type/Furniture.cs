@@ -23,24 +23,19 @@ namespace Buildings
         None=0
     }
 
-    public class Furniture
+    public class Furniture : Build
     {
-        public string Name;
-        public BuildingType buildingType;
-        public bool isTileable;
-        public int hitpoints; // dont add max hitpoints and hitpoints. no. thats not how it works
-        public bool hasRubble;
-        public RubbleType rubbleType;
-        public float flammability; // percent
-        public int coverQuality;
-        public bool leanToUse;
+        [XMLItem("Building Type")] public BuildingType buildingType;
+        [XMLItem("Is Tileable")] public bool isTileable;
+        [XMLItem("Cover Quality")] public int coverQuality;
+        [XMLItem("Lean To Use")] public bool leanToUse;
         public bool PrefersTouchingWall;
         public List<Furniture> PrefersTouchingFurnitures;
         public bool isCarpet;
 
         public Furniture(string name, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse, bool PrefersTouchingWall, List<Furniture> PrefersTouchingFurniture, bool isCarpet)
+            : base(name, "", false, hasRubble, rubbleType, hitpoints, flammability)
         {
-            this.Name = name;
             this.buildingType = BuildingType.Prop;
             this.isTileable = isTileable;
             this.hitpoints = hitpoints;

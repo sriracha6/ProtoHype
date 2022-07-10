@@ -25,20 +25,35 @@ namespace Weapons
         public const float Far = 2.4384f; // 8 feet
         public const float VeryFar = 5.1816f; // 17 feet
 
-        public static float getByName(string name)
+        public float value;
+
+        public MeleeRange(float value)
+        {
+            this.value = value;
+        }
+
+        public override string ToString()
+        {
+            if (value == Short) return "Short";
+            if (value == Medium) return "Medium";
+            if (value == Far) return "Far";
+            if (value == VeryFar) return "Very Far";
+            else
+                return "Idk";
+        }
+
+        public MeleeRange getByName(string name)
         {
             string n = name.ToLower();
             // new string[] {"medium", "med", ...}.Contains(n)
-            if (n == "short" || n == "s")
-                return Short;
-            if (n == "medium" || n == "med" || n == "m")
-                return Medium;
-            if (n == "far" || n == "long" || n == "l")
-                return Far;
-            if (n == "vfar" || n == "veryfar")
-                return VeryFar;
-            Debug.Log($"Unknown melee range: {name}");
-            return Medium;
+            if (n == "short" || n == "s") this.value = Short;
+            if (n == "medium" || n == "med" || n == "m") this.value = Medium;
+            if (n == "far" || n == "long" || n == "l") this.value = Far;
+            if (n == "vfar" || n == "veryfar") this.value = VeryFar;
+            
+            if (this.value == 0) DB.Attention($"Unknown melee range: \"{name}\"");
+
+            return this;
         }
     }
     public enum RangeType
@@ -47,33 +62,34 @@ namespace Weapons
         Thrown
     }
 
+    [ImageList(typeof(CachedItems.RenderedWeapon))]
     public class Weapon : Item
     {
-        public WeaponType Type { get; }
-        public string weaponClass { get; }
-        public float meleeRange { get; }
-        public bool hasWarmup { get; }
-        public int armorPenSharp { get; }
-        public int armorPenBlunt { get; }
-        public float size { get; } // in comparison to a 6ft person
-        public List<Attack> attacks { get; } = new List<Attack>();
+        [XMLItem("Weapon Type")] [MeleeAttribute] [RangedAttribute] public WeaponType Type { get; }
+        [XMLItem("Weapon Class")] [MeleeAttribute] [RangedAttribute] public string weaponClass { get; }
+        [XMLItem("Melee Range")] [MeleeAttribute] public MeleeRange meleeRange { get; }
+        [XMLItem("Has Warmup")] [MeleeAttribute] public bool hasWarmup { get; }
+        [XMLItem("Armor Pen Sharp")] [MeleeAttribute] public int armorPenSharp { get; }
+        [XMLItem("Armor Pen Blunt")] [MeleeAttribute] public int armorPenBlunt { get; }
+        [XMLItem("Size")] [MeleeAttribute] [RangedAttribute] public float size { get; } // in comparison to a 6ft person
+        [XMLItemList("Attacks")] [MeleeAttribute] public List<Attack> attacks { get; } = new List<Attack>();
 
-        public float longAccuracy { get; }
-        public float shortAccuracy { get; }
-        public float mediumAccuracy { get; }
+        [XMLItem("Short Accuracy")] [RangedAttribute] public float shortAccuracy { get; }
+        [XMLItem("Medium Accuracy")] [RangedAttribute] public float mediumAccuracy { get; }
+        [XMLItem("Long Accuracy")] [RangedAttribute] public float longAccuracy { get; }
 
-        public bool enableRangedMeleeDamage { get;}
-        public string meleeDamageType { get;}
-        public float rangedMeleeDamage { get; }
+        [XMLItem("Has Ranged Melee Damage")] [RangedAttribute] public bool enableRangedMeleeDamage { get;}
+        [XMLItem("Melee Damage Type")] [RangedAttribute] public string meleeDamageType { get;}
+        [XMLItem("Ranged Melee Damage")] [RangedAttribute] public float rangedMeleeDamage { get; }
 
-        public int rangedDamage { get; }
-        public float rangeWarmupTime { get; }
-        public float rangeArmorPen { get; }
+        [XMLItem("Ranged Damage")] [RangedAttribute] public int rangedDamage { get; }
+        [XMLItem("Range Warmup Time")] [RangedAttribute] public float rangeWarmupTime { get; }
+        [XMLItem("Range Armor Penetration")] [RangedAttribute] public float rangeArmorPen { get; }
 
-        public int range { get; }
-        public RangeType rangeType { get; }
+        [XMLItem("Range")] [RangedAttribute] public int range { get; }
+        [XMLItem("Range Type")] [RangedAttribute] public RangeType rangeType { get; }
 
-        public Weapon(string sourcefile, string name, WeaponType type, string description, string wc, float mrange, bool warmup, int armorpens,
+        public Weapon(string sourcefile, string name, WeaponType type, string description, string wc, MeleeRange mrange, bool warmup, int armorpens,
                       int armorpenb, float Size, List<Attack> attks) : base(name, description, sourcefile)
         {
             Type = type;
@@ -108,7 +124,7 @@ namespace Weapons
 
         public static List<Weapon> List = new List<Weapon>();
 
-        public static Weapon CreateMelee(string sourcefile, string name, WeaponType type, string weaponclass, string desc, float mrange, bool warmup,
+        public static Weapon CreateMelee(string sourcefile, string name, WeaponType type, string weaponclass, string desc, MeleeRange mrange, bool warmup,
             int armorpens, int armorpenb, float Size, List<Attack> attks)
         {
             Weapon c = new Weapon(sourcefile, name, type, weaponclass, desc, mrange, warmup, armorpens, armorpenb, Size, attks);

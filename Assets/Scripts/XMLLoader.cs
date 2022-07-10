@@ -156,7 +156,7 @@ namespace XMLLoader
                 Weapon.CreateMelee(filepath, xmls.Q<string>("Name"), WeaponType.Melee,
                     xmls.Q<string>("WeaponClass"), 
                     xmls.Q<string>("Description"),
-                    MeleeRange.getByName(xmls.Q<string>("MeleeRange")),
+                    new MeleeRange().getByName(xmls.Q<string>("MeleeRange")),
                     xmls.Q<bool>("Warmup"),
                     xmls.Q<int>("ArmorPenSharp"),
                     xmls.Q<int>("ArmorPenBlunt"),
@@ -547,7 +547,8 @@ namespace XMLLoader
                     xmls.Q<bool>("Rubble"),
                     xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")),
                     xmls.Q<int>("CoverQuality"),
-                    xmls.Q<bool>("Lean"));
+                    xmls.Q<bool>("Lean"),
+                    xmls.Q<bool>("IsOneUse"));
             }
             else
             {
@@ -733,7 +734,7 @@ namespace XMLLoader
         {
             return Convert.ToSingle(text);
         }
-        public static List<Weapon> parseWeapons(XmlNode xmls) // instead of getting by name, i could save the hashcode of the item
+        public static List<Weapon> parseWeapons(XmlNode xmls)
         {
             //if (xmls == null)
             //    return null; // uh oh : no sidearms
@@ -750,7 +751,10 @@ namespace XMLLoader
                 }
 
             foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
-                    weapons.Add(Weapon.Get(s.removeWS()));
+            {
+                Debug.Log($"{s.removeWS()} | {Weapon.Get(s.removeWS()) == null}");
+                weapons.Add(Weapon.Get(s.removeWS()));
+            }
             return weapons;
         }
         public static List<Projectile> parseProjectiles(XmlNode xmls)
@@ -1109,6 +1113,11 @@ namespace XMLLoader
             return list[rand.Next(0, list.Count)];
         }
 
+        public static string stripNewlines(this string x)
+        {
+            return x.Replace("\n", "").Replace("\r", "");
+        }
+
         public static bool HasNode(this XmlNode x, string text)
         {
             return x.SelectSingleNode(text) != null;
@@ -1117,7 +1126,7 @@ namespace XMLLoader
         {
             if(!attribute && x.SelectSingleNode(t) == null)
             {
-                if(t != "Description" && t != "WeaponClass" && t != "Group" && t != "Long" && t != "Medium" && t != "Short" && t != "GenericSpecial" && t != "Sidearms" && t != "PickFrom" && t != "Shields" && t != "IsCarpet" && t!="PrefersFeature" && t != "PartOf")
+                if(t != "Description" && t != "WeaponClass" && t != "Group" && t != "Long" && t != "Medium" && t != "GenericSpecial" && t != "Sidearms" && t != "PickFrom" && t != "Shields" && t != "IsCarpet" && t!="PrefersFeature" && t != "PartOf")
                     DB.Attention($"XMLERROR: No node : {t} : {Loaders.currentFile}");
                 return default(T);
             }

@@ -5,13 +5,14 @@ using System;
 
 namespace Shields
 {
+    [ImageList(typeof(CachedItems.RenderedShield))]
     public class Shield : Item
     {
-        public float sharpProtection;
-        public float bluntProtection;
-        public float movementSpeedEffect;
-        public float baseBlockChance;
-        public float size;
+        [XMLItem("Sharp Protection")] public float sharpProtection;
+        [XMLItem("Blunt Protection")] public float bluntProtection;
+        [XMLItem("Movement Speed Affect")] public float movementSpeedEffect;
+        [XMLItem("Base Block Chance")] public float baseBlockChance;
+        [XMLItem("Size")] public float size;
 
         public Shield(string sourcefile, string name, string desc, float sharpProt, float bluntProt, float moveSpeedEffect, float baseBlockChnc, float siz) // same for this
             :base(name, desc, sourcefile)

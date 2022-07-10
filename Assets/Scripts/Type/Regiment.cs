@@ -26,7 +26,8 @@ namespace Regiments
             isFriendly = Player.playerCountry == origin;
         }
         /// <summary>
-        /// DO NOT USE members.Add!!! USE THIS INSTEAD! Notes: first pawn added is flag beraer
+        /// DO NOT USE members.Add!!! USE THIS INSTEAD! 
+        /// Notes: first pawn added is flag beraer
         /// </summary>
         /// <param name="p">Pawn to add.</param>
         public void Add(Pawn p)
@@ -35,6 +36,7 @@ namespace Regiments
             {
                 p.isFlagBearer = true;
                 this.flagBearer = p;
+
                 var g = UnityEngine.Object.Instantiate(WCMngr.I.flagPrefab, p.transform);
                 g.GetComponent<FlagBehaviour>().flagTexture = CachedItems.renderedCountries.Find(x=>x.name==countryOrigin.Name).image;
                 members.Add(p);

@@ -17,6 +17,11 @@ namespace Nature
             this.averageTemperature = averageTemperature;
             this.flatnessPreference = flatnessPreference;
         }
+
+        public override string ToString()
+        {
+            return $"Average Temperature: {averageTemperature}, Flatness: {flatnessPreference.ToString()}";
+        }
     }
 
     public struct Weather // for name           :       use nameof()
@@ -41,14 +46,27 @@ namespace Nature
             this.terrain = terrain;
             this.frequencies = frequencies;
         }
+
+        public override string ToString()
+        {
+            string x = "";
+            int index = 0;
+            foreach(TerrainType t in terrain)
+            {
+                x += $"{t.name} | {frequencies[index]}";
+                x += "\n";
+                index++;
+            }
+            return x;
+        }
     }
 
     public class Biome : Item
     {
-        public LocationData locationData;
-        public List<Weather> weatherFrequencies;
-        public TerrainFrequencies terrainFrequencies;
-        public List<Buildings.Plant> flora;
+        [XMLItem("Location Data")] public LocationData locationData;
+        [XMLItemList("Weather Frequencies")] public List<Weather> weatherFrequencies;
+        [XMLItem("Terrain Frequencies")] public TerrainFrequencies terrainFrequencies;
+        [XMLLinkList("Flora")] public List<Buildings.Plant> flora;
 
         public Color color;
         public float plantDensity;

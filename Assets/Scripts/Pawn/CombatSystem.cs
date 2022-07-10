@@ -71,6 +71,10 @@ public class CombatSystem : MonoBehaviour
 
     protected void Start()
     {
+        if (p.isFlagBearer) // i mean
+            return;
+        if (!p.hasPrimary && !p.hasSidearm)
+            return;
         projectileCollection = WCMngr.I.projectileParent; // this is no  RESPONSE: it's alright. I mean, it organizes
 
         onChangeWeapon(); // this is VERY bad
@@ -79,8 +83,7 @@ public class CombatSystem : MonoBehaviour
         int defaul = 1 << LayerMask.NameToLayer("Default");
         layerMask = walls | defaul;
 
-        if(p.hasPrimary || p.hasSidearm)
-            InvokeRepeating(nameof(Checks), 0, 0.5f);
+        InvokeRepeating(nameof(Checks), 0, 0.5f);
     }
 
     protected void Update()
@@ -169,22 +172,17 @@ public class CombatSystem : MonoBehaviour
 
     public void onChangeWeapon()
     {
+        if (p.activeWeapon == null)
+            if (p.hasPrimary)
+                p.activeWeapon = p.heldPrimary;
+            else if (p.hasPrimary)
+                p.activeWeapon = p.heldSidearm;
         // its the weapons that's causing issues
-        try
-        {
-            meleeRange = p.activeWeapon.meleeRange;
-            rangeRange = p.activeWeapon.range;
-            weaponSprite.gameObject.transform.rotation = Quaternion.identity;
+        meleeRange = p.activeWeapon.meleeRange.value;
+        rangeRange = p.activeWeapon.range;
+        weaponSprite.gameObject.transform.rotation = Quaternion.identity;
 
-            extraRangeTime = Skills.EffectToAimTime(p.rangeSkill);
-        }
-        catch (Exception)
-        {
-            Debug.Log($"WARNING: This weird shit is happening with combat systemonchange weapon error and animalbehavior.");
-            DB.NullCount(Weapon.List);
-            DB.Null(p);
-            DB.Null(p.activeWeapon);
-        }
+        extraRangeTime = Skills.EffectToAimTime(p.rangeSkill);
     }
 
     void Checks()
@@ -198,7 +196,7 @@ public class CombatSystem : MonoBehaviour
         if (totalEnemies <= 0)
             return;
 
-        if (!canAttack && healthSystem.lastDamageTime <= 12f * Time.fixedDeltaTime // 0.2 sec
+        if (p.hasSidearm && !canAttack && healthSystem.lastDamageTime <= 12f * Time.fixedDeltaTime // 0.02 sec
             && healthSystem.lastAttacker != null && p.enemyCountries.Contains(healthSystem.lastAttacker.country)) // needed so we dont get ready to defend against ourself :/ 
         {
             switchToSecondary();
@@ -328,12 +326,12 @@ public class CombatSystem : MonoBehaviour
 
         float distance = (closestEnemy.position - transform.position).sqrMagnitude;
 
-        if (p.activeWeaponSlot == ActiveWeapon.Secondary
+        if (p.activeWeapon == p.heldPrimary
             && distance >= (2f*2f))
         {
-            p.activeWeapon = p.heldPrimary;
+            p.activeWeapon = p.heldSidearm;
             weaponSprite.sprite = CachedItems.renderedWeapons.Find(x => x.id == p.heldSidearm.ID).sprite;
-            p.activeWeaponSlot = ActiveWeapon.Primary;
+            p.activeWeaponSlot = ActiveWeapon.Secondary;
         }
         onChangeWeapon();
     }

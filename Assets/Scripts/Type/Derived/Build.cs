@@ -10,17 +10,17 @@ static class BuildList
 }
 public class Build
 {
-    public string Name;
-    public string Description;
+    [XMLItem("Name")] public string Name;
+    [XMLItem("Description", multiline = true)] public string Description;
     public int ID { get; private set; }
 
     public bool isSpecialPlace;
-    public bool hasRubble;
-    public RubbleType rubbleType;
+    [XMLItem("Has Rubble")] public bool hasRubble;
+    [XMLItem("Rubble Type")] public RubbleType rubbleType;
 
-    public int maxHitpoints;
-    public int hitpoints;
-    public int flammability;
+    [XMLItem("Max Hitpoint")] public int maxHitpoints;
+    [XMLItem("Hitpoints")] public int hitpoints;
+    [XMLItem("Flammability")] public int flammability;
     public RuleTile tile;
 
     public Build(string name, string description, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int hitpoints, int flammability)

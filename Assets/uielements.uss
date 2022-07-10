@@ -1,0 +1,8 @@
+#TitleBar
+{
+    background-color: var(--bgcolor-lightorange);
+}
+#Body
+{
+    background-color: var(--bgcolor-lightbrown);
+}

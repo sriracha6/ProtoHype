@@ -8,9 +8,9 @@ namespace Buildings
 {
     public class Building : Build // i probably shouldve made this derive from a single building class tbh
     {
-        public BuildingType buildingType { get; }
-        public int coverQuality;
-        public bool isLean;
+        [XMLItem("Building Type")] public BuildingType buildingType { get; }
+        [XMLItem("Cover Quality")] public int coverQuality;
+        [XMLItem("Lean To Use")] public bool isLean;
         public new RuleTile tile;
 
         public Building(string name, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)

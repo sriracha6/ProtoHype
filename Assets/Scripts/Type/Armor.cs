@@ -14,15 +14,17 @@ namespace Armors
         middle = 1,
         outer = 2
     }
+
+    [ImageList(typeof(CachedItems.RenderedArmor))]
     public class Armor : Item
     {
-        public float sharpProtection;
-        public float bluntProtection;
-        public float MovementSpeedAffect;
-        public Layer layer;
-        public int hitPoints;
-        public List<Bodypart> covers = new List<Bodypart>();
-        public bool isUtility;
+        [XMLItem("Sharp Protection")] public float sharpProtection;
+        [XMLItem("Blunt Protection")] public float bluntProtection;
+        [XMLItem("Move Speed Effect")] public float MovementSpeedAffect;
+        [XMLItem("Layer")] public Layer layer;
+        [XMLItem("Hitpoints")] public int hitPoints;
+        [XMLItemList("Covers")] public List<Bodypart> covers = new List<Bodypart>();
+        [XMLItem("Is Utility")] public bool isUtility;
 
         public Armor(string filepath, string name, string desc, int healthpoints, float sharppot, float bluntpot, float movespeedeffect, Layer laye, bool isUtil, List<Bodypart> coverList)
             : base(name, desc, filepath)

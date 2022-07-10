@@ -17,11 +17,16 @@ namespace Buildings
             SmallProjectileBlockChance = Small;
             LargeProjectileBlockChance = Large;
         }
+
+        public override string ToString()
+        {
+            return $"Small Block Chance: {SmallProjectileBlockChance}, Large Block Chance: {LargeProjectileBlockChance}";
+        }
     }
     public class Roof : Build
     {
-        public BuildingType buildingType;
-        public RoofStats roofStats;
+        [XMLItem("Building Type")] public BuildingType buildingType;
+        [XMLItem("Roof Projectile Stats", multiline = true)] public RoofStats roofStats;
         public new FuckBitchTile tile;
 
         public Roof(string name, int hitpoints, int flammability, RoofStats roofStats) 

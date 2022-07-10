@@ -10,12 +10,12 @@ public enum SpecialType { None, Water, Mountain }
 [System.Serializable]
 public class TerrainType
 {
-    public string name;
-    public float height;
-    public float walkSpeed;
+    [XMLItem("Name")] public string name;
+    [XMLItem("Height")] public float height;
+    [XMLItem("Walk Speed")] public float walkSpeed;
     public Color color;
     public SpecialType type;
-    public bool supportsNature;
+    [XMLItem("Supports Nature")] public bool supportsNature;
     public FuckBitchTile tile;
     public RuleTile thisIsVeryBadSpaghettiButImOutOfIdeas;
 

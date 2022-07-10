@@ -6,7 +6,7 @@ namespace Buildings
 {
     public class Door : Build
     {
-        public float OpeningSpeed;
+        [XMLItem("Opening Speed")] public float OpeningSpeed;
         
         public Door(string name, RubbleType rubbletype, int hp, int flammability, float openingSpeed) 
             : base(name, "", false, true, rubbletype, hp, flammability)

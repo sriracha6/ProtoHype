@@ -20,12 +20,6 @@
     background-color: white;
 }
 
-/*.timebutton {
-    background-color: var(--gray-2-9);
-    border-radius: 0;
-    border-color: var(--gray-0);
-}*/
-
 #TimeControls {
     background-color: var(--gray-3);
 }
@@ -39,24 +33,15 @@
     color: var(--color-light);
 }
 
-/*.unity-toggle__input #unity-checkmark {
-    background-color: var(--gray-9);
-}
-
-.unity-toggle__checkmark:enabled {
-    -unity-background-image-tint-color: white;
-    background-image: resource('ui/check');
-}*/
-
 #PawnInfoParent {
     background-color: var(--color-dark);
 }
-#PawnInfoParent #Health
-{
+
+#PawnInfoParent #Health {
     color: var(--color-light);
 }
-#PawnInfoParent #ShockLabel
-{
+
+#PawnInfoParent #ShockLabel {
     color: var(--color-light);
 }
 
@@ -88,7 +73,6 @@
 }
 
 .consistentLabel {
-    font-size: 100%;
 }
 
 #Vitals {
@@ -119,27 +103,17 @@
     background-color: var(--bgcolor-lightbrown);
 }
 
-/*#RegimentControlStuff #unity-tracker {
-    border-radius: 0;
-    width: 7px;
-    height: 24px;
-    background-color: var(--gray-2-8);
-}
-
-#RegimentControlStuff #unity-dragger {
-    background-color: var(--gray-2-6);
-    height: 15px;
-    top: 30%;
-}*/
-
 #RegimentSelect #ScrollView .unity-scroller * {
     max-height: 20px;
     min-height: 20px;
     height: 20px;
 }
 
-#ExtraPawnInfoParent #Left
-{
+#ExtraPawnInfoParent #Left {
     border-right-width: 3px;
     border-color: var(--color-light);
+}
+
+#QuickInfo {
+    overflow: scroll;
 }

@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace Animals
 {
+    [ImageList(typeof(CachedItems.RenderedAnimalArmor))]
     public class AnimalArmor : Item
     {
-        public Animal forAnimal;
-        public int protection;
-        public float moveSpeedEffect;
+        [XMLItemLink("For Animal", typeof(Animal))] public Animal forAnimal;
+        [XMLItem("Protection")] public int protection;
+        [XMLItem("Move Speed Affect")] public float moveSpeedEffect;
 
         public AnimalArmor(string Name, string Description, string Sourcefile, int protection, Animal forAnimal, float moveSpeedEffect)
             : base(Name, Description, Sourcefile)

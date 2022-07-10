@@ -52,6 +52,12 @@ public class PawnInfo : MonoBehaviour
 
     public void ShowPawnInfo(Pawn p)
     {
+        if(Input.GetKey(Keybinds.SelectAdd))
+        {
+            exp.style.visibility = Visibility.Visible;
+            ShowExtraPawnInfo(p);
+            return;
+        }
         /*foreach (Transform child in viewport.transform) // rfresh
         {
             GameObject.Destroy(child.gameObject);
@@ -64,9 +70,12 @@ public class PawnInfo : MonoBehaviour
         }
         panel.visible = true;
 
-        panel.Q<Button>("MoreInfo").clicked += delegate { ShowExtraPawnInfo(p); };
+        ShowExtraPawnInfo(p);
+
+        panel.Q<Button>("MoreInfo").clicked += delegate { exp.style.visibility = Visibility.Visible; };
         hpanel.style.display = DisplayStyle.Flex;
-        panel.Q<Label>("QuickInfo").text = $"{p.pname} | {p.country.memberName} {p.troopType.Name} | [sword] {p.meleeSkill} [bow] {p.rangeSkill}";
+
+        panel.Q<Label>("QuickInfo").text = $"{p.pname} | {p.country.memberName} {p.troopType.Name} | M: {p.meleeSkill} R: {p.rangeSkill}";
         UpdateHealth(p.healthSystem.bodyparts, p.healthSystem.pain);
         UpdateVitals(p.healthSystem.vitals, p.healthSystem.pain);
         UpdateShock(p.healthSystem.userFriendlyStatus, p.healthSystem.statusType);
@@ -76,8 +85,6 @@ public class PawnInfo : MonoBehaviour
     {
         // TODO TODO TODO TODO 
         // ITEM VIEWER SUPPORT
-        exp.style.visibility = Visibility.Visible;
-
         string pname = p.hasPrimary ? p.heldPrimary.Name : "None";
         string sname = p.hasSidearm ? p.heldSidearm.Name : "None";
         string ssname = p.hasShield ? p.shield.Name : "None";
@@ -87,7 +94,8 @@ public class PawnInfo : MonoBehaviour
         exp.Q<Label>("Shield").text = $"<u>Shield: {ssname}</u>";
         exp.Q<Label>("Kills").text = $"Kills: {p.killCount}";
 
-        foreach(Armor a in p.armor)
+        exp.Q<VisualElement>("Right").Clear();
+        foreach (Armor a in p.armor)
         {
             VisualElement v = armorPiece.CloneTree();
             v.Q<Label>("Armor").text = $"<u>{a.Name}</u>";
@@ -126,12 +134,12 @@ public class PawnInfo : MonoBehaviour
     {
         var color = typeColor switch
         {
-            PawnShockRating.Warning => new Color(192, 181, 46),
-            PawnShockRating.Bad => new Color(192, 54, 46),
-            PawnShockRating.Good => new Color(46, 192, 88),
-            _ => new Color(46, 192, 88),
+            PawnShockRating.Warning => new Color32(192, 181, 46, 255),
+            PawnShockRating.Bad => new Color32(192, 54, 46, 255),
+            PawnShockRating.Good => new Color32(46, 192, 88, 255),
+            _ => new Color32(46, 192, 88, 255),
         };
-        panel.Q<VisualElement>("ShockPanel").style.backgroundColor = color;
+        panel.Q<VisualElement>("ShockPanel").style.backgroundColor = new StyleColor(color);
         panel.Q<Label>("ShockLabel").text = type;
     }
 

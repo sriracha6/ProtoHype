@@ -2,13 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Baracuda.Monitoring;
 using UnityEngine.UIElements;
 
 /// <summary>
 /// Buddah bless this class
 /// </summary>
-public class UIManager : MonitoredBehaviour
+public class UIManager : MonoBehaviour
 {
     public static UIManager I = null;
     [SerializeField] internal UIDocument __ui;
@@ -24,7 +23,6 @@ public class UIManager : MonitoredBehaviour
     }
 
     public static MouseMoveEvent currentMouse;
-    [Monitor]
     public static bool mouseOverUI { get; private set; }
     private static readonly List<VisualElement> draggable = new List<VisualElement>();
 
@@ -33,7 +31,7 @@ public class UIManager : MonitoredBehaviour
 
     private static void mouseEnter(VisualElement v, MouseEnterEvent e)
     {
-        if (v.style.visibility == Visibility.Visible && v.style.display == DisplayStyle.Flex && v.name != "Membrane")
+        if (v.style.visibility != Visibility.Hidden && v.style.display != DisplayStyle.None && v.name != "Membrane")
             mouseOverUI = true;
     }
 

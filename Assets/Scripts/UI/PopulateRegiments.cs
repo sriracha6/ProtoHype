@@ -48,6 +48,7 @@ public class PopulateRegiments : MonoBehaviour
         if (hideState)
         {
             root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").style.display = DisplayStyle.None;
+            root.Q<VisualElement>("RegimentShiz").style.height = root.Q<VisualElement>("RegimentShiz").Q<Button>("HideButton").layout.height;
             root.Q<SliderInt>("RegimentControlStuff").style.display = DisplayStyle.None;
             hideButton.style.backgroundImage = new StyleBackground(downArrow);
         }
@@ -55,6 +56,7 @@ public class PopulateRegiments : MonoBehaviour
         {
             root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").style.display = DisplayStyle.Flex;
             root.Q<SliderInt>("RegimentControlStuff").style.display = DisplayStyle.Flex;
+            root.Q<VisualElement>("RegimentShiz").style.height = root.Q<VisualElement>("RegimentShiz").Q<Button>("HideButton").layout.height + root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").layout.height;
             hideButton.style.backgroundImage = new StyleBackground(upArrow);
         }
     }

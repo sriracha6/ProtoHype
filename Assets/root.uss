@@ -6,6 +6,8 @@
     --color-lightyellow: #DAC5A2;
     --color-light: #F1E8C8;
 
+    --color-link: #6495ED;
+
     --bgcolor-lightbrown: #524740;
     --bgcolor-lightorange: #D9AE84;
     --bgcolor-lightyellow: #D9C06D;
@@ -46,7 +48,7 @@
 
 /* ----- UNITY ----- */
 
-.unity-button
+.unity-button, .unity-scroller__lowbutton, .unity-scroller__highbutton
 {
     -unity-font: var(--font-GAY);
     -unity-font-definition: var(--font);
@@ -58,7 +60,7 @@
     color:white !important; 
 }
 
-.unity-button:hover
+.unity-button:hover, .unity-scroller__lowbutton:hover, .unity-scroller__highbutton:hover
 {
     background-color: var(--color-dark) !important;
 }
@@ -67,7 +69,7 @@
 {
     background-color: var(--color-dark) !important;
 }
-.unity-toggle__checkmark:enabled {
+.unity-toggle:checked .unity-toggle__checkmark{
     -unity-background-image-tint-color: var(--color-light);
     background-image: resource('ui/check') !important;
 }
@@ -108,7 +110,7 @@
     background-color: var(--color-light);
 }
 
-.unity-scroller, .unity-scroller * {
+.unity-scroller, .unity-scroller *, .unity-base-slider--vertical *{
     width: 15px !important;
 }
 

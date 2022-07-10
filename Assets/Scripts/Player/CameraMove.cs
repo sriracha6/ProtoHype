@@ -15,6 +15,7 @@ public class CameraMove : MonoBehaviour
     [SerializeField]
     float maxFov = 90f;
     [SerializeField] float moveSpeed = 25f;
+    public float zoomChangeAmount;
 
     [Header("Components")]
     [SerializeField] CinemachineVirtualCamera thecam;
@@ -106,7 +107,7 @@ public class CameraMove : MonoBehaviour
 
     private void checkMouse()
     {
-        ZoomOrthoCamera(Input.GetAxis("Mouse ScrollWheel") * 5);
+        ZoomOrthoCamera(Input.GetAxis("Mouse ScrollWheel") * zoomChangeAmount);
     }
 
     public void MoveTo(Vector2 pos) // todo : find a way to use this

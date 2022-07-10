@@ -10,9 +10,9 @@ namespace Buildings
 {
     public class Plant : Build
     {
-        public BuildingType buildingType;
-        public int coverQuality;
-        public bool isLean;
+        [XMLItem("Building Type")] public BuildingType buildingType;
+        [XMLItem("Cover Quality")] public int coverQuality;
+        [XMLItem("Lean to Use")] public bool isLean;
         public List<Sprite> sprites;
 
         public Plant(string name, int hitpoints, int flammability, int coverQuality, bool isLean, List<Sprite> sprites)

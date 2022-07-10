@@ -56,5 +56,10 @@ namespace Countries
                 //return CountryList.Find(x => x.Name == name);
             }
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

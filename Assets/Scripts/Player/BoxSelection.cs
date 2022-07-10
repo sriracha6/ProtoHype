@@ -4,13 +4,12 @@ using UnityEngine;
 using PawnFunctions;
 using System;
 using System.Linq;
-using Baracuda.Monitoring;
 
 /// <summary>
 /// This code is unbelievably poorly made. This will break something in the future. This will probably make the game slower.
 /// </summary>
 public enum SelectionMode { Default, Subtract, ClearAll }
-public class BoxSelection : MonitoredBehaviour
+public class BoxSelection : MonoBehaviour
 {
     public LineRenderer lineRenderer;
     private Vector2 initialMousePos;
@@ -18,10 +17,6 @@ public class BoxSelection : MonitoredBehaviour
     private BoxCollider2D bcollider;
     [SerializeField] private Camera maincam;
     [SerializeField] private SpriteRenderer boxFill;
-
-    [Monitor]
-    public int asd { get { return lineRenderer.positionCount; } }
-    
 
     public static List<Pawn> newSelectedPawns = new List<Pawn>();
 

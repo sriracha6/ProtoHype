@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 180405058}
   - component: {fileID: 180405060}
   - component: {fileID: 180405061}
+  - component: {fileID: 180405062}
   m_Layer: 5
   m_Name: -- Context Menu, Messages
   m_TagString: Untagged
@@ -261,6 +262,22 @@ MonoBehaviour:
   root: {fileID: 180405058}
   MENUASSET: {fileID: 9197481963319205126, guid: e5eed92e3146b9d44a146668a054c962, type: 3}
   watchOut: 0
+--- !u!114 &180405062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180405057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c086a214da6a2b48a465b86daff9dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uidoc: {fileID: 180405058}
+  singleItem: {fileID: 9197481963319205126, guid: 2620ab575cceb3547985176490445c7a, type: 3}
+  linkItem: {fileID: 9197481963319205126, guid: 9e9172c7d1c232f44a525b6d53764590, type: 3}
+  box: {fileID: 9197481963319205126, guid: 31ab4846ada4e9a4baedec36ebcd7aa8, type: 3}
 --- !u!1 &625993717
 GameObject:
   m_ObjectHideFlags: 0

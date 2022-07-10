@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using XMLLoader;
 using Armors;
 using Animals;
 // how about we delete these when we're done placing pawns to use 50% less RAM :: TODO
@@ -165,7 +166,7 @@ public class CachedItems
     {
         get
         {
-            return firstNames[Random.Range(0, CachedItems.firstNames.Count)] + " " + surnames[Random.Range(0, CachedItems.surnames.Count)];
+            return firstNames.randomElement().stripNewlines() + " " + surnames.randomElement().stripNewlines();
         }
     }
 }

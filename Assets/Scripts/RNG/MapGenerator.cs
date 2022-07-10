@@ -158,7 +158,6 @@ public class MapGenerator : MonoBehaviour
         new PathfindExtra();
         DrawMap();
     }
-
     private void DrawMap()
     {
         if (I.drawMode == DrawMode.NoiseMap)

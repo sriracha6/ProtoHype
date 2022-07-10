@@ -7,13 +7,14 @@ using Weapons;
 
 namespace Projectiles
 {
+    [ImageList(typeof(CachedItems.RenderedProjectile))]
     public class Projectile : Item
     {
-        public string forWeaponClass;
-        public float damage;
-        public DamageType damageType;
-        public float accuracyEffect;
-        public bool hasFire;
+        [XMLItem("For Weapon Class")] public string forWeaponClass;
+        [XMLItem("Damage")] public float damage;
+        [XMLItem("Damage Type")] public DamageType damageType;
+        [XMLItem("Accuracy Effect")] public float accuracyEffect;
+        [XMLItem("Has Fire")] public bool hasFire;
 
         public Projectile(string name, string desc, string sourcefile, string wclass, float dmg, DamageType dmgType, float accEffect, bool fire) // same for this
             : base(name, desc, sourcefile)

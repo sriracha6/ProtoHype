@@ -11,25 +11,27 @@ using Countries;
 namespace TroopTypes
 {
     public enum PreferSpawn { InsideBase, AroundBase, OutsideBase=0}
+
+    [ImageList(typeof(CachedItems.RenderedTroopType))]
     public class TroopType : Item
     {
-        public Country country;
-        public List<Weapon> weapons = new List<Weapon>(); // make this the weapon type because im not making another fucking type file
-        public List<Weapon> sidearms = new List<Weapon>();
-        public List<List<Armor>> armor = new List<List<Armor>>();
-        public List<Shield> shields = new List<Shield>();
+        [XMLItem("Country")] public Country country;
+        [XMLLinkList("Weapons")] public List<Weapon> weapons = new List<Weapon>();// make this the weapon type because im not making another fucking type file
+        [XMLLinkList("Sidearms")] public List<Weapon> sidearms = new List<Weapon>();
+        [XMLLinkList("Armor")] public List<List<Armor>> armor  = new List<List<Armor>>();
+        [XMLLinkList("Shields")] public List<Shield> shields = new List<Shield>();
 
-        public int meleeSkillMin;
-        public int meleeSkillMax;
+        [XMLItem("Melee Skill Min")] public int meleeSkillMin;
+        [XMLItem("Melee Skill Max")] public int meleeSkillMax;
 
-        public int rangeSkillMin;
-        public int rangeSkillMax;
+        [XMLItem("Range Skill Min")] public int rangeSkillMin;
+        [XMLItem("Range Skill Max")] public int rangeSkillMax;
         public string Icon;
 
-        public bool ridingAnimal;
-        public Animal riddenAnimal;
-        public List<AnimalArmor> animalArmor = new List<AnimalArmor>(); // todo: chances of having and required and pick from groups and sex and FUCk
-        public PreferSpawn preferSpawn;
+        [XMLItem("Is Riding Animal")] public bool ridingAnimal;
+        [XMLItemLink("Ridden Animal", typeof(Animal))] public Animal riddenAnimal;
+        [XMLLinkList("Animal Armor")] public List<AnimalArmor> animalArmor; // todo: chances of having and required and pick from groups and sex and FUCk
+        [XMLItem("Prefer Spawn")] public PreferSpawn preferSpawn;
 
         public override string ToString()
         {

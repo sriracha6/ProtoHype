@@ -118,6 +118,13 @@ public class PawnManager : MonoBehaviour
         newPawn.regiment = r;
         r.Add(newPawn);
 
+        if(newPawn.isFlagBearer)
+        {
+            newPawn.hasPrimary = true;
+            newPawn.heldPrimary = WCMngr.I.flagWeapon;
+            newPawn.activeWeapon = WCMngr.I.flagWeapon;
+        }
+
         foreach (Country co in Country.List)
             if (co != newPawn.country)
                 newPawn.enemyCountries.Add(co);
@@ -147,7 +154,7 @@ public class PawnManager : MonoBehaviour
             newPawn.hasPrimary = false;
 
         if (newPawn.hasPrimary == false)
-            Debug.Log($"{tt.Name} has no primaries? is that right? : {tt.weapons.Count}");
+            Debug.Log($"{tt.country.memberName} {tt.Name} has no primaries? is that right? : {tt.weapons.Count}");
         newPawn.activeWeapon = newPawn.heldPrimary;
 
         newPawn.activeWeaponSlot = ActiveWeapon.Primary;
@@ -177,6 +184,8 @@ public class PawnManager : MonoBehaviour
         {
             newPawn.heldSidearm = tt.sidearms[UnityEngine.Random.Range(0, tt.sidearms.Count)];
             newPawn.hasSidearm = true;
+            if (!newPawn.hasPrimary)
+                newPawn.heldPrimary = newPawn.heldSidearm;
         }
         else
             newPawn.hasSidearm = false;
