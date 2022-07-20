@@ -46,6 +46,7 @@ namespace Body
         public float TotalHP { get; }
         public float HP;
         public float bleedingRate;
+        private int numberedNumber;
         public PartType type;
         public string _partOf;
         public Bodypart partOf 
@@ -55,11 +56,16 @@ namespace Body
                 if (_partOf != "false" && !string.IsNullOrEmpty(_partOf))
                     if (count == 1)
                         return Get(_partOf);
-                    else if (Get(_partOf).countType == CountType.Numbered)
+                    else //if (List.Find(x => x.group == _partOf).countType == CountType.Numbered)
                     {
-                        return Get(Name.Split(' ')[0] + " " + _partOf);
+                        if (List.Find(x => x.group == _partOf) == null)
+                            return Get(_partOf);
+                        else if (countType == CountType.Numbered)
+                            return List.Find(x => x.group == _partOf && x.Name.Contains(numberedNumber > 4 ? "Right " : "Left "));
+                        else
+                            return Get(List.Find(x => x.group == _partOf && x.Name.Contains(Name.Split(' ')[0])).Name);
                     }
-                    else return null;
+                    //else return null;
                 else return null; 
             } 
         }
@@ -78,8 +84,13 @@ namespace Body
         public HitChance hitChance { get; }
         public CountType countType { get; }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         public Bodypart(string name, float hp, PartType pt, string parent, float pfactor, float bfactor, 
-            float dfactor, int cunt, VitalSystem effectz, EffectAmount eamont, HitChance hchance, CountType ct, string group)
+            float dfactor, int cunt, VitalSystem effectz, EffectAmount eamont, HitChance hchance, CountType ct, string group, int numberedNumber)
         {
             Name = name;
             HP = hp;
@@ -96,6 +107,7 @@ namespace Body
             hitChance = hchance;
             countType = ct;
             this.group = group;
+            this.numberedNumber = numberedNumber;
         }
 
         public Bodypart(Bodypart bp)
@@ -120,12 +132,12 @@ namespace Body
         public static List<Bodypart> List { get; private set; } = new List<Bodypart>();
 
         public static Bodypart Create(string name, float hp, PartType pt, string parent, float pfactor, float bfactor,
-            float dfactor, int cunt, VitalSystem effectz, EffectAmount eamont, HitChance hchance, CountType counttype, string group)
+            float dfactor, int cunt, VitalSystem effectz, EffectAmount eamont, HitChance hchance, CountType counttype, string group, int numberedNumber=0)
         {
             //Debug.Log($"I'm making a {name}");
             if (!List.Any(x => x.Name == name))
             {
-                Bodypart c = new Bodypart(name, hp, pt, parent, pfactor, bfactor, dfactor, cunt, effectz, eamont, hchance, counttype, group);
+                Bodypart c = new Bodypart(name, hp, pt, parent, pfactor, bfactor, dfactor, cunt, effectz, eamont, hchance, counttype, group, numberedNumber);
                 List.Add(c);
                 return c;
             }

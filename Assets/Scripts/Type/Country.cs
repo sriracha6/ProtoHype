@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace Countries
 {
+    [ImageList(typeof(List<CachedItems.RenderedCountry>))]
     public class Country
     {
 

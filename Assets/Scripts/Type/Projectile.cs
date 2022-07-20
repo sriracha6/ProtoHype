@@ -7,7 +7,7 @@ using Weapons;
 
 namespace Projectiles
 {
-    [ImageList(typeof(CachedItems.RenderedProjectile))]
+    [ImageList(typeof(List<CachedItems.RenderedProjectile>))]
     public class Projectile : Item
     {
         [XMLItem("For Weapon Class")] public string forWeaponClass;

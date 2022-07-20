@@ -66,6 +66,7 @@ public class CombatSystem : MonoBehaviour
     float extraRangeTime;
 
     bool shouldRunAndGun;
+    List<Transform> enemyCountryTransforms = new List<Transform>();
 
     // ------------------------------------------------------------ //
 
@@ -82,6 +83,12 @@ public class CombatSystem : MonoBehaviour
         int walls = 1 << LayerMask.NameToLayer("Walls");
         int defaul = 1 << LayerMask.NameToLayer("Default");
         layerMask = walls | defaul;
+
+        p.enemyCountries.ForEach(delegate (Country c)  // must we check this every time?
+        {
+            if(p.enemyCountries.Contains(c))
+                enemyCountryTransforms.AddRange(c.memberTransforms);
+        });
 
         InvokeRepeating(nameof(Checks), 0, 0.5f);
     }
@@ -100,9 +107,14 @@ public class CombatSystem : MonoBehaviour
             !CS.MeleeDodged(Skills.EffectToHitChance(p.meleeSkill),         // not dodged
                 Skills.EffectToDodgeChance(target.meleeSkill),              //  ...
                 p.healthSystem.GetVital(VitalSystem.Moving),                //  ...
-                target.healthSystem.GetVital(VitalSystem.Moving))           //  ...
-            && !CS.shieldBlocked(p.shield, target))                         // didnt shield block
+                target.healthSystem.GetVital(VitalSystem.Moving)))          //  ...
+
         {
+            if (CS.shieldBlocked(target.shield, target))
+            {
+                target.animator.Play("ShieldBlock");
+                return;
+            }
             weaponSprite.gameObject.transform.rotation = Quaternion.identity; // reset possible bow rotation
             animator.Play("MeleeHit");
             if (p.activeWeapon.enableRangedMeleeDamage)
@@ -139,8 +151,8 @@ public class CombatSystem : MonoBehaviour
 
     void doRangeShootaAttack(Pawn target)
     {
-        if (p.inventory == null)
-            return; // we have no fucking bullets??? what?? i still dont know why this happens??? i hate this file on god
+        //if (p.inventory == null)
+        //    return; // we have no fucking bullets??? what?? i still dont know why this happens??? i hate this file on god
         animator.Play("Recoil");
 
         weaponSprite.gameObject.transform.Rotate(transform.position - target.transform.position);
@@ -149,6 +161,7 @@ public class CombatSystem : MonoBehaviour
         float xpos = pawnPathfind.orientation == PawnOrientation.Right ? firePoint.transform.position.x + 0.5f : firePoint.transform.position.x - 0.5f;
 
         var projectilef = p.inventory;
+        Debug.Log($"HERE");
 
         arrow.transform.position = new Vector2(xpos, firePoint.transform.position.y); // no idea why i need to do this because the firepoint is rotated too but ok!
         arrow.GetComponent<ProjectileBehaviour>()
@@ -164,10 +177,11 @@ public class CombatSystem : MonoBehaviour
         weaponSprite.gameObject.transform.Rotate(new Vector3(0,0,(transform.position - target.transform.position).z));
         // ^ we need this to point to the target
         GameObject arrow = Instantiate(projectile);
+
         arrow.transform.position = firePoint.transform.position; // this is fairly bad
         arrow.GetComponent<ProjectileBehaviour>()
             .DoThrow(target.gameObject.transform, CS.calculateInaccuracy(shouldRunAndGun, p, runAndGunInaccuracy), p.activeWeapon,
-                p.activeWeapon.rangedDamage, healthSystem.GetVital(VitalSystem.Sight) * rangeRange);
+                p.activeWeapon.rangedDamage, healthSystem.GetVital(VitalSystem.Sight) * rangeRange, p);
     }
 
     public void onChangeWeapon()
@@ -187,11 +201,7 @@ public class CombatSystem : MonoBehaviour
 
     void Checks()
     {
-        int totalEnemies = 0;
-        p.enemyCountries.ForEach(delegate (Country c)  // must we check this every time?
-        {                                              // ans : no, but it's fast so who gives 2 shits? also its very useful
-            totalEnemies += c.members.Count;
-        });
+        int totalEnemies = enemyCountryTransforms.Count;
 
         if (totalEnemies <= 0)
             return;
@@ -217,15 +227,13 @@ public class CombatSystem : MonoBehaviour
         //{
         if(targetUntilDeath == null)
         {
-            closestEnemy = p.enemyCountries.Count > 1
-                ? CS.GetClosestEnemy(p.enemyCountries[Random.Range(0, p.enemyCountries.Count)].memberTransforms,   transform)
-                : CS.GetClosestEnemy(p.enemyCountries[Random.Range(0, p.enemyCountries.Count)].memberTransforms,   transform);
+            closestEnemy = CS.GetClosestEnemy(enemyCountryTransforms, transform);
 
             targetUntilDeath = closestEnemy.GetComponent<Pawn>();
             //Debug.Log($"new enemy: {p.country} : target is null");
         }
         //else
-        if(Player.ourSelectedPawns.Count > 0)
+        /*if(Player.ourSelectedPawns.Count > 0)
         {
             List<Transform> list = new List<Transform>();
             foreach(Pawn p in PawnManager.GetAll())
@@ -234,8 +242,9 @@ public class CombatSystem : MonoBehaviour
                     list.Add(p.gameObject.transform);
             }
 
-            closestEnemy = CS.GetClosestEnemy(list, transform);
-        }
+        }*/
+        // why tf was this here in the first place, what does it do? ^^
+        closestEnemy = CS.GetClosestEnemy(enemyCountryTransforms, transform);
         
         if (checkCanMeleeAttack(targetUntilDeath) && targetUntilDeath != null)
         {
@@ -319,9 +328,7 @@ public class CombatSystem : MonoBehaviour
 
     private void switchToSecondary()
     {
-        closestEnemy = p.enemyCountries.Count > 1
-            ? CS.GetClosestEnemy(p.enemyCountries[Random.Range(0, p.enemyCountries.Count)].memberTransforms,   transform)
-            : CS.GetClosestEnemy(p.enemyCountries[0].memberTransforms,   transform); 
+        closestEnemy = CS.GetClosestEnemy(enemyCountryTransforms, transform);
         targetUntilDeath = closestEnemy.GetComponent<Pawn>();
 
         float distance = (closestEnemy.position - transform.position).sqrMagnitude;
@@ -330,7 +337,7 @@ public class CombatSystem : MonoBehaviour
             && distance >= (2f*2f))
         {
             p.activeWeapon = p.heldSidearm;
-            weaponSprite.sprite = CachedItems.renderedWeapons.Find(x => x.id == p.heldSidearm.ID).sprite;
+            weaponSprite.sprite = CachedItems.renderedWeapons.Find(x => x.id == p.heldSidearm).sprite;
             p.activeWeaponSlot = ActiveWeapon.Secondary;
         }
         onChangeWeapon();

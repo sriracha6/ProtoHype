@@ -91,7 +91,7 @@ public class MapGenerator : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         if (I == null) // Main Menu
             I = this;
-        else if (I != null)// We have loaded the battle scene. We aren't on the main menu.
+        else if (Menus.I.inBattle)// We have loaded the battle scene. We aren't on the main menu.
         {
             I.mapBounds = mapBounds;
             I.sun = sun;
@@ -212,8 +212,9 @@ public class MapGenerator : MonoBehaviour
                     if (RoofPlacer.I.rooves != null && RoofPlacer.I.rooves[x, y] != null)
                         RoofPlacer.I.PlaceRoof(RoofPlacer.I.rooves[x, y], x, y);
                 }
-
             WCMngr.I.solidTilemap.RefreshAllTiles();
+            WCMngr.I.groundTilemap.RefreshAllTiles();
+            
             WCMngr.I.groundTilemap.RefreshAllTiles();
             //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
         }

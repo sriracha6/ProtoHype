@@ -3,7 +3,7 @@
     <Style src="/Assets/root.uss" />
     <ui:VisualElement style="position: absolute; width: 100%; height: 100%; background-image: resource(&apos;ui/bg&apos;);" />
     <ui:Button text="&lt;" display-tooltip-when-elided="true" name="BackButton" style="position: absolute; background-color: rgb(94, 94, 94); background-image: none;" />
-    <ui:VisualElement name="Box" class="body" style="position: absolute; left: 25%; top: 15%; width: 60%; height: 50%; background-color: rgb(58, 58, 58); flex-direction: row;">
+    <ui:VisualElement name="Box" class="body window" style="position: absolute; left: 25%; top: 15%; width: 60%; height: 50%; background-color: rgb(58, 58, 58); flex-direction: row;">
         <ui:VisualElement name="LeftBox" class="yellow-bg" style="flex-grow: 1; border-left-width: 0; border-right-width: 5px; border-top-width: 0; border-bottom-width: 0; -unity-font-definition: resource(&apos;&apos;);">
             <ui:Label display-tooltip-when-elided="true" text="New" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; top: 25%; border-bottom-width: 0; border-bottom-color: rgb(103, 103, 103); -unity-text-align: upper-center; border-left-width: 0; border-right-width: 0; border-top-width: 0; font-size: 14px; -unity-font-style: bold;" />
             <ui:Label display-tooltip-when-elided="true" name="DivLab" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; top: 50%; border-bottom-width: 3px; -unity-text-align: upper-center;" />

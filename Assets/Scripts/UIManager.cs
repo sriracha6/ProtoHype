@@ -7,10 +7,11 @@ using UnityEngine.UIElements;
 /// <summary>
 /// Buddah bless this class
 /// </summary>
+[RequireComponent(typeof(UIDocument))]
 public class UIManager : MonoBehaviour
 {
     public static UIManager I = null;
-    [SerializeField] internal UIDocument __ui;
+    [SerializeField] UIDocument __ui;
     private static UIDocument ___UI;
     public static UIDocument ui
     {
@@ -21,13 +22,15 @@ public class UIManager : MonoBehaviour
                 I.OnUiChange();
         }
     }
+    public static bool UIHidden { get; set; } = false;
 
-    public static MouseMoveEvent currentMouse;
     public static bool mouseOverUI { get; private set; }
     private static readonly List<VisualElement> draggable = new List<VisualElement>();
 
     public delegate void DelegateOnUIChange();
     public event DelegateOnUIChange OnUiChange;
+
+    private List<VisualElement> hiddenVes = new List<VisualElement> ();
 
     private static void mouseEnter(VisualElement v, MouseEnterEvent e)
     {
@@ -40,16 +43,22 @@ public class UIManager : MonoBehaviour
         if (I == null)
         {
             I = this;
-            OnUiChange += I.RefreshUI;
+            I.OnUiChange += I.RefreshUI;
         }
-        else
-            ui = __ui;
+        else if (Menus.I.inBattle)
+        {
+            Debug.Log($"HERE HERE");
+            ui = GetComponent<UIDocument>();
+        }
     }
 
     void RefreshUI()
     {
         var root = ui.rootVisualElement;
-        if(Menus.I.inBattle)
+        if (Menus.I.inBattle)
+            root = GetComponent<UIDocument>().rootVisualElement;
+
+        if (Menus.I.inBattle)
         {
             List<ContextMenuItem> list = new List<ContextMenuItem>
                 {
@@ -57,9 +66,8 @@ public class UIManager : MonoBehaviour
                     new ContextMenuItem("Clear Selection", ClearRCMenu)
                 };
             root.AddManipulator(new ContextMenuManipulator(list, false));
-            root.pickingMode = PickingMode.Position;
+            //root.pickingMode = PickingMode.Position;
         }
-        root.RegisterCallback<MouseMoveEvent>(x => { currentMouse = x; });
         foreach (VisualElement v in root.Children())
         {
             //v.RegisterCallback<MouseMoveEvent>(x => { currentMouse = x; });
@@ -73,6 +81,12 @@ public class UIManager : MonoBehaviour
             v.RegisterCallback<MouseLeaveEvent>(x => mouseOverUI = false);
 
         }
+    }
+
+    public static void TransferToNewUI(VisualElement window, string name)
+    {
+        if (ui.rootVisualElement.Q<VisualElement>(name) == null)
+            ui.rootVisualElement.Add(window);
     }
 
     public static void RegisterMouseOver(VisualElement v)
@@ -166,5 +180,30 @@ public class UIManager : MonoBehaviour
         v.style.backgroundColor = oldC;
         //v.style.backgroundColor = new StyleColor(oldColor);
     }
-}
 
+    public static void ToggleUI()
+    {
+        foreach (VisualElement v in ui.rootVisualElement.Children())
+        {
+            if (v.name == "PauseMenuParent")
+                continue;
+            if (!UIHidden && v.style.visibility == Visibility.Hidden && v.style.display == DisplayStyle.None)
+                I.hiddenVes.Add(v);
+
+            if (!UIHidden)
+            {
+                v.style.display = DisplayStyle.None;
+                v.style.visibility = Visibility.Hidden;
+            }
+            else
+            {
+                if (I.hiddenVes.Contains(v))
+                    continue;
+                v.style.display = DisplayStyle.Flex;
+                v.style.visibility = Visibility.Visible;
+            }
+        }
+
+        UIHidden = !UIHidden;
+    }
+}

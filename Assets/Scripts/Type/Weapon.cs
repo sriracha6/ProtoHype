@@ -62,7 +62,7 @@ namespace Weapons
         Thrown
     }
 
-    [ImageList(typeof(CachedItems.RenderedWeapon))]
+    [ImageList(typeof(List<CachedItems.RenderedWeapon>))]
     public class Weapon : Item
     {
         [XMLItem("Weapon Type")] [MeleeAttribute] [RangedAttribute] public WeaponType Type { get; }
@@ -79,7 +79,7 @@ namespace Weapons
         [XMLItem("Long Accuracy")] [RangedAttribute] public float longAccuracy { get; }
 
         [XMLItem("Has Ranged Melee Damage")] [RangedAttribute] public bool enableRangedMeleeDamage { get;}
-        [XMLItem("Melee Damage Type")] [RangedAttribute] public string meleeDamageType { get;}
+        [XMLItem("Melee Damage Type")] [RangedAttribute] public DamageType meleeDamageType { get;}
         [XMLItem("Ranged Melee Damage")] [RangedAttribute] public float rangedMeleeDamage { get; }
 
         [XMLItem("Ranged Damage")] [RangedAttribute] public int rangedDamage { get; }
@@ -88,6 +88,8 @@ namespace Weapons
 
         [XMLItem("Range")] [RangedAttribute] public int range { get; }
         [XMLItem("Range Type")] [RangedAttribute] public RangeType rangeType { get; }
+
+        public override string ToString() { return base.Name; }
 
         public Weapon(string sourcefile, string name, WeaponType type, string description, string wc, MeleeRange mrange, bool warmup, int armorpens,
                       int armorpenb, float Size, List<Attack> attks) : base(name, description, sourcefile)
@@ -101,7 +103,7 @@ namespace Weapons
         }
 
         public Weapon(string sourcefile, string name, string description, WeaponType type, string wc, int r, float armopen, RangeType rt, float meleeDmg,
-            float warmupTime, string meleeDmgType, int dmg, float siz,
+            float warmupTime, DamageType meleeDmgType, int dmg, float siz,
             float lAccuracy, float mAccuracy, float sAccuracy) : base(name, description, sourcefile)
         {
             Type = type;
@@ -133,7 +135,7 @@ namespace Weapons
         }
 
         public static Weapon CreateRanged(string sourcefile, string name, string desc, WeaponType type, string weaponclass, int range, float armorPen, RangeType rt, float meleeDamage, float warmupTime,
-            string meleeDamageType, int dmg, float size,
+            DamageType meleeDamageType, int dmg, float size,
             float longAccuracy, float mediumAccuracy, float shortAccuracy)
         {
             Weapon c = new Weapon(sourcefile, name, desc, type, weaponclass, range, armorPen, rt, meleeDamage, warmupTime, meleeDamageType, dmg, size, longAccuracy, mediumAccuracy, shortAccuracy);

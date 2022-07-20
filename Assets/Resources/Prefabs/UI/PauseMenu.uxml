@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/root.uss" />
+    <ui:VisualElement name="PauseMenuParent" style="width: 45%; height: 65%; position: absolute; bottom: 5%; right: 5%;">
+        <ui:VisualElement name="InfoBox" class="window orange-bg" style="height: 60%; width: 100%; margin-bottom: 7px;">
+            <ui:Label text="Most Kills: Quandale Dingle" display-tooltip-when-elided="true" name="MostKillsLabel" />
+            <ui:Label text="TotalCasualties : 59" display-tooltip-when-elided="true" name="TotalCasualtiesLabel" />
+        </ui:VisualElement>
+        <ui:Button text="Resume" display-tooltip-when-elided="true" name="ResumeButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
+        <ui:Button text="Settings" display-tooltip-when-elided="true" name="OptionsButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
+        <ui:Button text="Exit To Main Menu" display-tooltip-when-elided="true" name="MainMenuButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
+    </ui:VisualElement>
+</ui:UXML>

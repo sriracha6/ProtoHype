@@ -4,7 +4,7 @@
     <ui:VisualElement name="BG" style="background-image: resource(&apos;ui/bg&apos;); width: 100%; height: 100%;" />
     <ui:Button text="&lt;" display-tooltip-when-elided="true" name="BackButton" style="position: absolute; background-color: rgb(94, 94, 94); background-image: none;" />
     <ui:Button text="Play" display-tooltip-when-elided="true" name="Play" style="position: absolute; top: 90%; left: 94%;" />
-    <ui:VisualElement name="Box" class="brown-bg body" style="position: absolute; width: 75%; height: 80%; left: 15%; top: 15%;">
+    <ui:VisualElement name="Box" class="brown-bg body window" style="position: absolute; width: 75%; height: 80%; left: 15%; top: 15%;">
         <ui:VisualElement style="height: 35%; flex-direction: row; border-bottom-width: 3px; border-bottom-color: rgb(106, 106, 106);">
             <ui:ScrollView name="FriendlyCountryAdder" style="height: 100%; width: 47.5%; border-right-width: 3px; border-right-color: rgb(115, 115, 115);" />
             <ui:VisualElement style="width: 5%; align-items: center;">

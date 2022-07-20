@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/Resources/Prefabs/UI/prefab.uss" />
+    <ui:VisualElement name="Box" style="width: 100%; height: auto; flex-direction: row; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 2px; background-color: rgb(30, 39, 50); border-left-color: rgb(241, 232, 200); border-right-color: rgb(241, 232, 200); border-top-color: rgb(241, 232, 200); border-bottom-color: rgb(241, 232, 200);">
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="MainLabel" style="width: 25%; -unity-font: resource(&apos;garamond&apos;); -unity-font-definition: resource(&apos;garamond SDF&apos;); color: rgb(241, 232, 200); padding-top: 0; margin-top: 0;" />
+        <ui:VisualElement style="width: 75%;">
+            <ui:Label text="Required" display-tooltip-when-elided="true" name="RequriedLabel" style="-unity-font: resource(&apos;garamond&apos;); -unity-font-definition: resource(&apos;garamond SDF&apos;); color: rgb(241, 232, 200); padding-top: 0; margin-top: 0;" />
+            <ui:ScrollView name="RequiredScrollBox" />
+            <ui:Label text="Pick From" display-tooltip-when-elided="true" name="PickFromLabel" style="-unity-font: resource(&apos;garamond&apos;); -unity-font-definition: resource(&apos;garamond SDF&apos;); color: rgb(241, 232, 200); padding-top: 0; margin-top: 0;" />
+            <ui:ScrollView name="PickFromScrollBox" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -5,7 +5,7 @@ using System;
 
 namespace Shields
 {
-    [ImageList(typeof(CachedItems.RenderedShield))]
+    [ImageList(typeof(List<CachedItems.RenderedShield>))]
     public class Shield : Item
     {
         [XMLItem("Sharp Protection")] public float sharpProtection;
@@ -13,6 +13,8 @@ namespace Shields
         [XMLItem("Movement Speed Affect")] public float movementSpeedEffect;
         [XMLItem("Base Block Chance")] public float baseBlockChance;
         [XMLItem("Size")] public float size;
+
+        public override string ToString() { return base.Name; }
 
         public Shield(string sourcefile, string name, string desc, float sharpProt, float bluntProt, float moveSpeedEffect, float baseBlockChnc, float siz) // same for this
             :base(name, desc, sourcefile)
@@ -49,7 +51,7 @@ namespace Shields
             if (List.Exists(x => x.Name == name))
                 return List.Find(x => x.Name == name);
             else
-                DB.Attention($"Couldn't find Shield of name {name}");
+                DB.Attention($"Couldn't find Shield of name \"{name}\"");
             return null;
         }
     }

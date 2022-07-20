@@ -18,38 +18,58 @@ public class SpriteSheetCreator : MonoBehaviour
         if(I == null)
             I = this;
     }
-
+    // im a genius create tile blending by making the edges 50% transparent and make the ppu too small
     public FuckBitchTile createTerrainTileFromSheet(byte[] image)
     {
         Sprite[] SPRITES;
         //t.tbase = Instantiate<RandomTile>(ScriptableObject.CreateInstance<RandomTile>());
         //t.tbase = ScriptableObject.CreateInstance<FuckBitchTile>();//
         Texture2D sheet = new Texture2D(1,1);
+        sheet.filterMode = FilterMode.Point;
         sheet.LoadImage(image);
+        sheet.Apply();
+
         int count = (int)(sheet.width/256) + (int)(sheet.height/256);
         SPRITES = new Sprite[count];
 
         FuckBitchTile bitchBase = Instantiate(ScriptableObject.CreateInstance<FuckBitchTile>());
-        //if (t == null)
-        //{
-        //    DB.Attention("Null TerrainType in create terrain tile.");
-        //    return null;
-        //}
-        //t.tile = bitchBase;
         for (int i = 0; i < (int)(sheet.width / 256); i++)
         {
             for(int j = 0; j < (int)(sheet.height / 256); j++)
             {
-                Texture2D tex = new Texture2D(256, 256);
+                Texture2D tex = new Texture2D(256, 256, TextureFormat.RGB24, true);
+                tex.filterMode = FilterMode.Point;
+                tex.wrapMode = tex.wrapModeU = tex.wrapModeV = tex.wrapModeW = TextureWrapMode.Clamp;
                 tex.SetPixels(sheet.GetPixels(i*256, j*256, 256, 256));
-                tex.Apply();
+                
+                /*
+                for(int x = 0; x < 256; x++)
+                {
+                    for(int y = 0; y < 256; y++)
+                    {
+                        int checkCount = 0;
+                        if (x <= 13) checkCount++;
+                        if (x >= 256 - 13) checkCount++;
+                        if (y <= 13) checkCount++;
+                        if (y >= 256 - 13) checkCount++;
 
-                Sprite spr = Sprite.Create(tex, new Rect(Vector2.zero, new Vector2(256,256)), Vector2.zero, 256 / 2); // 2: size of tilemap cells
-                //SPRITES[i+j] = spr;
-                //bitchBase.m_Sprites = SPRITES.ToList
+                        if (checkCount == 1)
+                        {
+                            float multipler = 1f / 13f;
+                            var c = tex.GetPixel(x, y);
+                            tex.SetPixel(x, y, new Color(c.r*0.4f, c.g*0.4f, c.b*0.4f, 0.4f * multipler));
+                        }
+                        else if (checkCount != 0)
+                        {
+                            tex.SetPixel(x, y, new Color(0,0,0,0f));
+                        }
+                    }
+                }*/
+                
+                tex.Apply();
+                                                                                                            // 230 /2
+                Sprite spr = Sprite.Create(tex, new Rect(Vector2.zero, new Vector2(256,256)), Vector2.zero, 256 / 2, 8); // 2: size of tilemap cells
                 bitchBase.m_Sprites.Add(spr);
-                // WTF???
-                //Debug.Log($"bb:{bitchBase.sprite.texture.imageContentsHash}");
             }
         }
         

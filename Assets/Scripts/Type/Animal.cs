@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Animals
 {
-    [ImageList(typeof(CachedItems.RenderedAnimal))]
+    [ImageList(typeof(List<CachedItems.RenderedAnimal>))]
     public class Animal : Item
     {
         [XMLItem("Is Ridable")] public bool ridable;
@@ -21,6 +21,11 @@ namespace Animals
             this.speedEffect = speedEffect;
             this.hitpoints = hitpoints;
             this.hitChance = hitChance;
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
 
         public static List<Animal> List = new List<Animal>();

@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34049e8883c5cf24182ea07ef556388a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  regimentSize: 0
+  regimentSize: 30
 --- !u!1 &180405057
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78658efc307d46c48b85c556f2ae5f50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToFade: 3
+  timeToFade: 0
 --- !u!114 &180405061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,8 +259,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2559ce6f223e854418d8c8f6edeb9769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  root: {fileID: 180405058}
-  MENUASSET: {fileID: 9197481963319205126, guid: e5eed92e3146b9d44a146668a054c962, type: 3}
+  root: {fileID: 0}
+  MENUASSET: {fileID: 0}
   watchOut: 0
 --- !u!114 &180405062
 MonoBehaviour:
@@ -274,10 +274,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c086a214da6a2b48a465b86daff9dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uidoc: {fileID: 180405058}
-  singleItem: {fileID: 9197481963319205126, guid: 2620ab575cceb3547985176490445c7a, type: 3}
-  linkItem: {fileID: 9197481963319205126, guid: 9e9172c7d1c232f44a525b6d53764590, type: 3}
-  box: {fileID: 9197481963319205126, guid: 31ab4846ada4e9a4baedec36ebcd7aa8, type: 3}
+  uidoc: {fileID: 0}
+  ITEMVIEWERASSET: {fileID: 0}
+  singleItem: {fileID: 0}
+  linkItem: {fileID: 0}
+  box: {fileID: 0}
+  requiredPickFrom: {fileID: 0}
+  currentHistoryIndex: 0
 --- !u!1 &625993717
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,12 +354,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b27e6ca33f4fd0246ab56680f7477a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenu: {fileID: 625993718}
-  start: {fileID: 1399250236}
-  quickstart: {fileID: 5939711}
-  loading: {fileID: 932197536}
+  mainMenu: {fileID: 0}
+  start: {fileID: 0}
+  quickstart: {fileID: 0}
+  loading: {fileID: 0}
   inBattle: 0
-  prefab_country: {fileID: 1573550036}
+  prefab_country: {fileID: 0}
 --- !u!1 &902525626
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,6 +376,7 @@ GameObject:
   - component: {fileID: 902525632}
   - component: {fileID: 902525633}
   - component: {fileID: 902525634}
+  - component: {fileID: 902525635}
   m_Layer: 0
   m_Name: '**Load**'
   m_TagString: Untagged
@@ -393,9 +397,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 0}
-  flagSprite: {fileID: 0}
-  difficulty: 1
-  pawnInfo: {fileID: 0}
+  flagSprite: {fileID: 21300000, guid: 9b4e4b78838fdb147baea4d446bdf150, type: 3}
+  difficulty: 0
   bloodParent: {fileID: 0}
   projectileParent: {fileID: 0}
   groundTilemap: {fileID: 0}
@@ -460,7 +463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34783a84ed3e1cb4ba4d7e1f3c63a564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  __ui: {fileID: 0}
+  __ui: {fileID: 625993718}
 --- !u!114 &902525632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -501,7 +504,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roofTmap: {fileID: 0}
-  invisibleTile: {fileID: 0}
+  invisibleTile: {fileID: 11400000, guid: c43606fa95f28d448b5ea07f112ea01d, type: 2}
+--- !u!114 &902525635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902525626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21c074d86024caca2a0034ce4f53f73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 7105603aed39466438f8bb3d00b2b470, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 1489713bc57b5e24581b392933eeaaa6, type: 3}
+  m_SortingOrder: 0
 --- !u!1 &932197535
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92773540a52cfbb4ea57038f64635ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisdoc: {fileID: 932197536}
+  thisdoc: {fileID: 0}
   tips: []
 --- !u!1 &1003303747
 GameObject:
@@ -596,33 +615,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be5a9d75dafee964b9b70cabf79832ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapWidth: 250
-  mapHeight: 250
-  noiseScale: 35
+  mapWidth: 0
+  mapHeight: 0
+  noiseScale: 0
   autoUpdate: 0
   drawMode: 0
   shallowSeaLevel: 0
   deepSeaLevel: 0
-  mountainHeight: 0.7
-  seed: -553980917
+  mountainHeight: 0
+  seed: 
   offset: {x: 0, y: 0}
-  octaves: 4
-  persistence: 0.71
-  lacunarity: 2
-  erosionAmount: 2
-  meshHeightMultiplier: 10
+  octaves: 0
+  persistence: 0
+  lacunarity: 0
+  erosionAmount: 0
+  meshHeightMultiplier: 0
   treesSeed: 
-  radius: 4.2
-  rejectionSamples: 5
-  treeHeight: 0.77
+  radius: 0
+  rejectionSamples: 30
+  treeHeight: 0
   mapBounds: {fileID: 0}
   currentTexture: {fileID: 0}
   sun: {fileID: 0}
-  waterPrefab: {fileID: 6606901910760228351, guid: e827662de34de004fb2b4d8a3b31c10f, type: 3}
-  treeFab: {fileID: 6602318320774876730, guid: 25a92d99eb59c3d4080e2197a375a897, type: 3}
+  waterPrefab: {fileID: 0}
+  treeFab: {fileID: 0}
   riverCount: 0
   seasidesCount: 0
-  riverPerturbation: 1
+  riverPerturbation: 0
   minRiverWidth: 0
   maxRiverWidth: 0
   isTestMap: 0
@@ -656,11 +675,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doDayCycle: 0
-  dayLength: 4000
-  step: 10
-  dayColor: {r: 0.99215686, g: 0.9843137, b: 0.827451, a: 0}
+  dayLength: 0
+  step: 0
+  dayColor: {r: 0, g: 0, b: 0, a: 0}
   sunSetColor: {r: 0, g: 0, b: 0, a: 0}
-  nightColor: {r: 0.81960785, g: 0.65882355, b: 0.8509804, a: 0}
+  nightColor: {r: 0, g: 0, b: 0, a: 0}
   globalLight: {fileID: 0}
   sunLight: {fileID: 0}
   currentProgressPercent: 0

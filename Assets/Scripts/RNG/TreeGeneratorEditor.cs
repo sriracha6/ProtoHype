@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(TreeGenerator))]
 public class TreeGeneratorEditor : Editor
 {
@@ -29,3 +30,4 @@ public class TreeGeneratorEditor : Editor
         }
     }
 }
+#endif

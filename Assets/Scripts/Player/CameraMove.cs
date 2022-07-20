@@ -107,7 +107,10 @@ public class CameraMove : MonoBehaviour
 
     private void checkMouse()
     {
-        ZoomOrthoCamera(Input.GetAxis("Mouse ScrollWheel") * zoomChangeAmount);
+        if (!Input.GetKey(Keybinds.changeSpeed))
+            ZoomOrthoCamera(Input.GetAxis("Mouse ScrollWheel") * zoomChangeAmount);
+        else
+            moveSpeed += Input.GetAxis("Mouse ScrollWheel") * 10;
     }
 
     public void MoveTo(Vector2 pos) // todo : find a way to use this

@@ -15,11 +15,11 @@ public class Loading : MonoBehaviour
         set 
         { 
             _status = value;
-            progress.title = value;
+            progress.text = value;
         } 
     }
 
-    AbstractProgressBar progress;
+    Label progress;
     Label tip;
     [SerializeField] UIDocument thisdoc;
 
@@ -27,7 +27,7 @@ public class Loading : MonoBehaviour
 
     protected void Start()
     {
-        progress = thisdoc.rootVisualElement.Q<AbstractProgressBar>("Progress");
+        progress = thisdoc.rootVisualElement.Q<Label>("Progress");
         tip = thisdoc.rootVisualElement.Q<Label>("Tip");
         I = this;
 
@@ -38,7 +38,8 @@ public class Loading : MonoBehaviour
         "Melee attacks from an animal going full speed will multiply damage.", "You can't go through doors if you're on an animal.",
         "Attacks from stationary animals do 25% less damage.", "Different terraintypes have different walkspeeds. Use this to plan a fast route around your enemy.",
         "You can drag around many GUI elements.", "You can add to your current pawn selection, subtract, or remove it.", 
-        "Troops can spawn inside a base, around it, or just outside it. Watch out!"});
+        "Troops can spawn inside a base, around it, or just outside it. Watch out!", "Some weapons have a warmup time.", 
+        "You can reorder regiments in the regiment viewer. You can also change the default sorting method."});
         
         StartCoroutine(Tips());
     }
@@ -62,8 +63,6 @@ public class Loading : MonoBehaviour
         while (!asyncOperation.isDone)
         {
             //Output the current progress
-            progress.value = asyncOperation.progress * 100;
-
             //if (asyncOperation.progress > 0.99f)
             //    asyncOperation.allowSceneActivation = true;
 

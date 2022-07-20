@@ -6,8 +6,6 @@ using Regiments;
 using UnityEngine.Tilemaps;
 using PawnFunctions;
 
-public enum LoadFrom { Quickbattle }
-
 public class Player : MonoBehaviour
 {
     public static Country playerCountry;
@@ -21,12 +19,10 @@ public class Player : MonoBehaviour
     public static List<BoundsInt> selectedTileBounds = new List<BoundsInt>();
 
     public static int regimentSelectNumber;
-    public static LoadFrom loadedFrom;
+    public static bool isRoofShow = false;
 
-    private void Start()
-    {
-        playerCountry = Country.Get("France"); // AAAA! todo! make dyanimc. this is the source of bugs if i dont remember
-    }
+    public static List<Country> friends = new List<Country>();
+    public static List<Country> enemies = new List<Country>();
 
     private void Update()
     {   

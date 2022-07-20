@@ -28,7 +28,7 @@ public class ProjectileBehaviour : MonoBehaviour
     bool isFire;
     float damage;
     DamageType damageType;
-
+    
     PawnFunctions.Pawn sourcePawn;
     bool isThrow;
 
@@ -48,8 +48,7 @@ public class ProjectileBehaviour : MonoBehaviour
     // take end parameter to auto destroy there?
     public void CreateAndMove(Transform target, float inaccuracy, Projectile projectileType, float thisWeaponDamage, PawnFunctions.Pawn sourcePawn, Weapon thisWeapon, float range, bool isFire)
     {
-        Destroy(gameObject, range * 1.25f);
-
+        Destroy(gameObject, range * 1.25f); // todo when add projec speed, mul by that too THIS AND THROWER FUNCTIOn.
         thisProjectile = projectileType;
         weaponDamage = thisWeaponDamage;
         thisType = projectileType.damageType;
@@ -73,17 +72,16 @@ public class ProjectileBehaviour : MonoBehaviour
         rb.AddForce((targetNew-transform.position) * projectileForce, ForceMode2D.Impulse);
     }
                                                             // we need this reference for the image
-    public void DoThrow(Transform target, float inaccuracy, Weapon weapon, float damage, float range)
+    public void DoThrow(Transform target, float inaccuracy, Weapon weapon, float damage, float range, PawnFunctions.Pawn sourcePawn)
     {
-        if (weapon.attacks.Count <= 0)
-            return;                   // why are we even here>
         Destroy(gameObject, range * 1.25f);
 
         isThrow = true;
         weaponDamage = damage;
-        thisType = weapon.attacks[(int)(Random.value * weapon.attacks.Count)].damageType;
+        thisType = weapon.meleeDamageType;
         thisWeapon = weapon;
         this.damage = damage;
+        this.sourcePawn = sourcePawn;
 
         Vector3 targetNew = target.position;
         targetNew.x += Random.Range(-inaccuracy, inaccuracy);       // this is genius

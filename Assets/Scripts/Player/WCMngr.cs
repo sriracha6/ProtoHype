@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.U2D;
 using Weapons;
 
 public class WCMngr : MonoBehaviour
@@ -15,7 +16,6 @@ public class WCMngr : MonoBehaviour
     public Difficulty difficulty;
 
     [Header("Groups")]
-    public PawnInfo pawnInfo;
     public GameObject bloodParent;
     public GameObject projectileParent;
 
@@ -38,23 +38,24 @@ public class WCMngr : MonoBehaviour
     protected void Awake()
     {
         mainCam = Camera.main;
-        flagWeapon = new Weapon("", "Flag", WeaponType.Melee, "A flag carried by heroic flagbearers. Boosts troops when the bearer is still alive. Not an effective weapon.", "Flag", new MeleeRange(MeleeRange.Medium), false, 0, 0, 1.25f, null);
 
-        CachedItems.renderedWeapons.Add(new CachedItems.RenderedWeapon(flagSprite, flagWeapon.ID));
+        CachedItems.renderedWeapons.Add(new CachedItems.RenderedWeapon(flagSprite, flagWeapon));
         if (I == null)
+        {
             I = this;
-        else
+
+            flagWeapon = new Weapon("", "Flag", WeaponType.Melee, "A flag carried by heroic flagbearers. Boosts troops when the bearer is still alive. Not an effective weapon.", "Flag", new MeleeRange(MeleeRange.Medium), false, 0, 0, 1.25f, null);
+            bluntWoundNames.AddRange(new string[] { "Crack", "Fracture", "Fissure" });
+            seriousBluntWoundNames.AddRange(new string[] { "Dislocation", "Break" });
+        }
+        else if (Menus.I.inBattle)
         {
             I.groundTilemap = groundTilemap;
             I.solidTilemap = solidTilemap;
             I.projectileParent = projectileParent;
             I.bloodParent = bloodParent;
-            I.pawnInfo = pawnInfo;
             I.mainCam = Camera.main;
         }
-
-        bluntWoundNames.AddRange(new string[] { "Crack", "Fracture", "Fissure" });
-        seriousBluntWoundNames.AddRange(new string[] { "Dislocation", "Break" });
     }
 
     /// <summary>
@@ -78,6 +79,7 @@ public class WCMngr : MonoBehaviour
 
     protected void Start()
     {
-        PathfindExtra _ = new PathfindExtra(); // singleton :)
+        if(Menus.I.inBattle)
+            new PathfindExtra(); // singleton :)
     }
 }

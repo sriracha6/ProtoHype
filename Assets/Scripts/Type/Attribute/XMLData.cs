@@ -18,7 +18,7 @@ public class XMLItem : Attribute
 [System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class MeleeAttribute : Attribute{}
 [System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class RangedAttribute : Attribute{ }
+public class RangedAttribute : Attribute{}
 
 [System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class XMLItemList : Attribute
@@ -61,6 +61,17 @@ public class XMLItemLink : Attribute
 
     public XMLItemLink(string name, Type t)
     {
+        this.name = name;
         this.type = t;
+    }
+}
+
+public class XMLRequiredPickFrom : Attribute
+{
+    public string name;
+
+    public XMLRequiredPickFrom(string name)
+    {
+        this.name = name;
     }
 }

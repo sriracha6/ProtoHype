@@ -30,7 +30,10 @@ public class Menus : MonoBehaviour
 
     protected void Start()
     {
-        I = this;
-        SwitchTo(mainMenu);
+        if (I == null)
+        {
+            I = this;
+            SwitchTo(mainMenu);
+        }
     }
 }

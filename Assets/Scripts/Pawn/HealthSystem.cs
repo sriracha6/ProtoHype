@@ -7,7 +7,7 @@ using Body;
 using Attacks;
 using Armors;
 using System.Linq;
-using static XMLLoader.ParseFuncs;
+using static ParseFuncs;
 using static HealthFunctions;
 //using HS = HealthFunctions;
 
@@ -61,6 +61,7 @@ public class HealthSystem : MonoBehaviour
 	[SerializeField] Pawn ___p;
 	[SerializeField] Pathfinding.Seeker seeker;
 	[SerializeField] Animator anim;
+	[SerializeField] GameObject flag;
 	[SerializeField] CombatSystem combat;
 	[SerializeField] PawnPathfind pfind;
 	[SerializeField] SpriteRenderer weaponSprite;
@@ -181,7 +182,8 @@ public class HealthSystem : MonoBehaviour
 			DoDamage(bodyparts.Find(x=>x.Name==p.partOf.Name), neww); // auto-recursion!
 																	 // also it's required bc we have different health stats
         }
-		p.HP -= Mathf.Clamp(p.damageMultiplier * w.damage,0,float.MaxValue);
+		p.HP -= p.damageMultiplier * w.damage;
+		p.HP = Mathf.Max(p.HP, 0);
 		p.effectiveness -= w.damage;
 
 		if (p.HP <= 0)
@@ -202,15 +204,11 @@ public class HealthSystem : MonoBehaviour
 
 		vitals[(int)GetVitalI(VitalSystem.Conciousness)] = new Vital(VitalSystem.Conciousness,1f-pain); // sex
 
-		if (pain >= 1f)
-			Down("in neurogenic shock"); // neurogenic shock
-		else if (GetVital(VitalSystem.Conciousness) <= 0.25f)
-			Down("unconcious");
-		else if (GetVital(VitalSystem.Conciousness) <= 0f)
-			Die("no conciousness");
-
+		if (p.Name == "Torso" && p.HP <= 0.2 * p.TotalHP)
+			Down("Severe blunt force trauma");
         if (p.type == PartType.VitalOrgan && p.HP <= 0)
-            Die("die vital organ");
+            Die("Lost vital organ");
+
 		// todo: check if it's open before you update it pointlessly. ctrl + f this file to see all 100000 instances
         p.wounds.Add(w);
 
@@ -221,9 +219,9 @@ public class HealthSystem : MonoBehaviour
     {
 		if (PawnInfo.currentSelectedPawn == this.p) 
 		{
-			WCMngr.I.pawnInfo.UpdateHealth(bodyparts, pain);
-			WCMngr.I.pawnInfo.UpdateVitals(vitals, pain);
-			WCMngr.I.pawnInfo.UpdateShock(userFriendlyStatus, statusType);
+			PawnInfo.I.UpdateHealth(bodyparts, pain);
+			PawnInfo.I.UpdateVitals(vitals, pain);
+			PawnInfo.I.UpdateShock(userFriendlyStatus, statusType);
 		}
 	}
 
@@ -232,16 +230,22 @@ public class HealthSystem : MonoBehaviour
 	{
 		totalBlood -= Mathf.Clamp(GetVital(VitalSystem.BloodPumping) * (bleedToBlood * totalBleedRate), 0f, maxBlood);
 
-		if (totalBlood <= 3f) // on god. there isn't a better way to do this
-			Down("under 30% blood");
-		else if (totalBlood <= 0f)
-			Die("no blood");
+		if (totalBlood <= 4f) // on god. there isn't a better way to do this
+			Down("Severe blood loss");
 		if (GetVital(VitalSystem.Conciousness) <= 0.25f)
-			Down("little conciousness");
-		else if (GetVital(VitalSystem.Conciousness) <= 0f)
-			Die("no conciousness");
-		else if (GetVital(VitalSystem.Moving) <= 0.25f)
-			Down("under 25% moving");
+			Down("Loss of conciousness");
+		if (GetVital(VitalSystem.Moving) <= 0.25f)
+			Down("Paralyzed");
+		if (pain >= 1f)
+			Down("In neurogenic shock"); // neurogenic shock
+		if (GetVital(VitalSystem.Conciousness) <= 0.25f)
+			Down("Loss of conciousness");
+		if (totalBlood <= 2f)
+			Die("Critical blood loss");
+		if (GetVital(VitalSystem.Conciousness) <= 0.1f)
+			Die("Severe brain damage");
+		if (GetVital(VitalSystem.Conciousness) <= 0.1f)
+			Die("Severe brain damage");
 
 		foreach (Bodypart bp in bleedingBodyparts)
 		{
@@ -270,6 +274,7 @@ public class HealthSystem : MonoBehaviour
 		weaponSprite.forceRenderingOff = true; // destroy's expensive so this should be like a 0.5% improvement. also it means we can EASILY get it back at any time
 		shieldSprite.forceRenderingOff = true;
 
+		Destroy(flag);
 		//if (PawnInfo.currentSelectedPawn == this.p)
 		//	UpdateShock(reason);
 	}
@@ -282,10 +287,11 @@ public class HealthSystem : MonoBehaviour
 
 		CancelInvoke();
 		anim.StopPlayback();//s
+		transform.parent.rotation = new Quaternion(0,0,0,0);
+		transform.localRotation = new Quaternion(0,0,Random.Range(0,2) == 1 ? -45f : 45f,0);
 		p.dead = true;
 		p.pawnDowned = true;
 		statusType = PawnShockRating.Bad;
-		rb.rotation = 45f;
 
 		p.country.members.Remove(p);
 		p.country.memberTransforms.Remove(transform);
@@ -293,8 +299,10 @@ public class HealthSystem : MonoBehaviour
 		if(!PopulateRegiments.hideState)
 			PopulateRegiments.updateAllRegimentsSelectNumber(Player.regimentSelectNumber);
 		
-		weaponSprite.forceRenderingOff = true; // destroy is expensive, so this is better. and if there is coming back from the dead for some reason, just flick it bcak on.
 		//Destroy(p); // we should NOT DO THIS!!
+		Destroy(weaponSprite.gameObject);
+		Destroy(shieldSprite.gameObject);
+		Destroy(flag);
 		Destroy(rb); // ez optimization, and prevents spaghetti code. le magnum opus.
 		Destroy(seeker);
 		Destroy(combat);

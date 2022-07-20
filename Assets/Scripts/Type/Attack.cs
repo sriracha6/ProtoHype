@@ -29,7 +29,7 @@ namespace Attacks
 
         public override string ToString()
         {
-            return $"{Name} | {(isRare ? "Rare" : "")} {damageType.ToString()} : {Damage} damage";
+            return $"{Name} | {(isRare ? "(Rare)" : "")} {damageType.ToString()} : {Damage} damage";
         }
     }
 }

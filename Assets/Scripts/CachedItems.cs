@@ -5,6 +5,7 @@ using UnityEngine;
 using XMLLoader;
 using Armors;
 using Animals;
+
 // how about we delete these when we're done placing pawns to use 50% less RAM :: TODO
 public class CachedItems
 {
@@ -22,9 +23,9 @@ public class CachedItems
     public struct RenderedShield
     {
         public Sprite sprite;
-        public int id;
+        public Shields.Shield id;
 
-        public RenderedShield(Sprite sprite, int id)
+        public RenderedShield(Sprite sprite, Shields.Shield id)
         {
             this.sprite = sprite;
             this.id = id;
@@ -33,9 +34,9 @@ public class CachedItems
     public struct RenderedWeapon
     {
         public Sprite sprite;
-        public int id;
+        public Weapons.Weapon id;
 
-        public RenderedWeapon(Sprite sprite, int id)
+        public RenderedWeapon(Sprite sprite, Weapons.Weapon id)
         {
             this.sprite = sprite;
             this.id = id;
@@ -44,9 +45,9 @@ public class CachedItems
     public struct RenderedArmor
     {
         public Sprite sprite;
-        public int id;
+        public Armors.Armor id;
 
-        public RenderedArmor(Sprite sprite, int id)
+        public RenderedArmor(Sprite sprite, Armors.Armor id)
         {
             this.sprite = sprite;
             this.id = id;
@@ -55,9 +56,9 @@ public class CachedItems
     public struct RenderedProjectile
     {
         public Sprite sprite;
-        public int id;
+        public Projectiles.Projectile id;
 
-        public RenderedProjectile(Sprite sprite, int id)
+        public RenderedProjectile(Sprite sprite, Projectiles.Projectile id)
         {
             this.sprite = sprite;
             this.id = id;
@@ -77,26 +78,26 @@ public class CachedItems
     public struct RenderedCountry
     {
         public Sprite image;
-        public string name;
+        public Countries.Country id;
 
-        public RenderedCountry(Sprite flag, string name)
+        public RenderedCountry(Sprite flag, Countries.Country id)
         {
             this.image = flag;
-            this.name = name;
+            this.id = id;
         }
     }
     public struct RenderedAnimal
     {
         public List<AnimalArmor> animalArmor;
         public Sprite animalSprite; // taken from all the ones in the file
-        public Animal animal;
+        public Animal id;
         public Sprite finalSprite;
 
-        public RenderedAnimal(List<AnimalArmor> animalArmor, Sprite animalSprite, Animal animal, Sprite finalSprite)
+        public RenderedAnimal(List<AnimalArmor> animalArmor, Sprite animalSprite, Animal id, Sprite finalSprite)
         {
             this.animalArmor = animalArmor;
             this.animalSprite = animalSprite;
-            this.animal = animal;
+            this.id = id;
             this.finalSprite = finalSprite;
         }
     }   

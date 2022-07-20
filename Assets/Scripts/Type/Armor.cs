@@ -15,7 +15,7 @@ namespace Armors
         outer = 2
     }
 
-    [ImageList(typeof(CachedItems.RenderedArmor))]
+    [ImageList(typeof(List<CachedItems.RenderedArmor>))]
     public class Armor : Item
     {
         [XMLItem("Sharp Protection")] public float sharpProtection;
@@ -25,6 +25,8 @@ namespace Armors
         [XMLItem("Hitpoints")] public int hitPoints;
         [XMLItemList("Covers")] public List<Bodypart> covers = new List<Bodypart>();
         [XMLItem("Is Utility")] public bool isUtility;
+
+        public override string ToString() { return Name; }
 
         public Armor(string filepath, string name, string desc, int healthpoints, float sharppot, float bluntpot, float movespeedeffect, Layer laye, bool isUtil, List<Bodypart> coverList)
             : base(name, desc, filepath)

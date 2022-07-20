@@ -61,7 +61,7 @@
     <Compile Include="Assets\Scripts\Type\Biome.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
     <Compile Include="Assets\MainMenu\Loading.cs" />
-    <Compile Include="Assets\Scripts\KeyboardShortcuts.cs" />
+    <Compile Include="Assets\Scripts\Player\KeyboardShortcuts.cs" />
     <Compile Include="Assets\Scripts\Type\Trap.cs" />
     <Compile Include="Assets\Scripts\GenericLists.cs" />
     <Compile Include="Assets\Scripts\Type\Structure.cs" />
@@ -76,6 +76,7 @@
     <Compile Include="Assets\Baracuda\IL2CPP\IL2CPP_AOT.cs" />
     <Compile Include="Assets\Scripts\RNG\TextureGenerator.cs" />
     <Compile Include="Assets\Scripts\UI\PopulateRegiments.cs" />
+    <Compile Include="Assets\Scripts\Type\Attribute\XMLData.cs" />
     <Compile Include="Assets\Scripts\UI\MoveControls.cs" />
     <Compile Include="Assets\Scripts\Type\TerrainType.cs" />
     <Compile Include="Assets\Scripts\DevTools.cs" />
@@ -84,9 +85,12 @@
     <Compile Include="Assets\Scripts\Type\Floor.cs" />
     <Compile Include="Assets\Scripts\Type\Furniture.cs" />
     <Compile Include="Assets\Scripts\UI\Messages.cs" />
+    <Compile Include="Assets\Scripts\ParseFuncs.cs" />
+    <Compile Include="Assets\Scripts\Type\Derived\IItem.cs" />
     <Compile Include="Assets\Scripts\RNG\BaseGen\StructureGenerator.cs" />
     <Compile Include="Assets\Scripts\HealthFunctions.cs" />
     <Compile Include="Assets\Scripts\Blood.cs" />
+    <Compile Include="Assets\Scripts\Player\Stats.cs" />
     <Compile Include="Assets\Scripts\UI\ContextMenuManipulator.cs" />
     <Compile Include="Assets\Scripts\Pawn\PawnPathfind.cs" />
     <Compile Include="Assets\Scripts\Type\Weapon.cs" />
@@ -94,7 +98,7 @@
     <Compile Include="Assets\Scripts\Type\Gear.cs" />
     <Compile Include="Assets\Scripts\LogX.cs" />
     <Compile Include="Assets\Scripts\Type\Bodypart.cs" />
-    <Compile Include="Assets\Scripts\Pawn\Keybinds.cs" />
+    <Compile Include="Assets\Scripts\Player\Keybinds.cs" />
     <Compile Include="Assets\Scripts\RNG\TilemapPlace.cs" />
     <Compile Include="Assets\Scripts\LoadComponents.cs" />
     <Compile Include="Assets\Scripts\Type\Armor.cs" />
@@ -138,8 +142,10 @@
     <Compile Include="Assets\Scripts\Pawn\PawnManager.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\Build.cs" />
     <Compile Include="Assets\Scripts\FireBehaviour.cs" />
+    <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Pawn\ExtraPathfind.cs" />
     <Compile Include="Assets\Scripts\UI\TooltipManipulator.cs" />
+    <Compile Include="Assets\Scripts\UI\ItemViewer.cs" />
     <Compile Include="Assets\Scripts\RNG\TreeGenerator.cs" />
     <Compile Include="Assets\Scripts\AnimalBehavior.cs" />
     <Compile Include="Assets\MainMenu\QuickBattle.cs" />
@@ -153,11 +159,9 @@
     <Compile Include="Assets\Scripts\Skills.cs" />
     <Compile Include="Assets\Scripts\RNG\TilemapShadow.cs" />
     <Compile Include="Assets\Scripts\RNG\Direction.cs" />
+    <Compile Include="Assets\Scripts\Player\ItemSelector.cs" />
     <Compile Include="Assets\Scripts\FireManager.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
-    <Compile Include="Assets\Scripts\Type\Attribute\XMLData.cs" />
-    <Compile Include="Assets\Scripts\Type\Derived\IItem.cs" />
-    <Compile Include="Assets\Scripts\UI\ItemViewer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />
@@ -178,6 +182,8 @@
     <None Include="Assets\ugh.uss" />
     <None Include="Assets\Resources\Prefabs\UI\Regiment.uxml" />
     <None Include="Assets\MainMenu\MainMenu.uxml" />
+    <None Include="Assets\Resources\Prefabs\UI\ItemViewer.uxml" />
+    <None Include="Assets\Resources\Prefabs\UI\Item Viewer\RequiredPick.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\ContextMenu.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\SingleItem.uxml" />
     <None Include="Assets\Scripts\Shaders\Watter.shader" />
@@ -192,6 +198,7 @@
     <None Include="Assets\Scripts\Shaders\ToonTerrain.cginc" />
     <None Include="Assets\root.uss" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\Link.uxml" />
+    <None Include="Assets\Resources\Prefabs\UI\PauseMenu.uxml" />
     <None Include="Assets\MainMenu\quickbattle.uxml" />
   </ItemGroup>
   <ItemGroup>

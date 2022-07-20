@@ -12,26 +12,37 @@ namespace TroopTypes
 {
     public enum PreferSpawn { InsideBase, AroundBase, OutsideBase=0}
 
-    [ImageList(typeof(CachedItems.RenderedTroopType))]
+    public struct ArmorInfo
+    {
+        public List<List<Armor>> pickFrom;
+        public List<Armor> required;
+
+        public ArmorInfo (List<List<Armor>> armor, List<Armor> required)
+        {
+            this.pickFrom = armor;
+            this.required = required;
+        }
+    }
+    [ImageList(typeof(List<CachedItems.RenderedTroopType>))]
     public class TroopType : Item
     {
-        [XMLItem("Country")] public Country country;
         [XMLLinkList("Weapons")] public List<Weapon> weapons = new List<Weapon>();// make this the weapon type because im not making another fucking type file
         [XMLLinkList("Sidearms")] public List<Weapon> sidearms = new List<Weapon>();
-        [XMLLinkList("Armor")] public List<List<Armor>> armor  = new List<List<Armor>>();
+        [XMLRequiredPickFrom("Armor")] public List<List<Armor>> armor  = new List<List<Armor>>();
         [XMLLinkList("Shields")] public List<Shield> shields = new List<Shield>();
 
-        [XMLItem("Melee Skill Min")] public int meleeSkillMin;
         [XMLItem("Melee Skill Max")] public int meleeSkillMax;
+        [XMLItem("Melee Skill Min")] public int meleeSkillMin;
 
-        [XMLItem("Range Skill Min")] public int rangeSkillMin;
         [XMLItem("Range Skill Max")] public int rangeSkillMax;
+        [XMLItem("Range Skill Min")] public int rangeSkillMin;
         public string Icon;
 
         [XMLItem("Is Riding Animal")] public bool ridingAnimal;
         [XMLItemLink("Ridden Animal", typeof(Animal))] public Animal riddenAnimal;
         [XMLLinkList("Animal Armor")] public List<AnimalArmor> animalArmor; // todo: chances of having and required and pick from groups and sex and FUCk
         [XMLItem("Prefer Spawn")] public PreferSpawn preferSpawn;
+        [XMLItem("Country")] public Country country;
 
         public override string ToString()
         {
@@ -58,7 +69,6 @@ namespace TroopTypes
                     else
                         DB.Attention("Null Armor");*/
             armor = armo;
-
             /*if (shelds != null)
                 foreach(Shield s in shelds)
                     if(s != null)
@@ -105,27 +115,28 @@ namespace TroopTypes
         }
         public static TroopType Get(string name)
         {
-            try
-            {
+            if(List.Exists(x=>x.Name == name))
                 return List.Find(x => x.Name == name);
-            }
-            catch (NullReferenceException)
-            {
+            else
                 DB.Attention($"Couldn't find TroopType of name {name}");
                 return null;
-            }
         }
+        public static TroopType Get(string name, Country country)
+        {
+            if (List.Exists(x => x.Name == name && x.country == country))
+                return List.Find(x => x.Name == name && x.country == country);
+            else
+                DB.Attention($"Couldn't find TroopType of name {name} and country {country.Name}");
+                return null;
+        }
+
         public static TroopType Get(int id)
         {
-            try
-            {
+            if(List.Exists(x=>x.ID == id))
                 return List.Find(x => x.ID == id);
-            }
-            catch (NullReferenceException)
-            {
+            else
                 DB.Attention($"Couldn't find TroopType of id {id}");
                 return null;
-            }
         }
 
         /*public string ToString(this TroopType i)

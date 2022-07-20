@@ -103,10 +103,13 @@ public class QuickBattle : MonoBehaviour
             }
             Menus.I.inBattle = true;
             Player.playerCountry = friends[0].country;
-            Player.loadedFrom = LoadFrom.Quickbattle;
+
+            Player.enemies.AddRange(enemies.Select(x=>x.country));
+            Player.friends.AddRange(friends.Select(x=>x.country));
 
             //if (string.IsNullOrEmpty(root.Q<TextField>("Seed").value))
             //    MapGenerator.I.seed = Random.Range(int.MinValue, int.MaxValue).ToString();
+            ItemViewer.I.history.Clear();
             Menus.I.SwitchTo(Menus.I.loading);
             StartCoroutine(Loading.I.load("Battle"));
         };

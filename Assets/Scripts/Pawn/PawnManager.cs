@@ -18,7 +18,7 @@ public class PawnManager : MonoBehaviour
     public static PawnManager I = null;
     public GameObject pawnPrefab; // lol this is the most important line of code in the game
     public GameObject horsePrefab;
-    private static readonly List<Pawn> allPawns = new List<Pawn>();
+    public static readonly List<Pawn> allPawns = new List<Pawn>();
 
     public static bool doneLoading = false;
     List<Vector2Int> usedPoints = new List<Vector2Int>();
@@ -34,14 +34,13 @@ public class PawnManager : MonoBehaviour
             I = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
-            if (Player.loadedFrom == LoadFrom.Quickbattle)
-                I.CreatePawns(QuickBattle.I.regimentSize, QuickBattle.I.friends, QuickBattle.I.enemies);
+        else if(Menus.I.inBattle)
+            I.CreatePawns(QuickBattle.I.regimentSize, QuickBattle.I.friends, QuickBattle.I.enemies);
     }
     
     public void CreatePawns(int regimentSize, List<CountryInfo> friendlies, List<CountryInfo> enemies)
     { // this is somehow the cause for that dumb bug with animals, array size must be .... and onchange weapon
-        Loading.I.Status = "Creating people...";
+        Loading.I.Status = "Birthing people...";
         List<CountryInfo> cs = new List<CountryInfo>();
         cs.AddRange(friendlies);
         cs.AddRange(enemies);
@@ -125,9 +124,10 @@ public class PawnManager : MonoBehaviour
             newPawn.activeWeapon = WCMngr.I.flagWeapon;
         }
 
-        foreach (Country co in Country.List)
-            if (co != newPawn.country)
-                newPawn.enemyCountries.Add(co);
+        if (Player.friends.Contains(newPawn.country))
+            newPawn.enemyCountries.AddRange(Player.enemies);
+        else
+            newPawn.enemyCountries.AddRange(Player.friends);
 
         if(tt.weapons.Count > 0)
         {

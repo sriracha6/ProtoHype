@@ -17,7 +17,8 @@ public class ContextMenuShower : MonoBehaviour
     public bool watchOut = false;
     public List<ContextMenuItem> watchOutItems = new List<ContextMenuItem>();
 
-    protected void Start() {
+    protected void Start() 
+    {
         if (I == null)
         {
             I = this;
@@ -28,17 +29,17 @@ public class ContextMenuShower : MonoBehaviour
     public void OnUiChange() 
     {
         //var oldRoot = root;
-        //VisualElement mm = root.rootVisualElement.Q<VisualElement>("contextmenu");
+        VisualElement mm = I.MENUASSET.CloneTree().contentContainer.Q<VisualElement>("contextmenu");
+        UIManager.TransferToNewUI(mm, "contextmenu");
         I.root = UIManager.ui;
-        var MM = I.MENUASSET.CloneTree().contentContainer.Q<VisualElement>("contextmenu");
+        /*var MM = I.MENUASSET.CloneTree().contentContainer.Q<VisualElement>("contextmenu");
         if (!I.root.rootVisualElement.Contains(MM))
-            I.root.rootVisualElement.Add(MM);
+            I.root.rootVisualElement.Add(MM);*/
 
         I.menu = I.root.rootVisualElement.Q<VisualElement>("contextmenu");
         I.menu.BringToFront();
         I.menu.RegisterCallback<MouseEnterEvent>(x => I.canClose = false);
         I.menu.RegisterCallback<MouseLeaveEvent>(x => I.canClose = true);
-        I.menu.RegisterCallback<MouseDownEvent>(x => Debug.Log($"Monkey testicles"));
 
         I.menu.style.display = DisplayStyle.None;
         //oldRoot.rootVisualElement.Remove(mm);
@@ -84,7 +85,7 @@ public class ContextMenuShower : MonoBehaviour
                 UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").style.visibility = Visibility.Hidden;
                 UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").style.display = DisplayStyle.None;*/
                 foreach (ContextMenuItem item in I.watchOutItems)
-                    AddButton(item);
+                    I.AddButton(item);
                 I.Show(new MouseUpEvent(), false, true);
             }
         }
@@ -97,7 +98,7 @@ public class ContextMenuShower : MonoBehaviour
 
     protected void LateUpdate()
     {
-        HideIfClickedOutside(I.menu);
+        I.HideIfClickedOutside(I.menu);
     }
 
     public void AddButton(ContextMenuItem item)
@@ -131,7 +132,7 @@ public class ContextMenuShower : MonoBehaviour
     {
         if (I.open && 
             (Input.GetMouseButtonDown(Keybinds.LeftMouse) || Input.GetMouseButton(Keybinds.LeftMouse) || Input.GetMouseButtonUp(Keybinds.LeftMouse)) 
-            && I.menu.style.display == DisplayStyle.Flex && canClose)
+            && I.menu.style.display == DisplayStyle.Flex && I.canClose)
         {
             I.menu.style.display = DisplayStyle.None;
             /*UIManager.ui.rootVisualElement.Q<VisualElement>("Membrane").pickingMode = PickingMode.Position;

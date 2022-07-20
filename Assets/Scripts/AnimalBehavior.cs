@@ -71,8 +71,8 @@ public class AnimalBehavior : MonoBehaviour
             transform.parent = rider.transform; // the z level is slightly above the pawn. i'll add size attribute later todo
         }
         #region Render                                      
-        if (CachedItems.renderedAnimals.Exists(x => x.animal == sourceAnimal && x.animalArmor == armors)) // we don't need to check the image contents hash here because 1. that would be slow. 2. it's contained in the animal type already so it wouldn't be equal if it wasnt't there
-            spr.sprite = CachedItems.renderedAnimals.Find(x => x.animal == sourceAnimal && x.animalArmor == armors).finalSprite;
+        if (CachedItems.renderedAnimals.Exists(x => x.id == sourceAnimal && x.animalArmor == armors)) // we don't need to check the image contents hash here because 1. that would be slow. 2. it's contained in the animal type already so it wouldn't be equal if it wasnt't there
+            spr.sprite = CachedItems.renderedAnimals.Find(x => x.id == sourceAnimal && x.animalArmor == armors).finalSprite;
         else
         {
             List<Sprite> animalArmorSprites = new List<Sprite>();
@@ -96,7 +96,11 @@ public class AnimalBehavior : MonoBehaviour
                 picks = SpriteSheetCreator.createSpritesFromSheet(pickTex, 512, 512);
 
                 srcAnimalSprite = picks[Random.Range(0, picks.Count)];
-                sourceAnimal.spriteHash = fullImage.imageContentsHash;
+                
+                var hash = new Hash128();
+                hash.Append(fullImage.GetPixels());
+
+                sourceAnimal.spriteHash = hash;
                 renderedAnimalPicks.Add(new RenderedAnimalPick(picks, sourceAnimal));
             }
             if(armors != null)

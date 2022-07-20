@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System;
 using Armors;
+using Weapons;
 using Body;
 using XMLLoader;
 //using System.Drawing;
@@ -15,6 +16,8 @@ using XMLLoader;
 // WE CANT USE THIS BECAUSE UNITY IS SEXIST
 
 using static CachedItems;
+using Shields;
+using Projectiles;
 
 /// <summary>
 /// How the armor renderer works:
@@ -39,7 +42,7 @@ public class PawnRenderer : MonoBehaviour
     public SpriteRenderer shield;
     public Texture2D TEX;
 
-    public const float SIXFEETMETERS = 1.8288f;
+    public readonly float SIXFEETMETERS = 2.56f; // 1.8288f ? 
 
     void Start()
     {
@@ -110,16 +113,16 @@ public class PawnRenderer : MonoBehaviour
             return null;
         try
         {
-            if (!CachedItems.renderedWeapons.Exists(x => x.id == id))
+            if (!CachedItems.renderedWeapons.Exists(x => x.id == Weapon.Get(id)))
             {
                 Texture2D tex = XMLLoader.Loaders.LoadTex(Weapons.Weapon.Get(id).SourceFile);
                 Sprite spr = Loaders.LoadSprite(tex, tex.height * size / SIXFEETMETERS);
-                CachedItems.renderedWeapons.Add(new RenderedWeapon(spr, id));
+                CachedItems.renderedWeapons.Add(new RenderedWeapon(spr, Weapon.Get(id)));
                 return spr;
             }
             else
             {
-                return CachedItems.renderedWeapons.Find(x=>x.id==id).sprite;
+                return CachedItems.renderedWeapons.Find(x=>x.id==Weapon.Get(id)).sprite;
             }
         }catch(System.IO.IOException e)
         {
@@ -131,16 +134,16 @@ public class PawnRenderer : MonoBehaviour
     {
         try
         {
-            if (!CachedItems.renderedShields.Exists(x => x.id == id))
+            if (!CachedItems.renderedShields.Exists(x => x.id == Shield.Get(id)))
             {
                 Texture2D tex = Loaders.LoadTex(Shields.Shield.Get(id).SourceFile);
                 Sprite spr = Loaders.LoadSprite(tex, tex.height * size / SIXFEETMETERS);
-                CachedItems.renderedShields.Add(new RenderedShield(spr, id));
+                CachedItems.renderedShields.Add(new RenderedShield(spr, Shield.Get(id)));
                 return spr;
             }
             else
             {
-                return CachedItems.renderedShields.Find(x=>x.id==id).sprite;
+                return CachedItems.renderedShields.Find(x=>x.id==Shield.Get(id)).sprite;
             }
         }
         catch (System.IO.IOException e)
@@ -153,16 +156,16 @@ public class PawnRenderer : MonoBehaviour
     {
         try
         {
-            if (!CachedItems.renderedArmors.Exists(x => x.id == id))
+            if (!CachedItems.renderedArmors.Exists(x => x.id == Armor.Get(id)))
             {
                 Texture2D tex = Loaders.LoadTex(Armors.Armor.Get(id).SourceFile);
                 Sprite spr = Loaders.LoadSprite(tex, 1);
-                CachedItems.renderedArmors.Add(new RenderedArmor(spr, id));
+                CachedItems.renderedArmors.Add(new RenderedArmor(spr, Armor.Get(id)));
                 return spr;
             }
             else
             {
-                return CachedItems.renderedArmors.Find(x=>x.id==id).sprite;
+                return CachedItems.renderedArmors.Find(x=>x.id==Armor.Get(id)).sprite;
             }
         }
         catch (System.IO.IOException e)
@@ -176,14 +179,14 @@ public class PawnRenderer : MonoBehaviour
     {
         try
         {
-            if (CachedItems.renderedProjectiles.Exists(x => x.id == id))
-                return CachedItems.renderedProjectiles.Find(x=>x.id==id).sprite;
+            if (CachedItems.renderedProjectiles.Exists(x => x.id == Projectile.Get(id)))
+                return CachedItems.renderedProjectiles.Find(x=>x.id==Projectile.Get(id)).sprite;
             else
             {
                 Debug.Log($"{Projectiles.Projectile.Get(id).Name}");
                 Texture2D tex = Loaders.LoadTex(Projectiles.Projectile.Get(id).SourceFile);
                 Sprite spr = Loaders.LoadSprite(tex, 1);
-                CachedItems.renderedProjectiles.Add(new RenderedProjectile(spr, id));
+                CachedItems.renderedProjectiles.Add(new RenderedProjectile(spr, Projectile.Get(id)));
                 return spr;
             }
         }
@@ -194,60 +197,55 @@ public class PawnRenderer : MonoBehaviour
         }
     }
 
-    // make this a compute shader??
     private Sprite renderAvatar(List<Armor> armor)
     {
-        if (armor.Count == 0) 
-            return Sprite.Create(WCMngr.I.defaultPawnTexture, new Rect(Vector2.zero, new Vector2(512, 512)), Vector2.zero, 512);
-
-        if (CachedItems.renderedPawns.Exists(x => x.armors == armor))
-            return CachedItems.renderedPawns.Find(x => x.armors == armor).sprite;
-
-        else
+        Debug.Log("<color=maroon>HERE!</color>");
+        if (armor.Count == 0)
         {
-            Texture2D final = new Texture2D(512, 512, TextureFormat.ARGB32, true);
-            final.SetPixels(WCMngr.I.defaultPawnTexture.GetPixels());
-            //List<Armor> sortedArmors = armor.OrderBy(x=>x.layer).ToList(); // sort the list low to high
-            List<Armor> sortedArmors = armor.OrderBy(o=>o.layer).ToList();
-
-            for(int i=0;i<armor.Count;i++)
-            {
-                Texture2D source = renderedArmors.Find(x=>x.id==armor[i].ID).sprite.texture;
-                final = CombineTextures(source,final, p.country);
-            }
-            final.Apply();
-            //try
-            //{
-                Sprite sprite = Sprite.Create(final, new Rect(Vector2.zero, new Vector2(512, 512)), Vector2.zero, 512);
-
-                renderedPawns.Add(new RenderedPawn(sprite, armor));
-                return sprite;
-            //}
-            //catch (Exception e)
-            //{
-            //    Debug.LogError("Couldn't render pawn. " + e);
-            //    return null;
-            //}
+            Debug.Log($"RETURNING DEFAULT!");
+            return Sprite.Create(WCMngr.I.defaultPawnTexture, new Rect(Vector2.zero, new Vector2(512, 512)), Vector2.zero, 512);
         }
+        if (CachedItems.renderedPawns.Exists(x => x.armors == armor))
+        {
+            Debug.Log($"FOUND CACHED ARMOR");
+            return CachedItems.renderedPawns.Find(x => x.armors == armor).sprite;
+        }
+
+        Texture2D final = new Texture2D(512, 512, TextureFormat.ARGB32, true);
+        final.SetPixels32(WCMngr.I.defaultPawnTexture.GetPixels32());
+        //List<Armor> sortedArmors = armor.OrderBy(x=>x.layer).ToList(); // sort the list low to high
+        List<Armor> sortedArmors = armor.OrderBy(o => o.layer).ToList();
+
+        for (int i = 0; i < armor.Count; i++)
+        {
+            Texture2D source = renderedArmors.Find(x => x.id == sortedArmors[i]).sprite.texture;
+            final = CombineTextures(final, source, p.country);
+        }
+        final.Apply();
+        Sprite sprite = Sprite.Create(final, new Rect(Vector2.zero, new Vector2(512, 512)), Vector2.zero, 512);
+
+        renderedPawns.Add(new RenderedPawn(sprite, armor));
+        return sprite;
     }
 
     // this is O(1) because always 512x512
     public static Texture2D CombineTextures(Texture2D _textureA, Texture2D _textureB, Countries.Country country)
     {
+        Debug.Log($">> HERE.");
         //Create new textures
         //                                          V using textureb instead of a may cause issues and spawning in wrong spot
         Texture2D textureResult = new Texture2D(_textureB.width, _textureB.height, TextureFormat.ARGB32, true);
         //create clone form texture
         //if(_textureB.width * _textureB.height < textureResult.A)
-        textureResult.SetPixels(_textureB.GetPixels());
+        textureResult.SetPixels32(_textureA.GetPixels32());
         //Now copy texture B in texutre A
         int co = 0;
         for (int x = 0; x < _textureB.width; x++)
         {
             for (int y = 0; y < _textureB.height; y++)
             {
-                Color c = _textureA.GetPixel(x, y);
-                if (c.a > 0.0f) //Is not transparent
+                Color c = _textureB.GetPixel(x, y);
+                if (c.a == 1f) //Is not transparent
                 {
                     co++;
                     //Copy pixel color in TexturaA
@@ -255,7 +253,7 @@ public class PawnRenderer : MonoBehaviour
                     if(c.r == 255 && c.g == 0 && c.b == 255)
                     { // wrap this around thats how we make it repeat sexpenis
                         Color ccolor;
-                        var cimage = renderedCountries.Find(x => x.name == country.Name).image;
+                        var cimage = renderedCountries.Find(x => x.id == country).image;
                         ccolor = cimage.texture.GetPixel(x % cimage.texture.width, y % cimage.texture.height);
                         textureResult.SetPixel(x, y, ccolor);
                     }
@@ -266,6 +264,7 @@ public class PawnRenderer : MonoBehaviour
                 //}
             }
         }
+        Debug.Log($">>> CO: {co}");
         //Apply colors
         textureResult.Apply();
         return textureResult;

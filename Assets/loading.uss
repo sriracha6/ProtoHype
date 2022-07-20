@@ -2,3 +2,8 @@
 {
     border-color: var(--color-darkbrown);
 }
+#Progress
+{
+    color: var(--color-dark);
+    background-color: var(--color-light);
+}

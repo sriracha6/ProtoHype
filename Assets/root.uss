@@ -45,6 +45,11 @@
 {
     color: #6495ED !important;
 }
+.window
+{
+    border-color: var(--color-light) !important;
+    border-width: 2px !important;
+}
 
 /* ----- UNITY ----- */
 

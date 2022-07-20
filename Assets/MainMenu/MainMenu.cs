@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public enum Difficulty
 {
-    Hard, Medium, Easy
+    Hard = 1, Medium = 0, Easy = 2
 }
 public class MainMenu : MonoBehaviour
 {

@@ -9,7 +9,9 @@ public enum Side
     Top = 0,
     Bottom = 1,
     Left = 2,
-    Right = 3
+    Right = 3,
+    Center = 15,
+    Diagonal = 99
 }
 
 public static class WaterFeature
@@ -131,6 +133,7 @@ public static class WaterFeature
         return Mathf.Clamp((int)x, 0, max - 1);
     }
 
+    // todo: this can be IMPROVED (more natural)!!! by selecting a position FURTHER AWAY AND CONNECTING TO IT!
     public static River GenerateRiver(System.Random seed, int width, int height)
     {
         System.Random prng = seed;

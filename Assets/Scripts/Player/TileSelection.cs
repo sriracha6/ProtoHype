@@ -24,7 +24,7 @@ public class TileSelection : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(Keybinds.RightMouse) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started)
+        if (Input.GetMouseButtonDown(Keybinds.RightMouse) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started && Time.timeScale > 0)
         {
             started = true;
             lineRenderer.positionCount = 4;

@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="ItemViewerParent" class="window" style="position: absolute; width: 80%; height: 80%; left: 5%; top: 5%; visibility: hidden; display: none;">
+        <ui:VisualElement name="TitleBar" style="width: 100%; height: 25px; flex-direction: row;">
+            <ui:Button text="&lt;b&gt;X&lt;/b&gt;" display-tooltip-when-elided="true" name="IVCloseButton" style="height: 100%; width: 5%; right: 0; left: 95%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgb(255, 105, 97);" />
+            <ui:Button text="&lt;b&gt;&lt;-&lt;/b&gt;" display-tooltip-when-elided="true" name="BackButton" style="height: 100%; width: 5%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; right: 5%;" />
+            <ui:Button text="&lt;b&gt;-&gt;&lt;/b&gt;" display-tooltip-when-elided="true" name="ForwardButton" style="height: 100%; width: 5%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; right: 5%;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Body" class="body brown-bg" style="width: 100%; height: 97.5%;">
+            <ui:ScrollView name="Contents" style="width: 100%; height: 100%;" />
+            <ui:VisualElement name="Image" style="position: absolute; width: 256px; height: 256px; right: 10px; top: 10px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

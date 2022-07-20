@@ -19,6 +19,25 @@ public class RoofPlacer : MonoBehaviour
         else
             I.roofTmap = roofTmap;
     }
+
+    protected void Update()
+    {
+        if (Input.GetKeyDown(Keybinds.showRooves))
+        {
+            Player.isRoofShow = !Player.isRoofShow;
+            for (int i = 0; i < I.rooves.GetLength(0); i++)
+            {
+                for(int j = 0; j < I.rooves.GetLength(1); j++)
+                {
+                    if (Player.isRoofShow)
+                        roofTmap.SetTile(new Vector3Int(i,j,0), rooves[i,j].tile);
+                    else
+                        roofTmap.SetTile(new Vector3Int(i, j, 0), null);
+                }
+            }
+        }
+    }
+
     public void Setup(int width, int height)
     {
         rooves = new Buildings.Roof[width, height];

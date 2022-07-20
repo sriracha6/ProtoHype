@@ -57,6 +57,7 @@ namespace PawnFunctions
         public bool isFlagBearer = false;
 
         public Projectile inventory;
+        public Animator animator;
 
         public List<Armor> armor = new List<Armor>(); // probably gonna regret doing it like this
 

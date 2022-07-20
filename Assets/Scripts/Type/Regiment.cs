@@ -38,7 +38,7 @@ namespace Regiments
                 this.flagBearer = p;
 
                 var g = UnityEngine.Object.Instantiate(WCMngr.I.flagPrefab, p.transform);
-                g.GetComponent<FlagBehaviour>().flagTexture = CachedItems.renderedCountries.Find(x=>x.name==countryOrigin.Name).image;
+                g.GetComponent<FlagBehaviour>().flagTexture = CachedItems.renderedCountries.Find(x=>x.id==countryOrigin).image;
                 members.Add(p);
                 memberTransforms.Add(p.gameObject.transform);
             }

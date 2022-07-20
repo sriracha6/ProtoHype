@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3088852015259915811}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.456, y: -0.09, z: 0}
+  m_LocalPosition: {x: 1.143, y: -0.659, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7526895195975188615}
@@ -4988,7 +4988,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3572966572365095969}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.03, y: -0.09, z: 0}
+  m_LocalPosition: {x: 0.75, y: -0.601, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7526895195975188615}
@@ -5182,6 +5182,7 @@ MonoBehaviour:
   ___p: {fileID: 4103537463890445299}
   seeker: {fileID: 2728859045761933165}
   anim: {fileID: 7651848475595865476}
+  flag: {fileID: 0}
   combat: {fileID: 3213804089190479892}
   pfind: {fileID: 6899968418176702960}
   weaponSprite: {fileID: 2339952832213691577}
@@ -5212,6 +5213,7 @@ MonoBehaviour:
   hasSidearm: 0
   hasPrimary: 0
   isFlagBearer: 0
+  animator: {fileID: 7651848475595865476}
   pname: 
   dead: 0
   pawnDowned: 0
@@ -5335,7 +5337,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5141149785496592322}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.597, y: -0.09, z: 0}
+  m_LocalPosition: {x: 0.269, y: -1.211, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7526895195975188615}

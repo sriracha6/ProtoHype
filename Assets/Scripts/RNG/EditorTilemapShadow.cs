@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(TilemapShadow))]
 public class ShadowCastersGeneratorEditor : Editor
 {
@@ -31,3 +32,4 @@ public class ShadowCastersGeneratorEditor : Editor
     }
 
 }
+#endif

@@ -8,20 +8,41 @@ static class BuildList
 {
     public static List<Build> builds = new List<Build>();
 }
-public class Build
+public class Build // i should really put a float rotation variable in here for everything. 
 {
-    [XMLItem("Name")] public string Name;
-    [XMLItem("Description", multiline = true)] public string Description;
     public int ID { get; private set; }
 
     public bool isSpecialPlace;
     [XMLItem("Has Rubble")] public bool hasRubble;
     [XMLItem("Rubble Type")] public RubbleType rubbleType;
 
-    [XMLItem("Max Hitpoint")] public int maxHitpoints;
-    [XMLItem("Hitpoints")] public int hitpoints;
     [XMLItem("Flammability")] public int flammability;
+    [XMLItem("Hitpoints")] public int hitpoints;
+    [XMLItem("Max Hitpoint")] public int maxHitpoints;
+
+    [XMLItem("Description", multiline = true)] public string Description;
+    [XMLItem("Name")] public string Name;
     public RuleTile tile;
+
+    public override string ToString()
+    {
+        return Name;
+    }
+
+    public static bool operator ==(Build lhs, Build rhs)
+    {
+        if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null))
+            return false;
+        
+        return lhs.ID == rhs.ID;
+    }
+    public static bool operator !=(Build lhs, Build rhs)
+    {
+        if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null))
+            return false;
+
+        return lhs.ID != rhs.ID;
+    }
 
     public Build(string name, string description, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int hitpoints, int flammability)
     {

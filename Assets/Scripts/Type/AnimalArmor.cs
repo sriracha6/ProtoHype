@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Animals
 {
-    [ImageList(typeof(CachedItems.RenderedAnimalArmor))]
+    [ImageList(typeof(List<CachedItems.RenderedAnimalArmor>))]
     public class AnimalArmor : Item
     {
         [XMLItemLink("For Animal", typeof(Animal))] public Animal forAnimal;

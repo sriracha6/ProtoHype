@@ -18,7 +18,7 @@
             <ui:Toggle label="Run and Gun" name="RunGunToggle" value="false" style="position: absolute; bottom: 0; flex-direction: row-reverse; font-size: 10px; left: 2px; width: auto;" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="PawnInfoParent" style="width: 50%; height: 50%; position: absolute; top: 102px; left: 223px; visibility: hidden;">
+    <ui:VisualElement name="PawnInfoParent" class="window" style="width: 50%; height: 50%; position: absolute; top: 102px; left: 223px; visibility: hidden;">
         <ui:VisualElement name="TitleBar" style="width: 100%; height: 7%; flex-direction: row;">
             <ui:Button text="&lt;b&gt;X&lt;/b&gt;" display-tooltip-when-elided="true" name="CloseButton" style="height: 100%; width: 5%; right: 0; left: 95%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px;" />
             <ui:Button text="&lt;b&gt;i&lt;/b&gt;" display-tooltip-when-elided="true" name="MoreInfo" style="width: 15px; bottom: 0; position: absolute; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px;" />
@@ -50,14 +50,14 @@
         <ui:Button text="II" display-tooltip-when-elided="true" name="pause" class="timebutton" style="width: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 90%;" />
     </ui:VisualElement>
     <ui:VisualElement name="RegimentShiz" style="position: absolute; width: 40%; height: 106px; left: 20%; right: 343px;">
-        <ui:VisualElement name="RegimentSelect" style="position: relative; left: 0; width: 100%; height: 90%; background-color: rgb(182, 179, 172);">
+        <ui:VisualElement name="RegimentSelect" class="window" style="position: relative; left: 0; width: 100%; height: 90%; background-color: rgb(182, 179, 172);">
             <ui:ScrollView vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Auto" mode="Horizontal" name="ScrollView" horizontal-page-size="-0.5" class="orange-bg" style="height: 100%; width: 100%; min-height: 100%;" />
         </ui:VisualElement>
         <ui:VisualElement name="Controls" style="height: auto; width: 5%; left: 45%;">
             <ui:Button display-tooltip-when-elided="true" name="HideButton" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 100%; left: 0; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; background-image: resource(&apos;ui/uparrow&apos;);" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="ExtraPawnInfoParent" style="position: absolute; width: 31%; height: 34%; left: 31px; top: 101px; visibility: hidden;">
+    <ui:VisualElement name="ExtraPawnInfoParent" class="window" style="position: absolute; width: 31%; height: 34%; left: 31px; top: 101px; visibility: hidden; display: none;">
         <ui:VisualElement name="Title" class="yellow-bg" style="height: 10%; width: 100%; flex-direction: row-reverse;">
             <ui:Button text="X" display-tooltip-when-elided="true" name="CloseButton" style="border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 7%; background-color: rgb(255, 105, 97);" />
         </ui:VisualElement>
@@ -66,6 +66,7 @@
                 <ui:Label text="&lt;u&gt;Weapon:&#10;" display-tooltip-when-elided="true" name="Weapon" class="link" style="padding-left: 2px; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 20px; color: rgb(100, 149, 237); white-space: normal;" />
                 <ui:Label text="&lt;u&gt;Sidearm:&#10;" display-tooltip-when-elided="true" name="Sidearm" class="link" style="padding-left: 2px; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 20px; color: rgb(100, 149, 237); white-space: normal;" />
                 <ui:Label text="&lt;u&gt;Shield:&#10;" display-tooltip-when-elided="true" name="Shield" class="link" style="padding-left: 2px; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 20px; color: rgb(100, 149, 237); white-space: normal;" />
+                <ui:Label text="&lt;u&gt;Regiment:&#10;" display-tooltip-when-elided="true" name="TroopType" class="link" style="padding-left: 2px; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 20px; color: rgb(100, 149, 237); white-space: normal;" />
                 <ui:Label text="Kills:" display-tooltip-when-elided="true" name="Kills" class="link" style="padding-left: 2px; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 20px; white-space: normal; bottom: 0;" />
             </ui:VisualElement>
             <ui:VisualElement name="Right" style="height: 100%; width: 33.3333%; top: 0;" />
