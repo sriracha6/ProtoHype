@@ -29,8 +29,8 @@ namespace Buildings
         [XMLItem("Roof Projectile Stats", multiline = true)] public RoofStats roofStats;
         public new Tile tile;
 
-        public Roof(string name, int hitpoints, int flammability, RoofStats roofStats) 
-            : base(name,"",false,false,RubbleType.None,hitpoints,flammability)
+        public Roof(string name, string description, string sourcefile, int hitpoints, int flammability, RoofStats roofStats) 
+            : base(name, description, sourcefile,false,false,RubbleType.None,hitpoints,flammability)
         {
             this.buildingType = BuildingType.Roof;
             this.roofStats = roofStats;
@@ -38,11 +38,11 @@ namespace Buildings
 
         public static List<Roof> List = new List<Roof>();
 
-        public static Roof Create(string name, int hitpoints, int flammability, RoofStats roofStats)
+        public static Roof Create(string sourcefile, string name, string description, int hitpoints, int flammability, RoofStats roofStats)
         {
             if (!List.Any(x => x.Name == name))
             {
-                Roof c = new Roof(name, hitpoints, flammability, roofStats);
+                Roof c = new Roof(name, description, sourcefile, hitpoints, flammability, roofStats);
                 List.Add(c);
                 return c;
             }

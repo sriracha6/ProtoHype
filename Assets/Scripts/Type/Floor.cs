@@ -12,16 +12,16 @@ namespace Buildings
         [XMLItem("Building Type")] public BuildingType buildingType { get; }
         public FuckBitchTile tile;
 
-        public Floor(string name, int hitpoints, int flammability) : base(name, "", false,false,RubbleType.None,hitpoints,flammability)
+        public Floor(string name, string description, string sourcefile, int hitpoints, int flammability) : base(name, description, sourcefile, false,false,RubbleType.None,hitpoints,flammability)
         {
             this.buildingType = BuildingType.Floor;
         }
 
         public static List<Floor> List = new List<Floor>();
 
-        public static Floor Create(string name, int hitpoints, int flammability)
+        public static Floor Create(string sourcefile, string name, string description, int hitpoints, int flammability)
         {
-            Floor c = new Floor(name, hitpoints, flammability);
+            Floor c = new Floor(name, description, sourcefile, hitpoints, flammability);
             List.Add(c);
             return c;
         }

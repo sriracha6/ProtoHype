@@ -152,6 +152,18 @@ public class HealthSystem : MonoBehaviour
 		generateBloodSplatter(1);
 	}		
 
+	public void TakeHit(float amount, string name)
+    {
+		amount = Random.Range(0.75f, 1.26f) * amount;
+		lastDamageTime = 0;
+		lastAttacker = null;
+
+		Bodypart bp = GetBodypart();
+
+		DoDamage(bp, new Wound(name, null, amount, new Attack(name, DamageType.Blunt, false, amount), 0));
+		generateBloodSplatter(1);
+	}
+
 	public void TakeBurn(float amount)
     {
 		lastDamageTime = 0;

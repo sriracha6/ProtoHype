@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Countries;
+using PawnFunctions;
+using Regiments;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -20,7 +23,7 @@ public class PauseMenu : MonoBehaviour
         I.root = UIManager.ui.rootVisualElement;
         I.root.Q<VisualElement>("PauseMenuParent").style.visibility = Visibility.Hidden;
         I.root.Q<VisualElement>("PauseMenuParent").Q<Button>("ResumeButton").clicked += Resume;
-        I.root.Q<VisualElement>("PauseMenuParent").Q<Button>("MainMenuButton").clicked += GoToMainMenu;
+        I.root.Q<VisualElement>("PauseMenuParent").Q<Button>("MainMenuButton").clicked += delegate { StartCoroutine(GoToMainMenu()); };
     }
 
     protected void Start()
@@ -58,12 +61,23 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = TimeController.I.lastSpeed;
     }
 
-    public void GoToMainMenu()
+    public IEnumerator GoToMainMenu()
     {
         // TODO: SAVE IF THIS IS A BATTLE IN WORLD MAP
+        PawnManager.GetAll().ForEach(p => Destroy(p.gameObject));
+        foreach(Country c in Country.List)
+        {
+            c.members.Clear();
+            c.memberTransforms.Clear();
+        }
+        Regiment.List.Clear();
         Menus.I.inBattle = false;
+        Player.enemies.Clear();
+        Player.friends.Clear();
         StartCoroutine(Loading.I.load("MainMenu"));
+        yield return new WaitUntil(() => Loading.I.done);
         Menus.I.SwitchTo(Menus.I.mainMenu);
+        Loading.I.done = false;
     }
 
     protected void Update()

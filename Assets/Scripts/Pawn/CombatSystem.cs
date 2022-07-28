@@ -76,6 +76,8 @@ public class CombatSystem : MonoBehaviour
             return;
         if (!p.hasPrimary && !p.hasSidearm)
             return;
+
+        enemyCountryTransforms.Clear();
         projectileCollection = WCMngr.I.projectileParent; // this is no  RESPONSE: it's alright. I mean, it organizes
 
         onChangeWeapon(); // this is VERY bad
@@ -84,12 +86,10 @@ public class CombatSystem : MonoBehaviour
         int defaul = 1 << LayerMask.NameToLayer("Default");
         layerMask = walls | defaul;
 
-        p.enemyCountries.ForEach(delegate (Country c)  // must we check this every time?
+        foreach (Country c in p.enemyCountries)
         {
-            if(p.enemyCountries.Contains(c))
-                enemyCountryTransforms.AddRange(c.memberTransforms);
-        });
-
+            enemyCountryTransforms.AddRange(c.memberTransforms);
+        }
         InvokeRepeating(nameof(Checks), 0, 0.5f);
     }
 
@@ -161,7 +161,6 @@ public class CombatSystem : MonoBehaviour
         float xpos = pawnPathfind.orientation == PawnOrientation.Right ? firePoint.transform.position.x + 0.5f : firePoint.transform.position.x - 0.5f;
 
         var projectilef = p.inventory;
-        Debug.Log($"HERE");
 
         arrow.transform.position = new Vector2(xpos, firePoint.transform.position.y); // no idea why i need to do this because the firepoint is rotated too but ok!
         arrow.GetComponent<ProjectileBehaviour>()

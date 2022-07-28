@@ -16,8 +16,8 @@ namespace Buildings
         private bool isDamaged;
         public GameObject damageObject;
 
-        public Building(string name, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)
-            : base(name,"",isSpecialPlace,rubble,rubbleType,hitpoints,flammability)
+        public Building(string name, string description, string sourcefile, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)
+            : base(name,description,sourcefile,isSpecialPlace,rubble,rubbleType,hitpoints,flammability)
         {
             this.buildingType = BuildingType.Building;
             this.coverQuality = coverQuality;
@@ -26,11 +26,11 @@ namespace Buildings
 
         public static List<Building> List = new List<Building>();
 
-        public static Building Create(string name, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)
+        public static Building Create(string sourcefile, string name, string description, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)
         {
             if (!List.Any(x => x.Name == name))
             {
-                Building c = new Building(name, hitpoints, flammability, coverQuality, isLean, isSpecialPlace, rubble, rubbleType);
+                Building c = new Building(name, description, sourcefile, hitpoints, flammability, coverQuality, isLean, isSpecialPlace, rubble, rubbleType);
                 List.Add(c);
                 return c;
             }

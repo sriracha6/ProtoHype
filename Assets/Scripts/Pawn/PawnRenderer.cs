@@ -195,9 +195,8 @@ public class PawnRenderer : MonoBehaviour
                 return CachedItems.renderedProjectiles.Find(x=>x.id==Projectile.Get(id)).sprite;
             else
             {
-                Debug.Log($"{Projectiles.Projectile.Get(id).Name}");
                 Texture2D tex = Loaders.LoadTex(Projectiles.Projectile.Get(id).SourceFile);
-                Sprite spr = Loaders.LoadSprite(tex, 1);
+                Sprite spr = Loaders.LoadSprite(tex, 512);
                 CachedItems.renderedProjectiles.Add(new RenderedProjectile(spr, Projectile.Get(id)));
                 return spr;
             }

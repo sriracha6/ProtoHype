@@ -7,7 +7,7 @@ using static TilemapPlace;
 public class ItemSelector : MonoBehaviour
 {
     [SerializeField] SpriteRenderer spriteRenderer;
-    List<Build[,]> validClickables = new List<Build[,]>() {buildings}; // todo: traps here
+    List<Build[,]> validClickables = new List<Build[,]>(); // todo: traps here, rooves, blah whatever else
 
     protected void Start()
     {
@@ -20,6 +20,7 @@ public class ItemSelector : MonoBehaviour
                 builds[i, j] = doors[i, j].door;
 
         validClickables.Add(builds); // DOES THIS UPDATE WHEN YOu CHANGE DOORS?? AHH
+        validClickables.Add(TilemapPlace.buildings);
     }
 
     protected void Update()
@@ -28,10 +29,13 @@ public class ItemSelector : MonoBehaviour
         {
             spriteRenderer.forceRenderingOff = false;
             var mousePos = Vector2Int.FloorToInt(WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition));
+            mousePos = new Vector2Int(mousePos.x-1, mousePos.y-1);
             object item = null;
-            foreach (var build in validClickables)
+            Debug.Log($"{mousePos}");
+
+            foreach (Build[,] build in validClickables)
             {
-                if (build != null && build[mousePos.x, mousePos.y] != null)
+                if (build[mousePos.x, mousePos.y] != null)
                     item = build[mousePos.x, mousePos.y];
             }
             transform.position = new Vector3(mousePos.x, mousePos.y);

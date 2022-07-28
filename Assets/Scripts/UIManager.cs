@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public static UIManager I = null;
     [SerializeField] UIDocument __ui;
     private static UIDocument ___UI;
+    public static int Reloads { get; internal set; }
     public static UIDocument ui
     {
         get { return ___UI; }

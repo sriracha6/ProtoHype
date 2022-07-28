@@ -89,10 +89,7 @@ namespace TroopTypes
             if(sidearmz != null)
             sidearms.AddRange(sidearmz);
 
-            if (riddenAnimal != null)
-                this.riddenAnimal = riddenAnimal;
-            else
-                DB.Attention("Null animal");
+            this.riddenAnimal = riddenAnimal;
                 
             this.preferSpawn = preferSpawn;
             country = countr;

@@ -45,7 +45,7 @@ public class FireBehaviour : MonoBehaviour
                 int r = Random.Range(0,101);
                 if (r <= 33)
                     Size++;
-                else if (r > 33 && r <= 50)
+                else if (r > 33 && r <= 66)
                     Size--;
                 break;
             case WeatherType.Rain:
@@ -81,7 +81,12 @@ public class FireBehaviour : MonoBehaviour
             neighbors[1] = FireManager.firePositions.Contains(transform.position + Vector3.right);
             neighbors[2] = FireManager.firePositions.Contains(transform.position + Vector3.up);
             neighbors[3] = FireManager.firePositions.Contains(transform.position + Vector3.down);
-
+            if (neighbors[0] && neighbors[1] && neighbors[2] && neighbors[3])
+            {
+                int s = Random.Range(0,100);
+                if (s >= 50) Size--;
+                goto end;
+            }
             if (neighbors.Count(x => x == true) < 4)
             {
                 GameObject go = Instantiate(WCMngr.I.firePrefab);
@@ -94,7 +99,7 @@ public class FireBehaviour : MonoBehaviour
                 PathfindExtra.SetUsed((int)transform.position.x, (int)transform.position.y);
             }
         }
-
+        end:
         yield return new WaitForSeconds(tickRate);
         StartCoroutine(UpdateFire());
     }

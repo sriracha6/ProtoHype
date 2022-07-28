@@ -77,7 +77,8 @@ public class PawnManager : MonoBehaviour
                     
                     if (troopType.ridingAnimal)
                     {
-                        GameObject go = Instantiate(horsePrefab); // im so sorry
+                        GameObject go = Instantiate(I.horsePrefab, p.transform); // v im so sorry
+                        go.transform.position = new Vector3(-2, -3.26f, -1);
                         var supersorryforthisone = go.GetComponent<AnimalBehavior>();
                         supersorryforthisone.rider = p;
                         supersorryforthisone.sourceAnimal = troopType.riddenAnimal;
@@ -88,12 +89,14 @@ public class PawnManager : MonoBehaviour
         doneLoading = true;
         for(int i = 0; i < I.usedPoints.Count; i++)
             PathfindExtra.SetFree(I.usedPoints[i].x, I.usedPoints[i].y);
-        I.usedPoints = null;
+        I.usedPoints = new List<Vector2Int>();
         PopulateRegiments.updateAllRegimentsSelectNumber(Player.regimentSelectNumber);
     }
 
     public static TroopType RandomTroopType(Country c)
     {
+        //if (c != Player.playerCountry)
+        //    return TroopType.List.Find(x=>x.country==c&&x.Name == "Archer");
         List<TroopType> t = TroopType.List.FindAll(x => x.country == c);
         return t[Random.Range(0, t.Count)];
     }
@@ -101,7 +104,7 @@ public class PawnManager : MonoBehaviour
     public Pawn CreatePawn(Country c, string n, TroopType tt, Regiment r, Vector2 pos, Projectile projectile=null)
     {
         // USE POOLING!!!!!!!!!!!!!!!!!!!! TODO
-        GameObject newPawnObj = Instantiate(pawnPrefab);//gameObject.AddComponent<Pawn>();
+        GameObject newPawnObj = Instantiate(I.pawnPrefab);//gameObject.AddComponent<Pawn>();
         Pawn newPawn = newPawnObj.GetComponent<Pawn>();
 
         newPawnObj.transform.position = new Vector3(pos.x, pos.y, -0.5f);

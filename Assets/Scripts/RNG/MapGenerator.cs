@@ -84,18 +84,18 @@ public class MapGenerator : MonoBehaviour
         if (!isTestMap && Menus.I != null && Menus.I.inBattle)
             treeHeight = currentBiome.plantDensity;
 
-        // -------------------------
-        //seed = Random.Range(int.MinValue, int.MaxValue).ToString();
-        //treesSeed = Random.Range(int.MinValue, int.MaxValue).ToString();
-        DontDestroyOnLoad(gameObject);
         if (I == null) // Main Menu
             I = this;
-        else if (Menus.I.inBattle)// We have loaded the battle scene. We aren't on the main menu.
+        else if (Menus.I.inBattle)
         {
             I.mapBounds = mapBounds;
             I.sun = sun;
             I.drawMode = DrawMode.Place;
             DrawMap();
+            if (UIManager.Reloads > 1)
+                Destroy(gameObject);
+            else
+                DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -224,7 +224,7 @@ public class MapGenerator : MonoBehaviour
             if(structure == null)
                 TilemapPlace.UpdateBuildings();
 
-            TilemapPlace.SetWall(Buildings.Building.List.randomElement(), 0, 0);
+            //TilemapPlace.SetWall(Buildings.Building.List.randomElement(), 0, 0);
             //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
         }
         I.finishedLoading = true;

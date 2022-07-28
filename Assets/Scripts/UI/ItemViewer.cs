@@ -77,8 +77,6 @@ public class ItemViewer : MonoBehaviour
         if (t.BaseType != typeof(Item) && t.BaseType != typeof(Build))
             return;
 
-        Debug.Log($"hmmm..");
-
         I.history.Add(item);
 
         I.root.Q<VisualElement>("ItemViewerParent").style.visibility = Visibility.Visible;

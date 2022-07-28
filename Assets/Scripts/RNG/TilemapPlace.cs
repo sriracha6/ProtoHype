@@ -16,6 +16,7 @@ public class TilemapPlace : MonoBehaviour
 
     public static Building[,] buildings;
     public static Floor[,] floors;
+    public static Trap[,] traps;
     public static (Door door, float rotation)[,] doors;
 
     [SerializeField] AstarPath pfinder;
@@ -54,6 +55,11 @@ public class TilemapPlace : MonoBehaviour
         }
     }
 
+    public static void SetTrap(Trap trap,  int x, int y)
+    {
+        traps[x, y] = trap;
+    }
+
     public static void RemoveWall(int x, int y)
     {
         buildings[x, y] = null;
@@ -82,6 +88,7 @@ public class TilemapPlace : MonoBehaviour
         buildings = new Building[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
         floors = new Floor[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
         doors = new (Door, float)[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight]; // this really sucks
+        traps = new Trap[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
     }
 
     public static void UpdateTilemap(float[,] noiseMap, TerrainType[] tTypesUnsorted, bool place, Biome biome)

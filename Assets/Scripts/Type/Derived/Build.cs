@@ -4,14 +4,8 @@ using UnityEngine;
 using Buildings;
 using UnityEngine.Tilemaps;
 
-static class BuildList
+public class Build : Item// i should really put a float rotation variable in here for everything. 
 {
-    public static List<Build> builds = new List<Build>();
-}
-public class Build // i should really put a float rotation variable in here for everything. 
-{
-    public int ID { get; private set; }
-
     public bool isSpecialPlace;
     [XMLItem("Has Rubble")] public bool hasRubble;
     [XMLItem("Rubble Type")] public RubbleType rubbleType;
@@ -20,8 +14,6 @@ public class Build // i should really put a float rotation variable in here for 
     [XMLItem("Hitpoints")] public int hitpoints;
     [XMLItem("Max Hitpoint")] public int maxHitpoints;
 
-    [XMLItem("Description", multiline = true)] public string Description;
-    [XMLItem("Name")] public string Name;
     public RuleTile tile;
 
     public override string ToString()
@@ -44,13 +36,9 @@ public class Build // i should really put a float rotation variable in here for 
         return lhs.ID != rhs.ID;
     }
 
-    public Build(string name, string description, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int hitpoints, int flammability)
+    public Build(string name, string description, string sourcefile, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int hitpoints, int flammability)
+        : base(name, description, sourcefile)
     {
-        this.Name = name;
-        this.Description = description;
-        BuildList.builds.Add(this);
-        this.ID = BuildList.builds.Count;
-
         this.isSpecialPlace = isSpecialPlace;
         this.hasRubble = hasRubble;
         this.rubbleType = rubbleType;

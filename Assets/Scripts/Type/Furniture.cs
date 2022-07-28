@@ -33,8 +33,8 @@ namespace Buildings
         public List<Furniture> PrefersTouchingFurnitures;
         public bool isCarpet;
 
-        public Furniture(string name, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse, bool PrefersTouchingWall, List<Furniture> PrefersTouchingFurniture, bool isCarpet)
-            : base(name, "", false, hasRubble, rubbleType, hitpoints, flammability)
+        public Furniture(string name, string description, string sourcefile, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse, bool PrefersTouchingWall, List<Furniture> PrefersTouchingFurniture, bool isCarpet)
+            : base(name, description, sourcefile, false, hasRubble, rubbleType, hitpoints, flammability)
         {
             this.buildingType = BuildingType.Prop;
             this.isTileable = isTileable;
@@ -51,11 +51,11 @@ namespace Buildings
 
         public static List<Furniture> List = new List<Furniture>();
 
-        public static Furniture Create(string name, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse, bool prefertouchwall, List<Furniture> preferTouchFurniture, bool isCarpet)
+        public static Furniture Create(string sourcefile, string name, string description, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse, bool prefertouchwall, List<Furniture> preferTouchFurniture, bool isCarpet)
         {
             if (!List.Any(x => x.Name == name))
             {
-                Furniture c = new Furniture(name, isTileable, hitpoints, hasRubble, rubbleType, flammability, coverQuality, leanToUse, prefertouchwall, preferTouchFurniture, isCarpet);
+                Furniture c = new Furniture(name, description, sourcefile, isTileable, hitpoints, hasRubble, rubbleType, flammability, coverQuality, leanToUse, prefertouchwall, preferTouchFurniture, isCarpet);
                 List.Add(c);
                 return c;
             }

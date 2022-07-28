@@ -18,7 +18,7 @@ public class Loading : MonoBehaviour
             progress.text = value;
         } 
     }
-
+    public bool done { get; internal set; }
     Label progress;
     Label tip;
     [SerializeField] UIDocument thisdoc;
@@ -60,8 +60,10 @@ public class Loading : MonoBehaviour
         //Begin to load the Scene you specify
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(scene);
         //Don't let the Scene activate until you allow it to
-        asyncOperation.allowSceneActivation = true; 
+        asyncOperation.allowSceneActivation = true;
         //When the load is still in progress, output the Text and progress bar
+        if (scene == "Battle")
+            UIManager.Reloads++;
         while (!asyncOperation.isDone)
         {
             //Output the current progress
@@ -70,5 +72,7 @@ public class Loading : MonoBehaviour
 
             yield return null;
         }
+
+        done = true;
     }
 }

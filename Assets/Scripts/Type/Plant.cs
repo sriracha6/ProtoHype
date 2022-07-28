@@ -15,8 +15,8 @@ namespace Buildings
         [XMLItem("Lean to Use")] public bool isLean;
         public List<Sprite> sprites;
 
-        public Plant(string name, int hitpoints, int flammability, int coverQuality, bool isLean, List<Sprite> sprites)
-            : base(name,"",false,false,RubbleType.None,hitpoints,flammability)
+        public Plant(string name, string description, string sourcefile, int hitpoints, int flammability, int coverQuality, bool isLean, List<Sprite> sprites)
+            : base(name,description,sourcefile,false,false,RubbleType.None,hitpoints,flammability)
         {
             this.buildingType = BuildingType.Nature;
             this.coverQuality = coverQuality;
@@ -26,11 +26,11 @@ namespace Buildings
 
         public static List<Plant> List = new List<Plant>();
 
-        public static Plant Create(string name, int hitpoints, int flammability, int coverQuality, bool isLean, List<Sprite> tbase)
+        public static Plant Create(string sourcefile, string name, string description, int hitpoints, int flammability, int coverQuality, bool isLean, List<Sprite> tbase)
         {
             if (!List.Any(x => x.Name == name))
             {
-                Plant c = new Plant(name, hitpoints, flammability, coverQuality, isLean, tbase);
+                Plant c = new Plant(name, description, sourcefile, hitpoints, flammability, coverQuality, isLean, tbase);
                 List.Add(c);
                 return c;
             }

@@ -341,7 +341,7 @@ namespace XMLLoader
             foreach (XmlElement LOLWHYISTHISHERE in xmls.Qs("Soldier"))
             {
                 var t = xmls.Qs("Soldier")[currentLoop];
-                bool riding = t.Q<bool>("RidingAnimal");
+                bool riding = t.Q<string>("RidingAnimal") != "false";
 
                 var x = TroopType.Create(t.Q<string>("name", attribute:true),
                     t.Q<string>("Description"),
@@ -448,7 +448,9 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.Q<string>("Type").Equals("Building"))
             {
-                var q = Building.Create(xmls.Q<string>("Name"),
+                var q = Building.Create(filepath,
+                    xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"),
                     xmls.Q<int>("CoverQuality"),
@@ -472,7 +474,9 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Prop"))
             {
-                Furniture.Create(xmls.Q<string>("Name"),
+                Furniture.Create(filepath,
+                    xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
                     xmls.Q<bool>("Tilable"),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<bool>("Rubble"),
@@ -495,7 +499,9 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.Q<string>("Type").Equals("Floor"))
             {
-                var temp = Floor.Create(xmls.Q<string>("Name"),
+                var temp = Floor.Create(filepath,
+                    xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"));
 
@@ -512,7 +518,9 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Roof"))
             {
-                var s = Roof.Create(xmls.Q<string>("Name"),
+                var s = Roof.Create(filepath,
+                    xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"),
                     new RoofStats(xmls.Q<XmlNode>("RoofStats").Q<int>("SmallProjectileBlock"),
@@ -534,7 +542,9 @@ namespace XMLLoader
             XmlElement xmls = LoadXML(filepath);
             if (xmls.Q<string>("Type").Equals("Nature"))
             {
-                Buildings.Plant.Create(xmls.Q<string>("Name"),
+                Buildings.Plant.Create(filepath,
+                    xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"),
                     xmls.Q<int>("CoverQuality"),
@@ -552,7 +562,9 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.Q<string>("Type").Equals("Trap"))
             {
-                Trap.Create(xmls.Q<string>("Name"),
+                Trap.Create(filepath,
+                    xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"),
                     xmls.Q<int>("Damage"),
@@ -574,7 +586,9 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.Q<string>("Type").Equals("Door"))
             {
-                Door.Create(xmls.Q<string>("Name"),
+                Door.Create(filepath,
+                    xmls.Q<string>("Name"),
+                    xmls.Q<string>("Description"),
                     xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"),

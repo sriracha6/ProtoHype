@@ -191,6 +191,11 @@ public class PawnPathfind : MonoBehaviour
         Vector2 dir = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
         Vector2 force = (p.healthSystem.GetVital(VitalSystem.Moving) * 2) * Time.fixedDeltaTime * dir;
 
+        Vector2Int currenttile = Vector2Int.FloorToInt(transform.position);
+        var trap = TilemapPlace.traps[currenttile.x, currenttile.y];
+        if (trap != null)
+            p.healthSystem.TakeHit(trap.damage, $"Hit ({trap.Name})");
+
         rb.MovePosition(rb.position + force);
         Vector2 distanceVector = rb.position - (Vector2)path.vectorPath[currentWaypoint];
         float distance = distanceVector.sqrMagnitude;

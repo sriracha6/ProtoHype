@@ -96,6 +96,7 @@ namespace Weapons
         {
             Type = type;
             meleeRange = mrange;
+            weaponClass = wc;
             armorPenSharp = armorpens;
             armorPenBlunt = armorpenb;
             size = Size;
@@ -108,6 +109,7 @@ namespace Weapons
         {
             Type = type;
             range = r;
+            weaponClass = wc;
             rangeType = rt;
             rangeWarmupTime = warmupTime;
             if (meleeDmg > 0)
@@ -129,7 +131,7 @@ namespace Weapons
         public static Weapon CreateMelee(string sourcefile, string name, WeaponType type, string weaponclass, string desc, MeleeRange mrange, bool warmup,
             int armorpens, int armorpenb, float Size, List<Attack> attks)
         {
-            Weapon c = new Weapon(sourcefile, name, type, weaponclass, desc, mrange, warmup, armorpens, armorpenb, Size, attks);
+            Weapon c = new Weapon(sourcefile, name, type, desc, weaponclass, mrange, warmup, armorpens, armorpenb, Size, attks);
             List.Add(c);
             return c;
         }
