@@ -16,12 +16,16 @@ public class FireBehaviour : MonoBehaviour
     [Range(0,100)]
     private int spreadRate;
     [SerializeField] private int tickRate;
-
+    
     private int __size;
     private int Size 
     { 
       get { return __size; } 
-      set { __size = Mathf.Clamp(value, 1, 10); } 
+      set 
+        {
+            __size = Mathf.Clamp(value, 1, 10);
+            spr.size = new Vector2(Size/10f, Size/10f);
+        }
     }
     [SerializeField] SpriteRenderer spr;
 
@@ -38,7 +42,11 @@ public class FireBehaviour : MonoBehaviour
         switch(WeatherManager.currentWeather)
         {
             case WeatherType.Clear:
-                Size++;
+                int r = Random.Range(0,101);
+                if (r <= 33)
+                    Size++;
+                else if (r > 33 && r <= 50)
+                    Size--;
                 break;
             case WeatherType.Rain:
                 Size -= 2;
@@ -51,16 +59,19 @@ public class FireBehaviour : MonoBehaviour
         var currentBuilding = TilemapPlace.buildings[(int)transform.position.x, (int)transform.position.y];
 
         if (Size <= 0                                                                 // no fire
-           || currentBuilding == null                                                 // we destroyed it
-           || currentBuilding.flammability <= 0)                                      // weird edge case
+           //|| currentBuilding == null                                               // we destroyed it
+           || (currentBuilding != null && (currentBuilding.flammability <= 0 || currentBuilding.hitpoints <= 0)))         // weird edge case
         {
             FireManager.firePositions.Remove(transform.position);
             PathfindExtra.SetFree((int)transform.position.x, (int)transform.position.y);
             Destroy(gameObject);
         }
-        currentBuilding.hitpoints -= (Size / 10) * (currentBuilding.flammability/100 * currentBuilding.hitpoints);
-
-        if (currentBuilding.hitpoints <= 0)
+        if (currentBuilding != null)
+        {
+            currentBuilding.hitpoints -= (Size / 10) * (currentBuilding.flammability / 100 * currentBuilding.hitpoints);
+            currentBuilding.UpdateDMG(transform.position);
+        }
+        if (currentBuilding != null && currentBuilding.hitpoints <= 0)
             TilemapPlace.DestroyBuilding(transform.position);
 
         if (Size >= 5 && Random.Range(0, 100) >= 100-spreadRate)
@@ -83,7 +94,6 @@ public class FireBehaviour : MonoBehaviour
                 PathfindExtra.SetUsed((int)transform.position.x, (int)transform.position.y);
             }
         }
-        spr.size = new Vector2(Size, Size);
 
         yield return new WaitForSeconds(tickRate);
         StartCoroutine(UpdateFire());

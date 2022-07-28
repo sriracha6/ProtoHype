@@ -8,6 +8,7 @@ using PawnFunctions;
 
 public class Player : MonoBehaviour
 {
+    public static Color SelectedPawnTintColor = Color.cyan;
     public static Country playerCountry;
     public static bool isFollowingCursor = false;
 
@@ -33,6 +34,17 @@ public class Player : MonoBehaviour
                 isFollowingCursor = false;
                 print("Cancelled follow cursor");
             }
+        }
+    }
+
+    public static void UpdateSelectedPawnsTint()
+    {
+        foreach(Pawn p in PawnManager.allPawns) // required to untint unselected pawns
+        {
+            if (selectedPawns.Contains(p))
+                p.sprite.color = SelectedPawnTintColor;
+            else
+                p.sprite.color = Color.white;
         }
     }
 }

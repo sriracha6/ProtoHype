@@ -75,15 +75,14 @@ public class MapGenerator : MonoBehaviour
     public Vector2Int structurePos;
     public Vector2Int structureSize;
 
+    public GameObject water;
+
     public bool finishedLoading;
 
     protected void Awake()
     {
-        if (!isTestMap)
-        {
-            currentBiome = Biome.Get("Plains");
+        if (!isTestMap && Menus.I != null && Menus.I.inBattle)
             treeHeight = currentBiome.plantDensity;
-        }
 
         // -------------------------
         //seed = Random.Range(int.MinValue, int.MaxValue).ToString();
@@ -135,7 +134,11 @@ public class MapGenerator : MonoBehaviour
 
     public void GenMap()
     {
+        if (currentBiome == null) return;
         terrainTypes = currentBiome.terrainFrequencies.terrain;
+        BiomeArea.waterHeight = currentBiome.waterComminality;
+        terrainTypes.Add(new TerrainType("Water", BiomeArea.waterHeight, Color.blue, WCMngr.I.mountainTile, SpecialType.Water, false));
+        terrainTypes.Add(new TerrainType("Mountain", BiomeArea.mountainHeight, new Color(256, 100, 100), WCMngr.I.mountainTile, SpecialType.Mountain, false));
         erosionAmount = Mathf.CeilToInt(I.mapWidth / 100);
 
         //long _seed = ParseSeed(seed);
@@ -144,7 +147,7 @@ public class MapGenerator : MonoBehaviour
 
         rand = new System.Random(_seed);
 
-        noiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, _seed, noiseScale, octaves, persistence, lacunarity, offset)
+        noiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, _seed, noiseScale, octaves, persistence, lacunarity, offset, currentBiome.waterComminality)
             .carveRiver(deepSeaLevel, rand, riverPerturbation, false)
             .carveWaterBody(deepSeaLevel, rand, false);
 
@@ -173,6 +176,7 @@ public class MapGenerator : MonoBehaviour
             Color[] colorMap = new Color[I.mapWidth * I.mapHeight];
 
             TerrainType[] tts = terrainTypes.OrderBy(x => x.height).ToArray();
+            // todo ^ commonality goes here
 
             for (int y = 0; y < height; y++)
             {
@@ -216,6 +220,11 @@ public class MapGenerator : MonoBehaviour
             WCMngr.I.groundTilemap.RefreshAllTiles();
             
             WCMngr.I.groundTilemap.RefreshAllTiles();
+
+            if(structure == null)
+                TilemapPlace.UpdateBuildings();
+
+            TilemapPlace.SetWall(Buildings.Building.List.randomElement(), 0, 0);
             //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
         }
         I.finishedLoading = true;
@@ -227,6 +236,7 @@ public class MapGenerator : MonoBehaviour
             Destroy(c.gameObject); // kill kids (NOT LIKE THAT)
         
         GameObject water = Instantiate(waterPrefab, WCMngr.I.groundTilemap.transform);
+        I.water = water;
 
         Mesh m = water.GetComponent<MeshFilter>().sharedMesh;
         Vector3 meshSize = m.bounds.size * 2;
@@ -263,7 +273,7 @@ public class MapGenerator : MonoBehaviour
     /// <returns></returns>
     public List<Vector3Int> generateTrees() // i promies this is the most inefficient algorithm in the entire project
     {
-        float[,] treeNoiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, treesSeed.GetHashCode().GetHashCode(), noiseScale, octaves, persistence, lacunarity, offset);
+        float[,] treeNoiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, treesSeed.GetHashCode(), noiseScale, octaves, persistence, lacunarity, offset, 1);
         treePoints = TreeSampling.generatePoints(radius, new Vector2(I.mapWidth,I.mapHeight), rejectionSamples);
         //Debug.Break();
         List<Vector3Int> points = new List<Vector3Int>();

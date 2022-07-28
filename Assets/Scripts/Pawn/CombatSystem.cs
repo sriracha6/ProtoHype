@@ -115,7 +115,7 @@ public class CombatSystem : MonoBehaviour
                 target.animator.Play("ShieldBlock");
                 return;
             }
-            weaponSprite.gameObject.transform.rotation = Quaternion.identity; // reset possible bow rotation
+            weaponSprite.transform.rotation = Quaternion.identity; // reset possible bow rotation
             animator.Play("MeleeHit");
             if (p.activeWeapon.enableRangedMeleeDamage)
             {
@@ -155,7 +155,7 @@ public class CombatSystem : MonoBehaviour
         //    return; // we have no fucking bullets??? what?? i still dont know why this happens??? i hate this file on god
         animator.Play("Recoil");
 
-        weaponSprite.gameObject.transform.Rotate(transform.position - target.transform.position);
+        weaponSprite.transform.Rotate(transform.position - target.transform.position);
         // ^ point to target
         GameObject arrow = Instantiate(projectile);
         float xpos = pawnPathfind.orientation == PawnOrientation.Right ? firePoint.transform.position.x + 0.5f : firePoint.transform.position.x - 0.5f;
@@ -174,7 +174,7 @@ public class CombatSystem : MonoBehaviour
     {
         animator.Play("Recoil");
 
-        weaponSprite.gameObject.transform.Rotate(new Vector3(0,0,(transform.position - target.transform.position).z));
+        weaponSprite.transform.Rotate(new Vector3(0,0,(transform.position - target.transform.position).z));
         // ^ we need this to point to the target
         GameObject arrow = Instantiate(projectile);
 
@@ -194,7 +194,7 @@ public class CombatSystem : MonoBehaviour
         // its the weapons that's causing issues
         meleeRange = p.activeWeapon.meleeRange.value;
         rangeRange = p.activeWeapon.range;
-        weaponSprite.gameObject.transform.rotation = Quaternion.identity;
+        weaponSprite.transform.rotation = Quaternion.identity;
 
         extraRangeTime = Skills.EffectToAimTime(p.rangeSkill);
     }

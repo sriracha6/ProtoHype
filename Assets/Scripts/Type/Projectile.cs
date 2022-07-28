@@ -11,7 +11,7 @@ namespace Projectiles
     public class Projectile : Item
     {
         [XMLItem("For Weapon Class")] public string forWeaponClass;
-        [XMLItem("Damage")] public float damage;
+        [XMLItem("Damage (multiplied)")] public float damage;
         [XMLItem("Damage Type")] public DamageType damageType;
         [XMLItem("Accuracy Effect")] public float accuracyEffect;
         [XMLItem("Has Fire")] public bool hasFire;

@@ -179,9 +179,6 @@ public static class ParseFuncs
 
             frequencies.Add(amount);
         }
-        //                                                                            V bc call is ambiguous
-        terrain.Add(new TerrainType("Water", BiomeArea.waterHeight, Color.blue, WCMngr.I.mountainTile, SpecialType.Water, false));
-        terrain.Add(new TerrainType("Mountain", BiomeArea.mountainHeight, new Color(256, 100, 100), WCMngr.I.mountainTile, SpecialType.Mountain, false));
         // todo: mountains have snow? don't just say no im lazy and delete it may make the game beautiful  
 
         return new TerrainFrequencies(terrain, frequencies); // todo: frequencies are obsolete if height exists. wtf was i thinking

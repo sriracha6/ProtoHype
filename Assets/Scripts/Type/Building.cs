@@ -13,6 +13,9 @@ namespace Buildings
         [XMLItem("Lean To Use")] public bool isLean;
         public new RuleTile tile;
 
+        private bool isDamaged;
+        public GameObject damageObject;
+
         public Building(string name, int hitpoints, int flammability, int coverQuality, bool isLean, bool isSpecialPlace, bool rubble, RubbleType rubbleType)
             : base(name,"",isSpecialPlace,rubble,rubbleType,hitpoints,flammability)
         {
@@ -58,6 +61,17 @@ namespace Buildings
             else
                 DB.Attention($"Couldn't find Building of name \"{name}\"");
                 return null;
+        }
+
+        public void UpdateDMG(Vector3 position)
+        {
+            if(!isDamaged)
+            {
+                var s = GameObject.Instantiate(WCMngr.I.damagePrefab);
+                s.transform.position = position;
+                damageObject = s;
+                isDamaged = true;
+            }
         }
     }
 }

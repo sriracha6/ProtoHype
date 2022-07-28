@@ -7,13 +7,13 @@ namespace RNG
     public static class RandomMap
     {
         // DONT MENTION SEBASTIAN. I GOT FAR ENOUGH ON MY OWN BUT LAYERING IS ASS!!!!!! and seeds i had 0 clue
-        public static float[,] genNoise(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
+        public static float[,] genNoise(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, float waterComminality)
         {
             float[,] map = new float[width, height];
 
             // ------- SEED --
             System.Random prng = new System.Random(seed);
-            Vector2[] octaveOffsets = new Vector2[octaves];
+            Vector2[] octaveOffsets = new Vector2[octaves]; 
 
             for(int i = 0; i < octaves; i++) 
             {
@@ -65,6 +65,8 @@ namespace RNG
                     map[x,y] = noiseHeight;
                 }
             }
+            //minNoiseHeight = waterComminality;
+            //BiomeArea.waterHeight = waterComminality;
 
             for (int y = 0; y < height; y++)
             {
@@ -73,7 +75,6 @@ namespace RNG
                     map[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, map[x,y]);
                 }
             }
-            //TilemapPlace.UpdateTilemap(map, MapGenerator.I.currentBiome.terrainFrequencies.terrain.ToArray(), false);
 
             return map;
         }

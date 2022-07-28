@@ -40,17 +40,27 @@ public class PawnRenderer : MonoBehaviour
     public Pawn p;   
     public SpriteRenderer weapon;
     public SpriteRenderer shield;
-    public Texture2D TEX;
+    public SpriteRenderer RENDERER;
+    public SpriteRenderer indicator;
+    public Sprite TEX;
+    //public SpriteRenderer renderer;
 
     public readonly float SIXFEETMETERS = 2.56f; // 1.8288f ? 
 
-    void Start()
+    protected void Start()
     {
-        if(p.hasPrimary && !p.isFlagBearer)
+        if (p.hasPrimary && !p.isFlagBearer)
             weapon.sprite =
                 imageFromWeaponID(p.heldPrimary.ID, p.heldPrimary.size);
         if (p.hasSidearm)
             imageFromWeaponID(p.heldSidearm.ID, p.heldSidearm.size);
+
+        if (p.country == Player.playerCountry)              // us
+            indicator.color = new Color32(86, 94, 144, 150);
+        else if (Player.friends.Contains(p.country))        // ally
+            indicator.color = new Color32(0, 0, 0, 0);
+        else                                                // enemy
+            indicator.color = new Color32(144,86,86,150);
 
         if (p.hasShield)
         {
@@ -58,12 +68,12 @@ public class PawnRenderer : MonoBehaviour
                 imageFromShieldID(p.shield.ID, p.shield.size);
         }
 
-        foreach(Armor a in p.armor)
+        foreach (Armor a in p.armor)
             imageFromArmorName(a.ID);
 
-        p.sprite.sprite = renderAvatar(p.armor);
-        TEX = p.sprite.sprite.texture;
-    } 
+        TEX = renderAvatar(p.armor);
+        p.sprite.sprite = TEX;
+    }
 
     /*private Sprite createSprite(Texture2D image, string backup, float size, Loadtype ltype)
     {
@@ -116,7 +126,10 @@ public class PawnRenderer : MonoBehaviour
             if (!CachedItems.renderedWeapons.Exists(x => x.id == Weapon.Get(id)))
             {
                 Texture2D tex = XMLLoader.Loaders.LoadTex(Weapons.Weapon.Get(id).SourceFile);
-                Sprite spr = Loaders.LoadSprite(tex, tex.height * size / SIXFEETMETERS);
+                //Sprite spr = Loaders.LoadSprite(tex, tex.height * size / SIXFEETMETERS);
+                float PPU = tex.height * size / (SIXFEETMETERS * size);
+                Debug.Log($"{PPU} : {id}");
+                Sprite spr = Sprite.Create(tex, new Rect(0,0,tex.width,tex.height), new Vector2(0f, 0f), PPU);
                 CachedItems.renderedWeapons.Add(new RenderedWeapon(spr, Weapon.Get(id)));
                 return spr;
             }
@@ -137,14 +150,13 @@ public class PawnRenderer : MonoBehaviour
             if (!CachedItems.renderedShields.Exists(x => x.id == Shield.Get(id)))
             {
                 Texture2D tex = Loaders.LoadTex(Shields.Shield.Get(id).SourceFile);
-                Sprite spr = Loaders.LoadSprite(tex, tex.height * size / SIXFEETMETERS);
-                CachedItems.renderedShields.Add(new RenderedShield(spr, Shield.Get(id)));
+                float PPU = tex.height * size / (SIXFEETMETERS * size);
+                Debug.Log($"{PPU} : {id}");
+                Sprite spr = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0f, 0f), PPU);
                 return spr;
             }
             else
-            {
                 return CachedItems.renderedShields.Find(x=>x.id==Shield.Get(id)).sprite;
-            }
         }
         catch (System.IO.IOException e)
         {
@@ -197,22 +209,32 @@ public class PawnRenderer : MonoBehaviour
         }
     }
 
+    private static Texture2D GenColoredPawn(Pawn p)
+    {
+        Texture2D tex = new Texture2D(512,512);
+        tex.SetPixels32(p.sprite.sprite.texture.GetPixels32());
+        for(int x = 0; x < tex.width; x++)
+        {
+            for(int y = 0; y < tex.height; y++)
+            {
+                var c = tex.GetPixel(x, y);
+                if (c == Color.white) // oh!! oh!! this won't work!! theres intermediate colors! no. i changed the export settings
+                    tex.SetPixel(x,y, p.skinColor);
+            }
+        }
+        return tex;
+    }
+        
     private Sprite renderAvatar(List<Armor> armor)
     {
-        Debug.Log("<color=maroon>HERE!</color>");
         if (armor.Count == 0)
-        {
-            Debug.Log($"RETURNING DEFAULT!");
-            return Sprite.Create(WCMngr.I.defaultPawnTexture, new Rect(Vector2.zero, new Vector2(512, 512)), Vector2.zero, 512);
-        }
+            return p.sprite.sprite;
         if (CachedItems.renderedPawns.Exists(x => x.armors == armor))
-        {
-            Debug.Log($"FOUND CACHED ARMOR");
             return CachedItems.renderedPawns.Find(x => x.armors == armor).sprite;
-        }
 
         Texture2D final = new Texture2D(512, 512, TextureFormat.ARGB32, true);
-        final.SetPixels32(WCMngr.I.defaultPawnTexture.GetPixels32());
+        final.wrapMode = TextureWrapMode.Clamp;
+        final.SetPixels32(GenColoredPawn(p).GetPixels32());//WCMngr.I.defaultPawnTexture.GetPixels32());
         //List<Armor> sortedArmors = armor.OrderBy(x=>x.layer).ToList(); // sort the list low to high
         List<Armor> sortedArmors = armor.OrderBy(o => o.layer).ToList();
 
@@ -222,24 +244,35 @@ public class PawnRenderer : MonoBehaviour
             final = CombineTextures(final, source, p.country);
         }
         final.Apply();
-        Sprite sprite = Sprite.Create(final, new Rect(Vector2.zero, new Vector2(512, 512)), Vector2.zero, 512);
-
+        Sprite sprite = Sprite.Create(final, new Rect(Vector2.zero, new Vector2(final.width, final.height)), new Vector2(0.5f, 0.5f), 200);
         renderedPawns.Add(new RenderedPawn(sprite, armor));
+        
         return sprite;
     }
 
     // this is O(1) because always 512x512
     public static Texture2D CombineTextures(Texture2D _textureA, Texture2D _textureB, Countries.Country country)
     {
-        Debug.Log($">> HERE.");
         //Create new textures
         //                                          V using textureb instead of a may cause issues and spawning in wrong spot
         Texture2D textureResult = new Texture2D(_textureB.width, _textureB.height, TextureFormat.ARGB32, true);
         //create clone form texture
         //if(_textureB.width * _textureB.height < textureResult.A)
-        textureResult.SetPixels32(_textureA.GetPixels32());
-        //Now copy texture B in texutre A
-        int co = 0;
+        var pixs = _textureA.GetPixels32();
+        if (_textureB.height > _textureA.height)
+        {
+            pixs = new Color32[textureResult.width*textureResult.height];
+            var oldPixs = _textureA.GetPixels32();
+            for (int x = 0; x < textureResult.width; x++)
+                for (int y = 0; y < textureResult.height; y++)
+                    if (y >= textureResult.height - (_textureB.height - _textureA.height))
+                        pixs[x + y * textureResult.width] = Color.clear;
+                    else
+                        pixs[x + y * _textureA.width] = _textureA.GetPixel(x,y);
+        }
+        
+        textureResult.SetPixels32(pixs);
+
         for (int x = 0; x < _textureB.width; x++)
         {
             for (int y = 0; y < _textureB.height; y++)
@@ -247,7 +280,6 @@ public class PawnRenderer : MonoBehaviour
                 Color c = _textureB.GetPixel(x, y);
                 if (c.a == 1f) //Is not transparent
                 {
-                    co++;
                     //Copy pixel color in TexturaA
                     textureResult.SetPixel(x, y, c);
                     if(c.r == 255 && c.g == 0 && c.b == 255)
@@ -264,8 +296,6 @@ public class PawnRenderer : MonoBehaviour
                 //}
             }
         }
-        Debug.Log($">>> CO: {co}");
-        //Apply colors
         textureResult.Apply();
         return textureResult;
     }

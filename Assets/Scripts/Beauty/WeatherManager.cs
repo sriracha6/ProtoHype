@@ -12,13 +12,14 @@ public class WeatherManager : MonoBehaviour
 {
     public static WeatherManager I = null;
 
-    public enum WeatherType { Snow, Rain, Thunderstorm, Clear }
+    public enum WeatherType { Snow=2, Rain=1, Thunderstorm=3, Clear=0 }
     [SerializeField] private ParticleSystem rainPS;
     [SerializeField] private ParticleSystem snowPS;
     [SerializeField] private ParticleSystem lightningPS;
 
     Camera maincam;
     public static WeatherType currentWeather = WeatherType.Clear;
+    public static WeatherType weatherQueue = WeatherType.Clear;
 
     [Range(-100,150)] public float currentTemperature;
     [Range(-15f, 15f)] public float temperatureChange;
@@ -40,13 +41,17 @@ public class WeatherManager : MonoBehaviour
             isWeather = false;
             I = this;
         }
-        else
+        else if (Menus.I.inBattle)
         {
             I.rainPS = rainPS;
             I.lightningPS = lightningPS;
             I.snowPS = snowPS;
             I.wind = wind;
             I.maincam = Camera.main;
+            I.temperatureChange = temperatureChange;
+            I.minLengthSeconds = minLengthSeconds;
+
+            I.startWeather(weatherQueue);
         }
     }
 
@@ -57,10 +62,23 @@ public class WeatherManager : MonoBehaviour
             isWeather = false;
             return;
         }
-        currentTemperature = MapGenerator.I.currentBiome.locationData.averageTemperature;
+        if (Menus.I.inBattle)
+        {
+            currentTemperature = MapGenerator.I.currentBiome.locationData.averageTemperature + Random.Range(-15, 16);
+            currentTemperature = 31;
 
-        sortedWeather = new List<Weather>(MapGenerator.I.currentBiome.weatherFrequencies);
-        sortedWeather.OrderBy(x => x.frequency);
+            if (currentTemperature <= 32)
+                MapGenerator.I.water.GetComponent<MeshRenderer>().material = WCMngr.I.iceMat;
+
+            if (currentTemperature >= 90)
+            {
+                var g = Instantiate(WCMngr.I.heatDistortBlock);
+                g.transform.localScale = new Vector3(MapGenerator.I.mapWidth*2, MapGenerator.I.mapHeight*2);
+                g.transform.position = Vector3.zero;
+            }
+            sortedWeather = new List<Weather>(MapGenerator.I.currentBiome.weatherFrequencies);
+            sortedWeather.OrderBy(x => x.frequency);
+        }
     }
 
     protected void FixedUpdate()
@@ -83,7 +101,14 @@ public class WeatherManager : MonoBehaviour
         }
         if (isWeather)
         {
-            transform.position = new Vector2(maincam.transform.position.x,
+            if (rainPS != null)
+            {
+                rainPS.transform.localScale = new Vector3(maincam.rect.width*20, 1, 1); 
+                snowPS.transform.localScale = new Vector3(maincam.rect.width*20, 1, 1);
+                lightningPS.transform.localScale = new Vector3(maincam.rect.width*20, 1, 1);
+            }
+
+            transform.position = new Vector2(maincam.transform.position.x + maincam.rect.width,
                     maincam.transform.position.y + maincam.rect.yMax + 50);
             currentTime++;
         }

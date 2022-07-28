@@ -11,6 +11,7 @@
                 <ui:VisualElement style="width: 40%; height: 48.5%;">
                     <ui:Button text="Attack" display-tooltip-when-elided="true" name="AttackButton" style="width: 100%; font-size: 8%; height: 50%;" />
                     <ui:Button text="Follow\nCursor" display-tooltip-when-elided="true" name="FollowCursorButton" style="width: 100%; font-size: 8%; height: 50%;" />
+                    <ui:Button text="Set Fire" display-tooltip-when-elided="true" name="SetFireButton" style="width: 63%; font-size: 8%; height: 28%; padding-left: 1px; padding-right: 1px; padding-top: 1px; padding-bottom: 1px; left: 0;" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:Toggle label="Secondary" name="SecondaryToggle" style="position: absolute; bottom: 0; flex-direction: row-reverse; font-size: 10px; left: 50%; width: auto; -unity-font: resource(&apos;garamond&apos;);" />
@@ -49,8 +50,8 @@
         <ui:Button text="3x" display-tooltip-when-elided="true" name="3" class="timebutton" style="width: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 90%;" />
         <ui:Button text="II" display-tooltip-when-elided="true" name="pause" class="timebutton" style="width: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 90%;" />
     </ui:VisualElement>
-    <ui:VisualElement name="RegimentShiz" style="position: absolute; width: 40%; height: 106px; left: 20%; right: 343px;">
-        <ui:VisualElement name="RegimentSelect" class="window" style="position: relative; left: 0; width: 100%; height: 90%; background-color: rgb(182, 179, 172);">
+    <ui:VisualElement name="RegimentShiz" style="position: absolute; width: 40%; height: 150px; left: 20%; right: 343px;">
+        <ui:VisualElement name="RegimentSelect" class="window" style="position: relative; left: 0; width: 100%; height: 95%; background-color: rgb(182, 179, 172);">
             <ui:ScrollView vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Auto" mode="Horizontal" name="ScrollView" horizontal-page-size="-0.5" class="orange-bg" style="height: 100%; width: 100%; min-height: 100%;" />
         </ui:VisualElement>
         <ui:VisualElement name="Controls" style="height: auto; width: 5%; left: 45%;">

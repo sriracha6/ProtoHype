@@ -27,7 +27,7 @@ namespace Buildings
     {
         [XMLItem("Building Type")] public BuildingType buildingType;
         [XMLItem("Roof Projectile Stats", multiline = true)] public RoofStats roofStats;
-        public new FuckBitchTile tile;
+        public new Tile tile;
 
         public Roof(string name, int hitpoints, int flammability, RoofStats roofStats) 
             : base(name,"",false,false,RubbleType.None,hitpoints,flammability)

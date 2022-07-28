@@ -15,6 +15,7 @@ public class AnimalBehavior : MonoBehaviour
     public float trueSpeed;
     public bool isWarAnimal;
     public bool isDead;
+    public Animator animator;
 
     [SerializeField] ParticleSystem blood;
     [SerializeField] GameObject bloodPrefab;

@@ -68,7 +68,7 @@ public class SpriteSheetCreator : MonoBehaviour
                 
                 tex.Apply();
                                                                                                             // 230 /2
-                Sprite spr = Sprite.Create(tex, new Rect(Vector2.zero, new Vector2(256,256)), Vector2.zero, 256 / 2, 8); // 2: size of tilemap cells
+                Sprite spr = Sprite.Create(tex, new Rect(Vector2.zero, new Vector2(256,256)), Vector2.zero, 256 / 2, 16); // 2: size of tilemap cells
                 bitchBase.m_Sprites.Add(spr);
             }
         }

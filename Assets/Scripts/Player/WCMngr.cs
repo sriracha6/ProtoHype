@@ -15,6 +15,14 @@ public class WCMngr : MonoBehaviour
     [SerializeField] Sprite flagSprite;
     public Difficulty difficulty;
 
+    [Header("Prefabs")]
+    public GameObject damagePrefab;
+    public GameObject rubblePrefab;
+    public GameObject flagPrefab;
+    public GameObject firePrefab;
+    public GameObject testMat;
+    public GameObject heatDistortBlock;
+
     [Header("Groups")]
     public GameObject bloodParent;
     public GameObject projectileParent;
@@ -25,12 +33,14 @@ public class WCMngr : MonoBehaviour
 
     [Header("Texture")]
     public Texture2D defaultPawnTexture;
+    public Sprite miscrubbleTex;
+    public Sprite stonerubbleTex;
+    public Sprite woodrubbleTex;
 
-    public GameObject flagPrefab;
-    public GameObject firePrefab;
+    [Space]
+    public Material iceMat;
     public RuleTile mountainTile;
     public Tile testTile;
-    public GameObject testMat;
 
     public List<string> bluntWoundNames;
     public List<string> seriousBluntWoundNames;
@@ -38,7 +48,6 @@ public class WCMngr : MonoBehaviour
     protected void Awake()
     {
         mainCam = Camera.main;
-
         CachedItems.renderedWeapons.Add(new CachedItems.RenderedWeapon(flagSprite, flagWeapon));
         if (I == null)
         {

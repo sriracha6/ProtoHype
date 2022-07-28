@@ -25,10 +25,12 @@ public class MoveControls : MonoBehaviour
     public Button standGroundButton;
     public Button rallyBehindButton;
     public Button cancelButton;
+    public Button setFireButton;
 
     private static MoveControls instance;
 
     private bool pressShift = false;
+    private bool selectTileFlag = false;
     //--------
     //public static ActionType actionType;
     //public static List<MoveQueue> actionTypes = new List<MoveQueue>();
@@ -58,7 +60,7 @@ public class MoveControls : MonoBehaviour
         return -1;
     }*/
 
-    private void Update()
+    protected void Update()
     {
         pressShift = Input.GetKey(Keybinds.SelectAdd);
 
@@ -76,7 +78,29 @@ public class MoveControls : MonoBehaviour
             Option("Move", true);
         if(Input.GetKeyDown(Keybinds.mc_searchdestroy))
             Option("SearchAndDestroy", true);
+
+        if(selectTileFlag && Input.GetMouseButtonUp(Keybinds.RightMouse) && !UIManager.mouseOverUI)
+        {
+            Vector2Int pos = Vector2Int.FloorToInt(Input.mousePosition);
+            foreach(Pawn p in Player.ourSelectedPawns)
+            {
+                var ppos = Vector2Int.FloorToInt(p.transform.position);
+                if(Vector2.Distance(ppos, pos) <= 1)
+                {
+                    StartCoroutine(startFire(pos));
+                }
+            }
+            selectTileFlag = false;
+        }
     }
+
+    IEnumerator startFire(Vector2Int pos)
+    {
+        yield return new WaitForSeconds(2);
+        var go = Instantiate(WCMngr.I.firePrefab);
+        go.transform.position = new Vector3(pos.x, pos.y, -2);
+    }
+
     private void Awake()
     {
         // THIS SHOULDNT WORk
@@ -98,6 +122,7 @@ public class MoveControls : MonoBehaviour
         followCursorButton = root.Q<Button>("FollowCursorButton");
         standGroundButton = root.Q<Button>("StandGroundButton");
         cancelButton = root.Q<Button>("CancelButton");
+        setFireButton = root.Q<Button>("SetFireButton");
 
         /*        List<Button> blist = panel.Children<Button>();
 
@@ -111,6 +136,7 @@ public class MoveControls : MonoBehaviour
         followCursorButton.clicked += delegate { Option("FollowCursor", true); };
         standGroundButton.clicked += delegate { Option("StandGround", false); };
         cancelButton.clicked += delegate { Option("Cancel", false); };
+        setFireButton.clicked += delegate { SetFire(); };
 
         runGunToggle.RegisterValueChangedCallback(evt => RunAndGunToggle());
         secondaryToggle.RegisterValueChangedCallback(evt => SecondaryToggle());
@@ -208,6 +234,12 @@ public class MoveControls : MonoBehaviour
         }
 
         Debug.Log($"Toggled secondary for {Player.ourSelectedPawns.Count} pawns.");
+    }
+
+    public void SetFire()
+    {
+        Messages.AddMessage("Select a block to set fire to. The selected pawn \n within one tile will do it.");
+        selectTileFlag = true;
     }
 
     public static string GetUntilOrEmpty(string text, string stopAt)

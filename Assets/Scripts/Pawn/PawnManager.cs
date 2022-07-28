@@ -27,7 +27,7 @@ public class PawnManager : MonoBehaviour
     public const int AROUND_BASE_DISTANCE = 30;
     public const int OUTSIDE_BASE_DISTANCE = 50;
 
-    protected void Start()
+    protected void Awake()
     {
         if (I == null)
         {
@@ -191,7 +191,8 @@ public class PawnManager : MonoBehaviour
             newPawn.hasSidearm = false;
 
         newPawn.country.Add(newPawn);
-        newPawn.sprite.material.color = GenerateSkinColor();
+        newPawn.skinColor = GenerateSkinColor();
+
         allPawns.Add(newPawn);
         // todo
         if (newPawn.armor != null)

@@ -85,7 +85,7 @@ public class PawnInfo : MonoBehaviour
         I.panel.Q<Button>("MoreInfo").clicked += delegate { I.exp.BringToFront(); I.exp.style.visibility = Visibility.Visible; I.exp.style.display = DisplayStyle.Flex; };
         I.hpanel.style.display = DisplayStyle.Flex;
 
-        I.panel.Q<Label>("QuickInfo").text = $"{p.pname} | {p.country.memberName} {p.troopType.Name} | M: {p.meleeSkill} R: {p.rangeSkill}";
+        I.panel.Q<Label>("QuickInfo").text = $"{p.pname} | {p.country.memberName} {p.troopType.Name} | Melee {Skills.GetSkillName(p.meleeSkill)}, Range {Skills.GetSkillName(p.rangeSkill)}";
         I.UpdateHealth(p.healthSystem.bodyparts, p.healthSystem.pain);
         I.UpdateVitals(p.healthSystem.vitals, p.healthSystem.pain);
         I.UpdateShock(p.healthSystem.userFriendlyStatus, p.healthSystem.statusType);

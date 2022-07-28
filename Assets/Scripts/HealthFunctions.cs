@@ -8,6 +8,10 @@ using Attacks;
 
 public static class HealthFunctions
 {
+	public static int clampInMap(this int s, bool width)
+    {
+		return Mathf.Clamp(s, 0, width ? MapGenerator.I.mapWidth : MapGenerator.I.mapHeight);
+    }
 	public static float randomVariation(float orig)
 	{
 		return (float)System.Math.Round(Random.Range(0.75f, 1.25f) * orig, System.MidpointRounding.AwayFromZero);

@@ -39,5 +39,7 @@ public static class Keybinds
 
     public static KeyCode changeSpeed = KeyCode.LeftControl;
 
+    public static KeyCode bulkTileSelect = KeyCode.LeftControl;
+
     public static int sliderStep = 5;
 }

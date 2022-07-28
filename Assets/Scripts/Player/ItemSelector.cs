@@ -7,7 +7,7 @@ using static TilemapPlace;
 public class ItemSelector : MonoBehaviour
 {
     [SerializeField] SpriteRenderer spriteRenderer;
-    List<Build[,]> validClickables = new List<Build[,]>() {buildings};
+    List<Build[,]> validClickables = new List<Build[,]>() {buildings}; // todo: traps here
 
     protected void Start()
     {
@@ -27,16 +27,16 @@ public class ItemSelector : MonoBehaviour
         if(Input.GetMouseButtonUp(Keybinds.LeftMouse) && !UIManager.mouseOverUI)
         {
             spriteRenderer.forceRenderingOff = false;
-            var mousePos = WCMngr.I.groundTilemap.WorldToCell(Input.mousePosition);
+            var mousePos = Vector2Int.FloorToInt(WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition));
             object item = null;
             foreach (var build in validClickables)
             {
                 if (build != null && build[mousePos.x, mousePos.y] != null)
                     item = build[mousePos.x, mousePos.y];
             }
-            transform.position = mousePos;
-            // animation ...
-            if(item != null)
+            transform.position = new Vector3(mousePos.x, mousePos.y);
+            // todo: animation ...
+            if (item != null)
                 ItemViewer.I.DisplayItem(item);
             else
                 spriteRenderer.forceRenderingOff = true;

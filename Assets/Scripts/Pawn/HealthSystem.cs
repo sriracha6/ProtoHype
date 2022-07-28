@@ -61,7 +61,6 @@ public class HealthSystem : MonoBehaviour
 	[SerializeField] Pawn ___p;
 	[SerializeField] Pathfinding.Seeker seeker;
 	[SerializeField] Animator anim;
-	[SerializeField] GameObject flag;
 	[SerializeField] CombatSystem combat;
 	[SerializeField] PawnPathfind pfind;
 	[SerializeField] SpriteRenderer weaponSprite;
@@ -124,6 +123,20 @@ public class HealthSystem : MonoBehaviour
     {
 		//if (sourceWeapon == null) // we need this for final build
 		//	sourceWeapon = WeaponManager.Get("Empty");
+		// TODO: SUPPORT FOR FURNITURE
+		int chance = 0;
+		var c1 = TilemapPlace.buildings[((int)transform.position.x - 1).clampInMap(true), (int)transform.position.y];
+		var c2 = TilemapPlace.buildings[((int)transform.position.x + 1).clampInMap(true), (int)transform.position.y];
+		var c3 = TilemapPlace.buildings[(int)transform.position.x, ((int)(transform.position.y - 1)).clampInMap(false)];
+		var c4 = TilemapPlace.buildings[(int)transform.position.x, (((int)transform.position.y + 1)).clampInMap(false)];
+
+		if (c1 != null) chance += c1.coverQuality;
+		if (c2 != null) chance += c2.coverQuality;
+		if (c3 != null) chance += c3.coverQuality;
+		if (c4 != null) chance += c4.coverQuality;
+
+		if(Random.Range(0,101) < chance)
+
 		lastDamageTime = 0; // this is a stupid af solution.
 		lastAttacker = attacker;
 
@@ -146,7 +159,7 @@ public class HealthSystem : MonoBehaviour
 
 		Bodypart bp = GetBodypart();
 
-		DoDamage(bp, new Wound("Burn", null, amount, null, 0));
+		DoDamage(bp, new Wound("Burn", null, amount, new Attack("Burn", DamageType.Blunt, false, amount), 0));
 		generateBloodSplatter(1);
 	}
 
@@ -261,7 +274,8 @@ public class HealthSystem : MonoBehaviour
 	{
 		//if (PawnInfo.currentSelectedPawn == this.p)
 		//	UpdateVitals(vitals, pain);
-		lastAttacker.killCount++;
+		if(lastAttacker != null)
+			lastAttacker.killCount++;
 		userFriendlyStatus = reason;
 		statusType = PawnShockRating.Warning;
 		p.pawnDowned = true;
@@ -274,7 +288,8 @@ public class HealthSystem : MonoBehaviour
 		weaponSprite.forceRenderingOff = true; // destroy's expensive so this should be like a 0.5% improvement. also it means we can EASILY get it back at any time
 		shieldSprite.forceRenderingOff = true;
 
-		Destroy(flag);
+		if (p.flagObject != null)
+		Destroy(p.flagObject);
 		//if (PawnInfo.currentSelectedPawn == this.p)
 		//	UpdateShock(reason);
 	}
@@ -283,11 +298,12 @@ public class HealthSystem : MonoBehaviour
 	{							   // todo: make a destroy manager that manages destroying? (first set active, then destroy when ______)
 		TryUpdatePawnInfo();
 		userFriendlyStatus = reason;
-		lastAttacker.killCount++;
+		if (lastAttacker != null)
+			lastAttacker.killCount++;
 
 		CancelInvoke();
 		anim.StopPlayback();//s
-		transform.parent.rotation = new Quaternion(0,0,0,0);
+		transform.rotation = new Quaternion(0,0,0,0);
 		transform.localRotation = new Quaternion(0,0,Random.Range(0,2) == 1 ? -45f : 45f,0);
 		p.dead = true;
 		p.pawnDowned = true;
@@ -302,7 +318,7 @@ public class HealthSystem : MonoBehaviour
 		//Destroy(p); // we should NOT DO THIS!!
 		Destroy(weaponSprite.gameObject);
 		Destroy(shieldSprite.gameObject);
-		Destroy(flag);
+		if(p.flagObject != null) Destroy(p.flagObject);
 		Destroy(rb); // ez optimization, and prevents spaghetti code. le magnum opus.
 		Destroy(seeker);
 		Destroy(combat);

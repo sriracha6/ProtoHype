@@ -45,9 +45,6 @@ public class QuickBattle : MonoBehaviour
         root.Q<Button>("AddCountryLeft").clicked += delegate { AddCountry(true); };
         root.Q<Button>("AddCountryRight").clicked += delegate { AddCountry(false); };
         root.Q<Button>("SwapButton").clicked += Switcheroo;
-        List<string> biomes = getBiomes();
-        root.Q<DropdownField>("Biome").choices = biomes;
-        root.Q<DropdownField>("Biome").value = biomes[0];
         root.Q<SliderInt>("RegimentSize").RegisterValueChangedCallback(delegate
         {
             regimentSize = root.Q<SliderInt>("RegimentSize").value;
@@ -113,8 +110,6 @@ public class QuickBattle : MonoBehaviour
             Menus.I.SwitchTo(Menus.I.loading);
             StartCoroutine(Loading.I.load("Battle"));
         };
-
-        root.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
         root.Q<Button>("RandomBuilding").clicked += delegate{
             TilemapPlace.UpdateBuildings();
             root.Q<SliderInt>("MapSize").lowValue = 100;
@@ -122,8 +117,21 @@ public class QuickBattle : MonoBehaviour
             Structure item = Structure.List.randomElement();
             MapGenerator.I.structure = item;
             StructureGenerator.PlaceStructure(item, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
-            //StructureGenerator.GenerateStructure(item, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
+            StructureGenerator.GenerateStructure(item, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
         };
+        root.Q<DropdownField>("WeatherSelection").RegisterValueChangedCallback(delegate{
+            WeatherManager.weatherQueue = (WeatherManager.WeatherType)System.Enum.Parse(typeof(WeatherManager.WeatherType), root.Q<DropdownField>("WeatherSelection").value);
+        });
+        root.Q<Button>("RandomSeed").clicked += delegate
+        {
+            root.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
+        };
+
+        root.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
+
+        List<string> biomes = getBiomes();
+        root.Q<DropdownField>("Biome").choices = biomes;
+        root.Q<DropdownField>("Biome").value = biomes[0];
     }
 
     private void Back() =>

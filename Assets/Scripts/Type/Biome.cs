@@ -67,12 +67,13 @@ namespace Nature
         [XMLItemList("Weather Frequencies")] public List<Weather> weatherFrequencies;
         [XMLItem("Terrain Frequencies")] public TerrainFrequencies terrainFrequencies;
         [XMLLinkList("Flora")] public List<Buildings.Plant> flora;
+        [XMLItem("Water Comminality")] public float waterComminality;
 
         public Color color;
         public float plantDensity;
 
         public Biome(string name, string description, LocationData locationData, List<Weather> weatherFrequencies,
-            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity) : base(name, description, "")
+            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity, float waterComminality) : base(name, description, "")
         {
             this.locationData = locationData;
             this.weatherFrequencies = weatherFrequencies;
@@ -80,16 +81,17 @@ namespace Nature
             this.flora = flora;
             this.color = color;
             this.plantDensity = plantDensity;
+            this.waterComminality = waterComminality;
         }
 
         public static List<Biome> List = new List<Biome>();
 
         public static Biome Create(string name, string description, LocationData locationData, List<Weather> weatherFrequencies,
-            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity)
+            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity, float waterComminality)
         {
             //if(!BiomeList.Any(x => x.Name == name))
             //{
-            Biome c = new Biome(name, description, locationData, weatherFrequencies, terrainFrequencies, flora, color, plantDensity);
+            Biome c = new Biome(name, description, locationData, weatherFrequencies, terrainFrequencies, flora, color, plantDensity, waterComminality);
             List.Add(c);
             return c;
             //}

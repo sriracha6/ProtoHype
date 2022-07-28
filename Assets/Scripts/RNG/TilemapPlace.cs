@@ -95,7 +95,7 @@ public class TilemapPlace : MonoBehaviour
             {
                 for (int i = 0; i < tTypes.Length; i++)
                 {
-                    if (noiseMap[x, y] <= tTypes[i].height)
+                    if (noiseMap[x, y] <= BiomeArea.waterHeight + tTypes[i].height)
                     {
                         /* no*/switch (tTypes[i].type)
                         {
@@ -128,13 +128,37 @@ public class TilemapPlace : MonoBehaviour
         //    WCMngr.I.groundTilemap.RefreshAllTiles();
             I.pfinder.Scan();
         }
-    }
+    }                                                           // TODO: when placing builds in this array, if one is damaged, are all?
 
     public static void DestroyBuilding (Vector2 position)
     {
+        var build = buildings[(int)position.x, (int)position.y];
+        Destroy(build.damageObject);
+        
+        if(build.rubbleType != RubbleType.None)
+        {
+            var go = Instantiate(WCMngr.I.rubblePrefab);
+            go.transform.position = new Vector3(position.x, position.y, 0);
+
+            Sprite spr;
+            switch(build.rubbleType)
+            {
+                case RubbleType.woodrubble:
+                    spr = WCMngr.I.woodrubbleTex; break;
+                case RubbleType.stonerubble:
+                    spr = WCMngr.I.stonerubbleTex; break;
+                case RubbleType.miscrubble:
+                    spr = WCMngr.I.miscrubbleTex; break;
+                default:
+                    spr = WCMngr.I.miscrubbleTex; break;
+            }
+
+            go.GetComponent<SpriteRenderer>().sprite = spr;
+            go.transform.Rotate(0,0,Random.Range(0f,361f));
+        }
+
         buildings[(int)position.x, (int)position.y] = null;
         WCMngr.I.groundTilemap.SetTile(Vector3Int.FloorToInt(position), null);
-        // TODO : RUBBLE EFFECT
     }
 
 /*    public void placeTrees(List<Vector3Int> points, List<Buildings.Nature> flora,System.Random rand, GameObject treeFab)

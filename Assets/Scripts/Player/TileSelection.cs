@@ -13,8 +13,10 @@ public class TileSelection : MonoBehaviour
     public Camera maincam;
     public Tilemap tmap;
     private BoundsInt area;
+    private List<Vector2Int> selectedPoints = new List<Vector2Int> ();
 
     public static bool started;
+    public static bool isBulkMode;
 
     void Start()
     {
@@ -24,8 +26,44 @@ public class TileSelection : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(Keybinds.RightMouse) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started && Time.timeScale > 0)
+        if(Input.GetMouseButtonDown(Keybinds.RightMouse) && !Input.GetKey(Keybinds.bulkTileSelect) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started && Time.timeScale > 0)
         {
+            lineRenderer.positionCount = 0;
+            lineRenderer.loop = false;
+            selectedPoints.Clear();
+            started = true;
+            isBulkMode = false;
+        }
+        if(Input.GetMouseButton(Keybinds.RightMouse) && !Input.GetKey(Keybinds.bulkTileSelect) && started && !isBulkMode)
+        {
+            var c = maincam.ScreenToWorldPoint(Input.mousePosition);
+            currentMousePos = new Vector2(Mathf.Ceil(c.x), Mathf.Ceil(c.y));
+
+            if (!selectedPoints.Contains(new Vector2Int((int)currentMousePos.x, (int)currentMousePos.y)))
+            {
+                lineRenderer.positionCount++;
+                lineRenderer.SetPosition(lineRenderer.positionCount - 1, currentMousePos);
+                selectedPoints.Add(new Vector2Int((int)currentMousePos.x, (int)currentMousePos.y));
+            }
+        }
+        if(Input.GetMouseButtonUp(Keybinds.RightMouse) && !Input.GetKey(Keybinds.bulkTileSelect) && started && !isBulkMode)
+        {
+            started = false;
+            lineRenderer.positionCount = 0;
+
+            if (!Input.GetKey(Keybinds.SelectAdd))
+                Player.selectedTilePoses.Clear();
+            
+            foreach (Vector2Int p in selectedPoints)
+                Player.selectedTilePoses.Add(new Vector3(p.x, p.y));
+        }
+
+        // --- BULK --- //
+
+        if (Input.GetMouseButtonDown(Keybinds.RightMouse) && Input.GetKey(Keybinds.bulkTileSelect) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started && Time.timeScale > 0)
+        {
+            lineRenderer.loop = true;
+            isBulkMode = true;
             started = true;
             lineRenderer.positionCount = 4;
             initialMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
@@ -39,7 +77,7 @@ public class TileSelection : MonoBehaviour
             bcollider.offset = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         }
 
-        if (Input.GetMouseButton(Keybinds.RightMouse) && started)
+        if (Input.GetMouseButton(Keybinds.RightMouse) && Input.GetKey(Keybinds.bulkTileSelect) && started && isBulkMode)
         {
             currentMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -57,7 +95,7 @@ public class TileSelection : MonoBehaviour
             area = new BoundsInt(Vector3Int.FloorToInt(transform.position), Vector3Int.FloorToInt(lineRenderer.bounds.size));
         }
 
-        if (Input.GetMouseButtonUp(Keybinds.RightMouse) && started)
+        if (Input.GetMouseButtonUp(Keybinds.RightMouse) && Input.GetKey(Keybinds.bulkTileSelect) && started && isBulkMode)
         {
             started = false;
             transform.position = new Vector3(0, 0, -1);
@@ -72,6 +110,8 @@ public class TileSelection : MonoBehaviour
         {
             print("Selected Tiles: " + area);
             int it = 0;
+            if (!Input.GetKey(Keybinds.SelectAdd))
+                Player.selectedTilePoses.Clear();
             for (int y = tmap.cellBounds.min.y; y < tmap.cellBounds.max.y; y++)
             {
                 for (int x = tmap.cellBounds.min.x; x < tmap.cellBounds.max.x; x++)

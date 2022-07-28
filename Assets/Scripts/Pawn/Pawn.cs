@@ -73,7 +73,9 @@ namespace PawnFunctions
         public AnimalBehavior animal;
 
         public List<Country> enemyCountries = new List<Country>();
-        
+        public Color skinColor;
+        public GameObject flagObject;
+
         public int killCount;
 
         protected void OnTriggerEnter2D(Collider2D collision)

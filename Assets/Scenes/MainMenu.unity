@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   root: {fileID: 0}
-  MENUASSET: {fileID: 0}
+  MENUASSET: {fileID: 9197481963319205126, guid: e5eed92e3146b9d44a146668a054c962, type: 3}
   watchOut: 0
 --- !u!114 &180405062
 MonoBehaviour:
@@ -275,11 +275,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uidoc: {fileID: 0}
-  ITEMVIEWERASSET: {fileID: 0}
-  singleItem: {fileID: 0}
-  linkItem: {fileID: 0}
-  box: {fileID: 0}
-  requiredPickFrom: {fileID: 0}
+  ITEMVIEWERASSET: {fileID: 9197481963319205126, guid: 349a7460bd169144e8676199fd503899, type: 3}
+  singleItem: {fileID: 9197481963319205126, guid: 2620ab575cceb3547985176490445c7a, type: 3}
+  linkItem: {fileID: 9197481963319205126, guid: 9e9172c7d1c232f44a525b6d53764590, type: 3}
+  box: {fileID: 9197481963319205126, guid: 31ab4846ada4e9a4baedec36ebcd7aa8, type: 3}
+  requiredPickFrom: {fileID: 9197481963319205126, guid: 750fa40d503848540ade634ce6e4fc3e, type: 3}
   currentHistoryIndex: 0
 --- !u!1 &625993717
 GameObject:
@@ -354,12 +354,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b27e6ca33f4fd0246ab56680f7477a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenu: {fileID: 0}
-  start: {fileID: 0}
-  quickstart: {fileID: 0}
-  loading: {fileID: 0}
+  mainMenu: {fileID: 625993718}
+  start: {fileID: 1399250236}
+  quickstart: {fileID: 5939711}
+  loading: {fileID: 932197536}
   inBattle: 0
-  prefab_country: {fileID: 0}
+  prefab_country: {fileID: 1573550036}
 --- !u!1 &902525626
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,16 +399,23 @@ MonoBehaviour:
   mainCam: {fileID: 0}
   flagSprite: {fileID: 21300000, guid: 9b4e4b78838fdb147baea4d446bdf150, type: 3}
   difficulty: 0
+  damagePrefab: {fileID: 8596059044285073996, guid: b5ab18c45a08ab44db8ca9d71bf41a8b, type: 3}
+  rubblePrefab: {fileID: 8059263593713528323, guid: 4464613844be28248bd3b8f8bceda894, type: 3}
+  flagPrefab: {fileID: 3904059562426513951, guid: b8d1a70a6bf7c4a448d52477d39ecb7f, type: 3}
+  firePrefab: {fileID: 7292958377105258817, guid: 1f70609f5a0e3e74ca3f911f1f834310, type: 3}
+  testMat: {fileID: 8038504044803835002, guid: 067a2942aeafa1742a2cf7ea5e81136f, type: 3}
+  heatDistortBlock: {fileID: 8391768884658929751, guid: 98ffcbf7341faa94da6691e785c5016e, type: 3}
   bloodParent: {fileID: 0}
   projectileParent: {fileID: 0}
   groundTilemap: {fileID: 0}
   solidTilemap: {fileID: 0}
   defaultPawnTexture: {fileID: 2800000, guid: f3e9ba762a6e5d4439254fb968edb42d, type: 3}
-  flagPrefab: {fileID: 3904059562426513951, guid: b8d1a70a6bf7c4a448d52477d39ecb7f, type: 3}
-  firePrefab: {fileID: 7292958377105258817, guid: 1f70609f5a0e3e74ca3f911f1f834310, type: 3}
-  mountainTile: {fileID: 11400000, guid: d94d9a05f76f3c541be9d9a56ad651d9, type: 2}
+  miscrubbleTex: {fileID: 21300000, guid: ec6fbb2a674e2bd4f80f72d8aab0a1a9, type: 3}
+  stonerubbleTex: {fileID: 21300000, guid: 01a5894171700cc4e8f036868d77a93b, type: 3}
+  woodrubbleTex: {fileID: 21300000, guid: 500eccd2490e10b4781842ae4b144d36, type: 3}
+  iceMat: {fileID: 2100000, guid: 9550010a5a9c4bf4e8bd4d1cbc600f9c, type: 2}
+  mountainTile: {fileID: 11400000, guid: 931fb3bb9cfd2e74daf18105b0d5205f, type: 2}
   testTile: {fileID: 0}
-  testMat: {fileID: 8038504044803835002, guid: 067a2942aeafa1742a2cf7ea5e81136f, type: 3}
   bluntWoundNames: []
   seriousBluntWoundNames: []
 --- !u!4 &902525628
@@ -519,7 +526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 7105603aed39466438f8bb3d00b2b470, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 1489713bc57b5e24581b392933eeaaa6, type: 3}
+  sourceAsset: {fileID: 0}
   m_SortingOrder: 0
 --- !u!1 &932197535
 GameObject:
@@ -581,7 +588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92773540a52cfbb4ea57038f64635ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisdoc: {fileID: 0}
+  thisdoc: {fileID: 932197536}
   tips: []
 --- !u!1 &1003303747
 GameObject:
@@ -615,19 +622,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be5a9d75dafee964b9b70cabf79832ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapWidth: 0
-  mapHeight: 0
-  noiseScale: 0
+  mapWidth: 250
+  mapHeight: 250
+  noiseScale: 19.98
   autoUpdate: 0
   drawMode: 0
-  shallowSeaLevel: 0
-  deepSeaLevel: 0
+  shallowSeaLevel: 0.2
+  deepSeaLevel: 0.2
   mountainHeight: 0
   seed: 
   offset: {x: 0, y: 0}
-  octaves: 0
-  persistence: 0
-  lacunarity: 0
+  octaves: 4
+  persistence: 0.36
+  lacunarity: 0.44
   erosionAmount: 0
   meshHeightMultiplier: 0
   treesSeed: 
@@ -647,6 +654,7 @@ MonoBehaviour:
   isTestMap: 0
   structurePos: {x: 0, y: 0}
   structureSize: {x: 0, y: 0}
+  water: {fileID: 0}
   finishedLoading: 0
 --- !u!4 &1003303749
 Transform:

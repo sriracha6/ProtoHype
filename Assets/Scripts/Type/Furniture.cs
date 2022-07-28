@@ -17,9 +17,9 @@ namespace Buildings
     }
     public enum RubbleType
     {
-        woodrubble,
-        stonerubble,
-        miscrubble,
+        woodrubble,  // [x]
+        stonerubble, // [x]
+        miscrubble, //  [x]
         None=0
     }
 

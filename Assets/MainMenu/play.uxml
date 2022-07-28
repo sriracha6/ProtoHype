@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="mainmenucss.uss" />
     <Style src="/Assets/root.uss" />
-    <ui:VisualElement style="position: absolute; width: 100%; height: 100%; background-image: resource(&apos;ui/bg&apos;);" />
+    <ui:VisualElement style="position: absolute; width: 100%; height: 100%; background-image: resource(&apos;ui/BGNEW&apos;); -unity-background-scale-mode: scale-and-crop;" />
     <ui:Button text="&lt;" display-tooltip-when-elided="true" name="BackButton" style="position: absolute; background-color: rgb(94, 94, 94); background-image: none;" />
     <ui:VisualElement name="Box" class="body window" style="position: absolute; left: 25%; top: 15%; width: 60%; height: 50%; background-color: rgb(58, 58, 58); flex-direction: row;">
         <ui:VisualElement name="LeftBox" class="yellow-bg" style="flex-grow: 1; border-left-width: 0; border-right-width: 5px; border-top-width: 0; border-bottom-width: 0; -unity-font-definition: resource(&apos;&apos;);">

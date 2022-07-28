@@ -20,6 +20,10 @@ namespace PawnFunctions
         {
             return new Vector2Int(p.x, p.y);
         }
+        public static implicit operator Vector3Int(Pos p)
+        {
+            return new Vector3Int(p.x, p.y, 0);
+        }
         public static implicit operator Vector2(Pos p)
         {
             return new Vector2(p.x, p.y);

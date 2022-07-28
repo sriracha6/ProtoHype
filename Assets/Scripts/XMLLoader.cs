@@ -118,7 +118,7 @@ namespace XMLLoader
             currentFile = filepath;
             Texture2D tex = LoadTex(filepath);
             if(tex== null) return null;
-            Sprite spr = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0, 0), ppu);
+            Sprite spr = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), bottomRightPivot ? new Vector2(1, 0) : new Vector2(0, 0), ppu);
             return spr;
         }
         public static Sprite LoadSprite(Texture2D tex, float ppu)
@@ -376,7 +376,7 @@ namespace XMLLoader
             {
                 var x = Country.Create(xmls.Q<XmlNode>("MemberName").ParentNode.Q<string>("name", attribute:true),
                     xmls.Q<string>("MemberName"));
-                CachedItems.renderedCountries.Add(new RenderedCountry(LoadSprite(filepath, 256, true), x));
+                CachedItems.renderedCountries.Add(new RenderedCountry(LoadSprite(filepath, 256, false), x));
             }
             else
             {
@@ -512,11 +512,16 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Roof"))
             {
-                Roof.Create(xmls.Q<string>("Name"),
+                var s = Roof.Create(xmls.Q<string>("Name"),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"),
                     new RoofStats(xmls.Q<XmlNode>("RoofStats").Q<int>("SmallProjectileBlock"),
                         xmls.Q<XmlNode>("RoofStats").Q<int>("LargeProjectileBlock")));
+                
+                var ti = GameObject.Instantiate(ScriptableObject.CreateInstance<Tile>());
+                var tex = LoadTex(filepath);
+                ti.sprite = LoadSprite(tex, tex.width);
+                s.tile = ti;
             }
             else
             {
@@ -617,7 +622,8 @@ namespace XMLLoader
                     xmls.Q<TerrainFrequencies>("Terrains"),
                     xmls.Q<List<Plant>>("Plants"),
                     xmls.Q<Color>("Color"),
-                    xmls.Q<float>("PlantDensity"));
+                    xmls.Q<float>("PlantDensity"),
+                    xmls.Q<float>("WaterComminality"));
             }
             else
             {

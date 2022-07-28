@@ -36,7 +36,6 @@ public class PopulateRegiments : MonoBehaviour
             );
         hideButton = root.Q<VisualElement>("RegimentShiz").Q<Button>("HideButton");
         hideButton.clicked += changeHideState;
-
         FillRegiments();
         Player.regimentSelectNumber = 100;
         updateAllRegimentsSelectNumber(100);
@@ -48,7 +47,7 @@ public class PopulateRegiments : MonoBehaviour
         if (hideState)
         {
             root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").style.display = DisplayStyle.None;
-            root.Q<VisualElement>("RegimentShiz").style.height = root.Q<VisualElement>("RegimentShiz").Q<Button>("HideButton").layout.height;
+            //root.Q<VisualElement>("RegimentShiz").style.height = root.Q<VisualElement>("RegimentShiz").Q<Button>("HideButton").layout.height;
             root.Q<SliderInt>("RegimentControlStuff").style.display = DisplayStyle.None;
             hideButton.style.backgroundImage = new StyleBackground(downArrow);
         }
@@ -56,7 +55,7 @@ public class PopulateRegiments : MonoBehaviour
         {
             root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").style.display = DisplayStyle.Flex;
             root.Q<SliderInt>("RegimentControlStuff").style.display = DisplayStyle.Flex;
-            root.Q<VisualElement>("RegimentShiz").style.height = root.Q<VisualElement>("RegimentShiz").Q<Button>("HideButton").layout.height + root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").layout.height;
+            //root.Q<VisualElement>("RegimentShiz").style.height = root.Q<VisualElement>("RegimentShiz").Q<Button>("HideButton").layout.height + root.Q<VisualElement>("RegimentShiz").Q<VisualElement>("RegimentSelect").layout.height;
             hideButton.style.backgroundImage = new StyleBackground(upArrow);
         }
     }
@@ -66,7 +65,6 @@ public class PopulateRegiments : MonoBehaviour
         foreach ((VisualElement p, int id) v in panels)
         {
             var x = Regiment.Get(v.id);
-            v.p.Q<Label>("Regiment-Label").text = $"{x.type.Name} ({x.id + 1}) : {x.members.Count} members";
             v.p.Q<Label>("SelectX").text = $"Select {Mathf.FloorToInt(newValue / 100f * x.members.Count)}";
         }
     }
@@ -94,6 +92,17 @@ public class PopulateRegiments : MonoBehaviour
         regimentnew.Q<VisualElement>("Icon").style.backgroundImage = CachedItems.renderedTroopTypes.Find(x => x.name == r.type.Icon).texture;
         regimentnew.Q<Label>("Regiment-Name-ID").text = $"{r.type.Name} | {r.id+1}";
         regimentnew.Q<Label>("MembersCount").text = $"{r.members.Count} Members";
+        bool clicked = false;
+        bool done = false;
+        Vector2 totalDrag = Vector2.zero;
+
+        regimentnew.RegisterCallback<MouseDownEvent>(x=>clicked=true);
+        regimentnew.RegisterCallback<MouseMoveEvent>(x=>
+        {
+            if (clicked) OnDrag(regimentnew, x, ref done, ref totalDrag); 
+        });
+        regimentnew.RegisterCallback<MouseUpEvent>(x=> { clicked = false; totalDrag = Vector2.zero; done = false; });
+        regimentnew.RegisterCallback<MouseLeaveEvent>(x=> { clicked = false; totalDrag = Vector2.zero; done = false; });
         
         regimentnew.RegisterCallback<MouseDownEvent, int>(selectRegiment,id);
         panel.Add(regimentnew);
@@ -101,18 +110,32 @@ public class PopulateRegiments : MonoBehaviour
         panels.Add((regimentnew, id));
     }
 
+    void OnDrag(VisualElement v, MouseMoveEvent x, ref bool done, ref Vector2 totalDrag)
+    {
+        totalDrag += x.mouseDelta;
+        if (done) return;
+
+        if(totalDrag.x < -40 || totalDrag.x > 40)
+        {
+            int index = 0;
+            foreach(var s in v.parent.Children())
+            {
+                if (index == panels.FindIndex(x=>x.panel==v))
+                {
+                    int newPos = totalDrag.x < -40 ? index - 1 : index + 1;
+                    v.parent.hierarchy.Insert(Mathf.Clamp(newPos, 0, v.parent.childCount), v);
+                    done = true;
+                    break;
+                }
+                index++;
+            }
+        }
+    }
+
     public static void selectRegiment(MouseDownEvent evt, int id)
     {
         if (Player.regimentSelectNumber == 0)
-        {
-            print("Selecting pawns via regiment. ID:" + id);
-            if (Input.GetKey(Keybinds.SelectAdd))
-                Player.ourSelectedPawns.AddRange(Regiment.Get(id).members);
-            else
-                Player.ourSelectedPawns = Regiment.Get(id).members;
-            if (Player.ourSelectedPawns.Count == 0)
-                Messages.I.Add("No pawns selected");
-        }
+            Messages.I.Add("No pawns selected");
         else
         {
             int amount = Mathf.FloorToInt((Player.regimentSelectNumber / 100f) * Regiment.Get(id).members.Count);
@@ -126,7 +149,7 @@ public class PopulateRegiments : MonoBehaviour
     }
     public static void selectRegiment(int visualPosition)
     {
-        if (visualPosition > regimentIDOrder.Count)
+        if (visualPosition > regimentIDOrder.Count || visualPosition < 0)
             return;
 
         if (Player.regimentSelectNumber == 0)

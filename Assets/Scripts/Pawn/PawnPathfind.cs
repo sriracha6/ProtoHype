@@ -64,7 +64,7 @@ public class PawnPathfind : MonoBehaviour
 
     private void Update()
     {
-        if (p.pawnDowned)
+        if (p.pawnDowned || p.dead)
         {
             shouldPath = false;
             return;
@@ -73,9 +73,19 @@ public class PawnPathfind : MonoBehaviour
         if (FireManager.firePositions.Count > 0)
             if (FireManager.firePositions.AsReadOnly().Contains(new Vector2((int)transform.position.x, (int)transform.position.y)))
             {
-                animator.Play("Recoil");
                 p.healthSystem.TakeBurn(Random.Range(4, 9)); // i wish i could make it based of size but who gives 2 shits
-                p.animal.TakeBurn(Random.Range(4, 9));
+                animator.Play("Burn");
+                if (Random.Range(0, 101) >= 75)
+                {
+                    var s = Instantiate(WCMngr.I.firePrefab);
+                    s.transform.parent = transform;
+                    s.transform.position = Vector3.back;
+                }
+                if (p.animal != null)
+                {
+                    p.animal.TakeBurn(Random.Range(4, 9));
+                    p.animal.animator.Play("Burn");
+                }
             }
 
         //Debug.Log(path == null);
@@ -114,6 +124,8 @@ public class PawnPathfind : MonoBehaviour
 
         if (seeker.IsDone())
         {
+            if (Player.enemies.Contains(p.country))
+                p.actionTypes[0] = new ActionType("SearchAndDestroy", true);
             if ((p.actionTypes[0].Type.Equals("SearchAndDestroy") || p.actionTypes[0].Type.Equals("Attack")))
             {
                 target = p.enemyCountries.Count > 1
@@ -277,7 +289,9 @@ public class PawnPathfind : MonoBehaviour
         //    justTileFound = true;
         //    return ntile;
         //}
-        Debug.Log($"stuffs happening here dont delete this line : {position}");
+        if(PathfindExtra.PresentAt(ntile.x, ntile.y))
+            ntile = PathfindExtra.FindNearest(new Vector2Int(ntile.x, ntile.y));
+
         PathfindExtra.SetUsed(ntile.x, ntile.y);
         justTileFound = true;
         return new Vector3(position.x, position.y); // i dont know wtf else to put here but this'll definitely cause issues
