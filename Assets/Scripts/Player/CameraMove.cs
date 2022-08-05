@@ -35,6 +35,7 @@ public class CameraMove : MonoBehaviour
     {
         if (I == null)
             I = this;
+        maxFov -= 0.75f;
         camObject.transform.position = new Vector3(MapGenerator.I.mapWidth/2,MapGenerator.I.mapHeight /2,-10); // position the camera in middle of scene
 
         thecam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().enabled = false;
@@ -49,7 +50,7 @@ public class CameraMove : MonoBehaviour
         maxFov = width / 5 + (width/50); // this was my first guess and it's pretty fuckin spot on
     }
 
-    void Update()
+    protected void Update()
     {
         if (isFollowing)
         {
@@ -75,13 +76,13 @@ public class CameraMove : MonoBehaviour
         
         if (canMove)
         {
-            transform.position = mainCam.ViewportToWorldPoint(pos);
+            //transform.position = mainCam.ViewportToWorldPoint(pos);
             transform.Translate(moveSpeed * Time.unscaledDeltaTime * movement);
         }
     }
 
 
-    private void LateUpdate()
+    protected void LateUpdate()
     {
         if(Input.GetMouseButtonDown(Keybinds.MiddleMouse))
         {

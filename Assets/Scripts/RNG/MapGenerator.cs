@@ -127,8 +127,8 @@ public class MapGenerator : MonoBehaviour
     long LongRandom(long min, long max, System.Random rand)
     {
         long result = rand.Next((int)(min >> 32), (int)(max >> 32));
-        result = (result << 32);
-        result = result | (long)rand.Next((int)min, (int)max);
+        result <<= 32;
+        result |= (long)rand.Next((int)min, (int)max);
         return result;
     }
 
@@ -136,7 +136,7 @@ public class MapGenerator : MonoBehaviour
     {
         if (currentBiome == null) return;
         terrainTypes = currentBiome.terrainFrequencies.terrain;
-        BiomeArea.waterHeight = currentBiome.waterComminality;
+        BiomeArea.waterHeight = currentBiome.waterComminality * 0.2f;
         terrainTypes.Add(new TerrainType("Water", BiomeArea.waterHeight, Color.blue, WCMngr.I.mountainTile, SpecialType.Water, false));
         terrainTypes.Add(new TerrainType("Mountain", BiomeArea.mountainHeight, new Color(256, 100, 100), WCMngr.I.mountainTile, SpecialType.Mountain, false));
         erosionAmount = Mathf.CeilToInt(I.mapWidth / 100);
@@ -148,14 +148,14 @@ public class MapGenerator : MonoBehaviour
         rand = new System.Random(_seed);
 
         noiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, _seed, noiseScale, octaves, persistence, lacunarity, offset, currentBiome.waterComminality)
-            .carveRiver(deepSeaLevel, rand, riverPerturbation, false)
-            .carveWaterBody(deepSeaLevel, rand, false);
-
-        for (int i = 0; i < riverCount; i++)
-            noiseMap.carveRiver(deepSeaLevel, rand, riverPerturbation, always:true);
-        for (int i = 0; i < seasidesCount; i++)
-            noiseMap.carveWaterBody(deepSeaLevel, rand, overrideRandom: true);
-
+            .carveRiver(rand, riverPerturbation, false)                
+            .carveWaterBody(rand, false);                              
+                                                                       
+        for (int i = 0; i < riverCount; i++)                           
+            noiseMap.carveRiver(rand, riverPerturbation, always:true); 
+        for (int i = 0; i < seasidesCount; i++)                        
+            noiseMap.carveWaterBody(rand, overrideRandom: true);       
+                                                                       
         //noiseMap.erodeNearWater(shallowSeaLevel, erosionAmount);
         RoofPlacer.I.Setup(I.mapWidth, I.mapHeight);
         new PathfindExtra();
@@ -166,14 +166,14 @@ public class MapGenerator : MonoBehaviour
         if (I.drawMode == DrawMode.NoiseMap)
         {
             currentTexture = TextureGenerator.textureFromHeightMap(noiseMap);
-            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), false, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
+            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), false); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
         }
         else if (I.drawMode == DrawMode.ColorMap)
         {
             int width = noiseMap.GetLength(0);
             int height = noiseMap.GetLength(1);
 
-            Color[] colorMap = new Color[I.mapWidth * I.mapHeight];
+            Color32[] colorMap = new Color32[I.mapWidth * I.mapHeight];
 
             TerrainType[] tts = terrainTypes.OrderBy(x => x.height).ToArray();
             // todo ^ commonality goes here
@@ -193,13 +193,13 @@ public class MapGenerator : MonoBehaviour
                     }
                 }
             }
-            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), false, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
+            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), false); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             currentTexture = TextureGenerator.texturePreviewFromMap(colorMap, I.mapWidth, I.mapHeight);
         }
         else if (I.drawMode == DrawMode.Place)
         {
             Loading.I.Status = "Creating the world...";
-            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true, currentBiome); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
+            TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             generateWater();
             mapBounds.resizeBounds(I.mapWidth, I.mapHeight);
             WCMngr.I.solidTilemap.size = new Vector3Int(I.mapWidth, I.mapHeight, 1);

@@ -23,7 +23,7 @@ namespace Regiments
             type = t;
             id = i;
             countryOrigin = origin;
-            isFriendly = Player.playerCountry == origin;
+            isFriendly = Player.friends.Contains(origin);
         }
         /// <summary>
         /// DO NOT USE members.Add!!! USE THIS INSTEAD! 
@@ -53,10 +53,11 @@ namespace Regiments
 
         public static List<Regiment> List = new List<Regiment>();
 
-        public static void Create(TroopType trooptype, Country origin) // creates if it DOESNT exist
+        public static Regiment Create(TroopType trooptype, Country origin) // creates if it DOESNT exist
         {
             Regiment c = new Regiment(trooptype, origin, List.Count);
             List.Add(c);
+            return c;
         }
         public static Regiment Get(int id)
         {

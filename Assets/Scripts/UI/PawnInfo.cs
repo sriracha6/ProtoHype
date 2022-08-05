@@ -141,7 +141,7 @@ public class PawnInfo : MonoBehaviour
 
         I.vitalsbox.Q<Label>("SystemsLabel").text = parsedVitals;
         // ---------
-        string painparsed = pain > 0 ? (pain*100).ToString() : "None";
+        string painparsed = pain > 0 ? System.Math.Round(pain*100, 1).ToString() : "None";
         I.panel.Q<Label>("PainLabel").text = "Pain: " + painparsed;
     }
 

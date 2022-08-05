@@ -91,6 +91,10 @@ namespace XMLLoader
             byte[] img = fileRaw.Skip(startRead).ToArray();
             return img;
         }
+        public static byte[] LoadBytes(string filepath)
+        {
+            return File.ReadAllBytes(filepath);
+        }
         public static Texture2D LoadTex(string filepath)
         {
             currentFile = filepath;

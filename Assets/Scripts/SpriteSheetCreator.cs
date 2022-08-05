@@ -21,27 +21,30 @@ public class SpriteSheetCreator : MonoBehaviour
     // im a genius create tile blending by making the edges 50% transparent and make the ppu too small
     public FuckBitchTile createTerrainTileFromSheet(byte[] image)
     {
-        Sprite[] SPRITES;
         //t.tbase = Instantiate<RandomTile>(ScriptableObject.CreateInstance<RandomTile>());
         //t.tbase = ScriptableObject.CreateInstance<FuckBitchTile>();//
-        Texture2D sheet = new Texture2D(1,1);
-        sheet.filterMode = FilterMode.Point;
+        Texture2D sheet = new Texture2D(1, 1)
+        {
+            filterMode = FilterMode.Point
+        };
         sheet.LoadImage(image);
         sheet.Apply();
 
-        int count = (int)(sheet.width/256) + (int)(sheet.height/256);
-        SPRITES = new Sprite[count];
+        //int count = (int)(sheet.width/256) + (int)(sheet.height/256);
 
         FuckBitchTile bitchBase = Instantiate(ScriptableObject.CreateInstance<FuckBitchTile>());
         for (int i = 0; i < (int)(sheet.width / 256); i++)
         {
             for(int j = 0; j < (int)(sheet.height / 256); j++)
             {
-                Texture2D tex = new Texture2D(256, 256, TextureFormat.RGB24, true);
-                tex.filterMode = FilterMode.Point;
+                Texture2D tex = new Texture2D(256, 256, TextureFormat.RGB24, true)
+                {
+                    filterMode = FilterMode.Point
+                };
                 tex.wrapMode = tex.wrapModeU = tex.wrapModeV = tex.wrapModeW = TextureWrapMode.Clamp;
+#pragma warning disable UNT0017
                 tex.SetPixels(sheet.GetPixels(i*256, j*256, 256, 256));
-                
+#pragma warning restore UNT0017
                 /*
                 for(int x = 0; x < 256; x++)
                 {
@@ -65,7 +68,7 @@ public class SpriteSheetCreator : MonoBehaviour
                         }
                     }
                 }*/
-                
+
                 tex.Apply();
                                                                                                             // 230 /2
                 Sprite spr = Sprite.Create(tex, new Rect(Vector2.zero, new Vector2(256,256)), Vector2.zero, 256 / 2, 16); // 2: size of tilemap cells
@@ -88,7 +91,9 @@ public class SpriteSheetCreator : MonoBehaviour
             for (int j = 0; j < (int)(sheet.height / size); j++)
             {
                 Texture2D tex = new Texture2D(size, size);
+#pragma warning disable UNT0017
                 tex.SetPixels(sheet.GetPixels(i * size, j * size, size, size));
+#pragma warning restore UNT0017
                 tex.Apply();
                 
                 Sprite spr = Sprite.Create(tex, new Rect(Vector2.zero, new Vector2(size, size)), Vector2.zero, ppu);
@@ -104,38 +109,5 @@ public class SpriteSheetCreator : MonoBehaviour
         for (int i = 0; i < x.m_TilingRules.Count; i++)
             x.m_TilingRules[i].m_Sprites = new Sprite[] { CachedItems.renderedWalls.Find(x => x.ID == building.ID).sprites[i] };
         return x;
-    }
-
-    static Texture2D CombineTextures(Texture2D _textureA, Texture2D wallTex, Color groutColor)
-    {
-        //Create new textures
-        Texture2D textureResult = new Texture2D(_textureA.width, _textureA.height, TextureFormat.ARGB32, true);
-        //create clone form texture
-        //textureResult.SetPixels(_textureB.GetPixels());
-        //Now copy texture B in texutre A
-        int co = 0;
-        for (int x = 0; x < _textureA.width; x++)
-        {
-            for (int y = 0; y < _textureA.height; y++)
-            {
-                Color c = _textureA.GetPixel(x, y);
-                if (c.a > 0.0f) //Is not transparent
-                {
-                    co++;
-                    //Copy pixel color in TexturaA
-                    textureResult.SetPixel(x, y, c);
-                    if (c.r == 255 && c.g == 0 && c.b == 255)
-                    {
-                        Color ccolor;
-                        ccolor = wallTex.GetPixel(x % wallTex.width, y % wallTex.height);
-                        textureResult.SetPixel(x, y, ccolor);
-                    }
-                    if (c.r == 255 && c.g == 255 && c.b == 255)
-                        textureResult.SetPixel(x, y, groutColor);
-                }
-            }
-        }
-        textureResult.Apply();
-        return textureResult;
     }
 }

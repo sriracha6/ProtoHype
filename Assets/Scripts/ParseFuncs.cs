@@ -187,7 +187,7 @@ public static class ParseFuncs
 
     public static List<Sprite> parseSpriteSheetFromName(string filepath, int size, int ppu)
     {
-        List<Sprite> sprites = new List<Sprite>();
+        List<Sprite> sprites;
         byte[] file = Loaders.LoadImage(filepath);
         sprites = SpriteSheetCreator.createSpritesFromSheet(file, size, ppu);
         return sprites;
@@ -258,7 +258,7 @@ public static class ParseFuncs
                     list.Add(new Vector2Int(int.Parse(ss[0].removeWS()), int.Parse(ss[1].removeWS())));
                     list.Add(new Vector2Int(int.Parse(ss[1].removeWS()), int.Parse(ss[0].removeWS())));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     DB.Attention($"Couldn't parse room size. Input: \"{a.InnerText}\" : {Loaders.currentFile}");
                 }
@@ -323,17 +323,13 @@ public static class ParseFuncs
                 return num + "th";
         }
 
-        switch (num % 10)
+        return (num % 10) switch
         {
-            case 1:
-                return num + "st";
-            case 2:
-                return num + "nd";
-            case 3:
-                return num + "rd";
-            default:
-                return num + "th";
-        }
+            1 => num + "st",
+            2 => num + "nd",
+            3 => num + "rd",
+            _ => num + "th",
+        };
     }
     public static string toTitleCase(this string t)
     {
@@ -438,14 +434,14 @@ public static class ParseFuncs
         {
             if (t != "Description" && t != "WeaponClass" && t != "Group" && t != "Long" && t != "Medium" && t != "GenericSpecial" && t != "Sidearms" && t != "PickFrom" && t != "Shields" && t != "IsCarpet" && t != "PrefersFeature" && t != "PartOf")
                 DB.Attention($"XMLERROR: No node : {t} : {Loaders.currentFile}");
-            return default(T);
+            return default;
         }
 
         if (attribute && x.Attributes.GetNamedItem(t) == null)
         {
             if (t != "count")
                 DB.Attention($"XMLERROR: No attribute : {t} : {Loaders.currentFile}");
-            return default(T);
+            return default;
         }
 
         string innerText = !attribute ? x.SelectSingleNode(t).InnerText : x.Attributes.GetNamedItem(t).InnerText;
@@ -462,14 +458,14 @@ public static class ParseFuncs
                 return (T)(object)retf;
             else
             {
-                DB.Attention($"Not a float, Input:{innerText} : {Loaders.currentFile}"); return default(T);
+                DB.Attention($"Not a float, Input:{innerText} : {Loaders.currentFile}"); return default;
             }
         if (typeof(T) == typeof(int))
             if (int.TryParse(innerText, out int retf))
                 return (T)(object)retf;
             else
             {
-                DB.Attention($"Not an int. Input:{innerText} : {Loaders.currentFile}"); return default(T);
+                DB.Attention($"Not an int. Input:{innerText} : {Loaders.currentFile}"); return default;
             }
         var tt = typeof(T);
         if (tt == typeof(List<AnimalArmor>)) return (T)(object)parseAnimalArmor(innerText);
@@ -516,14 +512,14 @@ public static class ParseFuncs
         if (!typeof(T).IsEnum)
             throw new ArgumentException("T must be an enum type");
         if (string.IsNullOrEmpty(t) || t == "false")
-            return default(T);
+            return default;
 
         if (System.Enum.TryParse(t, out T enu))
             return enu;
         else
         {
             DB.Attention($"Couldn't parse {typeof(T)}. Input: {t} : {Loaders.currentFile}");
-            return default(T);
+            return default;
         }
     }
 }

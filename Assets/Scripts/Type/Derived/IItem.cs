@@ -4,8 +4,6 @@ using UnityEngine;
 
 public interface IItem<T>
 {
-    /*static T Get(string name);
-    static T Get(int ID);
-
-    static T Create();*/
+    public T Get(int id);
+    public T Get(string name);
 }

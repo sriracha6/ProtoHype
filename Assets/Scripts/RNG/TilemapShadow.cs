@@ -7,18 +7,13 @@ using System.Collections.Generic;
 public class TilemapShadow : MonoBehaviour
 {
     [Space]
-    [SerializeField]
     public float height;
     public MeshFilter targetMesh;
     public MeshRenderer targetRenderer;
 
-    private CompositeCollider2D tilemapCollider;
-
     public void Generate()
     {
         DestroyAllChildren();
-
-        tilemapCollider = GetComponent<CompositeCollider2D>();
 
         //Vector3[] pathVertices = new Vector3[tilemapCollider.GetPathPointCount(i)];
         //Vector2[] pathVertices2D = new Vector2[tilemapCollider.GetPathPointCount(i)];

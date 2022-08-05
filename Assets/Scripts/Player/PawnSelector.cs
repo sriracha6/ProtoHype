@@ -12,7 +12,7 @@ public class PawnSelector : MonoBehaviour
     [SerializeField]
     Camera mainCam;
 
-    void Update()
+    protected void Update()
     {
         if (Input.GetMouseButtonUp(Keybinds.LeftMouse))
         {

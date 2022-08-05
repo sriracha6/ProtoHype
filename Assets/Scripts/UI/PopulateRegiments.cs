@@ -22,7 +22,7 @@ public class PopulateRegiments : MonoBehaviour
 
     public static List<(VisualElement panel, int id)> panels = new List<(VisualElement panel, int id)>();
 
-    void Start()
+    protected void Start()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
         panel = root.Q<VisualElement>("RegimentSelect").Q<VisualElement>("unity-content-container");
@@ -62,10 +62,10 @@ public class PopulateRegiments : MonoBehaviour
 
     public static void updateAllRegimentsSelectNumber(int newValue)
     {
-        foreach ((VisualElement p, int id) v in panels)
+        foreach ((VisualElement p, int id) in panels)
         {
-            var x = Regiment.Get(v.id);
-            v.p.Q<Label>("SelectX").text = $"Select {Mathf.FloorToInt(newValue / 100f * x.members.Count)}";
+            var x = Regiment.Get(id);
+            p.Q<Label>("SelectX").text = $"Select {Mathf.FloorToInt(newValue / 100f * x.members.Count)}";
         }
     }
     

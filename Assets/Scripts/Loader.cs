@@ -47,7 +47,7 @@ $@"            Codename
   CS: {md5checksum}
   CD: {removeUsername(Directory.GetCurrentDirectory())}
   OS: {bit}{bit2} {Environment.OSVersion}
-  TIME: {DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()}
+  TIME: {DateTimeOffset.UtcNow.ToUnixTimeSeconds()}
   MEM: {SystemInfo.systemMemorySize}
   VMEM: {SystemInfo.graphicsMemorySize}
   CPU: {SystemInfo.processorType} : {SystemInfo.processorFrequency}MHz : {SystemInfo.processorCount}x
@@ -103,6 +103,9 @@ $@"            Codename
             Loaders.LoadArmor(file);
         foreach (string file in Directory.GetFiles(@"D:\medgame\wcfile\WC File Creator\WC File Creator\bin\Release\net6.0\pack\shields"))
             Loaders.LoadShield(file);
+
+        foreach (string file in Directory.GetFiles(Application.persistentDataPath + "/audio/UI"))
+            SFXManager.I.CacheAudio(Path.GetFileName(file), "UI");
 
         foreach(string file in Directory.GetFiles(@"C:\Users\frenz\Music\trt\sigh"))
             Loaders.LoadTroopTypeIcon(file);

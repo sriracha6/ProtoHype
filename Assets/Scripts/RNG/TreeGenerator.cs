@@ -65,7 +65,7 @@ public class TreeGenerator : MonoBehaviour
         currentTexture = result;
     }
 
-    private void OnValidate()
+    protected void OnValidate()
     {
         if(minBranches > maxBranches)
             minBranches = maxBranches;

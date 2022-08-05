@@ -142,8 +142,8 @@ public static class DB
     }
     public static void Attention(object o)
     {
-        Logger.Log(">>>>> "+o.ToString()+" <<<<<");
-        Debug.Log($"<color=yellow>{o.ToString()}</color>");
+        Logger.Log(">>>>> "+o+" <<<<<");
+        Debug.Log($"<color=yellow>{o}</color>");
     }
 
     public static void AddToLog(object o)
@@ -152,7 +152,7 @@ public static class DB
     }
     public static void AttentionToLog(object o)
     {
-        log.Add($"<color=yellow>{o.ToString()}</color>");
+        log.Add($"<color=yellow>{o}</color>");
     }
     public static void WriteLog()
     {

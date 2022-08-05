@@ -101,7 +101,7 @@ public class MoveControls : MonoBehaviour
         go.transform.position = new Vector3(pos.x, pos.y, -2);
     }
 
-    private void Awake()
+    protected void Awake()
     {
         // THIS SHOULDNT WORk
         //List<ActionType> action = new List<ActionType>();

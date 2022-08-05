@@ -21,7 +21,7 @@ public class PawnPathfind : MonoBehaviour
     [Header("Info")]
     public float speed;
     public float nextWaypointDistance = 0.1f;
-    private string moveOption;
+    private readonly string moveOption;
     public bool shouldPath;
 
     public PawnOrientation orientation = PawnOrientation.Right;
@@ -54,7 +54,7 @@ public class PawnPathfind : MonoBehaviour
     [SerializeField]
     Pawn p;
 
-    void Start()
+    protected void Start()
     {
         cam = WCMngr.I.mainCam;
         if (p.isFlagBearer)
@@ -62,7 +62,7 @@ public class PawnPathfind : MonoBehaviour
         InvokeRepeating(nameof(UpdatePath), 0f, 1f); // this is a cool fucktion
     }
 
-    private void Update()
+    protected void Update()
     {
         if (p.pawnDowned || p.dead)
         {
@@ -169,7 +169,7 @@ public class PawnPathfind : MonoBehaviour
         //}
     }
 
-    void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (!shouldPath)
             return;
@@ -213,28 +213,28 @@ public class PawnPathfind : MonoBehaviour
         #region Direction
         if (dir.x > 0)
         {
-            if (orientation == PawnOrientation.Up)
-                animator.Play("UpToSide", 0);
+            //if (orientation == PawnOrientation.Up)
+            //    animator.Play("UpToSide", 0);
             transform.localScale = new Vector3(1f, 1f, 1f);
             orientation = PawnOrientation.Right;
         }
         else if (dir.x < 0)
         {
-            if (orientation == PawnOrientation.Up)
-                animator.Play("UpToSide", 0);
+            //if (orientation == PawnOrientation.Up)
+            //    animator.Play("UpToSide", 0);
             transform.localScale = new Vector3(-1f, 1f, 1f);
             orientation = PawnOrientation.Left;
         }
         if (dir.y > 0 && dir.x == 0)
         {
-            if (orientation != PawnOrientation.Up)
-                animator.Play("SideToUp");
+            //if (orientation != PawnOrientation.Up)
+            //    animator.Play("SideToUp");
             orientation = PawnOrientation.Up;
         }
         else if (dir.y < 0)
         {
-            if (orientation != PawnOrientation.Down)
-                animator.Play("UpToSide", 0);
+            //if (orientation != PawnOrientation.Down)
+            //    animator.Play("UpToSide", 0);
             orientation = PawnOrientation.Down;
         }
         #endregion

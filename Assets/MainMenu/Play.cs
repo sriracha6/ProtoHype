@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class Play : MonoBehaviour
 {
-    void Start()
+    protected void Start()
     {
         var root = Menus.I.start.rootVisualElement;
         root.Q<Button>("BackButton").clicked += Back;

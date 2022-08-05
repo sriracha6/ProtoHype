@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
 {
     VisualElement root;
 
-    void Start()
+    protected void Start()
     {
         root = Menus.I.mainMenu.rootVisualElement;
         root.Q<VisualElement>("PlayButton").RegisterCallback<MouseDownEvent>(Play);

@@ -12,16 +12,20 @@ public class Blood : MonoBehaviour
     protected void Start() =>
 	    sr.sprite = CachedItems.bloodSplatters[Random.Range(0, CachedItems.bloodSplatters.Count)];
 
-    private void OnBecameInvisible()
+    protected void OnBecameInvisible()
     {
         shouldDie = true;
         //Destroy(gameObject);
     }
-    private void OnBecameVisible()
+    protected void OnBecameVisible()
     {
         shouldDie=false;
     }
 
-    protected void FixedUpdate() =>
+    protected void FixedUpdate()
+    {
         age += Time.fixedDeltaTime;
+        if (shouldDie && age > 5 * 3000) // 3000 = (60 / fixeddeltateim)
+            Destroy(gameObject);
+    }
 }

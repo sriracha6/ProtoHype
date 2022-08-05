@@ -36,7 +36,7 @@ public class QuickBattle : MonoBehaviour
 
     public int regimentSize = 30;
 
-    void Start()
+    protected void Start()
     {
         I = this;
 

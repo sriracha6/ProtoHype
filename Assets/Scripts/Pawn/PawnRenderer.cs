@@ -128,7 +128,6 @@ public class PawnRenderer : MonoBehaviour
                 Texture2D tex = XMLLoader.Loaders.LoadTex(Weapons.Weapon.Get(id).SourceFile);
                 //Sprite spr = Loaders.LoadSprite(tex, tex.height * size / SIXFEETMETERS);
                 float PPU = tex.height * size / (SIXFEETMETERS * size);
-                Debug.Log($"{PPU} : {id}");
                 Sprite spr = Sprite.Create(tex, new Rect(0,0,tex.width,tex.height), new Vector2(0f, 0f), PPU);
                 CachedItems.renderedWeapons.Add(new RenderedWeapon(spr, Weapon.Get(id)));
                 return spr;
@@ -151,16 +150,16 @@ public class PawnRenderer : MonoBehaviour
             {
                 Texture2D tex = Loaders.LoadTex(Shields.Shield.Get(id).SourceFile);
                 float PPU = tex.height * size / (SIXFEETMETERS * size);
-                Debug.Log($"{PPU} : {id}");
                 Sprite spr = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0f, 0f), PPU);
+                renderedShields.Add(new RenderedShield(spr, Shield.Get(id)));
                 return spr;
             }
             else
-                return CachedItems.renderedShields.Find(x=>x.id==Shield.Get(id)).sprite;
+                return CachedItems.renderedShields.Find(x => x.id == Shield.Get(id)).sprite;
         }
         catch (System.IO.IOException e)
         {
-            Debug.LogError("Couldn't load shield of name " + name + "\n\n" + e);
+            Logger.LogError("Couldn't load shield of name " + name + "\n\n" + e);
         }
         return null;
     }
@@ -231,8 +230,10 @@ public class PawnRenderer : MonoBehaviour
         if (CachedItems.renderedPawns.Exists(x => x.armors == armor))
             return CachedItems.renderedPawns.Find(x => x.armors == armor).sprite;
 
-        Texture2D final = new Texture2D(512, 512, TextureFormat.ARGB32, true);
-        final.wrapMode = TextureWrapMode.Clamp;
+        Texture2D final = new Texture2D(512, 512, TextureFormat.ARGB32, true)
+        {
+            wrapMode = TextureWrapMode.Clamp
+        };
         final.SetPixels32(GenColoredPawn(p).GetPixels32());//WCMngr.I.defaultPawnTexture.GetPixels32());
         //List<Armor> sortedArmors = armor.OrderBy(x=>x.layer).ToList(); // sort the list low to high
         List<Armor> sortedArmors = armor.OrderBy(o => o.layer).ToList();
@@ -304,7 +305,7 @@ public class PawnRenderer : MonoBehaviour
         //Create new textures
         Texture2D textureResult = new Texture2D(_textureA.width, _textureA.height, TextureFormat.ARGB32, true);
         //create clone form texture
-        textureResult.SetPixels(_textureB.GetPixels());
+        textureResult.SetPixels32(_textureB.GetPixels32());
         //Now copy texture B in texutre A
         int co = 0;
         for (int x = 0; x < _textureB.width; x++)

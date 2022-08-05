@@ -16,7 +16,7 @@ public class TimeController : MonoBehaviour
 
     public static TimeController I;
 
-    void Start()
+    protected void Start()
     {
         //
         if (I == null)

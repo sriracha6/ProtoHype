@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     public static List<Country> friends = new List<Country>();
     public static List<Country> enemies = new List<Country>();
 
-    private void Update()
+    protected void Update()
     {   
         if (isFollowingCursor) // i dont like it but it has to be done
         {

@@ -12,7 +12,9 @@ public class ProjectileBehaviour : MonoBehaviour
 
     public float projectileForce;
 
+#pragma warning disable IDE0052
     Projectile thisProjectile;
+#pragma warning restore IDE0052
     float weaponDamage;
 
     DamageType thisType;
@@ -27,7 +29,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     bool isFire;
     float damage;
-    DamageType damageType;
+    readonly DamageType damageType;
     
     PawnFunctions.Pawn sourcePawn;
     bool isThrow;
@@ -39,7 +41,6 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         if(isFire)
         {
-            Debug.Log($"<color=magenta>KO!! FIER!</color>");
             var go = Instantiate(WCMngr.I.firePrefab);
             Vector2Int p = Vector2Int.FloorToInt(transform.position);
             go.transform.position = new Vector3(p.x, p.y, -2);

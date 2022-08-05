@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] UIDocument __ui;
     private static UIDocument ___UI;
     public static int Reloads { get; internal set; }
+    public static List<CachedItems.CachedSound> UISounds { get; internal set; } = new List<CachedItems.CachedSound>();
+
     public static UIDocument ui
     {
         get { return ___UI; }
@@ -69,6 +71,12 @@ public class UIManager : MonoBehaviour
             root.AddManipulator(new ContextMenuManipulator(list, false));
             //root.pickingMode = PickingMode.Position;
         }
+
+        LoopKids(root);
+    }
+
+    private void LoopKids(VisualElement root)
+    {
         foreach (VisualElement v in root.Children())
         {
             //v.RegisterCallback<MouseMoveEvent>(x => { currentMouse = x; });
@@ -81,7 +89,15 @@ public class UIManager : MonoBehaviour
             v.RegisterCallback<MouseEnterEvent>(x => mouseEnter(v, x)); // worked
             v.RegisterCallback<MouseLeaveEvent>(x => mouseOverUI = false);
 
+            if (v.childCount > 0)
+                foreach(VisualElement v2 in root.Children())
+                    LoopKids(v2);
         }
+    }
+
+    public void PlayUISound()
+    {
+        SFXManager.I.PlaySound(UISounds.randomElement().name, "UI", 1, Vector2.zero, true);
     }
 
     public static void TransferToNewUI(VisualElement window, string name)

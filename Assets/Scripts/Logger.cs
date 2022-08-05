@@ -46,6 +46,6 @@ public static class Logger
     public static void LogUnityMsg(string condition, string stackTrace, LogType type)
     {
         if(type == LogType.Error || type == LogType.Exception)
-            Logger.LogError($"{type.ToString()} | {condition} : \n       {stackTrace}");
+            Logger.LogError($"{type} | {condition} : \n       {stackTrace}");
     }
 }

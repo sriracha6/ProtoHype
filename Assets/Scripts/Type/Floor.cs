@@ -10,7 +10,7 @@ namespace Buildings
     public class Floor : Build
     {
         [XMLItem("Building Type")] public BuildingType buildingType { get; }
-        public FuckBitchTile tile;
+        public new FuckBitchTile tile;
 
         public Floor(string name, string description, string sourcefile, int hitpoints, int flammability) : base(name, description, sourcefile, false,false,RubbleType.None,hitpoints,flammability)
         {

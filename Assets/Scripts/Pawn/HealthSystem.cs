@@ -105,6 +105,7 @@ public class HealthSystem : MonoBehaviour
 	/// Amount instead of attack because attack values don't take into account skills, etc.
 	public void TakeMeleeDamage(float amount, Weapon sourceWeapon, Pawn attacker, Attack attack)
     {
+		Debug.Log($"{p.pname}, {p.country.Name} || {attacker.pname}, {attacker.country.Name} || ({attack.Name}, {attack.damageType})");
 		lastDamageTime = 0;
 		lastAttacker = attacker;
 
@@ -121,9 +122,11 @@ public class HealthSystem : MonoBehaviour
 
 	public void TakeRangeDamage(float amount, Weapon sourceWeapon, Pawn attacker, DamageType rangeDamageType, Attack attack)
     {
-		//if (sourceWeapon == null) // we need this for final build
-		//	sourceWeapon = WeaponManager.Get("Empty");
-		// TODO: SUPPORT FOR FURNITURE
+        //if (sourceWeapon == null) // we need this for final build
+        //	sourceWeapon = WeaponManager.Get("Empty");
+
+        Debug.Log($"{p.pname} || {attacker.pname}");
+
 		int chance = 0;
 		var c1 = TilemapPlace.buildings[((int)transform.position.x - 1).clampInMap(true), (int)transform.position.y];
 		var c2 = TilemapPlace.buildings[((int)transform.position.x + 1).clampInMap(true), (int)transform.position.y];

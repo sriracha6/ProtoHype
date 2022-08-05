@@ -13,18 +13,18 @@ public class TileSelection : MonoBehaviour
     public Camera maincam;
     public Tilemap tmap;
     private BoundsInt area;
-    private List<Vector2Int> selectedPoints = new List<Vector2Int> ();
+    private readonly List<Vector2Int> selectedPoints = new List<Vector2Int> ();
 
     public static bool started;
     public static bool isBulkMode;
 
-    void Start()
+    protected void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 4;
     }
 
-    void Update()
+    protected void Update()
     {
         if(Input.GetMouseButtonDown(Keybinds.RightMouse) && !Input.GetKey(Keybinds.bulkTileSelect) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started && Time.timeScale > 0)
         {
@@ -44,6 +44,7 @@ public class TileSelection : MonoBehaviour
                 lineRenderer.positionCount++;
                 lineRenderer.SetPosition(lineRenderer.positionCount - 1, currentMousePos);
                 selectedPoints.Add(new Vector2Int((int)currentMousePos.x, (int)currentMousePos.y));
+                SFXManager.I.PlaySound(UIManager.UISounds.randomElement().name, "UI", 1, Vector2.zero, true);
             }
         }
         if(Input.GetMouseButtonUp(Keybinds.RightMouse) && !Input.GetKey(Keybinds.bulkTileSelect) && started && !isBulkMode)
@@ -76,7 +77,6 @@ public class TileSelection : MonoBehaviour
             bcollider.isTrigger = true;
             bcollider.offset = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         }
-
         if (Input.GetMouseButton(Keybinds.RightMouse) && Input.GetKey(Keybinds.bulkTileSelect) && started && isBulkMode)
         {
             currentMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
@@ -94,7 +94,6 @@ public class TileSelection : MonoBehaviour
 
             area = new BoundsInt(Vector3Int.FloorToInt(transform.position), Vector3Int.FloorToInt(lineRenderer.bounds.size));
         }
-
         if (Input.GetMouseButtonUp(Keybinds.RightMouse) && Input.GetKey(Keybinds.bulkTileSelect) && started && isBulkMode)
         {
             started = false;

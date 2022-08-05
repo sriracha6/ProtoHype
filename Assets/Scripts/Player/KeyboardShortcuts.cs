@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class KeyboardShortcuts : MonoBehaviour
 {
-    void Update()
+    protected void Update()
     {
         if(Input.GetKeyDown(Keybinds.clearTileSelection))
         {

@@ -39,7 +39,7 @@ namespace Projectiles
             if (List.Exists(x => x.Name == name))
                 return List.Find(x => x.Name == name);
             else
-                DB.Attention($"Couldn't find Projectile of name {name}");
+                DB.Attention($"Couldn't find Projectile of name \"{name}\"");
             return null;
         }
         public static Projectile Get(int id)
@@ -50,7 +50,7 @@ namespace Projectiles
             }
             catch (NullReferenceException)
             {
-                DB.Attention($"Couldn't find Projectile of id {id}");
+                DB.Attention($"Couldn't find Projectile of id \"{id}\"");
                 return null;
             }
         }

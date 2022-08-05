@@ -3,6 +3,7 @@ using PawnFunctions;
 using Projectiles;
 using Regiments;
 using System;
+using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 using TroopTypes;
@@ -20,12 +21,16 @@ public class PawnManager : MonoBehaviour
     public GameObject horsePrefab;
     public static readonly List<Pawn> allPawns = new List<Pawn>();
 
+    static readonly List<(Regiment r, Vector2Int pos)> regimentPoses = new List<(Regiment r, Vector2Int pos)>();
+
     public static bool doneLoading = false;
     List<Vector2Int> usedPoints = new List<Vector2Int>();
 
     public float minDistance;
     public const int AROUND_BASE_DISTANCE = 30;
     public const int OUTSIDE_BASE_DISTANCE = 50;
+    public const int MIN_ENEMY_DISTANCE = 50;
+
 
     protected void Awake()
     {
@@ -64,6 +69,10 @@ public class PawnManager : MonoBehaviour
                 else
                     regimentPos = new Vector2Int(Random.Range(0, map.mapWidth), Random.Range(0, map.mapHeight));
 
+                regimentPos = PositionRegiment(regimentPos);
+
+                regimentPoses.Add((Regiment.Get(currentRegiment), regimentPos));
+
                 float regimentMemberCount = Mathf.Max(Random.Range(0.75f, 1.25f) * regimentSize, 2);
                 for (int j = 0; j < regimentMemberCount; j++)
                 {
@@ -74,7 +83,7 @@ public class PawnManager : MonoBehaviour
 
                     Pawn p = I.CreatePawn(country.country, CachedItems.RandomName, troopType,
                         Regiment.Get(currentRegiment), pos); // make sure this id is right!
-                    
+
                     if (troopType.ridingAnimal)
                     {
                         GameObject go = Instantiate(I.horsePrefab, p.transform); // v im so sorry
@@ -91,6 +100,27 @@ public class PawnManager : MonoBehaviour
             PathfindExtra.SetFree(I.usedPoints[i].x, I.usedPoints[i].y);
         I.usedPoints = new List<Vector2Int>();
         PopulateRegiments.updateAllRegimentsSelectNumber(Player.regimentSelectNumber);
+    }
+
+    private static Vector2Int PositionRegiment(Vector2Int vPos, int maxRecursion=100)
+    {
+        if (maxRecursion < 0)
+            return vPos;
+
+        Vector2Int bestGuess = vPos;
+        int s = 0;
+        foreach ((Regiment r, Vector2Int pos) in regimentPoses)
+        {
+            if (Vector2.Distance(pos, vPos) < MIN_ENEMY_DISTANCE && !r.isFriendly)
+            {
+                bestGuess = new Vector2Int(Mathf.Clamp(vPos.x + Random.Range(-40, 41), 0, MapGenerator.I.mapWidth), Mathf.Clamp(vPos.y + Random.Range(-40, 41), 0, MapGenerator.I.mapHeight));
+                s++;
+            }
+        }
+        if (s == 0)
+            return bestGuess;
+        else
+            return PositionRegiment(vPos, maxRecursion--);
     }
 
     public static TroopType RandomTroopType(Country c)
@@ -230,10 +260,6 @@ public class PawnManager : MonoBehaviour
     #endregion
 
     public static Color GenerateSkinColor()
-    {
-        return Color.Lerp(new Color(241 / 255f, 194 / 255f, 125 / 255f), new Color(141 / 255f, 85 / 255f, 36 / 255f), Random.Range(0f, 1f));
-    }
-    public static Color GenerateSkinColor(int darkness)
     {
         return Color.Lerp(new Color(241 / 255f, 194 / 255f, 125 / 255f), new Color(141 / 255f, 85 / 255f, 36 / 255f), Random.Range(0f, 1f));
     }

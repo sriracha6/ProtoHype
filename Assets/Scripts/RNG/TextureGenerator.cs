@@ -7,12 +7,14 @@ using static MapGenerator;
 
 public static class TextureGenerator
 {
-    public static Texture2D texturePreviewFromMap(Color[] map, int width, int height)
+    public static Texture2D texturePreviewFromMap(Color32[] map, int width, int height)
     {
-        Texture2D texture = new Texture2D(width, height, TextureFormat.ARGB32, true);
-        texture.filterMode = FilterMode.Point;
-        texture.wrapMode = TextureWrapMode.Clamp;
-        texture.SetPixels(map);
+        Texture2D texture = new Texture2D(width, height, TextureFormat.ARGB32, true)
+        {
+            filterMode = FilterMode.Point,
+            wrapMode = TextureWrapMode.Clamp
+        };
+        texture.SetPixels32(map);
         texture.Apply();
         return texture;
     }
@@ -22,13 +24,13 @@ public static class TextureGenerator
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
 
-        Color[] colorMap = new Color[width * height];
+        Color32[] colorMap = new Color32[width * height];
 
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                colorMap[y * width + x] = Color.Lerp(Color.black, Color.white, heightMap[x, y]);
+                colorMap[y * width + x] = Color32.Lerp(Color.black, Color.white, heightMap[x, y]);
             }
         }
 

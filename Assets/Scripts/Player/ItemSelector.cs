@@ -7,7 +7,7 @@ using static TilemapPlace;
 public class ItemSelector : MonoBehaviour
 {
     [SerializeField] SpriteRenderer spriteRenderer;
-    List<Build[,]> validClickables = new List<Build[,]>(); // todo: traps here, rooves, blah whatever else
+    readonly List<Build[,]> validClickables = new List<Build[,]>(); // todo: traps here, rooves, blah whatever else
 
     protected void Start()
     {

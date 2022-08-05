@@ -11,11 +11,11 @@ public class Messages : MonoBehaviour
     [SerializeField]
     float timeToFade;
 
-    private List<string> messages = new List<string>();
+    private readonly List<string> messages = new List<string>();
 
     public static Messages I;
 
-    private void Start()
+    protected void Start()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
         box = root.Q<VisualElement>("MessageSystem");

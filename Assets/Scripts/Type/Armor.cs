@@ -64,7 +64,7 @@ namespace Armors
             {
                 return List.Find(x => x.ID == id);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Create(name);
                 DB.Attention($"Couldn't find Armor of id {id}");

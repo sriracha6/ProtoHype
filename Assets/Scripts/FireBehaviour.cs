@@ -29,7 +29,7 @@ public class FireBehaviour : MonoBehaviour
     }
     [SerializeField] SpriteRenderer spr;
 
-    void Start()
+    protected void Start()
     {
         Size = 1;
         StartCoroutine(UpdateFire());

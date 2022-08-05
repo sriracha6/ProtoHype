@@ -14,20 +14,17 @@ public class QuickMove : MonoBehaviour
     LineRenderer lineRenderer;
     public float lineSimplification = 0.7f;
 
-    Vector2Int lastPosition;
-    List<Vector2Int> targetedPositions = new List<Vector2Int>();
+    readonly List<Vector2Int> targetedPositions = new List<Vector2Int>();
     //List<List<Vector2Int>> pawnMovePositions = new List<List<Vector2Int>>();
-    List<Vector3> allPoints = new List<Vector3>();
+    readonly List<Vector3> allPoints = new List<Vector3>();
     bool shouldGo;
 
-    float startheldTime;
-
-    private void Start()
+    protected void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
     }
 
-    private void Update()
+    protected void Update()
     {
         // && Time.time-startheldTime >= 100) // ms??
         if (Input.GetMouseButtonDown(Keybinds.LeftMouse)) // first check: mouse down, not over UI, selected pawns, and over a pawn 
@@ -40,7 +37,6 @@ public class QuickMove : MonoBehaviour
                 && Player.ourSelectedPawns.Count > 0
                 && !UIManager.mouseOverUI)
             {
-                startheldTime = Time.time;
                 shouldGo = true;
                 lineRenderer.loop = false;
             }
@@ -53,7 +49,6 @@ public class QuickMove : MonoBehaviour
             lineRenderer.positionCount = 0;
 
             shouldGo = false;
-            startheldTime = 0f;
         }
 
         if (Input.GetMouseButton(Keybinds.LeftMouse) && shouldGo)
@@ -68,7 +63,6 @@ public class QuickMove : MonoBehaviour
             allPoints.Clear();
 
             shouldGo = false;
-            startheldTime = 0f;
         }
     }
 

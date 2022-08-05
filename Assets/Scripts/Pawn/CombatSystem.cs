@@ -66,7 +66,7 @@ public class CombatSystem : MonoBehaviour
     float extraRangeTime;
 
     bool shouldRunAndGun;
-    List<Transform> enemyCountryTransforms = new List<Transform>();
+    readonly List<Transform> enemyCountryTransforms = new List<Transform>();
 
     // ------------------------------------------------------------ //
 
@@ -93,12 +93,12 @@ public class CombatSystem : MonoBehaviour
         InvokeRepeating(nameof(Checks), 0, 0.5f);
     }
 
-    protected void Update()
+    IEnumerator AttackTimer()
     {
-        if (attackTimer <= 0f)
-            canAttack = true;
-        if (attackTimer > 0f)
-            attackTimer -= Time.deltaTime;
+        canAttack = false;
+        yield return new WaitForSeconds(meleeAttackCooldown + extraRangeTime);
+        attackTimer = 0;
+        canAttack = true;
     }
 
     public void doMeleeAttack(Pawn target)
@@ -200,6 +200,11 @@ public class CombatSystem : MonoBehaviour
 
     void Checks()
     {
+        enemyCountryTransforms.Clear();
+        foreach (Country c in p.enemyCountries)
+        {
+            enemyCountryTransforms.AddRange(c.memberTransforms);
+        }
         int totalEnemies = enemyCountryTransforms.Count;
 
         if (totalEnemies <= 0)
@@ -224,32 +229,21 @@ public class CombatSystem : MonoBehaviour
 
         //if (!MoveControls.findQueue(p).actions[0].Type.Equals("Attack"))
         //{
-        if(targetUntilDeath == null)
+        if (targetUntilDeath == null)
         {
             closestEnemy = CS.GetClosestEnemy(enemyCountryTransforms, transform);
 
             targetUntilDeath = closestEnemy.GetComponent<Pawn>();
             //Debug.Log($"new enemy: {p.country} : target is null");
         }
-        //else
-        /*if(Player.ourSelectedPawns.Count > 0)
-        {
-            List<Transform> list = new List<Transform>();
-            foreach(Pawn p in PawnManager.GetAll())
-            {
-                if (!p.country.Equals(Player.playerCountry))
-                    list.Add(p.gameObject.transform);
-            }
-
-        }*/
-        // why tf was this here in the first place, what does it do? ^^
+        
         closestEnemy = CS.GetClosestEnemy(enemyCountryTransforms, transform);
         
         if (checkCanMeleeAttack(targetUntilDeath) && targetUntilDeath != null)
         {
             doMeleeAttack(targetUntilDeath); // also bad
             canAttack = false;
-            attackTimer = meleeAttackCooldown;
+            StartCoroutine(AttackTimer());
             return;
         }
 
@@ -277,12 +271,12 @@ public class CombatSystem : MonoBehaviour
                 pawnPathfind.orientation = PawnOrientation.Right;
             }
             if(p.activeWeapon.rangeType == RangeType.Shooter)
-                doRangeShootaAttack(closestEnemy.GetComponent<Pawn>());
+                doRangeShootaAttack(closestEnemy.GetComponent<Pawn>()); // todo: can this just use targetUntilDeath
             else if(p.activeWeapon.rangeType == RangeType.Thrown)
-                doRangeThrowerAttack(closestEnemy.GetComponent<Pawn>());
+                doRangeThrowerAttack(closestEnemy.GetComponent<Pawn>()); // todo: can this just use targetUntilDeath
 
             canAttack = false;
-            attackTimer = meleeAttackCooldown + extraRangeTime;
+            StartCoroutine(AttackTimer());
 
             return;
         }
@@ -305,8 +299,8 @@ public class CombatSystem : MonoBehaviour
             return false;
         Vector2 offset = closestEnemy.position - transform.position;
         float sqrLen = offset.sqrMagnitude;
-        return p.activeWeapon.Type.Equals(WeaponType.Melee) || p.activeWeapon.enableRangedMeleeDamage && !closestPawn.pawnDowned
-                && sqrLen <= meleeRange * meleeRange;
+        return (p.activeWeapon.Type.Equals(WeaponType.Melee) || p.activeWeapon.enableRangedMeleeDamage) && !closestPawn.pawnDowned
+                && sqrLen <= (meleeRange * meleeRange);
     }
     private bool checkCanRangeAttack()
     {

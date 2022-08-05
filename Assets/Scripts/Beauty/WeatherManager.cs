@@ -31,6 +31,7 @@ public class WeatherManager : MonoBehaviour
     int currentTime;
 
     List<Weather> sortedWeather = new List<Weather>();
+    AudioSource rainSound;
 
     protected void Awake()
     {
@@ -122,32 +123,36 @@ public class WeatherManager : MonoBehaviour
             case WeatherType.Clear:
                 rainPS.Stop(true);
                 snowPS.Stop(true);
+                if(rainSound!=null)
+                    rainSound.Stop();
+                rainSound.loop = false;
                 break;
             case WeatherType.Rain:
                 if (currentTemperature <= 32)
                     goto case WeatherType.Snow; // i finally got to use this :)
+                rainSound = SFXManager.I.PlaySound("rain", "Weather", 1f, Vector2.zero, true);
+                rainSound.loop = true;
                 snowPS.Stop(false);
                 rainPS.Play(false);
                 break;
             case WeatherType.Snow:
                 rainPS.Stop(false);
                 snowPS.Play(false);
+                if (rainSound != null)
+                    rainSound.Stop();
+                rainSound.loop = false;
                 break;
             case WeatherType.Thunderstorm:
                 rainPS.Play(false);
                 lightningPS.Play(false);
                 snowPS.Stop(false);
+                rainSound = SFXManager.I.PlaySound("rain", "Weather", 1f, Vector2.zero, true);
+                rainSound.loop = true;
                 break;
         }
 
         //var scale = ps.shape.scale; // this shit doesn't work but this /SHOULD/ work on all monitors
         //scale.x = maincam.rect.width + (wind.windTurbulence * ps.externalForces.multiplier); // wind
         //scale.y = 50000;
-    }
-
-    protected void OnValidate()
-    {
-        startWeather(currentWeather);
-        minLengthSeconds *= 50; // because peepee
     }
 }

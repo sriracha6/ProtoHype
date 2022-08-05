@@ -46,17 +46,9 @@ public class TerrainType
 
     public static TerrainType Create(string name, float height, Color color, FuckBitchTile tbase, SpecialType special, bool supportedNature)
     {
-        //if (!TerrainTypeList.Any(x => x.name == name))
-        //{
         TerrainType c = new TerrainType(name, height, color, tbase, special, supportedNature);
         List.Add(c);
         return c;
-        //}
-        //else
-        //{
-        //Debug.Log("Tried to create multiple of: "+name);
-        return null;
-        //}
     }
     public static TerrainType Get(string name)
     {

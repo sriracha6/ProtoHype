@@ -49,7 +49,7 @@ public class TilemapPlace : MonoBehaviour
             if (MapGenerator.I.drawMode == DrawMode.Place)
                 WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), f.tile);
         }
-        catch(System.Exception e)
+        catch(System.Exception)
         {
             Debug.Log($"ERROR @ {x},{y}");
         }
@@ -91,7 +91,7 @@ public class TilemapPlace : MonoBehaviour
         traps = new Trap[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
     }
 
-    public static void UpdateTilemap(float[,] noiseMap, TerrainType[] tTypesUnsorted, bool place, Biome biome)
+    public static void UpdateTilemap(float[,] noiseMap, TerrainType[] tTypesUnsorted, bool place)
     {
         TerrainType[] tTypes = tTypesUnsorted.OrderBy(x => x.height).ToArray(); // this line of code makes the entire game, i'll make it a puzzle! figure out why! ;)
         tilemap = new TerrainType[noiseMap.GetLength(0), noiseMap.GetLength(1)];
@@ -147,19 +147,13 @@ public class TilemapPlace : MonoBehaviour
             var go = Instantiate(WCMngr.I.rubblePrefab);
             go.transform.position = new Vector3(position.x, position.y, 0);
 
-            Sprite spr;
-            switch(build.rubbleType)
+            Sprite spr = build.rubbleType switch
             {
-                case RubbleType.woodrubble:
-                    spr = WCMngr.I.woodrubbleTex; break;
-                case RubbleType.stonerubble:
-                    spr = WCMngr.I.stonerubbleTex; break;
-                case RubbleType.miscrubble:
-                    spr = WCMngr.I.miscrubbleTex; break;
-                default:
-                    spr = WCMngr.I.miscrubbleTex; break;
-            }
-
+                RubbleType.woodrubble => WCMngr.I.woodrubbleTex,
+                RubbleType.stonerubble => WCMngr.I.stonerubbleTex,
+                RubbleType.miscrubble => WCMngr.I.miscrubbleTex,
+                _ => WCMngr.I.miscrubbleTex,
+            };
             go.GetComponent<SpriteRenderer>().sprite = spr;
             go.transform.Rotate(0,0,Random.Range(0f,361f));
         }

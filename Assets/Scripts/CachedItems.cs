@@ -145,6 +145,17 @@ public class CachedItems
             this.sprites = sprites;
         }
     }
+    public struct CachedSound // this is a real memory hog
+    {
+        public AudioClip audioClip;
+        public string name;
+
+        public CachedSound(AudioClip audioClip, string name)
+        {
+            this.audioClip = audioClip;
+            this.name = name;
+        }
+    }
 
     public static List<RenderedWeapon> renderedWeapons = new List<RenderedWeapon>();
     public static List<RenderedShield> renderedShields = new List<RenderedShield>();
@@ -158,6 +169,7 @@ public class CachedItems
     public static List<RenderedAnimalPick> renderedAnimalPicks = new List<RenderedAnimalPick>();
     public static List<RenderedTroopType> renderedTroopTypes = new List<RenderedTroopType>();
     public static List<RenderedWall> renderedWalls = new List<RenderedWall>();
+    public static List<CachedSound> cachedSounds = new List<CachedSound>();
 
     public static List<Sprite> bloodSplatters = new List<Sprite>();
     public static List<string> firstNames = new List<string>();

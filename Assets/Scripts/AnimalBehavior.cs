@@ -10,7 +10,7 @@ using Pathfinding;
 // im gonna need a pawninfo for this arent i?
 public class AnimalBehavior : MonoBehaviour
 {
-    public Pawn rider; 
+    public Pawn rider;
     public Animal sourceAnimal;
     public float trueSpeed;
     public bool isWarAnimal;
@@ -44,7 +44,7 @@ public class AnimalBehavior : MonoBehaviour
     }
     public List<AnimalArmor> armors;
 
-    void Start()
+    protected void Start()
     {
         if(sourceAnimal == null)
         {

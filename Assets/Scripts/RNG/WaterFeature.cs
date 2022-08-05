@@ -14,6 +14,14 @@ public enum Side
     Diagonal = 99
 }
 
+public enum NSide
+{
+    Top=0,
+    Bottom=1,
+    Left=2,
+    Right=3
+}
+
 public static class WaterFeature
 {
     // we need more than just the side to start.. we need positions
@@ -38,7 +46,7 @@ public static class WaterFeature
     public const int MAX_BREADTH = 7;
     public const int MIN_BREADTH = 3;
 
-    public static float[,] carveRiver(this float[,] ogMap, float waterLevel, System.Random seed, float perturbation, bool always = false)
+    public static float[,] carveRiver(this float[,] ogMap, System.Random seed, float perturbation, bool always = false)
     {
         if(!always)
             if (seed.Next(0, 100) <= 100-RIVER_CHANCE)
@@ -100,8 +108,8 @@ public static class WaterFeature
 
             for(int i = 0; i < river.radius * 2; i++)
             {
-                newMap[(int)direction.x.ClampInMap(width), (direction.y + i).ClampInMap(height)] = waterLevel - 0.01f;
-                newMap[(int)direction.x.ClampInMap(width), (direction.y - i).ClampInMap(height)] = waterLevel - 0.01f;
+                newMap[(int)direction.x.ClampInMap(width), (direction.y + i).ClampInMap(height)] = BiomeArea.waterHeight - 0.01f;
+                newMap[(int)direction.x.ClampInMap(width), (direction.y - i).ClampInMap(height)] = BiomeArea.waterHeight - 0.01f;
             }
             if (seed.Next(0, 100) >= 100 - CHANGE_SIZE_CHANCE)
             {
@@ -112,7 +120,7 @@ public static class WaterFeature
                     river.radius--;
             }
 
-            newMap[(int)currentPosition.x, (int)currentPosition.y] = waterLevel - 0.01f;
+            newMap[(int)currentPosition.x, (int)currentPosition.y] = BiomeArea.waterHeight - 0.01f;
             it++;
         }
 
@@ -168,7 +176,7 @@ public static class WaterFeature
     public static float[,] erodeNearWater(this float[,] ogMap, float waterLevel, int erosionAmount)
     {
         float[,] result = ogMap;
-#if false // quando rongo
+#if false
         int width = ogMap.GetLength(0);
         int height = ogMap.GetLength(1);
 
@@ -217,80 +225,80 @@ public static class WaterFeature
         return result;
     }
     // todo: this can be easily made way more natural instead of straight lines by expanding on the creating start part. then you have perlin noise to add lotsa variation to the straight line. you have a list of offset's off the line so you know how to add to the end.
-    public static float[,] carveWaterBody(this float[,] ogMap, float waterLevel, System.Random rand, bool overrideRandom=false)
+    public static float[,] carveWaterBody(this float[,] ogMap, System.Random rand, bool overrideRandom=false)
     {
         if (!overrideRandom && rand.Next(0,15) <= 13)
             return ogMap; // 2/15 chance for water map
         
         float[,] newMap = ogMap;
 
-        Side side = RandomEnum<Side>(rand);
+        NSide side = RandomEnum<NSide>(rand);
         int size = rand.Next(ogMap.GetLength(0) / 15, ogMap.GetLength(0) / 3);
 
-        int width = side == Side.Left||side==Side.Right ? size : ogMap.GetLength(0);
-        int height = side == Side.Top||side == Side.Bottom ? size : ogMap.GetLength(1);
+        int width = side == NSide.Left||side== NSide.Right ? size : ogMap.GetLength(0);
+        int height = side == NSide.Top||side == NSide.Bottom ? size : ogMap.GetLength(1);
 
         int startX = 0; int startY = 0;
         int endY = ogMap.GetLength(1); int endX = ogMap.GetLength(0);
 
-        if (side == Side.Left)
+        if (side == NSide.Left)
             endX = width;
-        else if (side == Side.Right)
+        else if (side == NSide.Right)
             startX = ogMap.GetLength(0) - size;
-        else if (side == Side.Top)
+        else if (side == NSide.Top)
             startY = ogMap.GetLength(1) - size;
-        else if (side == Side.Bottom)
+        else if (side == NSide.Bottom)
             endY = height;
 
         for (int x = startX;x<endX;x++) // place beginning
             for(int y = startY; y < endY; y++)
-                newMap[x, y] = waterLevel - 0.01f;
+                newMap[x, y] = BiomeArea.waterHeight - 0.01f;
 
         float offset = rand.Offset();
         switch (side) // this is fucking terrible but fuck you deal with it 40 lines of bs
         {
             // repeat the value 3-5 times random
-            case Side.Left:
+            case NSide.Left:
                 for (int y = startY; y < endY; y++)
                 {
                     int i = (int)(Mathf.PerlinNoise(offset, y) * 10);
                     for (int c = 0; c <= i; c++)
                     {
                         for (int depth = 0; depth < rand.Next(3, 6); depth++)
-                            newMap[size + depth, y] = waterLevel - 0.01f;
+                            newMap[size + depth, y] = BiomeArea.waterHeight - 0.01f;
                     }
                 }
                 break;
-            case Side.Right:
+            case NSide.Right:
                 for (int y = 0; y < endY; y++)
                 {
                     int i = (int)(Mathf.PerlinNoise(offset, y)*10);
                     for (int c = 0; c <= i; c++)
                     {
                         for (int depth = 0; depth < rand.Next(3, 6); depth++)
-                            newMap[startX - depth, y] = waterLevel - 0.01f;
+                            newMap[startX - depth, y] = BiomeArea.waterHeight - 0.01f;
                     }
                 }
                 break;
-            case Side.Top:
+            case NSide.Top:
                 for (int x = 0; x < endX; x++)
                 {
                     int i = (int)(Mathf.PerlinNoise(x, offset) * 10);
                     for (int c = 0; c <= i; c++)
                     {
                         for (int depth = 0; depth < rand.Next(3, 6); depth++)
-                            newMap[x, startY - depth] = waterLevel - 0.01f;
+                            newMap[x, startY - depth] = BiomeArea.waterHeight - 0.01f;
                     }
                 }
                 break;
-            case Side.Bottom:
+            case NSide.Bottom:
                 for (int x = startX; x < endX; x++)
                 {
                     int i = (int)(Mathf.PerlinNoise(x, offset) * 10);
                     for (int c = 0; c <= i; c++)
                     {
                         for (int depth = 0; depth < rand.Next(3, 6); depth++)
-                            newMap[Mathf.Clamp(x + depth,0,width-1), size + c] = waterLevel - 0.01f;
+                            newMap[Mathf.Clamp(x + depth,0,width-1), size + c] = BiomeArea.waterHeight - 0.01f;
                     }
                 }
                 break;

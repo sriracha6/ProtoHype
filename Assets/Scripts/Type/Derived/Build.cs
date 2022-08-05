@@ -36,6 +36,16 @@ public class Build : Item// i should really put a float rotation variable in her
         return lhs.ID != rhs.ID;
     }
 
+    public override bool Equals(object obj)
+    {
+        return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
     public Build(string name, string description, string sourcefile, bool isSpecialPlace, bool hasRubble, RubbleType rubbleType, int hitpoints, int flammability)
         : base(name, description, sourcefile)
     {

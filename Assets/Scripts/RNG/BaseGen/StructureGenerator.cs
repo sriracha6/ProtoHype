@@ -33,7 +33,7 @@ public static class StructureGenerator
             for (int i = 0; i < s.RoomCount.Min - rooms.Count; i++)
                 rooms.Add(s.RoomInfo.randomElement(rng));
 
-        int structureWidth = 0;
+        int structureWidth;
         int structureHeight = 0;
 
         List<Room> roomOrder = new List<Room>();
@@ -43,8 +43,7 @@ public static class StructureGenerator
         int currentHighest = 0;
         int curX = 0;
         int curY = 0;
-        List<int> rowLengths = new List<int>();
-        rowLengths.Add(0);
+        List<int> rowLengths = new List<int>() { 0 };
         List<List<bool>> roomMap = new List<List<bool>>();// use chunks of 16x16 rooms scaled up in some way. makes perfect rooms. looks sexy
         for (int i = 0; i < 25; i++) // start off with some size. bc no one would ever want a 320x320 room
         {
