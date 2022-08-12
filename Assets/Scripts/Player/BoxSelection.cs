@@ -38,7 +38,7 @@ public class BoxSelection : MonoBehaviour
         else
             mode = SelectionMode.Default; // normal
         
-        if (Input.GetMouseButtonDown(Keybinds.LeftMouse) && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !TileSelection.started && Time.timeScale > 0)
+        if (Input.GetMouseButtonDown(Keybinds.LeftMouse) && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !TileSelection.started)
         {
             Player.selectedTiles.Clear();
             // WHY THE FUCK WERE THESE EVEN HERE???S???? FUCK YOU!!
@@ -99,17 +99,15 @@ public class BoxSelection : MonoBehaviour
                     Player.selectedPawns.AddRange(newSelectedPawns);
                     Player.ourSelectedPawns.AddRange(newSelectedPawns.FindAll(x => x.country == Player.playerCountry).ToList());
                 }
-                else                                                          // over write
+                else                      // over write
                 {
                     Player.selectedPawns = new List<Pawn>(newSelectedPawns);
                     Player.ourSelectedPawns = newSelectedPawns.FindAll(x => x.country == Player.playerCountry).ToList();
                 }
                 MoveControls.showPanel();
             }
+            Player.UpdateSelectedPawnsTint();
             newSelectedPawns.Clear();
-            
-            print("Selected Pawns: " + Player.selectedPawns.Count +
-    "\nOUR Seleted Pawns (haha funny USSR): " + Player.ourSelectedPawns.Count);
         }
     }
 }

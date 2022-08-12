@@ -15,6 +15,21 @@ public class TimeController : MonoBehaviour
     private Button lastButton;
 
     public static TimeController I;
+    public static float Speed { get { return Time.timeScale; }  set
+        {
+            Button b;
+            switch(value)
+            {
+                case 0: b = I.pause; break;
+                case 0.5f: b = I.halfSpeed; break;
+                case 1: b = I.fullSpeed; break;
+                case 2: b = I.doubleSpeed; break;
+                case 3: b = I.tripleSpeed; break;
+                default: b = I.pause; break;
+            }
+            I.ChangeTimeScale(value, b);
+        }
+    }
 
     protected void Start()
     {

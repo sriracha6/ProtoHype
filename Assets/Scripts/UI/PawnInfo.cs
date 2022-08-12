@@ -98,15 +98,19 @@ public class PawnInfo : MonoBehaviour
         string pname = p.hasPrimary ? p.heldPrimary.Name : "None";
         string sname = p.hasSidearm ? p.heldSidearm.Name : "None";
         string ssname = p.hasShield ? p.shield.Name : "None";
+        string projname = p.inventory == null ? "None" : p.inventory.Name;
 
-       I.exp.Q<Label>("Weapon").text = $"Weapon: <u>{pname}</u>";
-       I.exp.Q<Label>("Weapon").RegisterCallback<MouseDownEvent>(x=> { if(pname!="None") ItemViewer.OnLinkClick(x, p.heldPrimary); });
-       I.exp.Q<Label>("Sidearm").text = $"Sidearm: <u>{sname}</u>";
-       I.exp.Q<Label>("Sidearm").RegisterCallback<MouseDownEvent>(x => { if (sname != "None") ItemViewer.OnLinkClick(x, p.heldSidearm); });
-       I.exp.Q<Label>("Shield").text = $"Shield: <u>{ssname}</u>";
-       I.exp.Q<Label>("Shield").RegisterCallback<MouseDownEvent>(x => { if (ssname != "None") ItemViewer.OnLinkClick(x, p.shield); });
-       I.exp.Q<Label>("TroopType").text = $"Troop: <u>{p.troopType}</u>";
-       I.exp.Q<Label>("Kills").text = $"Kills: {p.killCount}";
+        I.exp.Q<Label>("Weapon").text = $"Weapon: <u>{pname}</u>";
+        I.exp.Q<Label>("Weapon").RegisterCallback<MouseDownEvent>(x=> { if(pname!="None") ItemViewer.OnLinkClick(x, p.heldPrimary); });
+        I.exp.Q<Label>("Sidearm").text = $"Sidearm: <u>{sname}</u>";
+        I.exp.Q<Label>("Sidearm").RegisterCallback<MouseDownEvent>(x => { if (sname != "None") ItemViewer.OnLinkClick(x, p.heldSidearm); });
+        I.exp.Q<Label>("Shield").text = $"Shield: <u>{ssname}</u>";
+        I.exp.Q<Label>("Shield").RegisterCallback<MouseDownEvent>(x => { if (ssname != "None") ItemViewer.OnLinkClick(x, p.shield); });
+        I.exp.Q<Label>("TroopType").text = $"Troop: <u>{p.troopType}</u>";
+        I.exp.Q<Label>("TroopType").RegisterCallback<MouseDownEvent>(x => { ItemViewer.OnLinkClick(x, p.troopType); });
+        I.exp.Q<Label>("Inventory").text = $"Inventory: <u>{p.inventory}</u>";
+        I.exp.Q<Label>("Inventory").RegisterCallback<MouseDownEvent>(x => { if (projname != "None") ItemViewer.OnLinkClick(x, p.inventory); });
+        I.exp.Q<Label>("Kills").text = $"Kills: {p.killCount}";
 
        I.exp.Q<VisualElement>("Right").Clear();
         foreach (Armor a in p.armor)

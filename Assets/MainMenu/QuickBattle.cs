@@ -64,6 +64,7 @@ public class QuickBattle : MonoBehaviour
         });
         root.Q<DropdownField>("Biome").RegisterValueChangedCallback(delegate{
             MapGenerator.I.currentBiome = Biome.Get(root.Q<DropdownField>("Biome").value);
+            MapGenerator.I.GenMap();
             UpdatePreview();
         });
         root.Q<DropdownField>("Difficulty").RegisterValueChangedCallback(delegate{
@@ -109,6 +110,7 @@ public class QuickBattle : MonoBehaviour
             ItemViewer.I.history.Clear();
             Menus.I.SwitchTo(Menus.I.loading);
             StartCoroutine(Loading.I.load("Battle"));
+            TimeController.Speed = 0;
         };
         root.Q<Button>("RandomBuilding").clicked += delegate{
             TilemapPlace.UpdateBuildings();

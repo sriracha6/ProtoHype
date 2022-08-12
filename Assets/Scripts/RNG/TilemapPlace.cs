@@ -85,6 +85,7 @@ public class TilemapPlace : MonoBehaviour
 
     public static void UpdateBuildings()
     {
+        Debug.Log($"Updating buildings");
         buildings = new Building[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
         floors = new Floor[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
         doors = new (Door, float)[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight]; // this really sucks

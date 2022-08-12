@@ -176,7 +176,6 @@ public class MapGenerator : MonoBehaviour
             Color32[] colorMap = new Color32[I.mapWidth * I.mapHeight];
 
             TerrainType[] tts = terrainTypes.OrderBy(x => x.height).ToArray();
-            // todo ^ commonality goes here
 
             for (int y = 0; y < height; y++)
             {
@@ -204,6 +203,10 @@ public class MapGenerator : MonoBehaviour
             mapBounds.resizeBounds(I.mapWidth, I.mapHeight);
             WCMngr.I.solidTilemap.size = new Vector3Int(I.mapWidth, I.mapHeight, 1);
             WCMngr.I.solidTilemap.ResizeBounds();
+
+            if(structure == null)
+                TilemapPlace.UpdateBuildings();
+            
             for (int x = 0; x < I.mapWidth; x++)
                 for (int y = 0; y < I.mapHeight; y++)
                 {
@@ -221,8 +224,6 @@ public class MapGenerator : MonoBehaviour
             
             WCMngr.I.groundTilemap.RefreshAllTiles();
 
-            if(structure == null)
-                TilemapPlace.UpdateBuildings();
 
             //TilemapPlace.SetWall(Buildings.Building.List.randomElement(), 0, 0);
             //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);

@@ -132,6 +132,7 @@ public class PopulateRegiments : MonoBehaviour
         }
     }
 
+    // changes to one = to both
     public static void selectRegiment(MouseDownEvent evt, int id)
     {
         if (Player.regimentSelectNumber == 0)
@@ -146,7 +147,9 @@ public class PopulateRegiments : MonoBehaviour
             else
                 Player.ourSelectedPawns = temp;
         }
+        Player.UpdateSelectedPawnsTint();
     }
+    // changes to one = to both
     public static void selectRegiment(int visualPosition)
     {
         if (visualPosition > regimentIDOrder.Count || visualPosition < 0)
@@ -172,6 +175,7 @@ public class PopulateRegiments : MonoBehaviour
             else
                 Player.ourSelectedPawns = temp;
         }
+        Player.UpdateSelectedPawnsTint();
     }
 
     public static List<T> GetRandomElements<T>(IEnumerable<T> list, int elementsCount)

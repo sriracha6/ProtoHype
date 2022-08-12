@@ -66,7 +66,7 @@ public class WeatherManager : MonoBehaviour
         if (Menus.I.inBattle)
         {
             currentTemperature = MapGenerator.I.currentBiome.locationData.averageTemperature + Random.Range(-15, 16);
-            currentTemperature = 31;
+            //currentTemperature = 31;
 
             if (currentTemperature <= 32)
                 MapGenerator.I.water.GetComponent<MeshRenderer>().material = WCMngr.I.iceMat;
@@ -123,14 +123,16 @@ public class WeatherManager : MonoBehaviour
             case WeatherType.Clear:
                 rainPS.Stop(true);
                 snowPS.Stop(true);
-                if(rainSound!=null)
+                if (rainSound != null)
+                {
                     rainSound.Stop();
-                rainSound.loop = false;
+                    rainSound.loop = false;
+                }
                 break;
             case WeatherType.Rain:
                 if (currentTemperature <= 32)
                     goto case WeatherType.Snow; // i finally got to use this :)
-                rainSound = SFXManager.I.PlaySound("rain", "Weather", 1f, Vector2.zero, true);
+                rainSound = SFXManager.I.PlaySound("rain.mp3", "Weather", 1f, Vector2.zero, true);
                 rainSound.loop = true;
                 snowPS.Stop(false);
                 rainPS.Play(false);
@@ -139,14 +141,16 @@ public class WeatherManager : MonoBehaviour
                 rainPS.Stop(false);
                 snowPS.Play(false);
                 if (rainSound != null)
+                {
                     rainSound.Stop();
-                rainSound.loop = false;
+                    rainSound.loop = false;
+                }
                 break;
             case WeatherType.Thunderstorm:
                 rainPS.Play(false);
                 lightningPS.Play(false);
                 snowPS.Stop(false);
-                rainSound = SFXManager.I.PlaySound("rain", "Weather", 1f, Vector2.zero, true);
+                rainSound = SFXManager.I.PlaySound("rain.mp3", "Weather", 1f, Vector2.zero, true);
                 rainSound.loop = true;
                 break;
         }

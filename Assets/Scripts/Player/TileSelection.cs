@@ -26,7 +26,7 @@ public class TileSelection : MonoBehaviour
 
     protected void Update()
     {
-        if(Input.GetMouseButtonDown(Keybinds.RightMouse) && !Input.GetKey(Keybinds.bulkTileSelect) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started && Time.timeScale > 0)
+        if(Input.GetMouseButtonDown(Keybinds.RightMouse) && !Input.GetKey(Keybinds.bulkTileSelect) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started)
         {
             lineRenderer.positionCount = 0;
             lineRenderer.loop = false;
@@ -61,7 +61,7 @@ public class TileSelection : MonoBehaviour
 
         // --- BULK --- //
 
-        if (Input.GetMouseButtonDown(Keybinds.RightMouse) && Input.GetKey(Keybinds.bulkTileSelect) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started && Time.timeScale > 0)
+        if (Input.GetMouseButtonDown(Keybinds.RightMouse) && Input.GetKey(Keybinds.bulkTileSelect) && !started && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !BoxSelection.started)
         {
             lineRenderer.loop = true;
             isBulkMode = true;

@@ -232,7 +232,7 @@ public static class WaterFeature
         
         float[,] newMap = ogMap;
 
-        NSide side = RandomEnum<NSide>(rand);
+        NSide side = ParseFuncs.RandomEnum<NSide>(rand);
         int size = rand.Next(ogMap.GetLength(0) / 15, ogMap.GetLength(0) / 3);
 
         int width = side == NSide.Left||side== NSide.Right ? size : ogMap.GetLength(0);
@@ -310,11 +310,5 @@ public static class WaterFeature
     public static float Offset(this System.Random rand)
     {
         return (float)(rand.NextDouble() * rand.Next(-100000,100000));
-    }
-
-    static T RandomEnum<T>(System.Random r)
-    {
-        var v = System.Enum.GetValues(typeof(T));
-        return (T)v.GetValue(r.Next(v.Length));
     }
 }

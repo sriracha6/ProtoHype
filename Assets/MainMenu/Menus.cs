@@ -10,6 +10,7 @@ public class Menus : MonoBehaviour
     public UIDocument start;
     public UIDocument quickstart;
     public UIDocument loading;
+    public UIDocument warning;
 
     public bool inBattle;
 
@@ -33,7 +34,7 @@ public class Menus : MonoBehaviour
         if (I == null)
         {
             I = this;
-            SwitchTo(mainMenu);
+            I.SwitchTo(I.warning);
         }
     }
 }

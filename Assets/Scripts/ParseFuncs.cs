@@ -362,6 +362,12 @@ public static class ParseFuncs
             return false;
     }
 
+    public static T RandomEnum<T>(System.Random r)
+    {
+        var v = System.Enum.GetValues(typeof(T));
+        return (T)v.GetValue(r.Next(v.Length));
+    }
+
     public static List<T> StripNulls<T>(this List<T> list)
     {
         List<T> tt = new List<T>();
@@ -374,7 +380,7 @@ public static class ParseFuncs
     }
     public static Vector2Int clampVector(this Vector2Int @in)
     {
-        return new Vector2Int(Mathf.Clamp(@in.x, 0, MapGenerator.I.mapWidth), Mathf.Clamp(@in.y, 0, MapGenerator.I.mapHeight));
+        return new Vector2Int(Mathf.Clamp(@in.x, 0, MapGenerator.I.mapWidth-1), Mathf.Clamp(@in.y, 0, MapGenerator.I.mapHeight-1));
     }
     public static T randomElement<T>(this List<T> list)
     {

@@ -243,6 +243,7 @@ public class CombatSystem : MonoBehaviour
         {
             doMeleeAttack(targetUntilDeath); // also bad
             canAttack = false;
+            attackTimer = meleeAttackCooldown;
             StartCoroutine(AttackTimer());
             return;
         }
@@ -270,12 +271,14 @@ public class CombatSystem : MonoBehaviour
                 transform.localScale = new Vector3(1, 1);
                 pawnPathfind.orientation = PawnOrientation.Right;
             }
-            if(p.activeWeapon.rangeType == RangeType.Shooter)
+            if (p.activeWeapon.rangeType == RangeType.Shooter)
                 doRangeShootaAttack(closestEnemy.GetComponent<Pawn>()); // todo: can this just use targetUntilDeath
-            else if(p.activeWeapon.rangeType == RangeType.Thrown)
+            else if (p.activeWeapon.rangeType == RangeType.Thrown)
                 doRangeThrowerAttack(closestEnemy.GetComponent<Pawn>()); // todo: can this just use targetUntilDeath
+            else return;
 
             canAttack = false;
+            attackTimer = meleeAttackCooldown;
             StartCoroutine(AttackTimer());
 
             return;
@@ -295,8 +298,9 @@ public class CombatSystem : MonoBehaviour
             targetUntilDeath = null;
             return false;
         }
-        if (p == null || p.dead == true)
-            return false;
+        if (p == null || p.dead == true) return false;
+        if (!canAttack) return false;
+
         Vector2 offset = closestEnemy.position - transform.position;
         float sqrLen = offset.sqrMagnitude;
         return (p.activeWeapon.Type.Equals(WeaponType.Melee) || p.activeWeapon.enableRangedMeleeDamage) && !closestPawn.pawnDowned
@@ -306,6 +310,7 @@ public class CombatSystem : MonoBehaviour
     {
         if (p == null || p.dead == true)
             return false;
+        if (!canAttack) return false;
 
         if (hit && p.activeWeapon.Type.Equals(WeaponType.Ranged) &&
                 hit.transform.CompareTag("Pawn"))

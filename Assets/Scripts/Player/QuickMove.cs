@@ -52,8 +52,12 @@ public class QuickMove : MonoBehaviour
         }
 
         if (Input.GetMouseButton(Keybinds.LeftMouse) && shouldGo)
-            updateLine(Vector2Int.CeilToInt(Input.mousePosition));
-        
+        {
+            var pos = Vector2Int.CeilToInt(mainCam.ScreenToWorldPoint(Input.mousePosition));
+            if(TilemapPlace.tilemap[pos.x, pos.y].type == SpecialType.None)
+                updateLine(pos);
+        }
+
         if (Input.GetMouseButtonUp(Keybinds.LeftMouse))
         {
             if (targetedPositions.Count > 0)
@@ -94,8 +98,8 @@ public class QuickMove : MonoBehaviour
 
     private void addActionToPawns()
     {
-        List<Vector2> simpleLine = new List<Vector2>();
         List<Vector2> linev2 = new List<Vector2>();
+        List<Vector2> simpleLine = new List<Vector2>();
         foreach(Vector2Int v in targetedPositions)
         {
             linev2.Add(new Vector2(v.x, v.y));
@@ -104,12 +108,9 @@ public class QuickMove : MonoBehaviour
         LineUtility.Simplify(linev2, lineSimplification, simpleLine);
 
         if (!Input.GetKey(Keybinds.SelectAdd))
-        {
             foreach (Pawn p in Player.ourSelectedPawns)
-            {
                 p.actionTypes.Clear();
-            }
-        }
+
         lineRenderer.positionCount = 0;
         foreach(Vector2 v in simpleLine)
         {
@@ -118,9 +119,7 @@ public class QuickMove : MonoBehaviour
             var cc = v;
             ActionType action = new ActionType("Move", true, new Vector2Int((int)cc.x, (int)cc.y), false);  
             foreach(Pawn p in Player.ourSelectedPawns)
-            {
                 p.actionTypes.Add(action);
-            }
         }
         targetedPositions.Clear();
         allPoints.Clear();

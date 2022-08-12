@@ -71,7 +71,7 @@ public class PawnPathfind : MonoBehaviour
         }
 
         if (FireManager.firePositions.Count > 0)
-            if (FireManager.firePositions.AsReadOnly().Contains(new Vector2((int)transform.position.x, (int)transform.position.y)))
+            if (FireManager.firePositions.Contains(new Vector2((int)transform.position.x, (int)transform.position.y)))
             {
                 p.healthSystem.TakeBurn(Random.Range(4, 9)); // i wish i could make it based of size but who gives 2 shits
                 animator.Play("Burn");
@@ -117,15 +117,16 @@ public class PawnPathfind : MonoBehaviour
 
     void UpdatePath()
     {
-        if(p.actionTypes.Count<=0)
-            return;
-        if (p.regiment.flagBearer.dead)
+        if(p.actionTypes.Count<=0)        
+            return;                       
+        if (p.regiment.flagBearer.dead)   
             speed *= 0.8f; // lazy moment!
 
         if (seeker.IsDone())
         {
             if (Player.enemies.Contains(p.country))
-                p.actionTypes[0] = new ActionType("SearchAndDestroy", true);
+                p.actionTypes[0] = new ActionType("SearchAndDestroy", true); // so enemies always find a new enemy instead of sitting arounds
+
             if ((p.actionTypes[0].Type.Equals("SearchAndDestroy") || p.actionTypes[0].Type.Equals("Attack")))
             {
                 target = p.enemyCountries.Count > 1
@@ -157,16 +158,13 @@ public class PawnPathfind : MonoBehaviour
             path = pa;
             currentWaypoint = 0;
         }
-        Vector3Int pos = WCMngr.I.groundTilemap.WorldToCell(rb.position);
+        Vector3Int pos = WCMngr.I.groundTilemap.WorldToCell(transform.position);
             PathfindExtra.SetFree(pos.x,pos.y);
             justTileFound = false;
         //}
 
-        //if (p.actionTypes.Count > 0)
-        //{
-        //    Debug.Log($"{currentWaypoint} >= {path.vectorPath.Count}");
+        //if (p.actionTypes.Count >= 0)
         //    p.actionTypes.RemoveAt(0); // make it always 0
-        //}
     }
 
     protected void FixedUpdate()
@@ -180,26 +178,39 @@ public class PawnPathfind : MonoBehaviour
         if (currentWaypoint >= path.vectorPath.Count)
         {
             reached = true;
-            if (p.actionTypes.Count > 0)
+            if (p.actionTypes.Count >= 0)
                 p.actionTypes.RemoveAt(0); // make it always 0
+
             currentWaypoint = 0;
             return;
         }
         else
             reached = false;
+        
+        if (p.actionTypes.Count == 0)
+        {
+            if (PathfindExtra.PresentAt((int)transform.position.x, (int)transform.position.y))
+                p.actionTypes.Add(new ActionType("Move", true, Vector2Int.FloorToInt(PosFromMove(Vector2Int.FloorToInt((Vector2)transform.position).clampVector())), false));
+            return;
+        }
 
         Vector2 dir = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
+        dir = new Vector2(dir.x+speed, dir.y+speed);
         Vector2 force = (p.healthSystem.GetVital(VitalSystem.Moving) * 2) * Time.fixedDeltaTime * dir;
 
         Vector2Int currenttile = Vector2Int.FloorToInt(transform.position);
+        currenttile = currenttile.clampVector();
+        PathfindExtra.SetFree(currenttile.x, currenttile.y);
+        
         var trap = TilemapPlace.traps[currenttile.x, currenttile.y];
         if (trap != null)
             p.healthSystem.TakeHit(trap.damage, $"Hit ({trap.Name})");
-
+        
+        speed *= TilemapPlace.tilemap[currenttile.x, currenttile.y].walkSpeed;
         rb.MovePosition(rb.position + force);
+
         Vector2 distanceVector = rb.position - (Vector2)path.vectorPath[currentWaypoint];
         float distance = distanceVector.sqrMagnitude;
-        Debug.DrawLine(rb.position, path.vectorPath[currentWaypoint], Color.magenta, Time.fixedDeltaTime, false);
         //float distance = (rb.position - (Vector2)path.vectorPath[currentWaypoint]);//.sqrMagnitude;
         // bruh                 V this cause a lot of issues :/
         if (distance < nextWaypointDistance * nextWaypointDistance && currentWaypoint <= path.vectorPath.Count)
@@ -207,7 +218,6 @@ public class PawnPathfind : MonoBehaviour
                                // THIS FIXES A FUCKING PATHFINDING SLOWDOWN BUG AND IT OPTIMIZES THE GAME BY
                                // REMOVE A SQRT CALL??? FUCK YEAH THAT WAS WORTH 4 HOURS HHOLY SHIT!!!
 
-        speed *= TilemapPlace.tilemap[(int)transform.position.x, (int)transform.position.y].walkSpeed;
 
         // crisis averted. instead of using rb velocity, we use the dir variable. duh. my god.
         #region Direction
@@ -299,7 +309,7 @@ public class PawnPathfind : MonoBehaviour
 
         PathfindExtra.SetUsed(ntile.x, ntile.y);
         justTileFound = true;
-        return new Vector3(position.x, position.y); // i dont know wtf else to put here but this'll definitely cause issues
+        return ntile;//new Vector3(position.x, position.y); // i dont know wtf else to put here but this'll definitely cause issues
     }
     #endregion
 }

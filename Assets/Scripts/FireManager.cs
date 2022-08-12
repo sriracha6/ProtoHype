@@ -4,5 +4,5 @@ using UnityEngine;
 
 public static class FireManager
 {
-    public static List<Vector2> firePositions = new List<Vector2>();
+    public static HashSet<Vector2> firePositions = new HashSet<Vector2>();
 }

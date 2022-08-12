@@ -31,7 +31,6 @@ public class ItemSelector : MonoBehaviour
             var mousePos = Vector2Int.FloorToInt(WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition));
             mousePos = new Vector2Int(mousePos.x-1, mousePos.y-1);
             object item = null;
-            Debug.Log($"{mousePos}");
 
             foreach (Build[,] build in validClickables)
             {

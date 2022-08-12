@@ -37,7 +37,7 @@ public class ToolTipManipulator : Manipulator
             label.style.color = new Color(241 / 255f, 232 / 255f, 200 / 255f, 1);
 
             element.Add(label);
-            var root = UIManager.ui.rootVisualElement;//(VisualElement)UiHelper.FindRootElement(this.target);
+            var root = UIManager.ui.rootVisualElement;
             root.Add(element);
 
         }
@@ -48,5 +48,6 @@ public class ToolTipManipulator : Manipulator
     private void MouseOut(MouseOutEvent e)
     {
         element.style.visibility = Visibility.Hidden;
+        element.parent.Remove(element);
     }
 }

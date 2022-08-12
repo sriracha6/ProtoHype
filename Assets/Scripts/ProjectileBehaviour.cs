@@ -67,10 +67,8 @@ public class ProjectileBehaviour : MonoBehaviour
         targetNew.z = 1;
 
         Vector2 diff = target.position - transform.position;
-        diff.Normalize();
+        rb.rotation = Mathf.Atan2(diff.y,diff.x) * Mathf.Rad2Deg - 45f;
 
-        //rb.rotation = Mathf.Atan2(diff.y,diff.x) * Mathf.Rad2Deg;
-        transform.right = ((Vector2)transform.position + diff) - (Vector2)transform.position;
         rb.AddForce((targetNew-transform.position) * projectileForce, ForceMode2D.Impulse);
     }
                                                             // we need this reference for the image
@@ -91,10 +89,8 @@ public class ProjectileBehaviour : MonoBehaviour
         targetNew.z = 1;
 
         Vector2 diff = target.position - transform.position;
-        diff.Normalize();
+        rb.rotation = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg - 45f;
 
-        //rb.rotation = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-        transform.right = ((Vector2)transform.position + diff) - (Vector2)transform.position;
         rb.AddForce(((targetNew - transform.position)) * projectileForce, ForceMode2D.Impulse);
     }
 

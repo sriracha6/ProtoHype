@@ -13,6 +13,7 @@ using XMLLoader;
 
 using Random = UnityEngine.Random;
 using System.Linq;
+using static MapGenerator;
 
 public class PawnManager : MonoBehaviour
 {
@@ -31,7 +32,6 @@ public class PawnManager : MonoBehaviour
     public const int OUTSIDE_BASE_DISTANCE = 50;
     public const int MIN_ENEMY_DISTANCE = 50;
 
-
     protected void Awake()
     {
         if (I == null)
@@ -42,7 +42,8 @@ public class PawnManager : MonoBehaviour
         else if(Menus.I.inBattle)
             I.CreatePawns(QuickBattle.I.regimentSize, QuickBattle.I.friends, QuickBattle.I.enemies);
     }
-    
+
+
     public void CreatePawns(int regimentSize, List<CountryInfo> friendlies, List<CountryInfo> enemies)
     { // this is somehow the cause for that dumb bug with animals, array size must be .... and onchange weapon
         Loading.I.Status = "Birthing people...";
@@ -51,7 +52,20 @@ public class PawnManager : MonoBehaviour
         cs.AddRange(enemies);
         var map = MapGenerator.I;
 
-        foreach(CountryInfo country in cs)
+        //Vector2Int friendsPos = PositionRegiment(new Vector2Int(Random.Range(map.mapWidth - AROUND_BASE_DISTANCE, map.mapWidth), Random.Range(map.mapHeight - AROUND_BASE_DISTANCE, map.mapHeight)));
+        //Vector2Int enemiesPos = PositionRegiment(new Vector2Int(Random.Range(map.mapWidth - AROUND_BASE_DISTANCE, map.mapWidth), Random.Range(map.mapHeight - AROUND_BASE_DISTANCE, map.mapHeight)));
+        NSide friendsSide = ParseFuncs.RandomEnum<NSide>(new System.Random(Random.state.GetHashCode()));
+        int friendsSize = (int)Random.Range(0.1f * MapGenerator.I.mapWidth, 0.4f * MapGenerator.I.mapWidth);
+        
+        NSide enemiesSide = NSide.Right;
+        int enemiesSize = (int)Random.Range(0.1f * MapGenerator.I.mapWidth, 0.4f * MapGenerator.I.mapWidth);
+
+        if(friendsSide == NSide.Left) enemiesSide = NSide.Right;
+        if(friendsSide == NSide.Right) enemiesSide = NSide.Left;
+        if(friendsSide == NSide.Bottom) enemiesSide = NSide.Top;
+        if(friendsSide == NSide.Top) enemiesSide = NSide.Bottom;
+
+        foreach (CountryInfo country in cs)
         {
             for (int currentRegiment = 0; currentRegiment < country.regimentsCount; currentRegiment++)
             {
@@ -60,14 +74,31 @@ public class PawnManager : MonoBehaviour
 
                 Vector2Int regimentPos;
                 if (map.structure != null)
-                    if (troopType.preferSpawn == PreferSpawn.AroundBase)
+                    if (troopType.preferSpawn == PreferSpawn.AroundBase) // todo: this is only on right side
                         regimentPos = new Vector2Int(Random.Range(map.mapWidth - AROUND_BASE_DISTANCE, map.mapWidth), Random.Range(map.mapHeight - AROUND_BASE_DISTANCE, map.mapHeight));
                     else if (troopType.preferSpawn == PreferSpawn.OutsideBase)
                         regimentPos = new Vector2Int(Random.Range(map.structurePos.x + map.structureSize.x, map.structurePos.x + map.structureSize.x + OUTSIDE_BASE_DISTANCE), Random.Range(map.structurePos.y + map.structureSize.y, map.structurePos.y + map.structureSize.y + OUTSIDE_BASE_DISTANCE));
                     else
-                        regimentPos = new Vector2Int(Random.Range(map.structurePos.x, map.structurePos.x+map.structureSize.x), Random.Range(map.structurePos.y, map.structurePos.y+map.structureSize.y));
+                        regimentPos = new Vector2Int(Random.Range(map.structurePos.x, map.structurePos.x + map.structureSize.x), Random.Range(map.structurePos.y, map.structurePos.y + map.structureSize.y));
                 else
-                    regimentPos = new Vector2Int(Random.Range(0, map.mapWidth), Random.Range(0, map.mapHeight));
+                {
+                    if (QuickBattle.I.friends.Contains(country))
+                    {
+                        if (friendsSide == NSide.Top) regimentPos = new Vector2Int(Random.Range(0, MapGenerator.I.mapWidth), Random.Range(MapGenerator.I.mapHeight - friendsSize, MapGenerator.I.mapHeight));
+                        else if (friendsSide == NSide.Bottom) regimentPos = new Vector2Int(Random.Range(0, MapGenerator.I.mapWidth), Random.Range(0, friendsSize));
+                        else if (friendsSide == NSide.Right) regimentPos = new Vector2Int(Random.Range(MapGenerator.I.mapWidth - friendsSize, MapGenerator.I.mapWidth), Random.Range(0, MapGenerator.I.mapHeight));
+                        else if (friendsSide == NSide.Left) regimentPos = new Vector2Int(Random.Range(0, friendsSize), Random.Range(0, MapGenerator.I.mapHeight));
+                        else regimentPos = Vector2Int.zero; // why tf do i need this?
+                    }
+                    else
+                    {
+                        if (enemiesSide == NSide.Top) regimentPos = new Vector2Int(Random.Range(0, MapGenerator.I.mapWidth), Random.Range(MapGenerator.I.mapHeight - enemiesSize, MapGenerator.I.mapHeight));
+                        else if (enemiesSide == NSide.Bottom) regimentPos = new Vector2Int(Random.Range(0, MapGenerator.I.mapWidth), Random.Range(0, enemiesSize));
+                        else if (enemiesSide == NSide.Right) regimentPos = new Vector2Int(Random.Range(MapGenerator.I.mapWidth - enemiesSize, MapGenerator.I.mapWidth), Random.Range(0, MapGenerator.I.mapHeight));
+                        else if (enemiesSide == NSide.Left) regimentPos = new Vector2Int(Random.Range(0, enemiesSize), Random.Range(0, MapGenerator.I.mapHeight));
+                        else regimentPos = Vector2Int.zero;
+                    }
+                }
 
                 regimentPos = PositionRegiment(regimentPos);
 
@@ -76,10 +107,7 @@ public class PawnManager : MonoBehaviour
                 float regimentMemberCount = Mathf.Max(Random.Range(0.75f, 1.25f) * regimentSize, 2);
                 for (int j = 0; j < regimentMemberCount; j++)
                 {
-                    Vector2Int pos = PathfindExtra.FindNearest(regimentPos, I.usedPoints);
-                    pos = new Vector2Int(pos.x + Random.Range(-7,8), pos.y + Random.Range(-1, 2)).clampVector();
-                    PathfindExtra.SetUsed(pos.x, pos.y);
-                    I.usedPoints.Add(pos);
+                    Vector2Int pos = PositionPawn(regimentPos, I.usedPoints);
 
                     Pawn p = I.CreatePawn(country.country, CachedItems.RandomName, troopType,
                         Regiment.Get(currentRegiment), pos); // make sure this id is right!
@@ -87,7 +115,7 @@ public class PawnManager : MonoBehaviour
                     if (troopType.ridingAnimal)
                     {
                         GameObject go = Instantiate(I.horsePrefab, p.transform); // v im so sorry
-                        go.transform.position = new Vector3(-2, -3.26f, -1);
+                        go.transform.localPosition = new Vector3(-2, -3.26f, -1);
                         var supersorryforthisone = go.GetComponent<AnimalBehavior>();
                         supersorryforthisone.rider = p;
                         supersorryforthisone.sourceAnimal = troopType.riddenAnimal;
@@ -95,11 +123,35 @@ public class PawnManager : MonoBehaviour
                 }
             }
         }
+        
         doneLoading = true;
         for(int i = 0; i < I.usedPoints.Count; i++)
             PathfindExtra.SetFree(I.usedPoints[i].x, I.usedPoints[i].y);
         I.usedPoints = new List<Vector2Int>();
+        foreach(Country c in Player.enemies)
+            foreach(Pawn p in c.members)
+                if(p.hasPrimary && p.heldPrimary.Type != Weapons.WeaponType.Ranged)
+                p.actionTypes.Add (new ActionType("SearchAndDestroy", true));
+
         PopulateRegiments.updateAllRegimentsSelectNumber(Player.regimentSelectNumber);
+    }
+
+    private static Vector2Int PositionPawn(Vector2Int pos, List<Vector2Int> usedPoints, int maxRecursion=100)
+    {
+        if(maxRecursion <= 0)
+            return pos;
+
+        var newPos = (Vector2Int)PathfindExtra.FindNearest(pos, usedPoints);
+        newPos = new Vector2Int(newPos.x + Random.Range(-7, 8), newPos.y + Random.Range(-1, 2)).clampVector();
+
+        if (TilemapPlace.tilemap[newPos.x, newPos.y].type == SpecialType.None)
+        {
+            return newPos;
+            I.usedPoints.Add(newPos);
+            PathfindExtra.SetUsed(pos.x, pos.y);
+        }
+        else
+            return PositionPawn(newPos, usedPoints, maxRecursion--);
     }
 
     private static Vector2Int PositionRegiment(Vector2Int vPos, int maxRecursion=100)
@@ -113,7 +165,7 @@ public class PawnManager : MonoBehaviour
         {
             if (Vector2.Distance(pos, vPos) < MIN_ENEMY_DISTANCE && !r.isFriendly)
             {
-                bestGuess = new Vector2Int(Mathf.Clamp(vPos.x + Random.Range(-40, 41), 0, MapGenerator.I.mapWidth), Mathf.Clamp(vPos.y + Random.Range(-40, 41), 0, MapGenerator.I.mapHeight));
+                bestGuess = new Vector2Int(Mathf.Clamp(vPos.x + Random.Range(-30, 31), 0, MapGenerator.I.mapWidth), Mathf.Clamp(vPos.y + Random.Range(-30, 31), 0, MapGenerator.I.mapHeight));
                 s++;
             }
         }

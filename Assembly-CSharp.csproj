@@ -103,6 +103,7 @@
     <Compile Include="Assets\Scripts\LoadComponents.cs" />
     <Compile Include="Assets\Scripts\Type\Armor.cs" />
     <Compile Include="Assets\Scripts\Pawn\Pawn.cs" />
+    <Compile Include="Assets\Scripts\SFX\SFXManager.cs" />
     <Compile Include="Assets\Scripts\Pawn\CombatSystem.cs" />
     <Compile Include="Assets\Scripts\Type\Country.cs" />
     <Compile Include="Assets\Scripts\Player\CameraMove.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Assets\Scripts\Pawn\ExtraPathfind.cs" />
     <Compile Include="Assets\Scripts\UI\TooltipManipulator.cs" />
     <Compile Include="Assets\Scripts\UI\ItemViewer.cs" />
+    <Compile Include="Assets\Scripts\UI\SoundManipulator.cs" />
     <Compile Include="Assets\Scripts\RNG\TreeGenerator.cs" />
     <Compile Include="Assets\Scripts\AnimalBehavior.cs" />
     <Compile Include="Assets\MainMenu\QuickBattle.cs" />
@@ -157,15 +159,14 @@
     <Compile Include="Assets\Scripts\CachedItems.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\Item.cs" />
     <Compile Include="Assets\Scripts\Skills.cs" />
+    <Compile Include="Assets\Scripts\UI\SliderSoundManipulator.cs" />
     <Compile Include="Assets\Scripts\RNG\TilemapShadow.cs" />
     <Compile Include="Assets\Scripts\Beauty\DamageMaker.cs" />
     <Compile Include="Assets\Scripts\RNG\Direction.cs" />
     <Compile Include="Assets\Scripts\Player\ItemSelector.cs" />
     <Compile Include="Assets\Scripts\FireManager.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
-    <Compile Include="Assets\Scripts\SFX\SFXManager.cs" />
-    <Compile Include="Assets\Scripts\UI\SliderSoundManipulator.cs" />
-    <Compile Include="Assets\Scripts\UI\SoundManipulator.cs" />
+    <Compile Include="Assets\MainMenu\Warning.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />
@@ -203,6 +204,7 @@
     <None Include="Assets\Scripts\Shaders\WaterACTUAL.shader" />
     <None Include="Assets\MainMenu\mainmenucss.uss" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain.cginc" />
+    <None Include="Assets\MainMenu\warning.uxml" />
     <None Include="Assets\root.uss" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\Link.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\PauseMenu.uxml" />
