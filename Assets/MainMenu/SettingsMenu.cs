@@ -145,7 +145,7 @@ public partial class SettingsMenu : MonoBehaviour
             alreadyRebinding = false;
         }
     }
-
+    // test
     public void ResetDefault()
     {
         if(System.IO.File.Exists(Application.persistentDataPath+"\\default.xml")) LoadSettings(Application.persistentDataPath+"\\default.xml");
