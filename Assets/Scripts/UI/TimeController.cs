@@ -31,12 +31,14 @@ public class TimeController : MonoBehaviour
         }
     }
 
-    protected void Start()
+    protected void Awake()
     {
-        //
         if (I == null)
             I = this;
+    }
 
+    protected void Start()
+    {
         var root = GetComponent<UIDocument>().rootVisualElement;
 
         I.halfSpeed = root.Q<Button>("half");
@@ -88,6 +90,7 @@ public class TimeController : MonoBehaviour
 
     public void ChangeTimeScale(float speed, Button src)
     {
+        if (speed < 1 && Settings.MasterMode) return;
         I.lastSpeed = speed;
         I.lastButton = src;
         Time.timeScale = speed;

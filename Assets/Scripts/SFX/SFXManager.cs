@@ -13,6 +13,7 @@ public class SFXManager : MonoBehaviour
 
     public const int MAXAUDIODISTANCE = 100;
 
+    public static float Volume01 = 0.5f;
     public int samplerate = 44100;
 
     AudioSource nextAudioSource { get { return I.audioSources.Find(x => !x.isPlaying); } }
@@ -59,12 +60,12 @@ public class SFXManager : MonoBehaviour
                 if (I.nextCameraAudioSource != null)
                 {
                     audio = I.nextCameraAudioSource;
-                    audio.PlayOneShot(item, volume01);
+                    audio.PlayOneShot(item, volume01 * Volume01);
                 }
                 else
                 {
                     audio = I.AddAudioSource(true);
-                    audio.PlayOneShot(item, volume01);
+                    audio.PlayOneShot(item, volume01 * Volume01);
                 }
                 return I.cameraAudioSources.Find(x => x.clip == item);
             }
@@ -73,14 +74,14 @@ public class SFXManager : MonoBehaviour
                 var s = I.AddAudioSource();
                 s.transform.position = location;
 
-                I.nextAudioSource.PlayOneShot(item, volume01);
+                I.nextAudioSource.PlayOneShot(item, volume01 * Volume01);
             }
             else
             {
                 var s = I.AddAudioSource();
                 s.transform.position = location;
 
-                s.PlayOneShot(item, volume01);
+                s.PlayOneShot(item, volume01 * Volume01);
             }
         }
         else

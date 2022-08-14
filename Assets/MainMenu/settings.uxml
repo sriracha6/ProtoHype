@@ -1,0 +1,52 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/root.uss" />
+    <ui:VisualElement name="BG" style="width: 100%; height: 100%; position: absolute; background-image: resource(&apos;ui/BGNEW&apos;); -unity-background-scale-mode: scale-and-crop;" />
+    <ui:Button text="&lt;" display-tooltip-when-elided="true" name="BackButton" style="position: absolute; background-color: rgb(94, 94, 94); background-image: none;" />
+    <ui:Button text="Reset To Defaults" display-tooltip-when-elided="true" name="Reset" style="position: absolute; left: 25%; top: 91%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;" />
+    <ui:Button text="Save" display-tooltip-when-elided="true" name="Save" style="position: absolute; left: 71.5%; top: 91%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;" />
+    <ui:VisualElement name="Body" style="width: 50%; height: 75%; left: 25%; top: 15%;">
+        <ui:VisualElement name="Tabs" class="brown-bg" style="width: 100%; height: 7.5%; flex-direction: row;">
+            <ui:Button text="General" display-tooltip-when-elided="true" name="General" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 86px;" />
+            <ui:Button text="Controls" display-tooltip-when-elided="true" name="Controls" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 86px;" />
+            <ui:Button text="Video" display-tooltip-when-elided="true" name="Video" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 86px;" />
+            <ui:Button text="Audio" display-tooltip-when-elided="true" name="Audio" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 86px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="TabContent" style="height: 92.5%;">
+            <ui:ScrollView name="General" style="width: 100%; height: 100%; display: flex;">
+                <ui:VisualElement name="Body" class="orange-bg" style="width: 100%; height: 100%; -unity-font-definition: resource(&apos;garamond SDF&apos;);">
+                    <ui:SliderInt picking-mode="Ignore" label="Regiment Select Percent Slider Step" value="5" high-value="50" name="RegimentSliderStep" low-value="1" show-input-field="true" style="-unity-font: resource(&apos;garamond&apos;); -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:Toggle label="Run and Gun by Default " name="RunAndGun" value="true" style="-unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:Toggle label="Spawn Blood" name="SpawnBlood" value="true" tooltip="This will increase performance" style="-unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:Toggle label="Enable Screenshake" name="ScreenShake" value="true" style="-unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:DropdownField label="Regiment Sort Order" type="Difficulty" name="RegimentSortOrder" choices="Size,Random,MeleeSkill,RangeSkill" style="width: 339px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:Toggle label="Master Mode" name="MasterMode" value="false" tooltip="Disables pausing and half speed." style="-unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:Toggle label="Developer Mode" name="DeveloperMode" value="false" tooltip="Not recommended to turn on." style="-unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:Slider picking-mode="Ignore" label="UI Opacity" value="42" high-value="100" name="HUDOpacity" show-input-field="true" />
+                    <ui:Toggle label="Show FPS" name="ShowFPS" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:ScrollView name="Controls" style="width: 100%; height: 100%; display: none;">
+                <ui:VisualElement name="Body" class="orange-bg" style="width: 100%; height: 100%;">
+                    <ui:DropdownField label="Left Mouse" type="Difficulty" name="LeftMouse" choices="Left Mouse,Right Mouse, Middle Mouse" style="width: 339px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:DropdownField label="Right Mouse" type="Difficulty" name="RightMouse" choices="Right Mouse,Left Mouse,Middle Mouse" style="width: 339px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:DropdownField label="Middle Mouse" type="Difficulty" name="MiddleMouse" choices="Middle Mouse,Right Mouse,Left Mouse" style="width: 339px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:ScrollView name="Video" style="width: 100%; height: 100%; display: none;">
+                <ui:VisualElement name="Body" class="orange-bg" style="width: 100%; height: 100%;">
+                    <ui:DropdownField label="Resolution" type="Difficulty" name="Resolution" style="width: 339px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:DropdownField label="Window Mode" type="Difficulty" name="WindowMode" choices="Fullscreen,Borderless,Windowed" style="width: 339px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:Toggle label="VSync" name="VSync" style="-unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:TextField picking-mode="Ignore" label="Max FPS" max-length="4" name="MaxFPS" style="-unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:DropdownField label="Quality Level" type="Difficulty" name="QualityLevel" choices="Sexy,Medium,Low" style="width: 339px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                    <ui:DropdownField label="Anti Aliasing" type="Difficulty" name="AntiAliasing" choices="None,2x,4x,8x" style="width: 339px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:ScrollView name="Audio" style="width: 100%; height: 100%; display: none;">
+                <ui:VisualElement name="Body" class="orange-bg" style="width: 100%; height: 100%;">
+                    <ui:SliderInt picking-mode="Ignore" label="Volume" value="50" high-value="100" show-input-field="true" style="-unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

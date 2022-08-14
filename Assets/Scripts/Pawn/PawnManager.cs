@@ -278,6 +278,8 @@ public class PawnManager : MonoBehaviour
         newPawn.country.Add(newPawn);
         newPawn.skinColor = GenerateSkinColor();
 
+        newPawn.pawnPathfind.isRunAndGun = Settings.RunAndGunDefaultState;
+
         allPawns.Add(newPawn);
         // todo
         if (newPawn.armor != null)

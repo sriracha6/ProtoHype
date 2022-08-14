@@ -110,7 +110,6 @@ public class QuickBattle : MonoBehaviour
             ItemViewer.I.history.Clear();
             Menus.I.SwitchTo(Menus.I.loading);
             StartCoroutine(Loading.I.load("Battle"));
-            TimeController.Speed = 0;
         };
         root.Q<Button>("RandomBuilding").clicked += delegate{
             TilemapPlace.UpdateBuildings();

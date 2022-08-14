@@ -85,7 +85,7 @@ public class UIManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(v.tooltip))
                 v.AddManipulator(new ToolTipManipulator());
-
+            v.style.opacity = Settings.HUDOpacity01;
             v.RegisterCallback<MouseEnterEvent>(x => mouseEnter(v, x)); // worked
             v.RegisterCallback<MouseLeaveEvent>(x => mouseOverUI = false);
 

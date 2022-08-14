@@ -14,9 +14,7 @@ public class MainMenu : MonoBehaviour
     protected void Start()
     {
         root = Menus.I.mainMenu.rootVisualElement;
-        root.Q<VisualElement>("PlayButton").RegisterCallback<MouseDownEvent>(Play);
+        root.Q<VisualElement>("PlayButton").RegisterCallback<MouseDownEvent>(delegate { Menus.I.SwitchTo(Menus.I.start); });
+        root.Q<VisualElement>("SettingsButton").RegisterCallback<MouseDownEvent>(delegate { Menus.I.SwitchTo(Menus.I.settings); });
     }
-
-    private void Play(MouseDownEvent v) =>
-        Menus.I.SwitchTo(Menus.I.start);
 }

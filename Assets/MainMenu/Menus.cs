@@ -11,6 +11,7 @@ public class Menus : MonoBehaviour
     public UIDocument quickstart;
     public UIDocument loading;
     public UIDocument warning;
+    public UIDocument settings;
 
     public bool inBattle;
 

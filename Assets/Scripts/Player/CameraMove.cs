@@ -140,6 +140,7 @@ public class CameraMove : MonoBehaviour
 
     public void ScreenShake()
     {
+        if (!Settings.EnableScreenshake) return;
         StartCoroutine(nameof(_screenshake));
     }
 

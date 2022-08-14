@@ -345,6 +345,7 @@ public class HealthSystem : MonoBehaviour
 
 	public void generateBloodSplatter(int amount)
     {
+		if (!Settings.SpawnBlood) return;
 		// todo: object pooling
 		for (int i = 0; i < amount; i++)
 		{

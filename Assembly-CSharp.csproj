@@ -56,6 +56,7 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MainMenu\Warning.cs" />
     <Compile Include="Assets\Scripts\SpriteSheetCreator.cs" />
     <Compile Include="Assets\Scripts\Player\PawnSelector.cs" />
     <Compile Include="Assets\Scripts\Type\Biome.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Assets\Scripts\Player\TileSelection.cs" />
     <Compile Include="Assets\Scripts\Type\TroopType.cs" />
     <Compile Include="Assets\Scripts\Type\Room.cs" />
+    <Compile Include="Assets\MainMenu\SettingsMenu.cs" />
     <Compile Include="Assets\Scripts\Type\Animal.cs" />
     <Compile Include="Assets\Scripts\Type\Building.cs" />
     <Compile Include="Assets\Scripts\Type\BiomeArea.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="Assets\Scripts\UI\TimeController.cs" />
     <Compile Include="Assets\Scripts\RNG\MapGenerator.cs" />
     <Compile Include="Assets\Scripts\Pawn\PawnRenderer.cs" />
+    <Compile Include="Assets\Scripts\Type\Attribute\Settings.cs" />
     <Compile Include="Assets\Scripts\Logger.cs" />
     <Compile Include="Assets\Scripts\Pawn\HealthSystem.cs" />
     <Compile Include="Assets\Scripts\Triangulator.cs" />
@@ -143,6 +146,8 @@
     <Compile Include="Assets\Scripts\Pawn\PawnManager.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\Build.cs" />
     <Compile Include="Assets\Scripts\FireBehaviour.cs" />
+    <Compile Include="Assets\Scripts\DeveloperMode.cs" />
+    <Compile Include="Assets\Scripts\Settings.cs" />
     <Compile Include="Assets\Scripts\UI\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Pawn\ExtraPathfind.cs" />
     <Compile Include="Assets\Scripts\UI\TooltipManipulator.cs" />
@@ -166,7 +171,7 @@
     <Compile Include="Assets\Scripts\Player\ItemSelector.cs" />
     <Compile Include="Assets\Scripts\FireManager.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
-    <Compile Include="Assets\MainMenu\Warning.cs" />
+    <Compile Include="Assets\Scripts\SaveLoadSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />
@@ -189,12 +194,14 @@
     <None Include="Assets\Resources\Prefabs\UI\Regiment.uxml" />
     <None Include="Assets\MainMenu\MainMenu.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\ItemViewer.uxml" />
+    <None Include="Assets\MainMenu\Divider.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\RequiredPick.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\ContextMenu.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\SingleItem.uxml" />
     <None Include="Assets\Scripts\Shaders\Watter.shader" />
     <None Include="Assets\Scripts\Shaders\Water.shader" />
     <None Include="Assets\Resources\Prefabs\UI\Bodypart2ElectricBoogaloo.uxml" />
+    <None Include="Assets\MainMenu\Rebind.uxml" />
     <None Include="Assets\uxml.uxml" />
     <None Include="Assets\Scripts\Shaders\HeatDistort.shader" />
     <None Include="Assets\loading.uss" />
@@ -202,6 +209,7 @@
     <None Include="Assets\uielements.uss" />
     <None Include="Assets\Resources\Prefabs\UI\prefab.uss" />
     <None Include="Assets\Scripts\Shaders\WaterACTUAL.shader" />
+    <None Include="Assets\MainMenu\settings.uxml" />
     <None Include="Assets\MainMenu\mainmenucss.uss" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain.cginc" />
     <None Include="Assets\MainMenu\warning.uxml" />

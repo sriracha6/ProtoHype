@@ -61,7 +61,7 @@ public class PawnRenderer : MonoBehaviour
             indicator.color = new Color32(0, 0, 0, 0);
         else                                                // enemy
             indicator.color = new Color32(144,86,86,150);
-
+        
         if (p.hasShield)
         {
             shield.sprite =
@@ -150,7 +150,7 @@ public class PawnRenderer : MonoBehaviour
             {
                 Texture2D tex = Loaders.LoadTex(Shields.Shield.Get(id).SourceFile);
                 float PPU = tex.height * size / (SIXFEETMETERS * size);
-                Sprite spr = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0f, 0f), PPU);
+                Sprite spr = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), PPU);
                 renderedShields.Add(new RenderedShield(spr, Shield.Get(id)));
                 return spr;
             }

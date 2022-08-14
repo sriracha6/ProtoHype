@@ -41,7 +41,8 @@ public class Loading : MonoBehaviour
         "Troops can spawn inside a base, around it, or just outside it. Watch out!", "Some weapons have a warmup time.", 
         "You can reorder regiments in the regiment viewer. You can also change the default sorting method.", 
         "If you hold CTRL while right click and dragging, you can select a large box for an area your pawns should go to.",
-        "If you hold shift while selecting pawns or tiles, it will add to your selection. This also works for selecting regiments."});
+        "If you hold shift while selecting pawns or tiles, it will add to your selection. This also works for selecting regiments.",
+        "Pawns can run and gun, at the cost of movement speed."});
         
         StartCoroutine(Tips());
     }

@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -72,9 +73,21 @@ public class PopulateRegiments : MonoBehaviour
     void FillRegiments()
     {
         List<Regiment> l = Regiment.List; // TODO: this will probably cause issues later. it being here you know
-        //for (int i = 0; i < l.Count; i++)
+
         int currentLoop = 0;
-        foreach (Regiment r in l.OrderBy(x=>x.members.Count)) // todo: setting for how this should be ordered
+        List<Regiment> ordered = new List<Regiment>();
+        switch(Settings.RegimentSortOrder)
+        {
+            case RegimentSortOrder.Size:
+                ordered = l.OrderBy(x=>x.members.Count).ToList(); break;
+            case RegimentSortOrder.Random:
+                ordered = l.OrderBy(x=>new Guid()).ToList(); break;
+            case RegimentSortOrder.MeleeSkill:
+                ordered = l.OrderBy(x=>x.type.meleeSkillMax).ToList(); break;
+            case RegimentSortOrder.RangeSkill:
+                ordered = l.OrderBy(x=>x.type.rangeSkillMax).ToList(); break; 
+        }
+        foreach (Regiment r in ordered)
         {
             if (r.countryOrigin.Equals(Player.playerCountry))
             {

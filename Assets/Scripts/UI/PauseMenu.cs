@@ -48,7 +48,7 @@ public class PauseMenu : MonoBehaviour
         I.root.Q<VisualElement>("PauseMenuParent").Q<Label>("MostKillsLabel").text = $"Most Kills: <color=#6495ED><u>{Stats.PawnWithMostKills.pname}</u></color>";
         I.root.Q<VisualElement>("PauseMenuParent").Q<Label>("MostKillsLabel").RegisterCallback<MouseDownEvent>(x=>PawnInfo.I.ShowPawnInfo(Stats.PawnWithMostKills));
 
-        Time.timeScale = 0;
+        if(!Settings.MasterMode) Time.timeScale = 0;
     }
 
     public void Resume()
@@ -58,7 +58,7 @@ public class PauseMenu : MonoBehaviour
             UIManager.ToggleUI();
 
         I.root.Q<VisualElement>("PauseMenuParent").style.visibility = Visibility.Hidden;
-        Time.timeScale = TimeController.I.lastSpeed;
+        if (!Settings.MasterMode) Time.timeScale = TimeController.I.lastSpeed;
     }
 
     public IEnumerator GoToMainMenu()

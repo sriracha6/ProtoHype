@@ -331,6 +331,13 @@ public static class ParseFuncs
             _ => num + "th",
         };
     }
+    public static void WriteEl(this XmlWriter writer, string tag, object content)
+    {
+        writer.WriteStartElement(tag);
+        writer.WriteValue(content.ToString());
+        writer.WriteEndElement();
+    }
+
     public static string toTitleCase(this string t)
     {
         return System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
@@ -360,6 +367,11 @@ public static class ParseFuncs
             return false;
         else
             return false;
+    }
+
+    public static T StringToEnum<T>(this string s)
+    {
+        return (T)System.Enum.Parse(typeof(T), s, true);
     }
 
     public static T RandomEnum<T>(System.Random r)

@@ -88,7 +88,10 @@ public class WCMngr : MonoBehaviour
 
     protected void Start()
     {
-        if(Menus.I.inBattle)
+        if (Menus.I.inBattle)
+        {
             new PathfindExtra(); // singleton :)
+            TimeController.Speed = 0;
+        }
     }
 }

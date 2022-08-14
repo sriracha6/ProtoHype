@@ -112,6 +112,8 @@ $@"            Codename
 
         Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\germany.xml");
         Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\france.xml");
+        //Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\all.xml");
+        //Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\eurogeneric.xml");
 
         foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\floor"))
             Loaders.LoadFloor(file);

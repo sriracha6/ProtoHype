@@ -48,6 +48,6 @@ public class ToolTipManipulator : Manipulator
     private void MouseOut(MouseOutEvent e)
     {
         element.style.visibility = Visibility.Hidden;
-        element.parent.Remove(element);
+        //element.parent.Remove(element);
     }
 }
