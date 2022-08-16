@@ -108,15 +108,24 @@ public class TilemapPlace : MonoBehaviour
                         /* no*/switch (tTypes[i].type)
                         {
                             case SpecialType.None:
-                                TerrainType ttype = tTypes[i];
+                                TerrainType ttype = tTypes[i].height <= BiomeArea.DEFAULT_WATER_HEIGHT ? MapGenerator.I.currentBiome.WaterClampTT : tTypes[i];
                                 if(place)
                                     WCMngr.I.groundTilemap.SetTile(new Vector3Int(x, y, 0), tTypes[i].tile);
                                 tilemap[x, y] = tTypes[i];
                                 break;
                             case SpecialType.Mountain:
-                                if(place)
-                                    WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), tTypes[i].thisIsVeryBadSpaghettiButImOutOfIdeas);
-                                tilemap[x, y] = tTypes[i];
+                                if(!isMountainless)
+                                {
+                                    if(place)
+                                        WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), tTypes[i].thisIsVeryBadSpaghettiButImOutOfIdeas);
+                                    tilemap[x, y] = tTypes[i];
+                                }
+                                else
+                                {
+                                    if (place)
+                                        WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), MapGenerator.I.currentBiome.WaterClampTT.tile);
+                                    tilemap[x, y] = MapGenerator.I.currentBiome.WaterClampTT;
+                                }
                                 break;
                             case SpecialType.Water:
                                 tilemap[x, y] = tTypes[i];

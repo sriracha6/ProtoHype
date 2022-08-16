@@ -311,6 +311,11 @@ public static class ParseFuncs
             throw new ArgumentException();
     }
 
+    public static string removeUsername(this string s)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(s, @"([A-Z]{1}\:*\\Users\\)(\w+\\)(.*)", "$1*\\$3");
+    }
+
     public static string AddOrdinal(int num)
     {
         if (num <= 0) return num.ToString();
@@ -458,7 +463,7 @@ public static class ParseFuncs
         if (attribute && x.Attributes.GetNamedItem(t) == null)
         {
             if (t != "count")
-                DB.Attention($"XMLERROR: No attribute : {t} : {Loaders.currentFile}");
+                DB.Attention($"XMLERROR: No attribute : {t} : {Loaders.currentFile.removeUsername()}");
             return default;
         }
 

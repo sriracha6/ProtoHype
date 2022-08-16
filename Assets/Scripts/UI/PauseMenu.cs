@@ -76,7 +76,7 @@ public class PauseMenu : MonoBehaviour
         Player.friends.Clear();
         StartCoroutine(Loading.I.load("MainMenu"));
         yield return new WaitUntil(() => Loading.I.done);
-        Menus.I.SwitchTo(Menus.I.mainMenu);
+        Menus.I.SwitchTo(Menus.I.mainMenu, null);
         Loading.I.done = false;
     }
 

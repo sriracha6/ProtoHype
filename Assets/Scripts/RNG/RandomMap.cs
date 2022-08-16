@@ -7,7 +7,7 @@ namespace RNG
     public static class RandomMap
     {
         // DONT MENTION SEBASTIAN. I GOT FAR ENOUGH ON MY OWN BUT LAYERING IS ASS!!!!!! and seeds i had 0 clue
-        public static float[,] genNoise(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, float waterComminality)
+        public static float[,] genNoise(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, Nature.Biome biome)
         {
             float[,] map = new float[width, height];
 
@@ -29,10 +29,7 @@ namespace RNG
             float halfW = width / 2f;
             float halfH = height / 2f;
 
-            if(scale<=0)
-            {
-                scale = 0.00001f;
-            }
+            if(scale<=0) scale = 0.00001f;
 
             for(int y = 0;y<height;y++)
             {

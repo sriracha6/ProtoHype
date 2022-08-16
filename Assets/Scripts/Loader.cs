@@ -13,6 +13,8 @@ public class Loader : MonoBehaviour
     public static Loader I = null;
     public List<Vital> defaultVitals = new List<Vital>();
 
+    static bool firstPass = false;
+
     protected void Awake()
     {
         if (I == null)
@@ -39,13 +41,13 @@ $@"            Codename
  |  | / \ |_) / ` |_| / \ |\ |  | 
  |/\| |~| | \ \ , | | |~| | \|  | 
  ~  ~ ~ ~ ~ ~  ~  ~ ~ ~ ~ ~  ~  ~ 
-    Version 0.5 :: LOGFILE
+    Version {WCMngr.Version} :: LOGFILE
  'This machine. I hate this machine. 
   Because it does exactly what I tell it
   to do and not what I want it to do.'
 
   CS: {md5checksum}
-  CD: {removeUsername(Directory.GetCurrentDirectory())}
+  CD: {Directory.GetCurrentDirectory().removeUsername()}
   OS: {bit}{bit2} {Environment.OSVersion}
   TIME: {DateTimeOffset.UtcNow.ToUnixTimeSeconds()}
   MEM: {SystemInfo.systemMemorySize}
@@ -58,7 +60,7 @@ $@"            Codename
         Application.lowMemory += WCMngr.ClearCache;//delegate { Messages.I.Add("Your device is low on memory. Clearing cached items. This may result in slower loading times."); };
         
         Logger.Divide("START XML LOAD");
-        Loaders.LoadBodyparts("C:\\Users\\frenz\\Music\\bodyparts.xml");
+        Loaders.LoadBodyparts("C:\\Users\\frenz\\Music\\bodyparts.xml"); // TODO: DO NOT REMOVE THIS LINE. but replace it with correct path
 
         Loaders.LoadMeleeWeapon("C:\\Users\\frenz\\Music\\ahlspiess.wc");
         Loaders.LoadRangedWeapon("C:\\Users\\frenz\\Music\\arbalest.wc");
@@ -141,8 +143,39 @@ $@"            Codename
         defaultVitals.Add(new Vital(VitalSystem.Moving, 1f));
     }
 
-    private string removeUsername(string s)
+    public void LoadDirectory(string directorypath, bool isGeneric)
     {
-        return System.Text.RegularExpressions.Regex.Replace(s, @"([A-Z]{1}\:*\\Users\\)(\w+\\)(.*)", "$1*\\$3");
+        foreach (string file in Directory.GetFiles(directorypath + "\\audio", "*.*")) SFXManager.I.CacheAudio(file, file.Remove(0,(directorypath + "audio").Length).Substring(0,Path.GetFileName(file).Length));
+        if (!firstPass) Loaders.LoadBodyparts(Application.persistentDataPath + "\\bodyparts.xml");
+
+        foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\melee", "*.*")) Loaders.LoadMeleeWeapon(file, isGeneric);
+        foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\ranged", "*.*")) Loaders.LoadRangedWeapon(file, isGeneric);
+        foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\projectiles", "*.*")) Loaders.LoadProjectile(file, isGeneric);
+        
+        foreach (string file in Directory.GetFiles(directorypath + "\\armor\\shields", "*.*")) Loaders.LoadShield(file, isGeneric);
+        foreach (string file in Directory.GetFiles(directorypath + "\\armor\\armor", "*.*")) Loaders.LoadArmor(file, isGeneric);
+        
+        foreach (string file in Directory.GetFiles(directorypath + "\\countries", "*.*")) Loaders.LoadCountry(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\animals", "*.*")) Loaders.LoadAnimal(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\animalarmor", "*.*")) Loaders.LoadAnimalArmor(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\outfitting", "*.*")) Loaders.LoadCountryOutfit(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\terrain", "*.*")) Loaders.LoadTerrainType(file);
+        
+        foreach (string file in Directory.GetFiles(directorypath + "\\buildings\\buildings", "*.*")) Loaders.LoadBuilding(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\buildings\\doors", "*.*")) Loaders.LoadDoor(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\buildings\\floor", "*.*")) Loaders.LoadFloor(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\buildings\\furniture", "*.*")) Loaders.LoadFurniture(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\buildings\\nature", "*.*")) Loaders.LoadNature(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\buildings\\rooves", "*.*")) Loaders.LoadRoof(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\buildings\\traps", "*.*")) Loaders.LoadTrap(file);
+
+        if (!firstPass) Loaders.loadBlood();
+        if (!firstPass) Loaders.loadNames();
+
+        foreach (string file in Directory.GetFiles(directorypath + "\\biomes", "*.*")) Loaders.LoadBiome(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\room", "*.*")) Loaders.LoadRoom(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\structure", "*.*")) Loaders.LoadStructure(file);
+
+        firstPass = true;
     }
 }

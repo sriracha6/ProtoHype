@@ -8,19 +8,22 @@ public class Warning : MonoBehaviour
         StartCoroutine(AutoChange());
 
     bool flag = false;
+    bool done = false;
 
     protected void Update()
     {
-        if(Input.GetKeyUp(Keybinds.Escape))
+        if(Input.GetKeyUp(Keybinds.Escape) && !done)
         {
-            Menus.I.SwitchTo(Menus.I.mainMenu);
+            Menus.I.SwitchTo(Menus.I.mainMenu, null);
             flag = true;
+            done = true;
         }
     }
 
     IEnumerator AutoChange()
     {
         yield return new WaitForSecondsRealtime(4);
-        if(!flag) Menus.I.SwitchTo(Menus.I.mainMenu);
+        if(!flag) Menus.I.SwitchTo(Menus.I.mainMenu, null);
+        done = true;
     }
 }

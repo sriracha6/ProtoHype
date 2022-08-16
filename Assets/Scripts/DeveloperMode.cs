@@ -8,6 +8,7 @@ public class DeveloperMode : MonoBehaviour
     protected void Awake()
     {
         I = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     protected void OnGUI()

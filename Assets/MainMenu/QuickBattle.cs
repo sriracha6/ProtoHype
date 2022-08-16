@@ -26,7 +26,7 @@ public class CountryInfo
         this.regimentsCount = regimentsCount;
     }
 }
-public class QuickBattle : MonoBehaviour
+public class QuickBattle : MonoBehaviour, IMenu
 {
     VisualElement root;
     public List<CountryInfo> friends = new List<CountryInfo>();
@@ -108,14 +108,14 @@ public class QuickBattle : MonoBehaviour
             //if (string.IsNullOrEmpty(root.Q<TextField>("Seed").value))
             //    MapGenerator.I.seed = Random.Range(int.MinValue, int.MaxValue).ToString();
             ItemViewer.I.history.Clear();
-            Menus.I.SwitchTo(Menus.I.loading);
+            Menus.I.SwitchTo(Menus.I.loading, null);
             StartCoroutine(Loading.I.load("Battle"));
         };
         root.Q<Button>("RandomBuilding").clicked += delegate{
             TilemapPlace.UpdateBuildings();
             root.Q<SliderInt>("MapSize").lowValue = 100;
-            // todo: random
             Structure item = Structure.List.randomElement();
+            Messages.AddMessage("Adding a \""+item.Name+"\"");
             MapGenerator.I.structure = item;
             StructureGenerator.PlaceStructure(item, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
             StructureGenerator.GenerateStructure(item, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
@@ -135,8 +135,8 @@ public class QuickBattle : MonoBehaviour
         root.Q<DropdownField>("Biome").value = biomes[0];
     }
 
-    private void Back() =>
-        Menus.I.SwitchTo(Menus.I.start);
+    public void Back() =>
+        Menus.I.SwitchTo(Menus.I.start, Play.I);
 
     protected void OnBecameVisible()
     {

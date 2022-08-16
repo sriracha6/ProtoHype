@@ -63,7 +63,7 @@ public class MapGenerator : MonoBehaviour
     public int minRiverWidth;
     public int maxRiverWidth;
 
-    public bool isTestMap = false; // todo : should be false by default. lol
+    public bool isTestMap = false;
     public Biome currentBiome;
 
     public static float[,] noiseMap;
@@ -77,7 +77,19 @@ public class MapGenerator : MonoBehaviour
 
     public GameObject water;
 
+    public static bool isMountainless;
+
     public bool finishedLoading;
+    
+    public void GenerateRandomMountainHeight()
+    {
+        int num = Random.Range(0,101);
+        if (num >= 50) // no mountains
+        {
+            BiomeArea.mountainHeight = terrainTypes.OrderBy(x=>x.height).Last().height;
+            isMountainless = true;
+        }
+    }
 
     protected void Awake()
     {
@@ -86,7 +98,7 @@ public class MapGenerator : MonoBehaviour
 
         if (I == null) // Main Menu
             I = this;
-        else if (Menus.I.inBattle)
+        else if (Menus.I != null && Menus.I.inBattle)
         {
             I.mapBounds = mapBounds;
             I.sun = sun;
@@ -135,8 +147,10 @@ public class MapGenerator : MonoBehaviour
     public void GenMap()
     {
         if (currentBiome == null) return;
-        terrainTypes = currentBiome.terrainFrequencies.terrain;
-        BiomeArea.waterHeight = currentBiome.waterComminality * 0.2f;
+        terrainTypes = new List<TerrainType>();
+        terrainTypes.AddRange(currentBiome.terrainFrequencies.terrain);
+        BiomeArea.waterHeight = currentBiome.waterComminality * BiomeArea.DEFAULT_WATER_HEIGHT;
+        //GenerateRandomMountainHeight();
         terrainTypes.Add(new TerrainType("Water", BiomeArea.waterHeight, Color.blue, WCMngr.I.mountainTile, SpecialType.Water, false));
         terrainTypes.Add(new TerrainType("Mountain", BiomeArea.mountainHeight, new Color(256, 100, 100), WCMngr.I.mountainTile, SpecialType.Mountain, false));
         erosionAmount = Mathf.CeilToInt(I.mapWidth / 100);
@@ -147,7 +161,7 @@ public class MapGenerator : MonoBehaviour
 
         rand = new System.Random(_seed);
 
-        noiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, _seed, noiseScale, octaves, persistence, lacunarity, offset, currentBiome.waterComminality)
+        noiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, _seed, noiseScale, octaves, persistence, lacunarity, offset, currentBiome)
             .carveRiver(rand, riverPerturbation, false)                
             .carveWaterBody(rand, false);                              
                                                                        
@@ -206,19 +220,7 @@ public class MapGenerator : MonoBehaviour
 
             if(structure == null)
                 TilemapPlace.UpdateBuildings();
-            
-            for (int x = 0; x < I.mapWidth; x++)
-                for (int y = 0; y < I.mapHeight; y++)
-                {
-                    if (buildings != null && buildings[x, y] != null)
-                        TilemapPlace.SetWall(buildings[x, y], x, y);
-                    if (floors != null && floors[x, y] != null)
-                        TilemapPlace.SetFloor(floors[x, y], x, y);
-                    if (doors != null && doors[x, y].door != null)
-                        TilemapPlace.SetDoor(doors[x, y].door, x, y, doors[x, y].rotation);
-                    if (RoofPlacer.I.rooves != null && RoofPlacer.I.rooves[x, y] != null)
-                        RoofPlacer.I.PlaceRoof(RoofPlacer.I.rooves[x, y], x, y);
-                }
+
             WCMngr.I.solidTilemap.RefreshAllTiles();
             WCMngr.I.groundTilemap.RefreshAllTiles();
             
@@ -274,7 +276,7 @@ public class MapGenerator : MonoBehaviour
     /// <returns></returns>
     public List<Vector3Int> generateTrees() // i promies this is the most inefficient algorithm in the entire project
     {
-        float[,] treeNoiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, treesSeed.GetHashCode(), noiseScale, octaves, persistence, lacunarity, offset, 1);
+        float[,] treeNoiseMap = RandomMap.genNoise(I.mapWidth, I.mapHeight, treesSeed.GetHashCode(), noiseScale, octaves, persistence, lacunarity, offset, currentBiome);
         treePoints = TreeSampling.generatePoints(radius, new Vector2(I.mapWidth,I.mapHeight), rejectionSamples);
         //Debug.Break();
         List<Vector3Int> points = new List<Vector3Int>();

@@ -7,7 +7,7 @@ public static class Keybinds
     public static int LeftMouse = 0;
     public static int RightMouse = 1;
     public static int MiddleMouse = 2;
-
+    [SettingDivider]
     [Keybind("Add to Selection")] public static KeyCode SelectAdd = KeyCode.LeftShift;
     [Keybind("Keybind")] public static KeyCode Escape = KeyCode.Escape;
     [Keybind("Subtract from Selection")] public static KeyCode SubtractSelection = KeyCode.LeftControl;

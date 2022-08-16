@@ -68,12 +68,13 @@ namespace Nature
         [XMLItem("Terrain Frequencies")] public TerrainFrequencies terrainFrequencies;
         [XMLLinkList("Flora")] public List<Buildings.Plant> flora;
         [XMLItem("Water Comminality")] public float waterComminality;
+        public TerrainType WaterClampTT;
 
         public Color color;
         public float plantDensity;
 
         public Biome(string name, string description, LocationData locationData, List<Weather> weatherFrequencies,
-            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity, float waterComminality) : base(name, description, "")
+            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity, float waterComminality, TerrainType waterClampTT) : base(name, description, "")
         {
             this.locationData = locationData;
             this.weatherFrequencies = weatherFrequencies;
@@ -82,16 +83,17 @@ namespace Nature
             this.color = color;
             this.plantDensity = plantDensity;
             this.waterComminality = waterComminality;
+            this.WaterClampTT = waterClampTT;
         }
 
         public static List<Biome> List = new List<Biome>();
 
         public static Biome Create(string name, string description, LocationData locationData, List<Weather> weatherFrequencies,
-            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity, float waterComminality)
+            TerrainFrequencies terrainFrequencies, List<Buildings.Plant> flora, Color color, float plantDensity, float waterComminality, TerrainType WaterClampTT)
         {
             //if(!BiomeList.Any(x => x.Name == name))
             //{
-            Biome c = new Biome(name, description, locationData, weatherFrequencies, terrainFrequencies, flora, color, plantDensity, waterComminality);
+            Biome c = new Biome(name, description, locationData, weatherFrequencies, terrainFrequencies, flora, color, plantDensity, waterComminality, WaterClampTT);
             List.Add(c);
             return c;
             //}

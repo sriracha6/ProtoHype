@@ -9,7 +9,7 @@ using System.Xml;
 using Countries;
 using static CachedItems;
 
-public partial class SettingsMenu : MonoBehaviour
+public partial class SettingsMenu : MonoBehaviour, IMenu
 {
     [SerializeField] UIDocument uidoc;
     [SerializeField] VisualTreeAsset keyrebinder;
@@ -23,11 +23,16 @@ public partial class SettingsMenu : MonoBehaviour
     VisualElement video;
     new VisualElement audio;
 
-    bool alreadyRebinding = false;
+    public static bool IsRebinding = false;
     System.Reflection.FieldInfo rebindingField;
     Button rebindingButton;
 
     List<(Button tab, VisualElement content)> content = new List<(Button tab, VisualElement content)>();
+
+    public void Back()
+    {
+        Menus.I.SwitchTo(Menus.I.mainMenu, null);
+    }
 
     protected void Awake()
     {
@@ -35,7 +40,7 @@ public partial class SettingsMenu : MonoBehaviour
             I = this;
 
         root = uidoc.rootVisualElement;
-        root.Q<Button>("BackButton").clicked += delegate { Menus.I.SwitchTo(Menus.I.mainMenu); };
+        root.Q<Button>("BackButton").clicked += Back;
         //root.Q<Button>("ResetToDefault").clicked += ResetDefault;
 
         List<VisualElement> cs = new List<VisualElement>();
@@ -100,27 +105,25 @@ public partial class SettingsMenu : MonoBehaviour
 
     void PopulateKeyRebinds()
     {
-        foreach (var p in typeof(Keybinds).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static))
-            if(p.GetType() == typeof(KeyCode))
+        foreach (var p in typeof(Keybinds).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.GetField))
+            if (p.FieldType == typeof(KeyCode))
                 foreach (var a in p.GetCustomAttributes(true))
                     if (a.GetType() == typeof(KeybindAttribute))
                     {
                         var ele = keyrebinder.CloneTree().contentContainer;
                         ele.name = p.Name;
                         ele.Q<Label>("Label").text = a.GetType().GetField("Text").GetValue(a).ToString();
-                        ele.Q<Button>("Button").text = Convert.ChangeType(p, Enum.GetUnderlyingType(typeof(KeyCode))).ToString();
+                        ele.Q<Button>("Button").text = p.GetValue(p).ToString();
                         ele.Q<Button>("Button").clicked += delegate
                         {
-                            alreadyRebinding = true;
+                            IsRebinding = true;
                             rebindingField = p;
                             rebindingButton = ele.Q<Button>("Button");
                         };
                         controls.Add(ele);
                     }
                     else if (a.GetType() == typeof(SettingDivider))
-                    {
                         controls.Add(divider.CloneTree());
-                    }
     }
 
     int ParseMouseRebind(string value)
@@ -136,16 +139,17 @@ public partial class SettingsMenu : MonoBehaviour
 
     protected void Update()
     {
-        if (!alreadyRebinding) return;
-        if(Event.current.keyCode != KeyCode.None)
+        if (!IsRebinding) return;
+        foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode))) // this isn't particulary efficient
         {
-            rebindingField.SetValue(rebindingField, Event.current.keyCode);
+            if (!Input.GetKey(kcode)) continue;
+            rebindingField.SetValue(rebindingField, kcode);
             rebindingField = null;
-            rebindingButton.text = Event.current.keyCode.ToString();
-            alreadyRebinding = false;
+            rebindingButton.text = kcode.ToString();
+            IsRebinding = false;
         }
     }
-    // test
+
     public void ResetDefault()
     {
         if(System.IO.File.Exists(Application.persistentDataPath+"\\default.xml")) LoadSettings(Application.persistentDataPath+"\\default.xml");

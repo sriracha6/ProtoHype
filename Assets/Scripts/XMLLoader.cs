@@ -641,7 +641,8 @@ namespace XMLLoader
                     xmls.Q<List<Plant>>("Plants"),
                     xmls.Q<Color>("Color"),
                     xmls.Q<float>("PlantDensity"),
-                    xmls.Q<float>("WaterComminality"));
+                    xmls.Q<float>("WaterComminality"),
+                    TerrainType.Get(xmls.Q<string>("WaterClampTT")));
             }
             else
             {

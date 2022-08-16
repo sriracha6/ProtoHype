@@ -142,7 +142,7 @@ public class PawnManager : MonoBehaviour
             return pos;
 
         var newPos = (Vector2Int)PathfindExtra.FindNearest(pos, usedPoints);
-        newPos = new Vector2Int(newPos.x + Random.Range(-7, 8), newPos.y + Random.Range(-1, 2)).clampVector();
+        newPos = new Vector2Int(newPos.x + Random.Range(-7, 8), newPos.y + Random.Range(-7, 8)).clampVector();
 
         if (TilemapPlace.tilemap[newPos.x, newPos.y].type == SpecialType.None)
         {

@@ -31,19 +31,19 @@ public partial class SettingsMenu : MonoBehaviour
         writer.WriteEl("LeftMouse", controls.Q<DropdownField>("LeftMouse").value);
         writer.WriteEl("RightMouse", controls.Q<DropdownField>("RightMouse").value);
         writer.WriteEl("MiddleMouse", controls.Q<DropdownField>("MiddleMouse").value);
-        foreach (var p in typeof(Keybinds).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static))
-            if (p.GetType() == typeof(KeyCode))
+        foreach (var p in typeof(Keybinds).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.GetField))
+            if (p.FieldType == typeof(KeyCode))
                 writer.WriteEl(p.Name, p.GetValue(p).ToString());
         writer.WriteEndElement();
         writer.WriteEl("MasterAudioLevel", SFXManager.Volume01);
 
         writer.WriteStartElement("Video");
         writer.WriteEl("Resolution", Screen.currentResolution);
-        writer.WriteEl("WindowMode", video.Q<DropdownField>("WindowMode").value);
+        writer.WriteEl("WindowMode", video.Q<DropdownField>("WindowMode").value == null ? "Fullscreen" : video.Q<DropdownField>("WindowMode").value);
         writer.WriteEl("VSync", QualitySettings.vSyncCount > 0 ? "True" : "False");
         writer.WriteEl("MaxFPS", Application.targetFrameRate);
-        writer.WriteEl("QualityLevel", video.Q<DropdownField>("QualityLevel").value);
-        writer.WriteEl("AntiAliasing", video.Q<DropdownField>("AntiAliasing").text);
+        writer.WriteEl("QualityLevel", video.Q<DropdownField>("QualityLevel").value == null ? "Sexy" : video.Q<DropdownField>("QualityLevel").value);
+        writer.WriteEl("AntiAliasing", video.Q<DropdownField>("AntiAliasing").value == null ? "None" : video.Q<DropdownField>("AntiAliasing").value);
         writer.WriteEndElement();
         writer.WriteEndElement();
         writer.WriteEndDocument();
@@ -60,20 +60,23 @@ public partial class SettingsMenu : MonoBehaviour
         general.Q<DropdownField>("RegimentSortOrder").value = general.Q<DropdownField>("RegimentSortOrder").choices[xmls.Q<int>("RegimentSortOrder")];
         general.Q<Toggle>("MasterMode").value = xmls.Q<bool>("MasterMode");
         general.Q<Toggle>("DeveloperMode").value = xmls.Q<bool>("DeveloperMode");
-        general.Q<SliderInt>("HUDOpacity").value = (int)(xmls.Q<float>("HUDOpacity01") * 100);
+        general.Q<Slider>("HUDOpacity").value = (int)(xmls.Q<float>("HUDOpacity01") * 100);
         general.Q<Toggle>("ShowFPS").value = xmls.Q<bool>("ShowFPS");
 
         audio.Q<SliderInt>("Volume").value = (int)(xmls.Q<float>("MasterAudioLevel") * 100);
 
-        video.Q<DropdownField>("Resolution").value = xmls.Q<string>("Resolution");
-        video.Q<DropdownField>("WindowMode").value = xmls.Q<string>("WindowMode");
-        video.Q<Toggle>("VSync").value = xmls.Q<bool>("VSync");
-        video.Q<TextField>("MaxFPS").value = xmls.Q<int>("MaxFPS").ToString();
-        video.Q<DropdownField>("QualityLevel").value = xmls.Q<string>("QualityLevel");
-        video.Q<DropdownField>("AntiAliasing").value = xmls.Q<string>("AntiAliasing");
+        video.Q<DropdownField>("Resolution").value = xmls.Q<XmlNode>("Video").Q<string>("Resolution");
+        video.Q<DropdownField>("WindowMode").value = xmls.Q<XmlNode>("Video").Q<string>("WindowMode");
+        video.Q<Toggle>("VSync").value = xmls.Q<XmlNode>("Video").Q<bool>("VSync");
+        video.Q<TextField>("MaxFPS").value = xmls.Q<XmlNode>("Video").Q<int>("MaxFPS").ToString();
+        video.Q<DropdownField>("QualityLevel").value = xmls.Q<XmlNode>("Video").Q<string>("QualityLevel");
+        video.Q<DropdownField>("AntiAliasing").value = xmls.Q<XmlNode>("Video").Q<string>("AntiAliasing");
 
+        int i = 0;
         foreach (XmlNode x in xmls.Qs("Controls"))
         {
+            if (i == 0) continue;
+            Debug.Log($"{x.Name}");
             if (x.Name == "LeftMouse") controls.Q<DropdownField>("LeftMouse").value = x.InnerText;
             else if (x.Name == "RightMouse") controls.Q<DropdownField>("RightMouse").value = x.InnerText;
             else if (x.Name == "MiddleMouse") controls.Q<DropdownField>("MiddleMouse").value = x.InnerText;
@@ -82,6 +85,7 @@ public partial class SettingsMenu : MonoBehaviour
                 typeof(Keybinds).GetField(x.Name).SetValue(typeof(Keybinds), x.InnerText.StringToEnum<KeyCode>());
                 controls.Q<Button>(x.Name).text = x.InnerText.StringToEnum<KeyCode>().ToString();
             }
+            i++;
         }
     }
 }

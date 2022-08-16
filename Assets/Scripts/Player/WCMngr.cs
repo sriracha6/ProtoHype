@@ -10,6 +10,8 @@ public class WCMngr : MonoBehaviour
 {
     public static WCMngr I { get; private set; }
 
+    public static readonly string Version = "0.6";
+
     public Camera mainCam;
     public Weapon flagWeapon { get; private set; }
     [SerializeField] Sprite flagSprite;

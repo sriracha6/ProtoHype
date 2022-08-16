@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\CombatFunctions.cs" />
     <Compile Include="Assets\Scripts\Type\Rooves.cs" />
     <Compile Include="Assets\Scripts\Type\Floor.cs" />
+    <Compile Include="Assets\Scripts\SaveLoadSettings.cs" />
     <Compile Include="Assets\Scripts\Type\Furniture.cs" />
     <Compile Include="Assets\Scripts\UI\Messages.cs" />
     <Compile Include="Assets\Scripts\ParseFuncs.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Assets\Scripts\RNG\BaseGen\StructureGenerator.cs" />
     <Compile Include="Assets\Scripts\HealthFunctions.cs" />
     <Compile Include="Assets\Scripts\Blood.cs" />
+    <Compile Include="Assets\Scripts\Type\Derived\IMenu.cs" />
     <Compile Include="Assets\Scripts\Player\Stats.cs" />
     <Compile Include="Assets\Scripts\UI\ContextMenuManipulator.cs" />
     <Compile Include="Assets\Scripts\Pawn\PawnPathfind.cs" />
@@ -171,7 +173,9 @@
     <Compile Include="Assets\Scripts\Player\ItemSelector.cs" />
     <Compile Include="Assets\Scripts\FireManager.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
-    <Compile Include="Assets\Scripts\SaveLoadSettings.cs" />
+    <Compile Include="Assets\Scripts\SC\PlaceLayer.cs" />
+    <Compile Include="Assets\Scripts\SC\Clipboard.cs" />
+    <Compile Include="Assets\Scripts\SC\Placer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />

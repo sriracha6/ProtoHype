@@ -16,8 +16,9 @@ public class Menus : MonoBehaviour
     public bool inBattle;
 
     public UIDocument prefab_country;
+    public static IMenu currentMenu;
 
-    public void SwitchTo(UIDocument u)
+    public void SwitchTo(UIDocument u, IMenu menu)
     {
         foreach (var c in GameObject.FindGameObjectsWithTag("Menu"))
         {
@@ -27,6 +28,7 @@ public class Menus : MonoBehaviour
             else
                 x.rootVisualElement.style.display = DisplayStyle.Flex;
         }
+        currentMenu = menu;
         UIManager.ui = u;
     }
 
@@ -35,7 +37,13 @@ public class Menus : MonoBehaviour
         if (I == null)
         {
             I = this;
-            I.SwitchTo(I.warning);
+            I.SwitchTo(I.warning, null);
         }
+    }
+
+    protected void Update()
+    {
+        if (Input.GetKey(Keybinds.Escape) && !SettingsMenu.IsRebinding && !I.inBattle && currentMenu != null)
+            currentMenu.Back();
     }
 }
