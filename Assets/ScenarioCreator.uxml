@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="root.uss" />
+    <ui:VisualElement name="Selector" class="brown-bg" style="position: absolute; width: 75%; height: 25%; left: 12.5%; flex-direction: row;">
+        <ui:ScrollView name="Categories" style="height: 100%; width: 15%; border-right-width: 5px; border-right-color: rgb(241, 232, 200);" />
+        <ui:ScrollView name="Body" show-horizontal-scroller="false" mode="Horizontal" style="height: 100%; width: 85%;" />
+    </ui:VisualElement>
+</ui:UXML>

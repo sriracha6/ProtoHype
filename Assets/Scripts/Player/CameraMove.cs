@@ -28,24 +28,23 @@ public class CameraMove : MonoBehaviour
     Vector3 movement;
     public bool isFollowing = false;
     Vector2 lastMousePos;
-    public Transform camtransform;
     [HideInInspector] public bool canMove;
 
-    protected void Awake()
+    protected void Awake() => I = this;
+
+    protected void Start()
     {
-        if (I == null)
-            I = this;
-        maxFov -= 0.75f;
-        camObject.transform.position = new Vector3(MapGenerator.I.mapWidth/2,MapGenerator.I.mapHeight /2,-10); // position the camera in middle of scene
+        //maxFov -= 0.75f;
+        canMove = true;
+        thecam.Follow = transform;
 
         thecam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().enabled = false;
-        camtransform = transform;
     }
 
     public void resizeBounds(int width, int height)
     {
-        bounds.gameObject.transform.localScale = new Vector2((width*2)-1, (height*2)-1);
-        bounds.gameObject.transform.position = new Vector2(1,1);
+        bounds.transform.localScale = new Vector2((width*2)-1, (height*2)-1);
+        bounds.transform.position = new Vector2(1,1);
         // we also need to relimit max fov so its not out of bounds somefucking how.
         maxFov = width / 5 + (width/50); // this was my first guess and it's pretty fuckin spot on
     }
@@ -75,10 +74,7 @@ public class CameraMove : MonoBehaviour
         pos.y = Mathf.Clamp(pos.y, 0.1f, 0.9f);
         
         if (canMove)
-        {
-            //transform.position = mainCam.ViewportToWorldPoint(pos);
             transform.Translate(moveSpeed * Time.unscaledDeltaTime * movement);
-        }
     }
 
 

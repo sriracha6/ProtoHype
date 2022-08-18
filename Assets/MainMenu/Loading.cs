@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 
-public class Loading : MonoBehaviour
+public class Loading : MonoBehaviour, IMenu
 {
     public static Loading I = null;
 
@@ -24,6 +24,7 @@ public class Loading : MonoBehaviour
     [SerializeField] UIDocument thisdoc;
 
     public List<string> tips = new List<string>();
+    public void Back() { }
 
     protected void Start()
     {

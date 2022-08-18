@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class RoofPlacer : MonoBehaviour
 {
-    [SerializeField] Tilemap roofTmap;
+    [SerializeField] internal Tilemap roofTmap;
     [SerializeField] TileBase invisibleTile;
 
     public Buildings.Roof[,] rooves;

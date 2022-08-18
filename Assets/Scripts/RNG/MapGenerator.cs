@@ -71,6 +71,7 @@ public class MapGenerator : MonoBehaviour
 
     public System.Random rand;
 
+
     public Structure structure;
     public Vector2Int structurePos;
     public Vector2Int structureSize;
@@ -80,7 +81,11 @@ public class MapGenerator : MonoBehaviour
     public static bool isMountainless;
 
     public bool finishedLoading;
-    
+    [SerializeField] internal Tilemap groundTmap;
+    [SerializeField] internal Tilemap solidTmap;
+    [SerializeField] internal Tilemap roofTmap;
+    int why = 0;
+
     public void GenerateRandomMountainHeight()
     {
         int num = Random.Range(0,101);
@@ -97,18 +102,28 @@ public class MapGenerator : MonoBehaviour
             treeHeight = currentBiome.plantDensity;
 
         if (I == null) // Main Menu
-            I = this;
-        else if (Menus.I != null && Menus.I.inBattle)
         {
-            I.mapBounds = mapBounds;
-            I.sun = sun;
-            I.drawMode = DrawMode.Place;
-            DrawMap();
-            if (UIManager.Reloads > 1)
-                Destroy(gameObject);
-            else
-                DontDestroyOnLoad(gameObject);
+            I = this;
+            DontDestroyOnLoad(gameObject);
         }
+        else
+        {
+            //if (Menus.I == null) return;
+            //else Debug.Log($"continuung;;");
+            //I.why++;
+            //if (I.why == 1) return;
+            if (Menus.I.inBattle || Menus.I.inSC)
+            {
+                I.mapBounds = mapBounds;
+                I.sun = sun;
+                I.drawMode = DrawMode.Place;
+                I.DrawMap();
+                Destroy(gameObject);
+                //if (UIManager.Reloads > 1)
+                //else
+                //DontDestroyOnLoad(gameObject);
+            }
+        };
     }
 
     List<Vector2> treePoints = new List<Vector2>();
@@ -151,8 +166,8 @@ public class MapGenerator : MonoBehaviour
         terrainTypes.AddRange(currentBiome.terrainFrequencies.terrain);
         BiomeArea.waterHeight = currentBiome.waterComminality * BiomeArea.DEFAULT_WATER_HEIGHT;
         //GenerateRandomMountainHeight();
-        terrainTypes.Add(new TerrainType("Water", BiomeArea.waterHeight, Color.blue, WCMngr.I.mountainTile, SpecialType.Water, false));
-        terrainTypes.Add(new TerrainType("Mountain", BiomeArea.mountainHeight, new Color(256, 100, 100), WCMngr.I.mountainTile, SpecialType.Mountain, false));
+        terrainTypes.Add(new TerrainType("Water", "", BiomeArea.waterHeight, Color.blue, WCMngr.I.mountainTile, SpecialType.Water, false));
+        terrainTypes.Add(new TerrainType("Mountain", "", BiomeArea.mountainHeight, new Color(256, 100, 100), WCMngr.I.mountainTile, SpecialType.Mountain, false));
         erosionAmount = Mathf.CeilToInt(I.mapWidth / 100);
 
         //long _seed = ParseSeed(seed);
@@ -214,7 +229,8 @@ public class MapGenerator : MonoBehaviour
             Loading.I.Status = "Creating the world...";
             TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
             generateWater();
-            mapBounds.resizeBounds(I.mapWidth, I.mapHeight);
+            I.mapBounds.resizeBounds(I.mapWidth, I.mapHeight);
+            I.mapBounds.transform.position = new Vector3(I.mapWidth, I.mapHeight, -10); // position the camera in middle of scene. no /2 because cell size = 2
             WCMngr.I.solidTilemap.size = new Vector3Int(I.mapWidth, I.mapHeight, 1);
             WCMngr.I.solidTilemap.ResizeBounds();
 

@@ -48,11 +48,8 @@ public class UIManager : MonoBehaviour
             I = this;
             I.OnUiChange += I.RefreshUI;
         }
-        else if (Menus.I.inBattle)
-        {
-            Debug.Log($"HERE HERE");
+        else if (Menus.I.inBattle || Menus.I.inSC)
             ui = GetComponent<UIDocument>();
-        }
     }
 
     void RefreshUI()
@@ -71,7 +68,6 @@ public class UIManager : MonoBehaviour
             root.AddManipulator(new ContextMenuManipulator(list, false));
             //root.pickingMode = PickingMode.Position;
         }
-
         LoopKids(root);
     }
 

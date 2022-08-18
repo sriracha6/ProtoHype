@@ -53,7 +53,7 @@ namespace Nature
             int index = 0;
             foreach(TerrainType t in terrain)
             {
-                x += $"{t.name} | {frequencies[index]}";
+                x += $"{t.Name} | {frequencies[index]}";
                 x += "\n";
                 index++;
             }

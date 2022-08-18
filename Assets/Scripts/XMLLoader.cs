@@ -612,6 +612,7 @@ namespace XMLLoader
             {
                 TerrainType temp = 
                 TerrainType.Create(xmls.Q<string>("Name"),
+                    filepath,
                     xmls.Q<float>("Height"),
                     xmls.Q<Color>("Color"),
                     null,

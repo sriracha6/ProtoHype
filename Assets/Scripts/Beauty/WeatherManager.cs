@@ -41,6 +41,11 @@ public class WeatherManager : MonoBehaviour
             startWeather(WeatherType.Clear);
             isWeather = false;
             I = this;
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += delegate 
+            {
+                if (Menus.I == null || Menus.I.inSC) { isWeather = false; I.isWeather = false; }
+                maincam = Camera.main;
+            };
         }
         else if (Menus.I.inBattle)
         {
@@ -51,6 +56,9 @@ public class WeatherManager : MonoBehaviour
             I.maincam = Camera.main;
             I.temperatureChange = temperatureChange;
             I.minLengthSeconds = minLengthSeconds;
+
+            isWeather = true;
+            I.isWeather = true;
 
             I.startWeather(weatherQueue);
         }
@@ -84,7 +92,7 @@ public class WeatherManager : MonoBehaviour
 
     protected void FixedUpdate()
     {
-        if (currentTime >= minLengthSeconds)
+        if (currentTime >= minLengthSeconds && isWeather) // todo: weather may not work due to spaghetti. this && isWeather was not here before. see if it works
         {
             float num = Random.Range(0f, 100f);
 

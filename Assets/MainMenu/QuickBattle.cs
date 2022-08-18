@@ -89,6 +89,12 @@ public class QuickBattle : MonoBehaviour, IMenu
             MapGenerator.I.riverCount++;
             UpdatePreview();
         };
+        root.Q<Button>("Edit").clicked += delegate
+        {
+            Menus.I.inSC = true; // todo: pause menu
+            Menus.I.SwitchTo(Menus.I.loading, Loading.I);
+            StartCoroutine(Loading.I.load("ScenarioCreator"));
+        };
         root.Q<Button>("Play").clicked += delegate {
             if (friends.Count == 0 || enemies.Count == 0)
             {
@@ -108,7 +114,7 @@ public class QuickBattle : MonoBehaviour, IMenu
             //if (string.IsNullOrEmpty(root.Q<TextField>("Seed").value))
             //    MapGenerator.I.seed = Random.Range(int.MinValue, int.MaxValue).ToString();
             ItemViewer.I.history.Clear();
-            Menus.I.SwitchTo(Menus.I.loading, null);
+            Menus.I.SwitchTo(Menus.I.loading, Loading.I);
             StartCoroutine(Loading.I.load("Battle"));
         };
         root.Q<Button>("RandomBuilding").clicked += delegate{

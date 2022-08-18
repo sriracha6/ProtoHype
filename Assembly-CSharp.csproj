@@ -100,7 +100,9 @@
     <Compile Include="Assets\Scripts\RNG\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Type\Gear.cs" />
     <Compile Include="Assets\Scripts\LogX.cs" />
+    <Compile Include="Assets\Scripts\SC\PlaceLayer.cs" />
     <Compile Include="Assets\Scripts\Type\Bodypart.cs" />
+    <Compile Include="Assets\Scripts\SC\ScenarioUI.cs" />
     <Compile Include="Assets\Scripts\Player\Keybinds.cs" />
     <Compile Include="Assets\Scripts\RNG\TilemapPlace.cs" />
     <Compile Include="Assets\Scripts\LoadComponents.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Assets\Scripts\Type\Projectile.cs" />
     <Compile Include="Assets\Scripts\Pawn\PawnManager.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\Build.cs" />
+    <Compile Include="Assets\Scripts\SC\Placer.cs" />
     <Compile Include="Assets\Scripts\FireBehaviour.cs" />
     <Compile Include="Assets\Scripts\DeveloperMode.cs" />
     <Compile Include="Assets\Scripts\Settings.cs" />
@@ -167,15 +170,13 @@
     <Compile Include="Assets\Scripts\Type\Derived\Item.cs" />
     <Compile Include="Assets\Scripts\Skills.cs" />
     <Compile Include="Assets\Scripts\UI\SliderSoundManipulator.cs" />
+    <Compile Include="Assets\Scripts\SC\Clipboard.cs" />
     <Compile Include="Assets\Scripts\RNG\TilemapShadow.cs" />
     <Compile Include="Assets\Scripts\Beauty\DamageMaker.cs" />
     <Compile Include="Assets\Scripts\RNG\Direction.cs" />
     <Compile Include="Assets\Scripts\Player\ItemSelector.cs" />
     <Compile Include="Assets\Scripts\FireManager.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
-    <Compile Include="Assets\Scripts\SC\PlaceLayer.cs" />
-    <Compile Include="Assets\Scripts\SC\Clipboard.cs" />
-    <Compile Include="Assets\Scripts\SC\Placer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />
@@ -189,6 +190,7 @@
     <None Include="Assets\Resources\Prefabs\UI\ArmorPiece.uxml" />
     <None Include="Assets\Scripts\Shaders\Random.cginc" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain_Add.shader" />
+    <None Include="Assets\Resources\Prefabs\UI\Object.uxml" />
     <None Include="Assets\MainMenu\play.uxml" />
     <None Include="Assets\UI Elements.uxml" />
     <None Include="Assets\Scripts\Shaders\conversion.cginc" />
@@ -215,6 +217,7 @@
     <None Include="Assets\Scripts\Shaders\WaterACTUAL.shader" />
     <None Include="Assets\MainMenu\settings.uxml" />
     <None Include="Assets\MainMenu\mainmenucss.uss" />
+    <None Include="Assets\ScenarioCreator.uxml" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain.cginc" />
     <None Include="Assets\MainMenu\warning.uxml" />
     <None Include="Assets\root.uss" />

@@ -91,7 +91,7 @@ $@"            Codename
         Loaders.LoadAnimalArmor(@"C:\Users\frenz\Music\aamor\barding.wc");
         Loaders.LoadAnimalArmor(@"C:\Users\frenz\Music\aamor\cataphract.wc");
 
-        TerrainType.Create("Test Tile", 1f, Color.magenta, null, SpecialType.None, false);
+        TerrainType.Create("Test Tile", "", 1f, Color.magenta, null, SpecialType.None, false);
         Loaders.loadBlood();
         Loaders.loadNames();
 

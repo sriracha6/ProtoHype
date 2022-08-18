@@ -12,8 +12,10 @@ public class Menus : MonoBehaviour
     public UIDocument loading;
     public UIDocument warning;
     public UIDocument settings;
+    public UIDocument scenarioCreator;
 
     public bool inBattle;
+    public bool inSC;
 
     public UIDocument prefab_country;
     public static IMenu currentMenu;
@@ -32,7 +34,7 @@ public class Menus : MonoBehaviour
         UIManager.ui = u;
     }
 
-    protected void Start()
+    protected void Awake()
     {
         if (I == null)
         {

@@ -96,7 +96,7 @@ public class TilemapPlace : MonoBehaviour
     {
         TerrainType[] tTypes = tTypesUnsorted.OrderBy(x => x.height).ToArray(); // this line of code makes the entire game, i'll make it a puzzle! figure out why! ;)
         tilemap = new TerrainType[noiseMap.GetLength(0), noiseMap.GetLength(1)];
-        
+
         for (int x = 0; x < noiseMap.GetLength(0); x++)
         {
             for (int y = 0; y < noiseMap.GetLength(1); y++)
@@ -139,7 +139,7 @@ public class TilemapPlace : MonoBehaviour
                 }
             }
         }
-        if(place)
+        if(place && !Menus.I.inSC)
         {
         //    WCMngr.I.solidTilemap.RefreshAllTiles();
         //    WCMngr.I.groundTilemap.RefreshAllTiles();

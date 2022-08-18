@@ -29,9 +29,10 @@ public class WCMngr : MonoBehaviour
     public GameObject bloodParent;
     public GameObject projectileParent;
 
-    [Header("Tilemaps")]
-    public Tilemap groundTilemap;
-    public Tilemap solidTilemap;
+    //[Header("Tilemaps")]
+    public Tilemap groundTilemap { get { return MapGenerator.I.groundTmap; } }
+    public Tilemap solidTilemap { get { return MapGenerator.I.solidTmap; } }
+    public Tilemap roofTilemap { get { return RoofPlacer.I.roofTmap; } }
 
     [Header("Texture")]
     public Texture2D defaultPawnTexture;
@@ -59,10 +60,8 @@ public class WCMngr : MonoBehaviour
             bluntWoundNames.AddRange(new string[] { "Crack", "Fracture", "Fissure" });
             seriousBluntWoundNames.AddRange(new string[] { "Dislocation", "Break" });
         }
-        else if (Menus.I.inBattle)
+        else if (Menus.I.inBattle || Menus.I.inSC)
         {
-            I.groundTilemap = groundTilemap;
-            I.solidTilemap = solidTilemap;
             I.projectileParent = projectileParent;
             I.bloodParent = bloodParent;
             I.mainCam = Camera.main;

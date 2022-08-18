@@ -146,9 +146,9 @@ public class PawnManager : MonoBehaviour
 
         if (TilemapPlace.tilemap[newPos.x, newPos.y].type == SpecialType.None)
         {
-            return newPos;
             I.usedPoints.Add(newPos);
             PathfindExtra.SetUsed(pos.x, pos.y);
+            return newPos;
         }
         else
             return PositionPawn(newPos, usedPoints, maxRecursion--);

@@ -25,10 +25,11 @@ public class ItemSelector : MonoBehaviour
 
     protected void Update()
     {
-        if(Input.GetMouseButtonUp(Keybinds.LeftMouse) && !UIManager.mouseOverUI)
+        if(Input.GetMouseButtonUp(Keybinds.LeftMouse) && !UIManager.mouseOverUI && Placer.PlacedItem == null)
         {
             spriteRenderer.forceRenderingOff = false;
-            var mousePos = Vector2Int.FloorToInt(WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition));
+            var p = WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition) / 2;
+            var mousePos = new Vector2Int((int)p.x, (int)p.y);
             mousePos = new Vector2Int(mousePos.x-1, mousePos.y-1);
             object item = null;
 
