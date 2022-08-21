@@ -71,7 +71,6 @@ public class MapGenerator : MonoBehaviour
 
     public System.Random rand;
 
-
     public Structure structure;
     public Vector2Int structurePos;
     public Vector2Int structureSize;
@@ -84,6 +83,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] internal Tilemap groundTmap;
     [SerializeField] internal Tilemap solidTmap;
     [SerializeField] internal Tilemap roofTmap;
+    [SerializeField] internal Tilemap specialTilemap;
     int why = 0;
 
     public void GenerateRandomMountainHeight()
@@ -186,7 +186,6 @@ public class MapGenerator : MonoBehaviour
             noiseMap.carveWaterBody(rand, overrideRandom: true);       
                                                                        
         //noiseMap.erodeNearWater(shallowSeaLevel, erosionAmount);
-        RoofPlacer.I.Setup(I.mapWidth, I.mapHeight);
         new PathfindExtra();
         DrawMap();
     }
@@ -242,8 +241,6 @@ public class MapGenerator : MonoBehaviour
             
             WCMngr.I.groundTilemap.RefreshAllTiles();
 
-
-            //TilemapPlace.SetWall(Buildings.Building.List.randomElement(), 0, 0);
             //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
         }
         I.finishedLoading = true;

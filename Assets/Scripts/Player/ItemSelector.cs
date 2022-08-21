@@ -14,12 +14,8 @@ public class ItemSelector : MonoBehaviour
         spriteRenderer.forceRenderingOff = true;
         if (doors == null)
             return;
-        Build[,] builds = new Build[doors.GetLength(0), doors.GetLength(1)];
-        for(int i = 0; i < doors.GetLength(0); i++)
-            for(int j = 0; j < doors.GetLength(1); j++)
-                builds[i, j] = doors[i, j].door;
 
-        validClickables.Add(builds); // DOES THIS UPDATE WHEN YOu CHANGE DOORS?? AHH
+        validClickables.Add(doors);
         validClickables.Add(TilemapPlace.buildings);
     }
 
@@ -35,8 +31,8 @@ public class ItemSelector : MonoBehaviour
 
             foreach (Build[,] build in validClickables)
             {
-                if (build[mousePos.x, mousePos.y] != null)
-                    item = build[mousePos.x, mousePos.y];
+                if (build[mousePos.x/2, mousePos.y/2] != null)
+                    item = build[mousePos.x/2, mousePos.y/2];
             }
             transform.position = new Vector3(mousePos.x, mousePos.y);
             // todo: animation ...

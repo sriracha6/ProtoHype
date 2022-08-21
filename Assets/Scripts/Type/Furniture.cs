@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Buildings
 {
@@ -31,6 +32,7 @@ namespace Buildings
         [XMLItem("Lean To Use")] public bool leanToUse;
         public bool PrefersTouchingWall;
         public List<Furniture> PrefersTouchingFurnitures;
+        public new Tile[,] tile;
         public bool isCarpet;
 
         public Furniture(string name, string description, string sourcefile, bool isTileable, int hitpoints, bool hasRubble, RubbleType rubbleType, int flammability, int coverQuality, bool leanToUse, bool PrefersTouchingWall, List<Furniture> PrefersTouchingFurniture, bool isCarpet)

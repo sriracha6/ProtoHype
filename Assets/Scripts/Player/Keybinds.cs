@@ -38,4 +38,6 @@ public static class Keybinds
     [Keybind("Show Rooves")] public static KeyCode showRooves = KeyCode.Comma;
     [Keybind("Change Camera Speed w/ Scroll")] public static KeyCode changeSpeed = KeyCode.LeftControl;
     [Keybind("Bulk Tile Selection")] public static KeyCode bulkTileSelect = KeyCode.LeftControl;
+    [SettingDivider]
+    [Keybind("Rotate - Scenario Creator")] public static KeyCode rotate = KeyCode.R;
 }

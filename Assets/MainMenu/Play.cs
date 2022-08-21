@@ -18,6 +18,9 @@ public class Play : MonoBehaviour, IMenu
     public void Back() =>
         Menus.I.SwitchTo(Menus.I.mainMenu, null);
 
-    private void QuickBattl() =>
+    private void QuickBattl()
+    {
+        QuickBattle.IsBattleMode = true;
         Menus.I.SwitchTo(Menus.I.quickstart, QuickBattle.I);
+    }
 }

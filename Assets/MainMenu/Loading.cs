@@ -43,7 +43,9 @@ public class Loading : MonoBehaviour, IMenu
         "You can reorder regiments in the regiment viewer. You can also change the default sorting method.", 
         "If you hold CTRL while right click and dragging, you can select a large box for an area your pawns should go to.",
         "If you hold shift while selecting pawns or tiles, it will add to your selection. This also works for selecting regiments.",
-        "Pawns can run and gun, at the cost of movement speed."});
+        "Pawns can run and gun, at the cost of movement speed.",
+        "You can use CTRL+Scroll to change the paintbrush size in the Scenario Creator.",
+        "There is rich editing in the Scenario Creator. CTRL+Z/Y, CTRL+C/V. And rotation"});
         
         StartCoroutine(Tips());
     }

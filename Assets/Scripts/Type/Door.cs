@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Buildings
 {
     public class Door : Build
     {
         [XMLItem("Opening Speed")] public float OpeningSpeed;
-        
+        public new Tile[,] tile;
+
         public Door(string name, string description, string sourcefile, RubbleType rubbletype, int hp, int flammability, float openingSpeed) 
             : base(name, description, sourcefile, false, true, rubbletype, hp, flammability)
         {

@@ -33,9 +33,9 @@ public class SpriteSheetCreator : MonoBehaviour
         //int count = (int)(sheet.width/256) + (int)(sheet.height/256);
 
         FuckBitchTile bitchBase = Instantiate(ScriptableObject.CreateInstance<FuckBitchTile>());
-        for (int i = 0; i < (int)(sheet.width / 256); i++)
+        for (int i = 0; i < sheet.width / 256; i++)
         {
-            for(int j = 0; j < (int)(sheet.height / 256); j++)
+            for(int j = 0; j < sheet.height / 256; j++)
             {
                 Texture2D tex = new Texture2D(256, 256, TextureFormat.RGB24, true)
                 {
@@ -103,6 +103,26 @@ public class SpriteSheetCreator : MonoBehaviour
         return penisList; // this line of code here returns the penis list by returning the penis list. THe penis list is then returned
     }
     
+    public static Tile[,] createMutliTile(Texture2D tex)
+    {
+        var asd = new Tile[tex.width/512, tex.height/512];
+        
+        for(int i = 0; i < asd.GetLength(0); i++)
+        {
+            for(int j = 0; j < asd.GetLength(1); j++)
+            {
+                var tile = Instantiate(ScriptableObject.CreateInstance<Tile>());
+                Texture2D a = new Texture2D(512,512);
+                a.SetPixels(tex.GetPixels(i * 512, j * 512, 512, 512));
+                a.Apply();
+                tile.sprite = Sprite.Create(a, new Rect(0, 0, 512, 512), Vector2.zero, 512 / 2, 16); ;
+                asd[i, j] = tile;
+            }
+        }
+
+        return asd;
+    }
+
     public RuleTile createRuleTile(Buildings.Building building)
     {
         var x = Instantiate(defaultRuleTile);

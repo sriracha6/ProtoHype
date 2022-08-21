@@ -1,7 +1,25 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="root.uss" />
-    <ui:VisualElement name="Selector" class="brown-bg" style="position: absolute; width: 75%; height: 25%; left: 12.5%; flex-direction: row;">
-        <ui:ScrollView name="Categories" style="height: 100%; width: 15%; border-right-width: 5px; border-right-color: rgb(241, 232, 200);" />
-        <ui:ScrollView name="Body" show-horizontal-scroller="false" mode="Horizontal" style="height: 100%; width: 85%;" />
+    <ui:VisualElement name="Selector" class="brown-bg" style="position: absolute; width: 80%; height: 25%; left: 12.5%; flex-direction: row;">
+        <ui:ScrollView name="Categories" style="height: 100%; width: 14.25%; border-right-width: 5px; border-right-color: rgb(241, 232, 200);">
+            <ui:TextField picking-mode="Ignore" value="Search" text="Search" name="Search" tabindex="-1" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; font-size: 14px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+        </ui:ScrollView>
+        <ui:ScrollView name="Body" show-horizontal-scroller="false" mode="Horizontal" style="height: 100%; width: 80.75%;" />
+        <ui:Button text="Clear" display-tooltip-when-elided="true" name="Clear" style="width: 5%;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Brushes" class="orange-bg" style="position: absolute; width: 12%; height: 25%; flex-direction: column;">
+        <ui:VisualElement style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+            <ui:VisualElement style="width: 90%; height: 50%; flex-direction: row;">
+                <ui:Button display-tooltip-when-elided="true" name="Pencil" style="background-image: resource(&apos;ui/pencil&apos;); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; width: 50%; height: 50%; padding-left: 16px; padding-right: 16px; padding-top: 16px; padding-bottom: 16px;" />
+                <ui:Button display-tooltip-when-elided="true" name="Brush" style="background-image: resource(&apos;ui/paint-brush&apos;); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; width: 50%; height: 50%; padding-left: 16px; padding-right: 16px; padding-top: 16px; padding-bottom: 16px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="width: 90%; height: 50%; flex-direction: row;">
+                <ui:Button display-tooltip-when-elided="true" name="Line" style="background-image: resource(&apos;ui/pencil-ruler&apos;); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; width: 50%; height: 50%; padding-left: 16px; padding-right: 16px; padding-top: 16px; padding-bottom: 16px;" />
+                <ui:Button display-tooltip-when-elided="true" name="Bucket" style="background-image: resource(&apos;ui/full-wood-bucket&apos;); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; width: 50%; height: 50%; padding-left: 16px; padding-right: 16px; padding-top: 16px; padding-bottom: 16px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="Toggles" class="orange-bg" style="position: absolute; right: 0; bottom: 0; width: 195px;">
+        <ui:Toggle label="Show Rooves" name="ShowRooves" />
     </ui:VisualElement>
 </ui:UXML>

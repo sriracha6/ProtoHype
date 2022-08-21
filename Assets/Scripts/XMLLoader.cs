@@ -478,7 +478,7 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Prop"))
             {
-                Furniture.Create(filepath,
+                var temp = Furniture.Create(filepath,
                     xmls.Q<string>("Name"),
                     xmls.Q<string>("Description"),
                     xmls.Q<bool>("Tilable"),
@@ -491,6 +491,7 @@ namespace XMLLoader
                     xmls.Q<bool>("PrefersTouchingWall"),
                     null,
                     xmls.Q<bool>("IsCarpet"));
+                temp.tile = SpriteSheetCreator.createMutliTile(LoadTex(filepath));
             }
             else
             {
@@ -532,7 +533,7 @@ namespace XMLLoader
                 
                 var ti = GameObject.Instantiate(ScriptableObject.CreateInstance<Tile>());
                 var tex = LoadTex(filepath);
-                ti.sprite = LoadSprite(tex, tex.width);
+                ti.sprite = LoadSprite(tex, tex.width / 2);
                 s.tile = ti;
             }
             else
@@ -590,13 +591,15 @@ namespace XMLLoader
             XmlElement xmls = LoadWC(filepath);
             if (xmls.Q<string>("Type").Equals("Door"))
             {
-                Door.Create(filepath,
+                var temp = Door.Create(filepath,
                     xmls.Q<string>("Name"),
                     xmls.Q<string>("Description"),
                     xmls.Enum<RubbleType>(xmls.Q<string>("RubbleType")),
                     xmls.Q<int>("Hitpoints"),
                     xmls.Q<int>("Flammability"),
                     xmls.Q<float>("OpeningSpeed"));
+                temp.tile = SpriteSheetCreator.createMutliTile(LoadTex(filepath));
+                // here: load into TILE for door and rooves
             }
             else
             {

@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="/Assets/root.uss" />
-    <ui:VisualElement class="dark-bg" style="margin-right: 8px; flex-direction: row; width: 200px; background-color: rgb(30, 39, 50);">
+    <ui:VisualElement name="Bok" class="dark-bg" style="margin-right: 8px; flex-direction: row; width: 200px; background-color: rgb(30, 39, 50);">
         <ui:VisualElement name="Image" style="width: 100px; height: 100px;" />
-        <ui:Label text="&lt;u&gt;asdasd&lt;/u&gt;" display-tooltip-when-elided="true" name="Name" style="width: 100px; color: rgba(100, 149, 237, 255);" />
+        <ui:Label text="&lt;u&gt;asdasd&lt;/u&gt;" display-tooltip-when-elided="true" name="Name" style="width: 100px; color: rgb(100, 149, 237); height: 28px;" />
     </ui:VisualElement>
 </ui:UXML>

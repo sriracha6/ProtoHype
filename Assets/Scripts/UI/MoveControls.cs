@@ -152,6 +152,7 @@ public class MoveControls : MonoBehaviour
 
     public static void toggleMoveButton(bool off)
     {
+        if (!Menus.I.inBattle) return;
         if (off)
         {
             instance.moveButton.style.backgroundColor = Color.gray;

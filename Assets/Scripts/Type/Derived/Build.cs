@@ -13,6 +13,7 @@ public class Build : Item// i should really put a float rotation variable in her
     [XMLItem("Flammability")] public int flammability;
     [XMLItem("Hitpoints")] public int hitpoints;
     [XMLItem("Max Hitpoint")] public int maxHitpoints;
+    public float rotation = 0;
 
     public RuleTile tile;
 

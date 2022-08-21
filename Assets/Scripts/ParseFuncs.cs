@@ -399,6 +399,10 @@ public static class ParseFuncs
     {
         return new Vector2Int(Mathf.Clamp(@in.x, 0, MapGenerator.I.mapWidth-1), Mathf.Clamp(@in.y, 0, MapGenerator.I.mapHeight-1));
     }
+    public static Vector3Int clampVector(this Vector3Int @in, int overrideZ = 0)
+    {
+        return new Vector3Int(Mathf.Clamp(@in.x, 0, MapGenerator.I.mapWidth - 1), Mathf.Clamp(@in.y, 0, MapGenerator.I.mapHeight - 1), overrideZ);
+    }
     public static T randomElement<T>(this List<T> list)
     {
         return list[Random.Range(0, list.Count)];

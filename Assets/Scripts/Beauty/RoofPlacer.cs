@@ -2,22 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static TilemapPlace;
 
 public class RoofPlacer : MonoBehaviour
 {
     [SerializeField] internal Tilemap roofTmap;
     [SerializeField] TileBase invisibleTile;
 
-    public Buildings.Roof[,] rooves;
-
     public static RoofPlacer I;
 
     protected void Awake()
     {
-        if(I == null)
+        if (I == null)
             I = this;
-        else
-            I.roofTmap = roofTmap;
     }
 
     protected void Update()
@@ -25,22 +22,25 @@ public class RoofPlacer : MonoBehaviour
         if (Input.GetKeyDown(Keybinds.showRooves))
         {
             Player.isRoofShow = !Player.isRoofShow;
-            for (int i = 0; i < I.rooves.GetLength(0); i++)
-            {
-                for(int j = 0; j < I.rooves.GetLength(1); j++)
-                {
-                    if (Player.isRoofShow)
-                        roofTmap.SetTile(new Vector3Int(i,j,0), rooves[i,j].tile);
-                    else
-                        roofTmap.SetTile(new Vector3Int(i, j, 0), null);
-                }
-            }
+            Refresh();
         }
     }
 
-    public void Setup(int width, int height)
+    public void Refresh()
     {
-        rooves = new Buildings.Roof[width, height];
+        for (int i = 0; i < rooves.GetLength(0); i++)
+        {
+            for (int j = 0; j < rooves.GetLength(1); j++)
+            {
+                if (Player.isRoofShow)
+                    roofTmap.SetTile(new Vector3Int(i, j, 0), rooves[i,j] == null ? null : rooves[i, j].tile);
+                else
+                { 
+                    if (invisibleTile == null) DB.Attention("penis alert");
+                    else roofTmap.SetTile(new Vector3Int(i, j, 0), invisibleTile);
+                }
+            }
+        }
     }
 
     public void PlaceRoof(Buildings.Roof r, int x, int y)
@@ -48,7 +48,7 @@ public class RoofPlacer : MonoBehaviour
         try
         {
             rooves[x, y] = r;
-            if (MapGenerator.I.drawMode == MapGenerator.DrawMode.Place)
+            if (MapGenerator.I.drawMode == MapGenerator.DrawMode.Place && Player.isRoofShow)
                 roofTmap.SetTile(new Vector3Int(x, y, 0), r.tile);
         }
         catch(System.Exception)

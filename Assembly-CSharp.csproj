@@ -100,7 +100,7 @@
     <Compile Include="Assets\Scripts\RNG\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Type\Gear.cs" />
     <Compile Include="Assets\Scripts\LogX.cs" />
-    <Compile Include="Assets\Scripts\SC\PlaceLayer.cs" />
+    <Compile Include="Assets\Scripts\SC\FirePlacer.cs" />
     <Compile Include="Assets\Scripts\Type\Bodypart.cs" />
     <Compile Include="Assets\Scripts\SC\ScenarioUI.cs" />
     <Compile Include="Assets\Scripts\Player\Keybinds.cs" />
@@ -177,6 +177,8 @@
     <Compile Include="Assets\Scripts\Player\ItemSelector.cs" />
     <Compile Include="Assets\Scripts\FireManager.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
+    <Compile Include="Assets\Scripts\SC\UndoRedo.cs" />
+    <Compile Include="Assets\Scripts\SC\Rotator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />
@@ -210,6 +212,7 @@
     <None Include="Assets\MainMenu\Rebind.uxml" />
     <None Include="Assets\uxml.uxml" />
     <None Include="Assets\Scripts\Shaders\HeatDistort.shader" />
+    <None Include="Assets\scenariocreator.uss" />
     <None Include="Assets\loading.uss" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain_First.shader" />
     <None Include="Assets\uielements.uss" />

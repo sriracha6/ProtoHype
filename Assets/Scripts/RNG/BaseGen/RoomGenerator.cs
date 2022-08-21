@@ -34,7 +34,7 @@ public class RoomGenerator : MonoBehaviour
                 {
                     TilemapPlace.RemoveWall(x, y);
                     TilemapPlace.SetFloor(null, x, y);
-                    TilemapPlace.SetDoor(null, x, y, 0);
+                    TilemapPlace.SetDoor(null, x, y);
                     RoofPlacer.I.PlaceRoof(null, x, y);
                 }
                 if (x == Pos.x || y == Pos.y || y == Pos.y + size.height || x == Pos.x + size.width 
@@ -47,7 +47,7 @@ public class RoomGenerator : MonoBehaviour
                 roomPoints.Add(new Vector2Int(x,y));
 
                 if(doorPoints.Contains((x,y)))
-                    TilemapPlace.SetDoor(door, x, y, 90);
+                    TilemapPlace.SetDoor(door, x, y);
             }
         }
         return roomPoints;

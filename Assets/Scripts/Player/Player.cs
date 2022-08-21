@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     public static List<TileBase> selectedTiles = new List<TileBase>();
     public static List<Vector3> selectedTilePoses = new List<Vector3>();
     public static List<BoundsInt> selectedTileBounds = new List<BoundsInt>();
+    public static Vector2Int tileSelectStartPos;
 
     public static int regimentSelectNumber;
     public static bool isRoofShow = false;

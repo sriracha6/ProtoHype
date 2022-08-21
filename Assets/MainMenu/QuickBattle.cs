@@ -33,13 +33,15 @@ public class QuickBattle : MonoBehaviour, IMenu
     public List<CountryInfo> enemies = new List<CountryInfo>();
 
     public static QuickBattle I;
+    static bool isba = true;
+    public static bool IsBattleMode { get { return isba; } set { isba = value; I.RefreshButtons(); } }
 
     public int regimentSize = 30;
 
+    protected void Awake() =>
+        I = this;
     protected void Start()
     {
-        I = this;
-
         root = Menus.I.quickstart.rootVisualElement;
         root.Q<Button>("BackButton").clicked += Back;
         root.Q<Button>("AddCountryLeft").clicked += delegate { AddCountry(true); };
@@ -91,20 +93,13 @@ public class QuickBattle : MonoBehaviour, IMenu
         };
         root.Q<Button>("Edit").clicked += delegate
         {
+            RunCzecks();
             Menus.I.inSC = true; // todo: pause menu
             Menus.I.SwitchTo(Menus.I.loading, Loading.I);
             StartCoroutine(Loading.I.load("ScenarioCreator"));
         };
         root.Q<Button>("Play").clicked += delegate {
-            if (friends.Count == 0 || enemies.Count == 0)
-            {
-                if (friends.Count == 0)
-                    UIManager.I.Flash(root.Q<Button>("AddCountryLeft"));
-                if(enemies.Count == 0)
-                    UIManager.I.Flash(root.Q<Button>("AddCountryRight"));
-                Messages.I.Add("You must have at least one country on each side");
-                return;
-            }
+            RunCzecks();
             Menus.I.inBattle = true;
             Player.playerCountry = friends[0].country;
 
@@ -141,8 +136,40 @@ public class QuickBattle : MonoBehaviour, IMenu
         root.Q<DropdownField>("Biome").value = biomes[0];
     }
 
-    public void Back() =>
-        Menus.I.SwitchTo(Menus.I.start, Play.I);
+    void RunCzecks()
+    {
+        if (friends.Count == 0 || enemies.Count == 0)
+        {
+            if (friends.Count == 0)
+                UIManager.I.Flash(root.Q<Button>("AddCountryLeft"));
+            if (enemies.Count == 0)
+                UIManager.I.Flash(root.Q<Button>("AddCountryRight"));
+            Messages.I.Add("You must have at least one country on each side");
+            return;
+        }
+    }
+
+    public void Back()
+    {
+        if(IsBattleMode)
+            Menus.I.SwitchTo(Menus.I.start, Play.I);
+        else
+            Menus.I.SwitchTo(Menus.I.mainMenu, Play.I);
+    }
+
+    void RefreshButtons()
+    {
+        if(IsBattleMode)
+        {
+            root.Q<Button>("Edit").style.display = DisplayStyle.None;
+            root.Q<Button>("Play").style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            root.Q<Button>("Edit").style.display = DisplayStyle.Flex;
+            root.Q<Button>("Play").style.display = DisplayStyle.None;
+        }
+    }
 
     protected void OnBecameVisible()
     {

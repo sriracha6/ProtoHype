@@ -18,7 +18,7 @@ public class FireBehaviour : MonoBehaviour
     [SerializeField] private int tickRate;
     
     private int __size;
-    private int Size 
+    public int Size 
     { 
       get { return __size; } 
       set 
@@ -32,7 +32,8 @@ public class FireBehaviour : MonoBehaviour
     protected void Start()
     {
         Size = 1;
-        StartCoroutine(UpdateFire());
+        FireManager.fires.Add(this);
+        if(Menus.I.inBattle) StartCoroutine(UpdateFire());
     }
 
     IEnumerator UpdateFire()
@@ -56,7 +57,7 @@ public class FireBehaviour : MonoBehaviour
                 break;
         }
 
-        var currentBuilding = TilemapPlace.buildings[(int)transform.position.x, (int)transform.position.y];
+        var currentBuilding = TilemapPlace.buildings[(int)transform.position.x/2, (int)transform.position.y/2];
 
         if (Size <= 0                                                                 // no fire
            //|| currentBuilding == null                                               // we destroyed it

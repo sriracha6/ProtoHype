@@ -38,7 +38,7 @@ public class BoxSelection : MonoBehaviour
         else
             mode = SelectionMode.Default; // normal
         
-        if (Input.GetMouseButtonDown(Keybinds.LeftMouse) && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !TileSelection.started)
+        if (Input.GetMouseButtonDown(Keybinds.LeftMouse) && !Pawn.mouseOverPawn && !UIManager.mouseOverUI && !TileSelection.started && !Placer.canPlace && !FirePlacer.active)
         {
             Player.selectedTiles.Clear();
             // WHY THE FUCK WERE THESE EVEN HERE???S???? FUCK YOU!!

@@ -800,7 +800,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 1110056783}
   maincam: {fileID: 2058858469}
-  tmap: {fileID: 0}
 --- !u!120 &1110056783
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1122,6 +1121,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1510397456}
   - component: {fileID: 1510397455}
+  - component: {fileID: 1510397457}
+  - component: {fileID: 1510397458}
+  - component: {fileID: 1510397460}
+  - component: {fileID: 1510397459}
   m_Layer: 0
   m_Name: SC
   m_TagString: Untagged
@@ -1155,6 +1158,54 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1510397457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510397454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2e92d1965328f1498a157840b788e78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1510397458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510397454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6143d3b54b93b849ac881ba5d1e0203, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1510397459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510397454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f45d3daba6dcab46aaa2cd37f9ea2b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1510397460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510397454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc54c4e6bbffec14f94aefd50a32fccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1568685655
 GameObject:
   m_ObjectHideFlags: 0
@@ -2031,7 +2082,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 3.177635
+  field of view: 3.172148
   orthographic: 1
   orthographic size: 14.25
   m_Depth: -1
@@ -2057,7 +2108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2058858467}
   m_LocalRotation: {x: -0.018512797, y: 0.0003416267, z: -0.0005031639, w: 0.99982846}
-  m_LocalPosition: {x: 31.563482, y: 14.271574, z: -10.779137}
+  m_LocalPosition: {x: 31.6347, y: 14.271643, z: -10.779137}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2164,6 +2215,7 @@ MonoBehaviour:
   groundTmap: {fileID: 0}
   solidTmap: {fileID: 0}
   roofTmap: {fileID: 0}
+  specialTilemap: {fileID: 0}
 --- !u!156049354 &2061143282
 Grid:
   m_ObjectHideFlags: 0

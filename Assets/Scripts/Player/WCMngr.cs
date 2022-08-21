@@ -32,6 +32,7 @@ public class WCMngr : MonoBehaviour
     //[Header("Tilemaps")]
     public Tilemap groundTilemap { get { return MapGenerator.I.groundTmap; } }
     public Tilemap solidTilemap { get { return MapGenerator.I.solidTmap; } }
+    public Tilemap specialTilemap { get { return MapGenerator.I.specialTilemap; } }
     public Tilemap roofTilemap { get { return RoofPlacer.I.roofTmap; } }
 
     [Header("Texture")]
