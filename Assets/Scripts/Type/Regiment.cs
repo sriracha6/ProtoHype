@@ -39,7 +39,7 @@ namespace Regiments
 
                 var g = UnityEngine.Object.Instantiate(WCMngr.I.flagPrefab, p.transform);
                 p.flagObject = g;
-                g.GetComponent<FlagBehaviour>().flagTexture = CachedItems.renderedCountries.Find(x=>x.id==countryOrigin).image;
+                g.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = CachedItems.renderedCountries.Find(x=>x.id==countryOrigin).image;
                 g.transform.localPosition = new Vector3(0, -0.34f, -0.2f);
                 members.Add(p);
                 memberTransforms.Add(p.gameObject.transform);

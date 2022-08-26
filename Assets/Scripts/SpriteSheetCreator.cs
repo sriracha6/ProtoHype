@@ -12,6 +12,7 @@ public class SpriteSheetCreator : MonoBehaviour
     public static SpriteSheetCreator I = null;
     public Texture2D TEMP_;
     public RuleTile defaultRuleTile;
+    public Sprite unknownRule;
 
     protected void Awake()
     {
@@ -126,8 +127,9 @@ public class SpriteSheetCreator : MonoBehaviour
     public RuleTile createRuleTile(Buildings.Building building)
     {
         var x = Instantiate(defaultRuleTile);
-        for (int i = 0; i < x.m_TilingRules.Count; i++)
+        for (int i = 0; i < x.m_TilingRules.Count - 1; i++)
             x.m_TilingRules[i].m_Sprites = new Sprite[] { CachedItems.renderedWalls.Find(x => x.ID == building.ID).sprites[i] };
+        x.m_TilingRules[x.m_TilingRules.Count - 1].m_Sprites = new Sprite[] { unknownRule };
         return x;
     }
 }

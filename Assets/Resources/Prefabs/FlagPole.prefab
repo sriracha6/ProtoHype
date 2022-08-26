@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2310938648008616226}
   - component: {fileID: 3415198469205214486}
-  - component: {fileID: 954608048383518868}
   m_Layer: 0
   m_Name: FlagPole
   m_TagString: Untagged
@@ -84,20 +83,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &954608048383518868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3904059562426513951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3333be9a40ad5454b87ee53c435dd9dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flag: {fileID: 3312789421808883896}
-  flagTexture: {fileID: 0}
 --- !u!1 &6906121849793147097
 GameObject:
   m_ObjectHideFlags: 0

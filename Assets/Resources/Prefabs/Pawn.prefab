@@ -133,7 +133,6 @@ MonoBehaviour:
   shield: {fileID: 8508489183387639642}
   RENDERER: {fileID: 7452311125115811968}
   indicator: {fileID: 4199751871227259579}
-  TEX: {fileID: 0}
 --- !u!198 &4352134263903742567
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5206,7 +5205,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSystem: {fileID: 199815751062998508}
   pawnPathfind: {fileID: 6899968418176702960}
+  combatSystem: {fileID: 3213804089190479892}
+  pawnRenderer: {fileID: 3582491037993166424}
   sprite: {fileID: 7452311125115811968}
+  indicator: {fileID: 4199751871227259579}
   pawnSelected: 0
   thisPawnMouseOver: 0
   meleeSkill: 0

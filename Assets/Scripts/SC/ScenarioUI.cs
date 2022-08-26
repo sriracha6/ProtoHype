@@ -36,6 +36,7 @@ public partial class ScenarioUI: MonoBehaviour
 
         root.Q<Button>("Clear").clicked += Unselect;
         root.Q<Toggle>("ShowRooves").RegisterValueChangedCallback(delegate { Player.isRoofShow = root.Q<Toggle>("ShowRooves").value; RoofPlacer.I.Refresh(); });
+        root.Q<Toggle>("EraserMode").RegisterValueChangedCallback(delegate { Placer.eraserMode = root.Q<Toggle>("EraserMode").value; });
 
         pencil = root.Q<Button>("Pencil"); pencil.clicked += delegate { SwitchBrush(Brush.Pencil, pencil); };
         paintbrush = root.Q<Button>("Brush"); paintbrush.clicked += delegate { SwitchBrush(Brush.Brush, paintbrush); };
@@ -69,6 +70,10 @@ public partial class ScenarioUI: MonoBehaviour
     void Unselect()
     {
         Placer.canPlace = false; Placer.currentItem = null; Placer.PlacedItem = null;
+        Player.selectedPawns.Clear();
+        Player.ourSelectedPawns.Clear();
+        Player.selectedTilePoses.Clear();
+        Player.selectedTiles.Clear();
     }
 
     void SwitchBrush(Brush brush, Button b)

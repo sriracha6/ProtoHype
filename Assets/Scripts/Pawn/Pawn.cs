@@ -33,7 +33,11 @@ namespace PawnFunctions
         //public SpriteRenderer pawnDarkener; // this is bad right
         public HealthSystem healthSystem;
         public PawnPathfind pawnPathfind;
+        public CombatSystem combatSystem;
+        public PawnRenderer pawnRenderer;
+
         public SpriteRenderer sprite;
+        public SpriteRenderer indicator;
 
         public bool pawnSelected = false;
         public static bool mouseOverPawn = false;

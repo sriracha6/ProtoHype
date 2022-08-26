@@ -77,6 +77,19 @@ public class TilemapPlace : MonoBehaviour
         }
     }
 
+    public static void RemoveAll(int x, int y)
+    {
+        buildings[x, y] = null;
+        furnitures[x, y] = null;
+        if(furnitureInfo.Exists(d=>d.pos == new Vector2Int(x,y)))
+            furnitureInfo.RemoveAt(furnitureInfo.FindIndex(d=>d.pos==new Vector2Int(x,y)));
+        floors[x, y] = null;
+        traps[x, y] = null;
+        doors[x, y] = null;
+        specials[x, y] = null;
+        rooves[x, y] = null;
+    }
+
     public static void SetWall(Building f, int x, int y)
     {
         ResetTFM(x, y);
@@ -305,11 +318,7 @@ public class TilemapPlace : MonoBehaviour
             }
         }
         if(place && !Menus.I.inSC)
-        {
-        //    WCMngr.I.solidTilemap.RefreshAllTiles();
-        //    WCMngr.I.groundTilemap.RefreshAllTiles();
             I.pfinder.Scan();
-        }
     }                                                           // TODO: when placing builds in this array, if one is damaged, are all?
 
     public static void DestroyBuilding (Vector2 position)

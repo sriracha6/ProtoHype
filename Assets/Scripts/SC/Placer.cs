@@ -2,6 +2,7 @@ using Buildings;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public enum TargetLayer { Solid, Water, Terrain, Roof }
 public enum Brush { Pencil, Brush, Box, Bucket }
@@ -18,6 +19,7 @@ public class Placer : MonoBehaviour
     public static TileBase PlacedItem;
     public static TargetLayer targetLayer;
 
+    public static bool eraserMode;
     public static bool furnitureMode;
 
     Vector3Int startLinePos;
@@ -34,7 +36,9 @@ public class Placer : MonoBehaviour
     {
         if (canPlace && Input.GetMouseButtonDown(Keybinds.LeftMouse) && !UIManager.mouseOverUI)
         {
-            UndoRedo.changedValues.Insert(0,new List<(Vector2Int, List<Build>)>());
+            UndoRedo.changedValues.Add(new TileChange(new List<(Vector2Int, List<Build>)>()));
+            UndoRedo.currentIndex = UndoRedo.changedValues.Count - 1;
+
             tmap = targetLayer switch
             {
                 TargetLayer.Solid => WCMngr.I.solidTilemap,
@@ -53,7 +57,7 @@ public class Placer : MonoBehaviour
             {
                 var s = new Vector3Int((int)p.x, (int)p.y, 0);
                 floodTType = TilemapPlace.tilemap[s.x, s.y]; // todo: support for flooding buildings
-                FloodFill(s);
+                FloodFill(s, floodTType);
             }
         }
 
@@ -80,13 +84,15 @@ public class Placer : MonoBehaviour
 
         if(canPlace && Input.GetMouseButtonUp(Keybinds.LeftMouse) && !UIManager.mouseOverUI)
         {
-            for(int x = startLinePos.x; x <= endLinePos.x; x++)
-                for(int y = startLinePos.y; y <= endLinePos.y; y++)
-                {
-                    if(x == startLinePos.x || x == endLinePos.x || y == startLinePos.y || y == endLinePos.y)
-                        Set(new Vector3Int(x,y,0));
-                }
-            UndoRedo.currentIndex++;
+            if(BrushType == Brush.Box)
+            {
+                for(int x = startLinePos.x; x <= endLinePos.x; x++)
+                    for(int y = startLinePos.y; y <= endLinePos.y; y++)
+                    {
+                        if(x == startLinePos.x || x == endLinePos.x || y == startLinePos.y || y == endLinePos.y)
+                            Set(new Vector3Int(x,y,0));
+                    }
+            }
         }
 
         if (Input.GetKey(Keybinds.SubtractSelection))
@@ -94,58 +100,71 @@ public class Placer : MonoBehaviour
 
     }
 
-    void FloodFill(Vector3Int position)
+    void FloodFill(Vector3Int position, TerrainType old)
     {
         // todo: Span Filling
         if (position.y < 0 || position.y >= MapGenerator.I.mapHeight || position.x < 0 || position.x >= MapGenerator.I.mapWidth) return;
-        if (TilemapPlace.tilemap[position.x, position.y] == floodTType && TilemapPlace.tilemap[position.x, position.y].tile != PlacedItem)
+        if (TilemapPlace.tilemap[position.x, position.y] == old)
         {
             Set(position);
-            FloodFill(new Vector3Int(position.x,position.y--,0)); // south
-            FloodFill(new Vector3Int(position.x,position.y++,0)); // north
-            FloodFill(new Vector3Int(position.x--,position.y,0)); // west
-            FloodFill(new Vector3Int(position.x++,position.y,0)); // east
+            FloodFill(new Vector3Int(position.x,position.y--,0), old); 
+            FloodFill(new Vector3Int(position.x,position.y++,0), old); 
+            FloodFill(new Vector3Int(position.x--,position.y,0), old); 
+            FloodFill(new Vector3Int(position.x++,position.y,0), old); 
         }
     }
 
     void Set(Vector3Int position)
     {
-        if(!furnitureMode)
+        if (UIManager.mouseOverUI) return;
+        if(!eraserMode)
         {
-            if (specialsFlag)
+            if (TilemapPlace.BuildsAt(position.x, position.y).ConvertAll<Item>(x=>x).Contains(currentItem)) return;
+            if(!furnitureMode)
             {
-                currentMap = TilemapPlace.specials;
-                tmap = MapGenerator.I.specialTilemap;
-            }
-            if (tmap != null)
-            {
-                currentMap[position.x, position.y] = currentItem;
-                if (tmap != WCMngr.I.roofTilemap)
-                    tmap.SetTile(position, PlacedItem);
-                else RoofPlacer.I.PlaceRoof((Roof)currentItem, position.x, position.y);
+                if (specialsFlag)
+                {
+                    currentMap = TilemapPlace.specials;
+                    tmap = MapGenerator.I.specialTilemap;
+                }
+                if (tmap != null)
+                {
+                    currentMap[position.x, position.y] = currentItem;
+                    if (tmap != WCMngr.I.roofTilemap)
+                        tmap.SetTile(position, PlacedItem);
+                    else RoofPlacer.I.PlaceRoof((Roof)currentItem, position.x, position.y);
+                }
+                else
+                {
+                    TilemapPlace.tilemap[position.x, position.y] = null;
+                    WCMngr.I.groundTilemap.SetTile(position, null);
+                    WCMngr.I.solidTilemap.SetTile(position, null);
+                }
             }
             else
             {
-                TilemapPlace.tilemap[position.x, position.y] = null;
-                WCMngr.I.groundTilemap.SetTile(position, null);
-                WCMngr.I.solidTilemap.SetTile(position, null);
+                if (currentItem is Furniture) TilemapPlace.SetFurniture((Furniture)currentItem, position.x, position.y);
+                if (currentItem is Door) TilemapPlace.SetDoor((Door)currentItem, position.x, position.y);
             }
         }
         else
         {
-            if (currentItem is Furniture) TilemapPlace.SetFurniture((Furniture)currentItem, position.x, position.y);
-            if (currentItem is Door) TilemapPlace.SetDoor((Door)currentItem, position.x, position.y);
+            TilemapPlace.RemoveAll(position.x, position.y);
+            Debug.Log($"{TilemapPlace.buildings[position.x, position.y] == null}");
+            WCMngr.I.groundTilemap.SetTile(position, null);
+            WCMngr.I.solidTilemap.SetTile(position, null);
+            WCMngr.I.roofTilemap.SetTile(position, null);
         }
 
-        if (UndoRedo.currentIndex <= UndoRedo.changedValues.Count - 1)
+        if (UndoRedo.currentIndex == UndoRedo.changedValues.Count - 1)
+            ((TileChange)UndoRedo.changedValues[UndoRedo.currentIndex]).List.Add(((Vector2Int)position, TilemapPlace.BuildsAt(position.x, position.y)));
+        else 
         {
-            UndoRedo.changedValues[UndoRedo.changedValues.Count - 1].Add(((Vector2Int)position, TilemapPlace.BuildsAt(position.x, position.y)));
-            UndoRedo.currentIndex++;
-        }
-        else
-        {
+            Debug.Log($"CLEARING");
             UndoRedo.changedValues.Clear();
-            UndoRedo.currentIndex = 0;
+            UndoRedo.changedValues.Add(new TileChange(new List<(Vector2Int, List<Build>)>()));
+            UndoRedo.currentIndex = 0; 
         }
+
     }
 }

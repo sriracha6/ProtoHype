@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scripts\Player\PawnSelector.cs" />
     <Compile Include="Assets\Scripts\Type\Biome.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
+    <Compile Include="Assets\Scripts\SC\Type\TileChange.cs" />
     <Compile Include="Assets\MainMenu\Loading.cs" />
     <Compile Include="Assets\Scripts\Player\KeyboardShortcuts.cs" />
     <Compile Include="Assets\Scripts\Type\Trap.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Assets\Scripts\Type\Attribute\XMLData.cs" />
     <Compile Include="Assets\Scripts\UI\MoveControls.cs" />
     <Compile Include="Assets\Scripts\Type\TerrainType.cs" />
+    <Compile Include="Assets\Scripts\SC\Type\IUndoable.cs" />
     <Compile Include="Assets\Scripts\DevTools.cs" />
     <Compile Include="Assets\Scripts\CombatFunctions.cs" />
     <Compile Include="Assets\Scripts\Type\Rooves.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="Assets\Scripts\RNG\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Type\Gear.cs" />
     <Compile Include="Assets\Scripts\LogX.cs" />
+    <Compile Include="Assets\Scripts\SC\SCPauseMenu.cs" />
     <Compile Include="Assets\Scripts\SC\FirePlacer.cs" />
     <Compile Include="Assets\Scripts\Type\Bodypart.cs" />
     <Compile Include="Assets\Scripts\SC\ScenarioUI.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="Assets\Scripts\Type\Country.cs" />
     <Compile Include="Assets\Scripts\Player\CameraMove.cs" />
     <Compile Include="Assets\Scripts\UI\PawnInfo.cs" />
+    <Compile Include="Assets\Scripts\SC\PawnAdder.cs" />
     <Compile Include="Assets\Scripts\Player\TileSelection.cs" />
     <Compile Include="Assets\Scripts\Type\TroopType.cs" />
     <Compile Include="Assets\Scripts\Type\Room.cs" />
@@ -135,6 +139,7 @@
     <Compile Include="Assets\Scripts\RNG\RandomMap.cs" />
     <Compile Include="Assets\Scripts\ProjectileBehaviour.cs" />
     <Compile Include="Assets\Scripts\Player\BoxSelection.cs" />
+    <Compile Include="Assets\Scripts\SC\Rotator.cs" />
     <Compile Include="Assets\Scripts\Beauty\RoofPlacer.cs" />
     <Compile Include="Assets\Scripts\UI\TimeController.cs" />
     <Compile Include="Assets\Scripts\RNG\MapGenerator.cs" />
@@ -145,6 +150,7 @@
     <Compile Include="Assets\Scripts\Triangulator.cs" />
     <Compile Include="Assets\MainMenu\Play.cs" />
     <Compile Include="Assets\Scripts\RNG\TreeSampling.cs" />
+    <Compile Include="Assets\Scripts\SC\PawnEditor.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Type\Projectile.cs" />
     <Compile Include="Assets\Scripts\Pawn\PawnManager.cs" />
@@ -176,14 +182,15 @@
     <Compile Include="Assets\Scripts\RNG\Direction.cs" />
     <Compile Include="Assets\Scripts\Player\ItemSelector.cs" />
     <Compile Include="Assets\Scripts\FireManager.cs" />
-    <Compile Include="Assets\Scripts\Generics.cs" />
     <Compile Include="Assets\Scripts\SC\UndoRedo.cs" />
-    <Compile Include="Assets\Scripts\SC\Rotator.cs" />
+    <Compile Include="Assets\Scripts\Generics.cs" />
+    <Compile Include="Assets\Scripts\SC\PawnMover.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />
     <None Include="Assets\Resources\Prefabs\UI\Bodypart.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\VitalStat.uxml" />
+    <None Include="Assets\Resources\Prefabs\UI\SCPauseMenu.uxml" />
     <None Include="Assets\Scripts\Shaders\TilemapBlend.shader" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\Box.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\Reggymint.uxml" />

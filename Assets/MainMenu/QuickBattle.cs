@@ -94,6 +94,7 @@ public class QuickBattle : MonoBehaviour, IMenu
         root.Q<Button>("Edit").clicked += delegate
         {
             RunCzecks();
+            SetCountries();
             Menus.I.inSC = true; // todo: pause menu
             Menus.I.SwitchTo(Menus.I.loading, Loading.I);
             StartCoroutine(Loading.I.load("ScenarioCreator"));
@@ -101,10 +102,7 @@ public class QuickBattle : MonoBehaviour, IMenu
         root.Q<Button>("Play").clicked += delegate {
             RunCzecks();
             Menus.I.inBattle = true;
-            Player.playerCountry = friends[0].country;
-
-            Player.enemies.AddRange(enemies.Select(x=>x.country));
-            Player.friends.AddRange(friends.Select(x=>x.country));
+            SetCountries();
 
             //if (string.IsNullOrEmpty(root.Q<TextField>("Seed").value))
             //    MapGenerator.I.seed = Random.Range(int.MinValue, int.MaxValue).ToString();
@@ -134,6 +132,14 @@ public class QuickBattle : MonoBehaviour, IMenu
         List<string> biomes = getBiomes();
         root.Q<DropdownField>("Biome").choices = biomes;
         root.Q<DropdownField>("Biome").value = biomes[0];
+    }
+
+    void SetCountries()
+    {
+        Player.playerCountry = friends[0].country;
+
+        Player.enemies.AddRange(enemies.Select(x => x.country));
+        Player.friends.AddRange(friends.Select(x => x.country));
     }
 
     void RunCzecks()

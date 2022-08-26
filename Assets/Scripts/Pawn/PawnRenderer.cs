@@ -42,12 +42,16 @@ public class PawnRenderer : MonoBehaviour
     public SpriteRenderer shield;
     public SpriteRenderer RENDERER;
     public SpriteRenderer indicator;
-    public Sprite TEX;
     //public SpriteRenderer renderer;
 
     public readonly float SIXFEETMETERS = 2.56f; // 1.8288f ? 
 
     protected void Start()
+    {
+        ReRender();
+    }
+
+    public void ReRender()
     {
         if (p.hasPrimary && !p.isFlagBearer)
             weapon.sprite =
@@ -60,8 +64,8 @@ public class PawnRenderer : MonoBehaviour
         else if (Player.friends.Contains(p.country))        // ally
             indicator.color = new Color32(0, 0, 0, 0);
         else                                                // enemy
-            indicator.color = new Color32(144,86,86,150);
-        
+            indicator.color = new Color32(144, 86, 86, 150);
+
         if (p.hasShield)
         {
             shield.sprite =
@@ -71,7 +75,7 @@ public class PawnRenderer : MonoBehaviour
         foreach (Armor a in p.armor)
             imageFromArmorName(a.ID);
 
-        TEX = renderAvatar(p.armor);
+        Sprite TEX = renderAvatar(p.armor);
         p.sprite.sprite = TEX;
     }
 

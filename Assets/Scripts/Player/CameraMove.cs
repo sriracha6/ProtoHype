@@ -80,7 +80,7 @@ public class CameraMove : MonoBehaviour
 
     protected void LateUpdate()
     {
-        if(Input.GetMouseButtonDown(Keybinds.MiddleMouse))
+        if(Input.GetMouseButtonDown(Keybinds.MiddleMouse) && Menus.I.inBattle)
         {
             var find = PawnManager.GetAll().Find(p => p.thisPawnMouseOver);
             if (find != null)

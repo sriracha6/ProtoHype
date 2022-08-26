@@ -14,8 +14,10 @@ using XMLLoader;
 using Random = UnityEngine.Random;
 using System.Linq;
 using static MapGenerator;
+using static UnityEditor.MaterialProperty;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
-public class PawnManager : MonoBehaviour
+public partial class PawnManager : MonoBehaviour
 {
     public static PawnManager I = null;
     public GameObject pawnPrefab; // lol this is the most important line of code in the game
@@ -43,6 +45,13 @@ public class PawnManager : MonoBehaviour
             I.CreatePawns(QuickBattle.I.regimentSize, QuickBattle.I.friends, QuickBattle.I.enemies);
     }
 
+    public void RemovePawn(Pawn p)
+    {
+        p.regiment.memberTransforms.Remove(p.transform);
+        p.regiment.members.Remove(p);
+        allPawns.Remove(p);
+        Destroy(p);
+    }
 
     public void CreatePawns(int regimentSize, List<CountryInfo> friendlies, List<CountryInfo> enemies)
     { // this is somehow the cause for that dumb bug with animals, array size must be .... and onchange weapon
@@ -109,21 +118,14 @@ public class PawnManager : MonoBehaviour
                 {
                     Vector2Int pos = PositionPawn(regimentPos, I.usedPoints);
 
-                    Pawn p = I.CreatePawn(country.country, CachedItems.RandomName, troopType,
+                    Pawn p = I.CreatePawn(true, country.country, CachedItems.RandomName, troopType,
                         Regiment.Get(currentRegiment), pos); // make sure this id is right!
 
                     if (troopType.ridingAnimal)
-                    {
-                        GameObject go = Instantiate(I.horsePrefab, p.transform); // v im so sorry
-                        go.transform.localPosition = new Vector3(-2, -3.26f, -1);
-                        var supersorryforthisone = go.GetComponent<AnimalBehavior>();
-                        supersorryforthisone.rider = p;
-                        supersorryforthisone.sourceAnimal = troopType.riddenAnimal;
-                    }
+                        AddHorse(troopType.riddenAnimal, p);
                 }
             }
         }
-        
         doneLoading = true;
         for(int i = 0; i < I.usedPoints.Count; i++)
             PathfindExtra.SetFree(I.usedPoints[i].x, I.usedPoints[i].y);
@@ -152,6 +154,15 @@ public class PawnManager : MonoBehaviour
         }
         else
             return PositionPawn(newPos, usedPoints, maxRecursion--);
+    }
+
+    public void AddHorse(Animals.Animal a, Pawn p)
+    {
+        GameObject go = Instantiate(I.horsePrefab, p.transform); // v im so sorry
+        go.transform.localPosition = new Vector3(-2, -3.26f, -1);
+        var supersorryforthisone = go.GetComponent<AnimalBehavior>();
+        supersorryforthisone.rider = p;
+        supersorryforthisone.sourceAnimal = a;
     }
 
     private static Vector2Int PositionRegiment(Vector2Int vPos, int maxRecursion=100)
@@ -183,7 +194,7 @@ public class PawnManager : MonoBehaviour
         return t[Random.Range(0, t.Count)];
     }
 
-    public Pawn CreatePawn(Country c, string n, TroopType tt, Regiment r, Vector2 pos, Projectile projectile=null)
+    public Pawn CreatePawn(bool isDynamic, Country c, string n, TroopType tt, Regiment r, Vector2 pos, Projectile projectile=null)
     {
         // USE POOLING!!!!!!!!!!!!!!!!!!!! TODO
         GameObject newPawnObj = Instantiate(I.pawnPrefab);//gameObject.AddComponent<Pawn>();
@@ -286,7 +297,28 @@ public class PawnManager : MonoBehaviour
             foreach (Armor a in newPawn.armor)
                 newPawn.pawnPathfind.speed += (a.MovementSpeedAffect / 100); // almost made this a multiplily wonder how many other times ive fucked up a calculation
 
+        if (!isDynamic)
+        {
+            Destroy(newPawn.healthSystem);
+            Destroy(newPawn.pawnPathfind);
+            Destroy(newPawn.combatSystem);
+            Destroy(newPawn.indicator.gameObject);
+        }
+
         return newPawn;
+    }
+
+    public void CreateRegiment(bool isDynamic, TroopType tt, Regiment regiment, int size, Vector2 position)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            Vector2Int pos = PositionPawn(Vector2Int.FloorToInt(position), I.usedPoints);
+
+            Pawn p = I.CreatePawn(true, tt.country, CachedItems.RandomName, tt, regiment, pos); // make sure this id is right!
+
+            if (tt.ridingAnimal)
+                AddHorse(tt.riddenAnimal, p);
+        }
     }
 
     #region ------- Gets --------

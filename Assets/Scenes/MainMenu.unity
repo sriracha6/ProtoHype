@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78658efc307d46c48b85c556f2ae5f50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToFade: 0
+  timeToFade: 2
 --- !u!114 &180405061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1030,6 +1030,7 @@ GameObject:
   - component: {fileID: 902525633}
   - component: {fileID: 902525634}
   - component: {fileID: 902525635}
+  - component: {fileID: 902525636}
   m_Layer: 0
   m_Name: '**Load**'
   m_TagString: Untagged
@@ -1109,6 +1110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TEMP_: {fileID: 0}
   defaultRuleTile: {fileID: 11400000, guid: b239a6cb28d77ab499c7593af6546dab, type: 2}
+  unknownRule: {fileID: 21300000, guid: 6aa4aedf933d8b84b83574763f0d98df, type: 3}
 --- !u!114 &902525631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1179,6 +1181,18 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 0}
   m_SortingOrder: 0
+--- !u!114 &902525636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902525626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d86b5a5f4d7b2dd46b43c631e5fccc85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &932197535
 GameObject:
   m_ObjectHideFlags: 0
