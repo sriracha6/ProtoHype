@@ -62,7 +62,8 @@ $@"            Codename
         Application.lowMemory += WCMngr.ClearCache;//delegate { Messages.I.Add("Your device is low on memory. Clearing cached items. This may result in slower loading times."); };
         
         Logger.Divide("START XML LOAD");
-        Loaders.LoadGenericLists("C:\\Users\\frenz\\Music\\genericlists.xml");
+        LoadDirectory(Application.persistentDataPath + "\\items\\", false);
+        /*Loaders.LoadGenericLists("C:\\Users\\frenz\\Music\\genericlists.xml");
         Loaders.LoadBodyparts("C:\\Users\\frenz\\Music\\bodyparts.xml"); // TODO: DO NOT REMOVE THIS LINE. but replace it with correct path
 
         Loaders.LoadMeleeWeapon("C:\\Users\\frenz\\Music\\ahlspiess.wc");
@@ -79,7 +80,7 @@ $@"            Codename
         Loaders.LoadNature("C:\\Users\\frenz\\Music\\tree.xml");
         Loaders.LoadNature("C:\\Users\\frenz\\Music\\pinetree.xml");
         Loaders.LoadNature("C:\\Users\\frenz\\Music\\grass6969.xml");
-        Loaders.LoadNature("C:\\Users\\frenz\\Music\\bush.xml");*/
+        Loaders.LoadNature("C:\\Users\\frenz\\Music\\bush.xml");
         Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\tt\\deepsand.wc");
         Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\tt\\dirt.wc");
         Loaders.LoadTerrainType("C:\\Users\\frenz\\Music\\tt\\sand.wc");
@@ -98,7 +99,7 @@ $@"            Codename
         Loaders.loadBlood();
         Loaders.loadNames();
 
-        foreach (string file in Directory.GetFiles(@"D:\medgame\wcfile\WC File Creator\WC File Creator\bin\Release\net6.0\pack\melee"))
+        /*foreach (string file in Directory.GetFiles(@"D:\medgame\wcfile\WC File Creator\WC File Creator\bin\Release\net6.0\pack\melee"))
             Loaders.LoadMeleeWeapon(file);
         foreach (string file in Directory.GetFiles(@"D:\medgame\wcfile\WC File Creator\WC File Creator\bin\Release\net6.0\pack\ranged"))
             Loaders.LoadRangedWeapon(file);
@@ -136,7 +137,7 @@ $@"            Codename
             Loaders.LoadRoom(file);
         foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\ture"))
             new Structure(file);
-        new Scenario(Application.persistentDataPath + "\\bsidk.xml");
+        new Scenario(Application.persistentDataPath + "\\bsidk.xml");*/
         Logger.EndDivide();
         //Loaders.LoadCountryOutfit("C:\\Users\\frenz\\Music\\germany.xml");
 
