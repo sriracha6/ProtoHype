@@ -152,7 +152,7 @@ $@"            Codename
     public void LoadDirectory(string directorypath, bool isGeneric)
     {
         Loaders.LoadGenericLists(directorypath + "\\genericlists.xml");
-        foreach (string file in Directory.GetFiles(directorypath + "\\audio", "*.*")) StartCoroutine(SFXManager.I.CacheAudio(Path.GetFileName(file), file.Remove(0,(directorypath + "audio").Length).Substring(0,Path.GetFileName(file).Length)));
+        foreach (string file in Directory.GetFiles(firstPass ? Application.persistentDataPath + "\\audio" : directorypath + "\\audio", "*.*")) StartCoroutine(SFXManager.I.CacheAudio(Path.GetFileName(file), file.Remove(0,(directorypath + "audio").Length).Substring(0,Path.GetFileName(file).Length)));
         if (firstPass) Loaders.LoadBodyparts(Application.persistentDataPath + "\\bodyparts.xml");
 
         foreach (string file in Directory.GetFiles(directorypath + "\\trooptypeicons", "*.*")) Loaders.LoadTroopTypeIcon(file);

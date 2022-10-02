@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\SC\Type\TileChange.cs" />
     <Compile Include="Assets\MainMenu\Loading.cs" />
     <Compile Include="Assets\Scripts\Player\KeyboardShortcuts.cs" />
+    <Compile Include="Assets\Scripts\SC\DollySystem.cs" />
     <Compile Include="Assets\Scripts\Type\Trap.cs" />
     <Compile Include="Assets\Scripts\GenericLists.cs" />
     <Compile Include="Assets\Scripts\Type\Structure.cs" />
@@ -199,7 +200,6 @@
     <Compile Include="Assets\Scripts\FireManager.cs" />
     <Compile Include="Assets\Scripts\SC\UndoRedo.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
-    <Compile Include="Assets\Scripts\SC\DollySystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />
