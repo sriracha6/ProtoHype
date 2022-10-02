@@ -15,3 +15,5 @@ When large numbers of troops are moving, there is lag.
 People spawn in mountains
 
 I didn't have enough desire to fix these issues.
+
+**IF YOU NEED HELP COMPILING IT OR SETTING IT UP, CONTACT ME!**
