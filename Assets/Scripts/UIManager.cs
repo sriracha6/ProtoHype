@@ -21,8 +21,7 @@ public class UIManager : MonoBehaviour
         get { return ___UI; }
         set {
             ___UI = value;
-            if (I.OnUiChange != null)
-                I.OnUiChange();
+            OnUiChange?.Invoke(); // future self: this is why console/viewer not work on main menu
         }
     }
     public static bool UIHidden { get; set; } = false;
@@ -31,7 +30,7 @@ public class UIManager : MonoBehaviour
     private static readonly List<VisualElement> draggable = new List<VisualElement>();
 
     public delegate void DelegateOnUIChange();
-    public event DelegateOnUIChange OnUiChange;
+    public static event DelegateOnUIChange OnUiChange;
 
     private List<VisualElement> hiddenVes = new List<VisualElement> ();
 
@@ -46,10 +45,18 @@ public class UIManager : MonoBehaviour
         if (I == null)
         {
             I = this;
-            I.OnUiChange += I.RefreshUI;
+            OnUiChange += I.RefreshUI;
         }
         else if (Menus.I.inBattle || Menus.I.inSC)
             ui = GetComponent<UIDocument>();
+
+        OnUiChange += I.ScenarioEditorChange;
+    }
+
+    void ScenarioEditorChange()
+    {
+        if(Menus.I.scenLoad)
+            Menus.I.SwitchTo(Menus.I.quickstart, QuickBattle.I);
     }
 
     void RefreshUI()
@@ -93,7 +100,7 @@ public class UIManager : MonoBehaviour
 
     public void PlayUISound()
     {
-        SFXManager.I.PlaySound(UISounds.randomElement().name, "UI", 1, Vector2.zero, true);
+        SFXManager.I.PlaySound("uiclick"+UnityEngine.Random.Range(1,7)+".mp3", "UI", 1, Vector2.zero, true);
     }
 
     public static void TransferToNewUI(VisualElement window, string name)

@@ -53,7 +53,7 @@ public class QuickMove : MonoBehaviour
 
         if (Input.GetMouseButton(Keybinds.LeftMouse) && shouldGo)
         {
-            var pos = Vector2Int.CeilToInt(mainCam.ScreenToWorldPoint(Input.mousePosition));
+            var pos = Vector2Int.CeilToInt(mainCam.ScreenToWorldPoint(Input.mousePosition)) / 2;
             if(TilemapPlace.tilemap[pos.x, pos.y].type == SpecialType.None)
                 updateLine(pos);
         }

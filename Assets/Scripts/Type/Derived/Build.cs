@@ -4,7 +4,7 @@ using UnityEngine;
 using Buildings;
 using UnityEngine.Tilemaps;
 
-public class Build : Item// i should really put a float rotation variable in here for everything. 
+public class Build : Item
 {
     public bool isSpecialPlace;
     [XMLItem("Has Rubble")] public bool hasRubble;
@@ -13,7 +13,6 @@ public class Build : Item// i should really put a float rotation variable in her
     [XMLItem("Flammability")] public int flammability;
     [XMLItem("Hitpoints")] public int hitpoints;
     [XMLItem("Max Hitpoint")] public int maxHitpoints;
-    public float rotation = 0;
 
     public RuleTile tile;
 

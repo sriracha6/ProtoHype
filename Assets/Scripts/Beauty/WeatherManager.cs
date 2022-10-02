@@ -141,7 +141,7 @@ public class WeatherManager : MonoBehaviour
                 if (currentTemperature <= 32)
                     goto case WeatherType.Snow; // i finally got to use this :)
                 rainSound = SFXManager.I.PlaySound("rain.mp3", "Weather", 1f, Vector2.zero, true);
-                rainSound.loop = true;
+                if(rainSound != null) rainSound.loop = true;
                 snowPS.Stop(false);
                 rainPS.Play(false);
                 break;

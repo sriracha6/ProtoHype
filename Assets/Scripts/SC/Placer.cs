@@ -116,6 +116,7 @@ public class Placer : MonoBehaviour
 
     void Set(Vector3Int position)
     {
+        if (SCPauseMenu.I.isOpen) return;
         if (UIManager.mouseOverUI) return;
         if(!eraserMode)
         {
@@ -150,7 +151,6 @@ public class Placer : MonoBehaviour
         else
         {
             TilemapPlace.RemoveAll(position.x, position.y);
-            Debug.Log($"{TilemapPlace.buildings[position.x, position.y] == null}");
             WCMngr.I.groundTilemap.SetTile(position, null);
             WCMngr.I.solidTilemap.SetTile(position, null);
             WCMngr.I.roofTilemap.SetTile(position, null);

@@ -10044,7 +10044,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 3
+  field of view: 3.1472805
   orthographic: 1
   orthographic size: 21
   m_Depth: -1
@@ -10070,7 +10070,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 46.493244, y: 21, z: -10.785994}
+  m_LocalPosition: {x: 28, y: 21, z: -10.785994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -10245,7 +10245,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 645526910}
   maincam: {fileID: 519420031}
-  tmap: {fileID: 655843814}
 --- !u!120 &645526910
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -10817,6 +10816,7 @@ MonoBehaviour:
   groundTmap: {fileID: 0}
   solidTmap: {fileID: 0}
   roofTmap: {fileID: 0}
+  specialTilemap: {fileID: 0}
 --- !u!1 &855462934
 GameObject:
   m_ObjectHideFlags: 0
@@ -10993,7 +10993,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919040909}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 46.493244, y: 21, z: -10.785994}
+  m_LocalPosition: {x: 28, y: 21, z: -10.785994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 775629363}
@@ -11737,6 +11737,7 @@ GameObject:
   - component: {fileID: 1367618427}
   - component: {fileID: 1367618425}
   - component: {fileID: 1367618429}
+  - component: {fileID: 1367618428}
   m_Layer: 10
   m_Name: CamObj
   m_TagString: Untagged
@@ -11779,8 +11780,8 @@ MonoBehaviour:
   bounds: {fileID: 1887550456}
   mainCam: {fileID: 519420031}
   isFollowing: 0
-  camtransform: {fileID: 0}
   canMove: 0
+  isGliding: 0
 --- !u!114 &1367618422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11943,6 +11944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TEMP_: {fileID: 0}
   defaultRuleTile: {fileID: 0}
+  unknownRule: {fileID: 0}
 --- !u!114 &1367618427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11957,6 +11959,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pfinder: {fileID: 807042717}
   treeParent: {fileID: 1099183484}
+--- !u!114 &1367618428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367618419}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72378815cdfeb3540a8fc3e45b63cea6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1367618429
 MonoBehaviour:
   m_ObjectHideFlags: 0

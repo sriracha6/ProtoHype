@@ -10,19 +10,23 @@ using TroopTypes;
 using Armors;
 using UnityEngine;
 using XMLLoader;
+using Weapons;
+using Shields;
+using Animals;
 
 using Random = UnityEngine.Random;
 using System.Linq;
 using static MapGenerator;
-using static UnityEditor.MaterialProperty;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
+using Unity.Jobs;
 
+public enum AttackMode { Attack, Defend }
 public partial class PawnManager : MonoBehaviour
 {
     public static PawnManager I = null;
     public GameObject pawnPrefab; // lol this is the most important line of code in the game
     public GameObject horsePrefab;
     public static readonly List<Pawn> allPawns = new List<Pawn>();
+    public static AttackMode AttackMode;
 
     static readonly List<(Regiment r, Vector2Int pos)> regimentPoses = new List<(Regiment r, Vector2Int pos)>();
 
@@ -50,7 +54,7 @@ public partial class PawnManager : MonoBehaviour
         p.regiment.memberTransforms.Remove(p.transform);
         p.regiment.members.Remove(p);
         allPawns.Remove(p);
-        Destroy(p);
+        Destroy(p.gameObject);
     }
 
     public void CreatePawns(int regimentSize, List<CountryInfo> friendlies, List<CountryInfo> enemies)
@@ -83,12 +87,21 @@ public partial class PawnManager : MonoBehaviour
 
                 Vector2Int regimentPos;
                 if (map.structure != null)
-                    if (troopType.preferSpawn == PreferSpawn.AroundBase) // todo: this is only on right side
-                        regimentPos = new Vector2Int(Random.Range(map.mapWidth - AROUND_BASE_DISTANCE, map.mapWidth), Random.Range(map.mapHeight - AROUND_BASE_DISTANCE, map.mapHeight));
-                    else if (troopType.preferSpawn == PreferSpawn.OutsideBase)
-                        regimentPos = new Vector2Int(Random.Range(map.structurePos.x + map.structureSize.x, map.structurePos.x + map.structureSize.x + OUTSIDE_BASE_DISTANCE), Random.Range(map.structurePos.y + map.structureSize.y, map.structurePos.y + map.structureSize.y + OUTSIDE_BASE_DISTANCE));
-                    else
+                {
+                    if ((AttackMode == AttackMode.Defend && friendlies.Contains(country)) || (AttackMode == AttackMode.Attack && enemies.Contains(country)))
+                    {
+                        if (troopType.preferSpawn == PreferSpawn.AroundBase) // todo: this is only on right side
+                            regimentPos = new Vector2Int(Random.Range(map.mapWidth - AROUND_BASE_DISTANCE, map.mapWidth), Random.Range(map.mapHeight - AROUND_BASE_DISTANCE, map.mapHeight));
+                        else if (troopType.preferSpawn == PreferSpawn.OutsideBase)
+                            regimentPos = new Vector2Int(Random.Range(map.structurePos.x + map.structureSize.x, map.structurePos.x + map.structureSize.x + OUTSIDE_BASE_DISTANCE), Random.Range(map.structurePos.y + map.structureSize.y, map.structurePos.y + map.structureSize.y + OUTSIDE_BASE_DISTANCE));
+                        else
+                            regimentPos = Vector2Int.zero;
+                    }
+                    else if ((AttackMode == AttackMode.Attack && friendlies.Contains(country)) || (AttackMode == AttackMode.Defend && enemies.Contains(country)))
                         regimentPos = new Vector2Int(Random.Range(map.structurePos.x, map.structurePos.x + map.structureSize.x), Random.Range(map.structurePos.y, map.structurePos.y + map.structureSize.y));
+                    else
+                        regimentPos = Vector2Int.zero;
+                }
                 else
                 {
                     if (QuickBattle.I.friends.Contains(country))
@@ -116,10 +129,13 @@ public partial class PawnManager : MonoBehaviour
                 float regimentMemberCount = Mathf.Max(Random.Range(0.75f, 1.25f) * regimentSize, 2);
                 for (int j = 0; j < regimentMemberCount; j++)
                 {
+                    //InstantiatePawnJob job = new InstantiatePawnJob();
+                    //JobHandle jh = job.Schedule();
+
                     Vector2Int pos = PositionPawn(regimentPos, I.usedPoints);
 
                     Pawn p = I.CreatePawn(true, country.country, CachedItems.RandomName, troopType,
-                        Regiment.Get(currentRegiment), pos); // make sure this id is right!
+                        Regiment.Get(currentRegiment), pos/*, jh, job*/); // make sure this id is right!
 
                     if (troopType.ridingAnimal)
                         AddHorse(troopType.riddenAnimal, p);
@@ -194,10 +210,16 @@ public partial class PawnManager : MonoBehaviour
         return t[Random.Range(0, t.Count)];
     }
 
-    public Pawn CreatePawn(bool isDynamic, Country c, string n, TroopType tt, Regiment r, Vector2 pos, Projectile projectile=null)
+    public Pawn CreatePawn(bool isDynamic, Country c, string n, TroopType tt, Regiment r, Vector2 pos, /*JobHandle? handle, InstantiatePawnJob? job,*/ Projectile projectile=null)
     {
-        // USE POOLING!!!!!!!!!!!!!!!!!!!! TODO
-        GameObject newPawnObj = Instantiate(I.pawnPrefab);//gameObject.AddComponent<Pawn>();
+        GameObject newPawnObj;
+        //if(handle.HasValue)
+        //{
+        //    handle.Value.Complete();
+        //    newPawnObj = job.Value.output;//gameObject.AddComponent<Pawn>();
+        //}
+        //else
+            newPawnObj = Instantiate(I.pawnPrefab);
         Pawn newPawn = newPawnObj.GetComponent<Pawn>();
 
         newPawnObj.transform.position = new Vector3(pos.x, pos.y, -0.5f);
@@ -230,6 +252,7 @@ public partial class PawnManager : MonoBehaviour
             newPawn.heldPrimary = tt.weapons[UnityEngine.Random.Range(0, tt.weapons.Count)];
 
             if (newPawn.heldPrimary.Type == Weapons.WeaponType.Ranged && newPawn.heldPrimary.rangeType == Weapons.RangeType.Shooter)
+            {
                 if (projectile == null)
                 {
                     var forThisPawn = Projectile.List.FindAll(x => x.forWeaponClass == newPawn.heldPrimary.weaponClass);
@@ -243,14 +266,13 @@ public partial class PawnManager : MonoBehaviour
                 }
                 else
                     newPawn.inventory = projectile;
+            }
 
             newPawn.hasPrimary = true;
         }
         else
             newPawn.hasPrimary = false;
 
-        if (newPawn.hasPrimary == false)
-            Debug.Log($"{tt.country.memberName} {tt.Name} has no primaries? is that right? : {tt.weapons.Count}");
         newPawn.activeWeapon = newPawn.heldPrimary;
 
         newPawn.activeWeaponSlot = ActiveWeapon.Primary;
@@ -291,7 +313,6 @@ public partial class PawnManager : MonoBehaviour
 
         newPawn.pawnPathfind.isRunAndGun = Settings.RunAndGunDefaultState;
 
-        allPawns.Add(newPawn);
         // todo
         if (newPawn.armor != null)
             foreach (Armor a in newPawn.armor)
@@ -302,9 +323,77 @@ public partial class PawnManager : MonoBehaviour
             Destroy(newPawn.healthSystem);
             Destroy(newPawn.pawnPathfind);
             Destroy(newPawn.combatSystem);
-            Destroy(newPawn.indicator.gameObject);
         }
 
+        allPawns.Add(newPawn);
+        return newPawn;
+    }
+    public Pawn CreatePawn(bool isDynamic, Country c, string n, Regiment r, Vector2 pos, Projectile projectile, Weapon primary, Weapon secondary, Shield shield, Animal animal, List<Armor> armor)
+    {
+        GameObject newPawnObj = Instantiate(I.pawnPrefab);//gameObject.AddComponent<Pawn>();
+        Pawn newPawn = newPawnObj.GetComponent<Pawn>();
+        newPawnObj.transform.position = new Vector3(pos.x, pos.y, -0.5f);
+        newPawn.country = c;
+        newPawn.pname = n;
+        newPawn.troopType = r.type;
+        newPawn.regiment = r;
+        r.Add(newPawn);
+
+        if (newPawn.isFlagBearer)
+        {
+            newPawn.hasPrimary = true;
+            newPawn.heldPrimary = WCMngr.I.flagWeapon;
+            newPawn.activeWeapon = WCMngr.I.flagWeapon;
+        }
+
+        if (Player.friends.Contains(newPawn.country))
+            newPawn.enemyCountries.AddRange(Player.enemies);
+        else
+            newPawn.enemyCountries.AddRange(Player.friends);
+
+        if (primary != null)
+        {
+            newPawn.heldPrimary = primary;
+            newPawn.hasPrimary = true;
+        }
+        if (secondary != null)
+        {
+            newPawn.heldSidearm = primary;
+            newPawn.hasSidearm = true;
+        }
+        if (shield != null)
+        {
+            newPawn.shield = shield;
+            newPawn.hasShield = true;
+        }
+
+        newPawn.activeWeapon = newPawn.heldPrimary;
+
+        newPawn.activeWeaponSlot = ActiveWeapon.Primary;
+
+        newPawn.armor = armor;
+
+        newPawn.meleeSkill = Random.Range(r.type.meleeSkillMin, r.type.meleeSkillMax + 1);
+        newPawn.rangeSkill = Random.Range(r.type.rangeSkillMin, r.type.rangeSkillMax + 1);
+
+        newPawn.country.Add(newPawn);
+        newPawn.skinColor = GenerateSkinColor();
+
+        newPawn.pawnPathfind.isRunAndGun = Settings.RunAndGunDefaultState;
+
+        // todo
+        if (newPawn.armor != null)
+            foreach (Armor a in newPawn.armor)
+                newPawn.pawnPathfind.speed += (a.MovementSpeedAffect / 100); // almost made this a multiplily wonder how many other times ive fucked up a calculation
+
+        if (!isDynamic)
+        {
+            Destroy(newPawn.healthSystem);
+            Destroy(newPawn.pawnPathfind);
+            Destroy(newPawn.combatSystem);
+        }
+
+        allPawns.Add(newPawn);
         return newPawn;
     }
 
@@ -314,7 +403,7 @@ public partial class PawnManager : MonoBehaviour
         {
             Vector2Int pos = PositionPawn(Vector2Int.FloorToInt(position), I.usedPoints);
 
-            Pawn p = I.CreatePawn(true, tt.country, CachedItems.RandomName, tt, regiment, pos); // make sure this id is right!
+            Pawn p = I.CreatePawn(true, tt.country, CachedItems.RandomName, tt, regiment, pos/*, null, null*/); // make sure this id is right!
 
             if (tt.ridingAnimal)
                 AddHorse(tt.riddenAnimal, p);
@@ -332,7 +421,7 @@ public partial class PawnManager : MonoBehaviour
         return allPawns.FindAll(x=>x.country==Player.playerCountry);
     }
 
-    public static Pawn GetRandom() // find a way to use this todo
+    public static Pawn GetRandom() // find a way to use this 
     {
         if (allPawns.Count > 0)
             return allPawns[Random.Range(0, allPawns.Count)];

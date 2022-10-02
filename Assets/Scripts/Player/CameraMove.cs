@@ -14,7 +14,7 @@ public class CameraMove : MonoBehaviour
     float minFov = 15f;
     [SerializeField]
     float maxFov = 90f;
-    [SerializeField] float moveSpeed = 25f;
+    public float moveSpeed = 25f;
     public float zoomChangeAmount;
 
     [Header("Components")]
@@ -29,6 +29,8 @@ public class CameraMove : MonoBehaviour
     public bool isFollowing = false;
     Vector2 lastMousePos;
     [HideInInspector] public bool canMove;
+    public bool isGliding = false;
+    Vector2 glideToPos;
 
     protected void Awake() => I = this;
 
@@ -59,8 +61,13 @@ public class CameraMove : MonoBehaviour
             return;
         }
 
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
+        if(!isGliding)
+        {
+            movement.x = Input.GetAxisRaw("Horizontal");
+            movement.y = Input.GetAxisRaw("Vertical");
+        }
+        if((Vector2)transform.position == glideToPos)
+            isGliding = false;
 
         checkMouse();
 
@@ -100,6 +107,12 @@ public class CameraMove : MonoBehaviour
     {
         I.isFollowing = false;
         I.thecam.Follow = I.camObject.transform;
+    }
+
+    public void GlideTo(Vector2 position)
+    {
+        isGliding = true;
+        movement = position / transform.position;
     }
 
     private void checkMouse()

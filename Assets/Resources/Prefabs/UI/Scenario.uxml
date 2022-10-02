@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/root.uss" />
+    <ui:VisualElement class="orange-bg" style="width: 33.33%;">
+        <ui:VisualElement name="Image" style="width: 250px; height: 250px;" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="Title" style="font-size: 30px; -unity-font-definition: resource(&apos;helvetica SDF&apos;);" />
+    </ui:VisualElement>
+</ui:UXML>

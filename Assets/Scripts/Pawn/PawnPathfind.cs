@@ -8,6 +8,7 @@ using UnityEngine.Tilemaps;
 using System;
 using Body;
 using Random = UnityEngine.Random;
+using Unity.Jobs;
 
 public enum PawnOrientation
 {
@@ -132,7 +133,7 @@ public class PawnPathfind : MonoBehaviour
                 target = p.enemyCountries.Count > 1
                     ? GetClosestEnemy(p.enemyCountries[Random.Range(0, p.enemyCountries.Count)].memberTransforms)
                     : GetClosestEnemy(p.enemyCountries[0].memberTransforms);
-                seeker.StartPath(rb.position, target.position, OnPathComplete); // what the fuck?
+                seeker.StartPath(transform.position, target.position, OnPathComplete); // what the fuck?
             }
             // move normally
             if (p.actionTypes[0].Type.Equals("Move"))
@@ -140,7 +141,7 @@ public class PawnPathfind : MonoBehaviour
                 // THIS IS PROBABLY GOING TO CAUSE ISSUES
                 Vector3 t = PosFromMove(p.actionTypes[0].positionTarget);
                 if (t != Vector3.negativeInfinity)
-                    seeker.StartPath(rb.position, t, OnPathComplete);
+                    seeker.StartPath(transform.position, t, OnPathComplete);
             }
             if (Player.isFollowingCursor)
             {
@@ -296,6 +297,8 @@ public class PawnPathfind : MonoBehaviour
     }
     Vector3 PosFromMove(Vector2Int position)
     {
+        FindNearestJob job = new FindNearestJob(position);
+        JobHandle jh = job.Schedule();
         //Vector3Int ntile = WCMngr.I.groundTilemap.WorldToCell((Vector3Int)position);
         Vector3Int ntile = new Vector3Int(position.x, position.y, 0);
         //if (!PathfindExtra.PresentAt(ntile.x, ntile.y))
@@ -305,7 +308,10 @@ public class PawnPathfind : MonoBehaviour
         //    return ntile;
         //}
         if(PathfindExtra.PresentAt(ntile.x, ntile.y))
-            ntile = PathfindExtra.FindNearest(new Vector2Int(ntile.x, ntile.y));
+        {
+            jh.Complete();
+            ntile = (Vector3Int)job.output;//PathfindExtra.FindNearest(new Vector2Int(ntile.x, ntile.y));
+        }
 
         PathfindExtra.SetUsed(ntile.x, ntile.y);
         justTileFound = true;

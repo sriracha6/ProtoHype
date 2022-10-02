@@ -31,6 +31,7 @@ public class QuickBattle : MonoBehaviour, IMenu
     VisualElement root;
     public List<CountryInfo> friends = new List<CountryInfo>();
     public List<CountryInfo> enemies = new List<CountryInfo>();
+    VisualElement ab;
 
     public static QuickBattle I;
     static bool isba = true;
@@ -93,11 +94,12 @@ public class QuickBattle : MonoBehaviour, IMenu
         };
         root.Q<Button>("Edit").clicked += delegate
         {
-            RunCzecks();
-            SetCountries();
-            Menus.I.inSC = true; // todo: pause menu
-            Menus.I.SwitchTo(Menus.I.loading, Loading.I);
-            StartCoroutine(Loading.I.load("ScenarioCreator"));
+            Edit();
+            if(Menus.I.currentScenarioFilename == "temp")
+            { 
+                Menus.I.currentScenarioFilename = System.DateTime.Now.ToString("yyyy-mm-dd hh-mm-ss");
+                LoadScenario.LoadScenarioFromPath(UnityEngine.Application.persistentDataPath + "\\scenarios\\temp.xml");
+            }
         };
         root.Q<Button>("Play").clicked += delegate {
             RunCzecks();
@@ -116,8 +118,7 @@ public class QuickBattle : MonoBehaviour, IMenu
             Structure item = Structure.List.randomElement();
             Messages.AddMessage("Adding a \""+item.Name+"\"");
             MapGenerator.I.structure = item;
-            StructureGenerator.PlaceStructure(item, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
-            StructureGenerator.GenerateStructure(item, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
+            LoadScenario.PlaceStructure(item.Filepath, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
         };
         root.Q<DropdownField>("WeatherSelection").RegisterValueChangedCallback(delegate{
             WeatherManager.weatherQueue = (WeatherManager.WeatherType)System.Enum.Parse(typeof(WeatherManager.WeatherType), root.Q<DropdownField>("WeatherSelection").value);
@@ -126,12 +127,49 @@ public class QuickBattle : MonoBehaviour, IMenu
         {
             root.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
         };
+        root.Q<Toggle>("AttackMode").RegisterValueChangedCallback(delegate { PawnManager.AttackMode = root.Q<Toggle>("AttackMode").value ? AttackMode.Attack : AttackMode.Defend; });
 
         root.Q<TextField>("Seed").value = Random.Range(int.MinValue, int.MaxValue).ToString();
-
+        root.Q<Button>("LoadFileButton").clicked += delegate
+        {
+            LoadScenario.LoadScenarioFromPath(root.Q<TextField>("FilePath").value);
+            Menus.I.SwitchTo(Menus.I.loading, Loading.I);
+            StartCoroutine(Loading.I.load("ScenarioCreator"));
+        };
         List<string> biomes = getBiomes();
         root.Q<DropdownField>("Biome").choices = biomes;
         root.Q<DropdownField>("Biome").value = biomes[0];
+
+
+        ab = root.Q<VisualElement>("AddBuilding");
+        root.Q<Button>("AddBuildingB").clicked += delegate { ab.style.visibility = Visibility.Visible; ab.style.display = DisplayStyle.Flex; };
+        UIManager.MakeDraggable(ab, ab.Q<VisualElement>("ATitle"));
+        ab.Q<Button>("ACloseButton").clicked += delegate { ab.style.visibility = Visibility.Hidden; ab.style.display = DisplayStyle.None; };
+        ab.Q<TextField>("Search").RegisterValueChangedCallback(delegate { Search(ab.Q<TextField>("Search").value); });
+        ab.Q<DropdownField>("Structure").RegisterValueChangedCallback(delegate {
+            TilemapPlace.UpdateBuildings();
+            root.Q<SliderInt>("MapSize").lowValue = 100;
+            Structure item = Structure.Get(ab.Q<DropdownField>("Structure").value);
+            Messages.AddMessage("Adding a \"" + item.Name + "\"");
+            MapGenerator.I.structure = item;
+            LoadScenario.PlaceStructure(item.Filepath, MapGenerator.I.rand, root.Q<SliderInt>("MapSize"));
+        });
+    }
+
+    void Edit()
+    {
+        RunCzecks();
+        SetCountries();
+        Menus.I.inBattle = false;
+        Menus.I.inSC = true; // todo: pause menu
+        Menus.I.SwitchTo(Menus.I.loading, Loading.I);
+        StartCoroutine(Loading.I.load("ScenarioCreator"));
+        Menus.I.scenLoad = false;
+    }
+
+    void Search(string text)
+    {
+        ab.Q<DropdownField>("Structure").choices = Structure.List.FindAll(x=>x.Name.ToLower().Contains(text.ToLower())).ConvertAll(x=>x.Name);
     }
 
     void SetCountries()
@@ -168,11 +206,15 @@ public class QuickBattle : MonoBehaviour, IMenu
         if(IsBattleMode)
         {
             root.Q<Button>("Edit").style.display = DisplayStyle.None;
+            root.Q<Button>("LoadFileButton").style.display = DisplayStyle.None;
+            root.Q<TextField>("FilePath").style.display = DisplayStyle.None;
             root.Q<Button>("Play").style.display = DisplayStyle.Flex;
         }
         else
         {
             root.Q<Button>("Edit").style.display = DisplayStyle.Flex;
+            root.Q<Button>("LoadFileButton").style.display = DisplayStyle.Flex;
+            root.Q<TextField>("FilePath").style.display = DisplayStyle.Flex;
             root.Q<Button>("Play").style.display = DisplayStyle.None;
         }
     }

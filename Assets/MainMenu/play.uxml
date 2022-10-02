@@ -14,6 +14,7 @@
             <ui:Button text="Scenario" display-tooltip-when-elided="true" name="Scenario" style="width: 35%; position: absolute; left: 0; top: 20%;" />
             <ui:Button text="File" display-tooltip-when-elided="true" name="File" style="width: 35%; position: absolute; left: 0; top: 70%;" />
             <ui:Button text="War Mode" display-tooltip-when-elided="true" name="NewWarMode" style="width: 35%; position: relative;" />
+            <ui:Button text="Tutorial" display-tooltip-when-elided="true" name="Tutorial" style="width: 35%; position: absolute; top: 44px; left: 37%;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -131,28 +131,9 @@ namespace XMLLoader
         }
         //-----------------------------------------------------------------//
 
-        public static void LoadMeleeWeapon(string filepath, bool isGeneric = false)
+        public static void LoadMeleeWeapon(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
-            if (xmls == null) return;
-
-            if (isGeneric)
-            {
-                List<Weapon> list = new List<Weapon>();
-                List<Item> items = new List<Item>();
-                List<Weapon> meleeWeapons = new List<Weapon>();
-                foreach(Item item in items)
-                {
-                    meleeWeapons.Add(Weapon.Get(item.ID));
-                }
-
-                list.AddRange(meleeWeapons);
-
-                GenericManager.CreateGenericList(xmls.Q<string>("List", true), list,
-                    typeof(Weapon));
-
-                return;
-            }
 
             if (xmls.Q<string>("Type").Equals("Melee"))
             {
@@ -182,26 +163,9 @@ namespace XMLLoader
             }
 
         }
-        public static void LoadRangedWeapon(string filepath, bool isGeneric = false)
+        public static void LoadRangedWeapon(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
-
-            if (isGeneric)
-            {
-                List<Weapon> list = new List<Weapon>();
-                List<Weapon> items = xmls.Q<List<Weapon>>("List");
-                List<Weapon> rangedWeapons = new List<Weapon>();
-                foreach(Item item in items)
-                {
-                    rangedWeapons.Add(Weapon.Get(item.ID)); // so glad i made this
-                }
-                list.AddRange(rangedWeapons);
-
-                GenericManager.CreateGenericList(xmls.Q<XmlNode>("List").Q<string>("name", attribute: true), list,
-                    typeof(Weapon));
-
-                return;
-            }
 
             if (xmls.Q<string>("Type").Equals("Ranged"))
             {
@@ -237,20 +201,10 @@ namespace XMLLoader
             }
 
         }
-        public static void LoadProjectile(string filepath, bool isGeneric = false)
+        public static void LoadProjectile(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
 
-            if (isGeneric)
-            {
-                List<Projectile> list = new List<Projectile>();
-                list.AddRange(xmls.Q<List<Projectile>>("List"));
-
-                GenericManager.CreateGenericList(xmls.Q<XmlNode>("List").Q<string>("name", attribute: true), list,
-                    typeof(Projectile));
-
-                return;
-            }
             if (xmls.Q<string>("Type").Equals("Projectile"))
             {
                 Projectile.Create(xmls.Q<string>("Name"),
@@ -269,22 +223,11 @@ namespace XMLLoader
             }
         }
 
-        public static void LoadShield(string filepath, bool isGeneric = false)
+        public static void LoadShield(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
             if (xmls == null) return;
 
-            if (isGeneric)
-            {
-                List<Shield> list = new List<Shield>();
-                list.AddRange(xmls.Q<List<Shield>>("List"));
-
-                GenericManager.CreateGenericList(xmls.Q<XmlNode>("List").Q<string>("name", attribute: true), list,
-                    typeof(Shield));
-
-                return;
-            }
-            
             if (xmls.SelectSingleNode("Type").InnerText.Equals("Shield"))
             {
                 Shield.Create(filepath, xmls.Q<string>("Name"),
@@ -301,20 +244,9 @@ namespace XMLLoader
                 return;
             }
         }
-        public static void LoadArmor(string filepath, bool isGeneric = false)
+        public static void LoadArmor(string filepath)
         {
             XmlElement xmls = LoadWC(filepath);
-
-            if (isGeneric)
-            {
-                List<List<Armor>> list = new List<List<Armor>>();
-                list.AddRange(xmls.Q<List<List<Armor>>>("List"));
-
-                GenericManager.CreateGenericList(xmls.Q<XmlNode>("List").Q<string>("name", attribute: true), list,
-                    typeof(Armor));
-
-                return;
-            }
 
             if (xmls.Q<string>("Type") == "Armor")
             {
@@ -333,8 +265,8 @@ namespace XMLLoader
                 Debug.Log("Not armor.");
                 return;
             }
-        }
-
+        }                                     
+                                                                                            
         public static void LoadCountryOutfit(string filepath)
         {
             XmlElement xmls = LoadXML(filepath); // todo: this will be WC when we need archer icons and stuff hopefully
@@ -371,7 +303,7 @@ namespace XMLLoader
 
                 currentLoop++;
             }
-        }
+        }                             
 
         public static void LoadCountry(string filepath)
         {
@@ -715,7 +647,7 @@ namespace XMLLoader
                 return;
             }
         }
-        public static void LoadStructure(string filepath)
+        /* public static void LoadStructure(string filepath)
         {
             XmlElement xmls = LoadXML(filepath);
             if (xmls.HasNode("InfluenceRange"))
@@ -739,6 +671,27 @@ namespace XMLLoader
             else
             {
                 Debug.Log("Not a structure file.");
+                return;
+            }
+        }
+        */
+
+        public static void LoadGenericLists(string filepath)
+        {
+            XmlElement xmls = LoadXML(filepath);
+            if (xmls.Q<XmlNode>("List") != null)
+            {
+                foreach(XmlNode x in xmls.Qs("List"))
+                {
+                    List<string> items = new List<string>();
+                    foreach (string s in x.InnerText.Split(','))
+                        items.Add(s.removeWS());
+                    GenericManager.CreateGenericList(x.Q<string>("name", true), items, x.Q<string>("type", true));
+                }
+            }
+            else
+            {
+                Debug.Log("Not a country file.");
                 return;
             }
         }

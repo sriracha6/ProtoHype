@@ -9,12 +9,8 @@ using Buildings;
 
 public static class StructureGenerator
 {
+    /*
     public const int ROOMSIZE = 16;
-    public static void PlaceStructure(Structure s, System.Random rng, SliderInt mapSizeSlider)
-    {
-        // set the mapgenerator.structurepos and size
-        // messages.add if too big, let the player know the map is being resized
-    }
     [System.Obsolete]
     /// <summary>This is a relic from when I want procedurally generated structures. It's here in case I need it sometime.</summary>
     public static void GenerateStructure(Structure s, System.Random rng, SliderInt mapSizeSlider)
@@ -225,4 +221,5 @@ public static class StructureGenerator
         DB.Attention("Returning default room. Error");
         return pos;
     }
+    */
 }

@@ -159,6 +159,22 @@ public class MapGenerator : MonoBehaviour
         return result;
     }
 
+    public void GenerateTheStuffWeNeed()
+    {
+        generateWater();
+        I.mapBounds.resizeBounds(I.mapWidth, I.mapHeight);
+        I.mapBounds.transform.position = new Vector3(I.mapWidth, I.mapHeight, -10); // position the camera in middle of scene. no /2 because cell size = 2
+                                                                                    //WCMngr.I.solidTilemap.size = new Vector3Int(I.mapWidth, I.mapHeight, 1);
+                                                                                    //WCMngr.I.solidTilemap.ResizeBounds
+        if (structure == null)
+            TilemapPlace.UpdateBuildings();
+
+        WCMngr.I.solidTilemap.RefreshAllTiles();
+        WCMngr.I.groundTilemap.RefreshAllTiles();
+        new PathfindExtra();
+        I.finishedLoading = true;
+    }
+
     public void GenMap()
     {
         if (currentBiome == null) return;
@@ -227,19 +243,7 @@ public class MapGenerator : MonoBehaviour
         {
             Loading.I.Status = "Creating the world...";
             TilemapPlace.UpdateTilemap(noiseMap, terrainTypes.ToArray(), true); // for those wondering, this line cost me 7 days of work. because i forgot to put in the terraintypes of the current biome instead of the testing one in the unity editor.
-            generateWater();
-            I.mapBounds.resizeBounds(I.mapWidth, I.mapHeight);
-            I.mapBounds.transform.position = new Vector3(I.mapWidth, I.mapHeight, -10); // position the camera in middle of scene. no /2 because cell size = 2
-            WCMngr.I.solidTilemap.size = new Vector3Int(I.mapWidth, I.mapHeight, 1);
-            WCMngr.I.solidTilemap.ResizeBounds();
-
-            if(structure == null)
-                TilemapPlace.UpdateBuildings();
-
-            WCMngr.I.solidTilemap.RefreshAllTiles();
-            WCMngr.I.groundTilemap.RefreshAllTiles();
-            
-            WCMngr.I.groundTilemap.RefreshAllTiles();
+            GenerateTheStuffWeNeed();
 
             //TilemapPlace.Instance.placeTrees(generateTrees(), currentBiome.flora, rand, treeFab);
         }

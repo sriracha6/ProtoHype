@@ -74,4 +74,7 @@
             <ui:VisualElement name="Right" style="height: 100%; width: 33.3333%; top: 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:VisualElement name="MiniMap" style="top: 0; width: 256px; height: 256px; position: absolute; right: 0; display: none; visibility: hidden;">
+        <ui:VisualElement name="Image" />
+    </ui:VisualElement>
 </ui:UXML>

@@ -71,10 +71,13 @@
     <Compile Include="Assets\Scripts\FuckBitchTile.cs" />
     <Compile Include="Assets\Scripts\Type\Regiment.cs" />
     <Compile Include="Assets\Scripts\Type\Shield.cs" />
+    <Compile Include="Assets\AudioImporter\Scripts\AudioImporter.cs" />
     <Compile Include="Assets\MainMenu\Menus.cs" />
     <Compile Include="Assets\Scripts\RNG\BaseGen\RoomGenerator.cs" />
     <Compile Include="Assets\Scripts\Pawn\FlagBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Pawn\InstantiatePawnJob.cs" />
     <Compile Include="Assets\Scripts\XMLLoader.cs" />
+    <Compile Include="Assets\AudioImporter\Scripts\NAudioImporter.cs" />
     <Compile Include="Assets\Baracuda\IL2CPP\IL2CPP_AOT.cs" />
     <Compile Include="Assets\Scripts\RNG\TextureGenerator.cs" />
     <Compile Include="Assets\Scripts\UI\PopulateRegiments.cs" />
@@ -86,21 +89,27 @@
     <Compile Include="Assets\Scripts\CombatFunctions.cs" />
     <Compile Include="Assets\Scripts\Type\Rooves.cs" />
     <Compile Include="Assets\Scripts\Type\Floor.cs" />
+    <Compile Include="Assets\Scripts\SC\LoadScenario.cs" />
     <Compile Include="Assets\Scripts\SaveLoadSettings.cs" />
     <Compile Include="Assets\Scripts\Type\Furniture.cs" />
     <Compile Include="Assets\Scripts\UI\Messages.cs" />
     <Compile Include="Assets\Scripts\ParseFuncs.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\IItem.cs" />
+    <Compile Include="Assets\AudioImporter\Examples\ImporterExample.cs" />
     <Compile Include="Assets\Scripts\RNG\BaseGen\StructureGenerator.cs" />
     <Compile Include="Assets\Scripts\HealthFunctions.cs" />
     <Compile Include="Assets\Scripts\Blood.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\IMenu.cs" />
     <Compile Include="Assets\Scripts\Player\Stats.cs" />
+    <Compile Include="Assets\MainMenu\Scenarios.cs" />
     <Compile Include="Assets\Scripts\UI\ContextMenuManipulator.cs" />
     <Compile Include="Assets\Scripts\Pawn\PawnPathfind.cs" />
     <Compile Include="Assets\Scripts\Type\Weapon.cs" />
     <Compile Include="Assets\Scripts\RNG\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Type\Gear.cs" />
+    <Compile Include="Assets\Scripts\SFX\UISfxPlayer.cs" />
+    <Compile Include="Assets\Scripts\Type\Scenario.cs" />
+    <Compile Include="Assets\AudioImporter\Scripts\MobileImporter.cs" />
     <Compile Include="Assets\Scripts\LogX.cs" />
     <Compile Include="Assets\Scripts\SC\SCPauseMenu.cs" />
     <Compile Include="Assets\Scripts\SC\FirePlacer.cs" />
@@ -109,6 +118,7 @@
     <Compile Include="Assets\Scripts\Player\Keybinds.cs" />
     <Compile Include="Assets\Scripts\RNG\TilemapPlace.cs" />
     <Compile Include="Assets\Scripts\LoadComponents.cs" />
+    <Compile Include="Assets\Scripts\SC\SaveScenario.cs" />
     <Compile Include="Assets\Scripts\Type\Armor.cs" />
     <Compile Include="Assets\Scripts\Pawn\Pawn.cs" />
     <Compile Include="Assets\Scripts\SFX\SFXManager.cs" />
@@ -119,13 +129,16 @@
     <Compile Include="Assets\Scripts\SC\PawnAdder.cs" />
     <Compile Include="Assets\Scripts\Player\TileSelection.cs" />
     <Compile Include="Assets\Scripts\Type\TroopType.cs" />
+    <Compile Include="Assets\Scripts\Pawn\FindNearestJob.cs" />
     <Compile Include="Assets\Scripts\Type\Room.cs" />
     <Compile Include="Assets\MainMenu\SettingsMenu.cs" />
     <Compile Include="Assets\Scripts\Type\Animal.cs" />
     <Compile Include="Assets\Scripts\Type\Building.cs" />
     <Compile Include="Assets\Scripts\Type\BiomeArea.cs" />
+    <Compile Include="Assets\Scripts\Player\MiniMap.cs" />
     <Compile Include="Assets\Scripts\Beauty\PositionSun.cs" />
     <Compile Include="Assets\MainMenu\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\SC\PawnMover.cs" />
     <Compile Include="Assets\Scripts\RNG\TreeGeneratorEditor.cs" />
     <Compile Include="Assets\Scripts\Type\Wound.cs" />
     <Compile Include="Assets\Scripts\Player\QuickMove.cs" />
@@ -175,6 +188,8 @@
     <Compile Include="Assets\Scripts\CachedItems.cs" />
     <Compile Include="Assets\Scripts\Type\Derived\Item.cs" />
     <Compile Include="Assets\Scripts\Skills.cs" />
+    <Compile Include="Assets\AudioImporter\Scripts\DecoderImporter.cs" />
+    <Compile Include="Assets\AudioImporter\Scripts\Browser.cs" />
     <Compile Include="Assets\Scripts\UI\SliderSoundManipulator.cs" />
     <Compile Include="Assets\Scripts\SC\Clipboard.cs" />
     <Compile Include="Assets\Scripts\RNG\TilemapShadow.cs" />
@@ -184,7 +199,7 @@
     <Compile Include="Assets\Scripts\FireManager.cs" />
     <Compile Include="Assets\Scripts\SC\UndoRedo.cs" />
     <Compile Include="Assets\Scripts\Generics.cs" />
-    <Compile Include="Assets\Scripts\SC\PawnMover.cs" />
+    <Compile Include="Assets\Scripts\SC\DollySystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\MainMenu\quickbattle.uss" />
@@ -194,6 +209,7 @@
     <None Include="Assets\Scripts\Shaders\TilemapBlend.shader" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\Box.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\Reggymint.uxml" />
+    <None Include="Assets\AudioImporter\NAudio\NAudio.dll" />
     <None Include="Assets\MainMenu\Country.uxml" />
     <None Include="Assets\Scripts\Shaders\TerrainBlending.shader" />
     <None Include="Assets\Resources\Prefabs\UI\ArmorPiece.uxml" />
@@ -204,12 +220,15 @@
     <None Include="Assets\UI Elements.uxml" />
     <None Include="Assets\Scripts\Shaders\conversion.cginc" />
     <None Include="Assets\css.uss" />
+    <None Include="Assets\AudioImporter\NAudio\license.txt" />
     <None Include="Assets\MainMenu\loading.uxml" />
+    <None Include="Assets\AudioImporter\NAudio\readme.txt" />
     <None Include="Assets\ugh.uss" />
     <None Include="Assets\Resources\Prefabs\UI\Regiment.uxml" />
     <None Include="Assets\MainMenu\MainMenu.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\ItemViewer.uxml" />
     <None Include="Assets\MainMenu\Divider.uxml" />
+    <None Include="Assets\AudioImporter\NAudio\NAudio.xml" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\RequiredPick.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\ContextMenu.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\SingleItem.uxml" />
@@ -226,12 +245,15 @@
     <None Include="Assets\Resources\Prefabs\UI\prefab.uss" />
     <None Include="Assets\Scripts\Shaders\WaterACTUAL.shader" />
     <None Include="Assets\MainMenu\settings.uxml" />
+    <None Include="Assets\Resources\Prefabs\UI\Scenario.uxml" />
     <None Include="Assets\MainMenu\mainmenucss.uss" />
     <None Include="Assets\ScenarioCreator.uxml" />
     <None Include="Assets\Scripts\Shaders\ToonTerrain.cginc" />
     <None Include="Assets\MainMenu\warning.uxml" />
     <None Include="Assets\root.uss" />
+    <None Include="Assets\MainMenu\scenarios.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\Item Viewer\Link.uxml" />
+    <None Include="Assets\Resources\Prefabs\UI\Regiment 1.uxml" />
     <None Include="Assets\Resources\Prefabs\UI\PauseMenu.uxml" />
     <None Include="Assets\MainMenu\quickbattle.uxml" />
   </ItemGroup>
@@ -460,6 +482,9 @@
     </Reference>
     <Reference Include="Pathfinding.Ionic.Zip.Reduced">
       <HintPath>Assets\AstarPathfindingProject\Plugins\DotNetZip\Pathfinding.Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio">
+      <HintPath>Assets\AudioImporter\NAudio\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>

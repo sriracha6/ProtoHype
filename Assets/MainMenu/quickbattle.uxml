@@ -3,7 +3,7 @@
     <Style src="/Assets/root.uss" />
     <ui:VisualElement name="BG" style="background-image: resource(&apos;ui/BGNEW&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-and-crop;" />
     <ui:Button text="&lt;" display-tooltip-when-elided="true" name="BackButton" style="position: absolute; background-color: rgb(94, 94, 94); background-image: none;" />
-    <ui:VisualElement name="Box" class="brown-bg body window" style="position: absolute; width: 75%; height: 80%; left: 15%; top: 15%;">
+    <ui:VisualElement name="Box" class="brown-bg body window" style="position: absolute; width: 75%; height: 80%; left: 15%; top: 15%; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
         <ui:VisualElement style="height: 35%; flex-direction: row; border-bottom-width: 3px; border-bottom-color: rgb(106, 106, 106);">
             <ui:ScrollView name="FriendlyCountryAdder" style="height: 100%; width: 47.5%; border-right-width: 3px; border-right-color: rgb(115, 115, 115);" />
             <ui:VisualElement style="width: 5%; align-items: center;">
@@ -12,15 +12,16 @@
             </ui:VisualElement>
             <ui:ScrollView name="EnemyCountryAdder" style="height: 100%; width: 47.5%; border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px; border-left-color: rgb(115, 115, 115);" />
         </ui:VisualElement>
-        <ui:Button text="Add" display-tooltip-when-elided="true" name="AddCountryRight" style="top: 0; position: absolute; left: 92.5%; width: 7.5%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgb(152, 43, 32); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px;" />
+        <ui:Button text="Add" display-tooltip-when-elided="true" name="AddCountryRight" style="top: 5px; position: absolute; left: 92.5%; width: 7.5%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgb(152, 43, 32); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px;" />
         <ui:DropdownField label="Difficulty" type="Difficulty" name="Difficulty" choices="Normal,Hard,Easy" style="width: 245px;" />
         <ui:DropdownField label="Time" type="Difficulty" name="Time" choices="Dawn,Day,Night" style="width: 245px;" />
         <ui:Toggle label="Auto Weather and Time" name="DynamicTime" style="font-size: 18px;" />
+        <ui:Toggle label="Attack Mode" name="AttackMode" style="font-size: 18px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
         <ui:DropdownField label="Weather" type="Difficulty" name="WeatherSelection" choices="Clear,Rain,Snow,Thunderstorm" style="width: 245px;" />
         <ui:DropdownField label="Biome" type="Difficulty" name="Biome" style="width: 245px;" />
         <ui:VisualElement name="MapControls" style="width: 450px; height: auto; bottom: 0; top: 90%; position: absolute; flex-direction: row;">
             <ui:VisualElement style="width: 40%; margin-right: 10%;">
-                <ui:Button text="Add Building" display-tooltip-when-elided="true" name="AddBuilding" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 100%;" />
+                <ui:Button text="Add Building" display-tooltip-when-elided="true" name="AddBuildingB" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 100%;" />
                 <ui:Button text="Add Random Building" display-tooltip-when-elided="true" name="RandomBuilding" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 100%;" />
             </ui:VisualElement>
             <ui:VisualElement style="width: 40%; height: 100%;">
@@ -34,10 +35,23 @@
         <ui:TextField picking-mode="Ignore" label="Seed" name="Seed" style="width: 245px; position: absolute; left: 65%; top: 35%; right: 0;" />
         <ui:Button text="Random " display-tooltip-when-elided="true" name="RandomSeed" style="position: absolute; left: 65%; top: 50%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;" />
         <ui:VisualElement name="Preview" style="position: absolute; width: 184px; height: 184px; background-color: rgb(255, 255, 255); left: 74%; top: 44%;" />
-        <ui:Button text="Add" display-tooltip-when-elided="true" name="AddCountryLeft" choices="None,Rain,Snow,Lightning" style="top: 0; position: absolute; left: 39%; width: 7.5%; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-color: rgb(72, 135, 85); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px;" />
+        <ui:Button text="Add" display-tooltip-when-elided="true" name="AddCountryLeft" choices="None,Rain,Snow,Lightning" style="top: 5px; position: absolute; left: 39%; width: 7.5%; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-color: rgb(72, 135, 85); border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px;" />
     </ui:VisualElement>
     <ui:VisualElement style="position: absolute; width: auto; bottom: 0; right: 0;">
         <ui:Button text="Edit" display-tooltip-when-elided="true" name="Edit" style="position: relative;" />
         <ui:Button text="Play" display-tooltip-when-elided="true" name="Play" style="position: relative;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="AddBuilding" style="position: absolute; width: 25%; height: 25%; border-left-color: rgb(241, 232, 200); border-right-color: rgb(241, 232, 200); border-top-color: rgb(241, 232, 200); border-bottom-color: rgb(241, 232, 200); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; visibility: hidden; display: none;">
+        <ui:VisualElement name="ATitle" class="orange-bg" style="width: 100%; height: 10%;">
+            <ui:Button text="&lt;b&gt;X&lt;/b&gt;" display-tooltip-when-elided="true" name="ACloseButton" style="height: 100%; width: 5%; right: 0; left: 95%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgb(255, 105, 97);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ABody" class="brown-bg" style="width: 100%; height: 90%;">
+            <ui:TextField picking-mode="Ignore" value="Search" name="Search" />
+            <ui:DropdownField type="Difficulty" name="Structure" choices="Castle 1,Castle 2" style="width: 245px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement style="position: absolute; left: 25%; flex-direction: row;">
+        <ui:TextField picking-mode="Ignore" text="Filepath                                                                                    " name="FilePath" />
+        <ui:Button text="Load From File" display-tooltip-when-elided="true" name="LoadFileButton" />
     </ui:VisualElement>
 </ui:UXML>

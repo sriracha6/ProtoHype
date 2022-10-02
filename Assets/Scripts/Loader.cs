@@ -7,13 +7,14 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using XMLLoader;
+using Structures;
 
 public class Loader : MonoBehaviour
 {
     public static Loader I = null;
     public List<Vital> defaultVitals = new List<Vital>();
 
-    static bool firstPass = false;
+    static bool firstPass = true;
 
     protected void Awake()
     {
@@ -54,12 +55,14 @@ $@"            Codename
   VMEM: {SystemInfo.graphicsMemorySize}
   CPU: {SystemInfo.processorType} : {SystemInfo.processorFrequency}MHz : {SystemInfo.processorCount}x
   GPU: {SystemInfo.graphicsDeviceName} : {SystemInfo.graphicsDeviceVersion}
-       {"NO MODS DETECTED"}\n");
+       {"NO MODS DETECTED"}
+"); // dont remove this empty line
 
         Application.logMessageReceived += Logger.LogUnityMsg;
         Application.lowMemory += WCMngr.ClearCache;//delegate { Messages.I.Add("Your device is low on memory. Clearing cached items. This may result in slower loading times."); };
         
         Logger.Divide("START XML LOAD");
+        Loaders.LoadGenericLists("C:\\Users\\frenz\\Music\\genericlists.xml");
         Loaders.LoadBodyparts("C:\\Users\\frenz\\Music\\bodyparts.xml"); // TODO: DO NOT REMOVE THIS LINE. but replace it with correct path
 
         Loaders.LoadMeleeWeapon("C:\\Users\\frenz\\Music\\ahlspiess.wc");
@@ -107,9 +110,11 @@ $@"            Codename
             Loaders.LoadShield(file);
 
         foreach (string file in Directory.GetFiles(Application.persistentDataPath + "/audio/UI"))
-            SFXManager.I.CacheAudio(Path.GetFileName(file), "UI");
+            StartCoroutine(SFXManager.I.CacheAudio(Path.GetFileName(file), "UI"));
+        foreach (string file in Directory.GetFiles(Application.persistentDataPath + "/audio/Swishes"))
+            StartCoroutine(SFXManager.I.CacheAudio(Path.GetFileName(file), "Swishes"));
 
-        foreach(string file in Directory.GetFiles(@"C:\Users\frenz\Music\trt\sigh"))
+        foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\trt\sigh"))
             Loaders.LoadTroopTypeIcon(file);
 
         Loaders.LoadCountryOutfit(@"C:\Users\frenz\Music\trt\germany.xml");
@@ -130,8 +135,8 @@ $@"            Codename
         foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\room"))
             Loaders.LoadRoom(file);
         foreach (string file in Directory.GetFiles(@"C:\Users\frenz\Music\struc\ture"))
-            Loaders.LoadStructure(file);
-
+            new Structure(file);
+        new Scenario(Application.persistentDataPath + "\\bsidk.xml");
         Logger.EndDivide();
         //Loaders.LoadCountryOutfit("C:\\Users\\frenz\\Music\\germany.xml");
 
@@ -145,15 +150,16 @@ $@"            Codename
 
     public void LoadDirectory(string directorypath, bool isGeneric)
     {
-        foreach (string file in Directory.GetFiles(directorypath + "\\audio", "*.*")) SFXManager.I.CacheAudio(file, file.Remove(0,(directorypath + "audio").Length).Substring(0,Path.GetFileName(file).Length));
-        if (!firstPass) Loaders.LoadBodyparts(Application.persistentDataPath + "\\bodyparts.xml");
+        Loaders.LoadGenericLists(directorypath + "\\genericlists.xml");
+        foreach (string file in Directory.GetFiles(directorypath + "\\audio", "*.*")) StartCoroutine(SFXManager.I.CacheAudio(Path.GetFileName(file), file.Remove(0,(directorypath + "audio").Length).Substring(0,Path.GetFileName(file).Length)));
+        if (firstPass) Loaders.LoadBodyparts(Application.persistentDataPath + "\\bodyparts.xml");
 
-        foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\melee", "*.*")) Loaders.LoadMeleeWeapon(file, isGeneric);
-        foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\ranged", "*.*")) Loaders.LoadRangedWeapon(file, isGeneric);
-        foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\projectiles", "*.*")) Loaders.LoadProjectile(file, isGeneric);
+        foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\melee", "*.*")) Loaders.LoadMeleeWeapon(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\ranged", "*.*")) Loaders.LoadRangedWeapon(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\projectiles", "*.*")) Loaders.LoadProjectile(file);
         
-        foreach (string file in Directory.GetFiles(directorypath + "\\armor\\shields", "*.*")) Loaders.LoadShield(file, isGeneric);
-        foreach (string file in Directory.GetFiles(directorypath + "\\armor\\armor", "*.*")) Loaders.LoadArmor(file, isGeneric);
+        foreach (string file in Directory.GetFiles(directorypath + "\\armor\\shields", "*.*")) Loaders.LoadShield(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\armor\\armor", "*.*")) Loaders.LoadArmor(file);
         
         foreach (string file in Directory.GetFiles(directorypath + "\\countries", "*.*")) Loaders.LoadCountry(file);
         foreach (string file in Directory.GetFiles(directorypath + "\\animals", "*.*")) Loaders.LoadAnimal(file);
@@ -169,13 +175,13 @@ $@"            Codename
         foreach (string file in Directory.GetFiles(directorypath + "\\buildings\\rooves", "*.*")) Loaders.LoadRoof(file);
         foreach (string file in Directory.GetFiles(directorypath + "\\buildings\\traps", "*.*")) Loaders.LoadTrap(file);
 
-        if (!firstPass) Loaders.loadBlood();
-        if (!firstPass) Loaders.loadNames();
+        if (firstPass) Loaders.loadBlood();
+        if (firstPass) Loaders.loadNames();
 
         foreach (string file in Directory.GetFiles(directorypath + "\\biomes", "*.*")) Loaders.LoadBiome(file);
         foreach (string file in Directory.GetFiles(directorypath + "\\room", "*.*")) Loaders.LoadRoom(file);
-        foreach (string file in Directory.GetFiles(directorypath + "\\structure", "*.*")) Loaders.LoadStructure(file);
+        foreach (string file in Directory.GetFiles(directorypath + "\\structure", "*.*")) new Structures.Structure(file);
 
-        firstPass = true;
+        firstPass = false;
     }
 }

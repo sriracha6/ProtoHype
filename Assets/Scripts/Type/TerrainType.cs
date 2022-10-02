@@ -51,16 +51,12 @@ public class TerrainType : Item
     }
     public static TerrainType Get(string name)
     {
-        try
-        {
+        if (name == "Water") return WCMngr.WaterTT;
+        if (name == "Mountain") return WCMngr.MountainTT; 
+        if(List.Exists(x=>x.Name == name))
             return List.Find(x => x.Name == name);
-        }
-        catch (NullReferenceException)
-        {
-            //Create(name);
+        else    
             DB.Attention($"Couldn't find TerrainType of name {name}");
             return null;
-            //return CountryList.Find(x => x.Name == name);
-        }
     }
 }

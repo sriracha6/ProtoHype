@@ -10,8 +10,8 @@ public class Rotator : MonoBehaviour
     {
         if(Input.GetKeyDown(Keybinds.rotate))
         {
-            if (Rotation <= 270) Rotation += 90;
-            else                 Rotation = 180;
+            if (Rotation <= 180) Rotation += 90;
+            else                 Rotation = 0;
         }
     }
 }

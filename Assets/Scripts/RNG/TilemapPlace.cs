@@ -14,6 +14,7 @@ public class TilemapPlace : MonoBehaviour
     public static TilemapPlace I;
     public static TerrainType[,] tilemap;
 
+    public static Build[,] allbuilds;
     public static Building[,] buildings;
     public static Floor[,] floors;
     public static Trap[,] traps;
@@ -21,7 +22,8 @@ public class TilemapPlace : MonoBehaviour
     public static Building[,] specials;
     public static Roof[,] rooves;
     public static Furniture[,] furnitures;
-    public static List<(Furniture furn, Vector2Int pos)> furnitureInfo = new List<(Furniture, Vector2Int)>();
+    public static List<(Furniture furn, Vector2Int pos, float rotation)> furnitureInfo = new List<(Furniture, Vector2Int, float)>();
+    public static List<(Door furn, Vector2Int pos)> doorInfo = new List<(Door, Vector2Int)>();
 
     [SerializeField] AstarPath pfinder;
     [SerializeField] Transform treeParent;
@@ -93,6 +95,7 @@ public class TilemapPlace : MonoBehaviour
     public static void SetWall(Building f, int x, int y)
     {
         ResetTFM(x, y);
+        allbuilds[x, y] = f;
         if (!f.isSpecialPlace) buildings[x, y] = f;
         else specials[x, y] = f;
         PathfindExtra.SetUsed(x, y);
@@ -105,6 +108,7 @@ public class TilemapPlace : MonoBehaviour
     {
         ResetTFM(x,y);
         traps[x, y] = trap;
+        allbuilds[x, y] = trap;
     }
 
     public static void RemoveWall(int x, int y)
@@ -115,7 +119,7 @@ public class TilemapPlace : MonoBehaviour
 
     static void RotateTile(int x, int y, float rotation)
     {
-        Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, rotation), Vector3.one);
+        Matrix4x4 matrix = Matrix4x4.TRS(new Vector3(0,0), Quaternion.Euler(0f, 0f, rotation), Vector3.one);
         WCMngr.I.solidTilemap.SetTransformMatrix(new Vector3Int(x, y, 0), matrix);
     }
 
@@ -123,9 +127,8 @@ public class TilemapPlace : MonoBehaviour
     {
         // for loading files: Loader.currentRotation. it sucks but it works
         float rotation = 0;
-        if(Menus.I.inSC) rotation = Rotator.Rotation;
-        Debug.Log($"{rotation}");
-
+        if (Menus.I.inSC) rotation = Rotator.Rotation;
+        else rotation = LoadScenario.rotations[x, y];
         Tile[,] tiles = f.tile;
         tiles = Rotate(tiles, rotation);
 
@@ -133,74 +136,14 @@ public class TilemapPlace : MonoBehaviour
             for (int j = 0; j < tiles.GetLength(1); j++)
             {
                 furnitures[x + i, y + j] = f;
+                allbuilds[x + i, y + j] = f;
                 if (MapGenerator.I.drawMode == DrawMode.Place)
                 {
-                    RotateTile(x + i, y + j, rotation);
-                    WCMngr.I.solidTilemap.SetTile(new Vector3Int(x+i, y+j, 0), tiles[i, j]);
+                    WCMngr.I.solidTilemap.SetTile(new Vector3Int(x+i, y+j, 0), tiles[i,j]);
+                    RotateTile(x+i, y+j, rotation);
                 }
             }
-    }
-
-    static Tile[,] ReverseRows(Tile[,] input)
-    {
-        Tile[,] arr = input;
-        for (int i = 0; i < arr.GetLength(0); i++)
-        {
-
-            // Initialise start and end index
-            int start = 0;
-            int end = arr.GetLength(1) - 1;
-
-            // Till start < end, swap the element
-            // at start and end index
-            while (start < end)
-            {
-
-                // Swap the element
-                Tile temp = arr[i, start];
-                arr[i, start] = arr[i, end];
-                arr[i, end] = temp;
-
-                // Increment start and decrement
-                // end for next pair of swapping
-                start++;
-                end--;
-            }
-        }
-        return arr;
-    }
-    private static Tile[,] swap(Tile[,] arr, int start, int i, int end, int j)
-    {
-
-        Tile temp = arr[start, i];
-        arr[start, i] = arr[end, j];
-        arr[end, j] = temp;
-        return arr;
-    }
-    static Tile[,] ReverseCols(Tile[,] input)
-    {
-        Tile[,] arr = input;
-        for (int i = 0; i < input.GetLength(0); i++)
-        {
-            // Initialise start and end index
-            int start = 0;
-            int end = arr.GetLength(1) - 1;
-
-            // Till start < end, swap the
-            // element at start and end index
-            while (start < end)
-            {
-
-                // Swap the element
-                arr = swap(arr, start, i, end, i);
-
-                // Increment start and decrement
-                // end for next pair of swapping
-                start++;
-                end--;
-            }
-        }
-        return arr;
+        furnitureInfo.Add((f, new Vector2Int(x,y), rotation));
     }
 
     static Tile[,] Rotate(Tile[,] array, float degrees)
@@ -213,20 +156,21 @@ public class TilemapPlace : MonoBehaviour
             case 360:
                 return array;
             case 180:
-                output = ReverseCols(array);
+                for(int i = 0; i < array.GetLength(0); i++)
+                    for(int j = 0; j < array.GetLength(1); j++)
+                        output[i, j] = array[array.GetLength(0) - 1 - i, j]; 
                 break;
             case 90:
                 output = new Tile[array.GetLength(1), array.GetLength(0)];
-                for(int i = 0; i < array.GetLength(0); i++)
-                    for(int j = 0; j < array.GetLength(1); j++)
-                        output[j, i] = array[i, j];
+                for (int i = 0; i < output.GetLength(0); i++)
+                    for (int j = 0; j < output.GetLength(1); j++)
+                        output[i, j] = array[j, i];
                 break;
             case 270:
                 output = new Tile[array.GetLength(1), array.GetLength(0)];
-                for (int i = 0; i < array.GetLength(0); i++)
-                    for (int j = 0; j < array.GetLength(1); j++)
-                        output[j, i] = array[i, j];
-                output = ReverseRows(output);
+                for (int i = 0; i < output.GetLength(0); i++)
+                    for (int j = 0; j < output.GetLength(1); j++)
+                        output[i, j] = array[output.GetLength(1) - 1 - j, i];
                 break;
         }
 
@@ -235,7 +179,6 @@ public class TilemapPlace : MonoBehaviour
 
     public static void SetDoor(Door d, int x, int y)
     {
-        doors[x, y] = d; // DO NOT SET DOORS AS USED!! YOU CAN GO THROUGH THEM!!
         float rotation;
         if (y + 1 < MapGenerator.I.mapHeight && y - 1 >= 0 && buildings[x, y + 1] != null && buildings[x, y - 1] != null) rotation = 90;
         else rotation = 0;
@@ -246,12 +189,14 @@ public class TilemapPlace : MonoBehaviour
             for(int j = 0; j < tiles.GetLength(1); j++)
             {
                 doors[x+i, y+j] = d;
+                allbuilds[x+i, y+j] = d;
                 if (MapGenerator.I.drawMode == DrawMode.Place)
                 {
-                    RotateTile(x,y, rotation);
                     WCMngr.I.solidTilemap.SetTile(new Vector3Int(x+i,y+j,0), tiles[i,j]);
+                    RotateTile(x + i, y + j, rotation);
                 }
             }
+        doorInfo.Add((d, new Vector2Int(x,y)));
     }
 
     static void ResetTFM(int x, int y)
@@ -276,8 +221,24 @@ public class TilemapPlace : MonoBehaviour
         specials = new Building[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
         rooves = new Roof[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
         furnitures = new Furniture[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
+        allbuilds = new Build[MapGenerator.I.mapWidth, MapGenerator.I.mapHeight];
     }
 
+    public static void UpdateTilemap()
+    {
+        for(int x = 0; x < tilemap.GetLength(0); x++)
+        {
+            for(int y = 0; y < tilemap.GetLength(1); y++)
+            {
+                if (tilemap[x,y] == null || tilemap[x,y].type == SpecialType.Water)
+                    WCMngr.I.groundTilemap.SetTile(new Vector3Int(x, y, 0), null);
+                else if (tilemap[x, y].type == SpecialType.None)
+                    WCMngr.I.groundTilemap.SetTile(new Vector3Int(x, y, 0), tilemap[x, y].tile);
+                else if (tilemap[x, y].type == SpecialType.Mountain)
+                    WCMngr.I.solidTilemap.SetTile(new Vector3Int(x, y, 0), tilemap[x, y].tile);
+            }
+        }
+    }
     public static void UpdateTilemap(float[,] noiseMap, TerrainType[] tTypesUnsorted, bool place)
     {
         TerrainType[] tTypes = tTypesUnsorted.OrderBy(x => x.height).ToArray(); // this line of code makes the entire game, i'll make it a puzzle! figure out why! ;)

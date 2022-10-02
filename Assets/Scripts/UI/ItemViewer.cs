@@ -31,7 +31,7 @@ public class ItemViewer : MonoBehaviour
         if (I == null)
         {
             I = this;
-            UIManager.I.OnUiChange += OnUiChange;
+            UIManager.OnUiChange += OnUiChange;
         }
     }
 

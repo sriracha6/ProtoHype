@@ -35,9 +35,6 @@ public static class ParseFuncs
     }
     public static List<Weapon> parseWeapons(XmlNode xmls)
     {
-        //if (xmls == null)
-        //    return null; // uh oh : no sidearms
-
         List<Weapon> weapons = new List<Weapon>();
 
         if (xmls.HasNode("GenericSpecial"))
@@ -48,6 +45,9 @@ public static class ParseFuncs
                 else if (x.InnerText == "None")
                     weapons.Clear();
             }
+        if (xmls.HasNode("Generic"))
+            foreach (XmlNode x in xmls.Qs("Generic"))
+                weapons.AddRange(GenericManager.GetGeneric<Weapon>(x.InnerText));
 
         foreach (string s in xmls.LastChild.InnerText.Split(',')) // only this tag's text. not children
             weapons.Add(Weapon.Get(s.removeWS()));
@@ -70,6 +70,10 @@ public static class ParseFuncs
             weapons.Add(Projectile.Get(s.removeWS()));
         }
 
+        if (xmls.HasNode("Generic"))
+            foreach (XmlNode x in xmls.Qs("Generic"))
+                weapons.AddRange(GenericManager.GetGeneric<Projectile>(x.InnerText));
+
         return weapons;
     }
 
@@ -91,6 +95,9 @@ public static class ParseFuncs
         {
             normalRequired.Add(Armor.Get(s.removeWS()));
         }
+        if (xmls.HasNode("Generic"))
+            foreach (XmlNode x in xmls.Qs("Generic"))
+                armor.Add(GenericManager.GetGeneric<Armor>(x.InnerText));
         armor.Add(normalRequired);
         return armor;
     }
@@ -113,6 +120,9 @@ public static class ParseFuncs
         {
             shields.Add(Shield.Get(s.removeWS()));
         }
+        if (xmls.HasNode("Generic"))
+            foreach (XmlNode x in xmls.Qs("Generic"))
+                shields.AddRange(GenericManager.GetGeneric<Shield>(x.InnerText));
         return shields;
     }
     public static List<Bodypart> parseAllowedBodyparts(XmlNode xmls)
@@ -232,7 +242,7 @@ public static class ParseFuncs
             list.Add(Door.Get(str));
         return list;
     }
-    public static List<RoomInfo> parseRooms(XmlNode x)
+    /*public static List<RoomInfo> parseRooms(XmlNode x)
     {
         List<RoomInfo> roomInfo = new List<RoomInfo>();
         if (x.HasNode("Required"))
@@ -243,7 +253,7 @@ public static class ParseFuncs
                 roomInfo.Add(new RoomInfo(Room.Get(s.removeWS()), false, true));
 
         return roomInfo;
-    }
+    }*/
     public static List<Vector2Int> parseRoomSizes(XmlNode x)
     {
         List<Vector2Int> list = new List<Vector2Int>();
@@ -338,9 +348,17 @@ public static class ParseFuncs
     }
     public static void WriteEl(this XmlWriter writer, string tag, object content)
     {
+        if (content == null) return;
         writer.WriteStartElement(tag);
         writer.WriteValue(content.ToString());
         writer.WriteEndElement();
+    }
+    public static void WriteAttrib(this XmlWriter writer, string name, object content)
+    {
+        if (content == null) return;
+        writer.WriteStartAttribute(name);
+        writer.WriteValue(content.ToString());
+        writer.WriteEndAttribute();
     }
 
     public static string toTitleCase(this string t)
@@ -406,26 +424,6 @@ public static class ParseFuncs
     public static T randomElement<T>(this List<T> list)
     {
         return list[Random.Range(0, list.Count)];
-    }
-
-    public static List<T> randomElements<T>(this List<T> list, int count)
-    {
-        if (count > list.Count)
-            throw new ArgumentOutOfRangeException("Argument: count");
-        List<int> allowed = new List<int>();
-
-        for(int i = 0; i < list.Count; i++)
-            allowed.Add(i);
-        List<T> @out = new List<T>();
-
-        for (int i = 0; i < count; i++)
-        {
-            int a = Random.Range(0, allowed.Count);
-            allowed.Remove(a);
-            @out.Add(list[a]);
-        }
-
-        return @out;
     }
     public static T randomElement<T>(this T[] list)
     {
@@ -509,14 +507,14 @@ public static class ParseFuncs
         if (tt == typeof(FurnitureStats)) return (T)(object)parseFurniture(innerNode);
         if (tt == typeof(List<Floor>)) return (T)(object)parseFloors(innerText);
         if (tt == typeof(List<Door>)) return (T)(object)parseDoors(innerText);
-
+        if (tt == typeof(Vector2)) return (T)(object)new Vector2(float.Parse(innerText.Split(',')[0]), float.Parse(innerText.Split(',')[1]));
         throw new ArgumentException("Invalid T parameter. : " + typeof(T).Name);
     }
     public static XmlNodeList Qs(this XmlNode x, string text)
     {
         if (x.SelectSingleNode(text) == null)
         {
-            DB.Attention($"XMLERROR: Invalid group. Input:{text} : {Loaders.currentFile}");
+            DB.Attention($"XMLERROR: Invalid group. Input:\"{text}\" | {Loaders.currentFile}");
             return null;
         }
         else

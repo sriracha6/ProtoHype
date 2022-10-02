@@ -130,7 +130,7 @@ public partial class ScenarioUI: MonoBehaviour
                         Placer.furnitureMode = true;
                     }
                     if(previousVE != null)
-                        previousVE.Q<VisualElement>("Bok").style.backgroundColor = new StyleColor(StyleKeyword.Auto);
+                        previousVE.Q<VisualElement>("Bok").style.backgroundColor = new StyleColor(StyleKeyword.Initial);
                     ve.Q<VisualElement>("Bok").style.backgroundColor = new StyleColor(Color.yellow);
                     previousVE = ve;
 

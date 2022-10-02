@@ -1,11 +1,24 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="/Assets/root.uss" />
-    <ui:VisualElement name="PauseMenuParent" style="width: 45%; height: 65%; position: absolute; bottom: 5%; right: 5%;">
+    <ui:VisualElement name="PauseMenuParent" style="width: 45%; height: 65%; position: absolute; bottom: 10%; right: 5%;">
         <ui:Button text="Resume" display-tooltip-when-elided="true" name="ResumeButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
         <ui:Button text="Settings" display-tooltip-when-elided="true" name="OptionsButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
         <ui:Button text="Save Structure" display-tooltip-when-elided="true" name="SaveStrucButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
-        <ui:Button text="Load Structure" display-tooltip-when-elided="true" name="LoadStrucButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
         <ui:Button text="Save Scenario" display-tooltip-when-elided="true" name="SaveButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
+        <ui:Button text="Edit Scenario" display-tooltip-when-elided="true" name="EditScenarioButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
+        <ui:Button text="Edit Scenario Info" display-tooltip-when-elided="true" name="EditScenarioInfo" enable-rich-text="true" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
         <ui:Button text="Exit To Main Menu" display-tooltip-when-elided="true" name="MainMenuButton" style="padding-left: 0; padding-right: 0; padding-top: 4px; padding-bottom: 4px; width: 50%;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="ScenarioInfo" style="position: absolute; left: 5%; top: 5%; width: 25%; height: 25%; border-left-color: rgb(241, 232, 200); border-right-color: rgb(241, 232, 200); border-top-color: rgb(241, 232, 200); border-bottom-color: rgb(241, 232, 200); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; display: none; visibility: hidden;">
+        <ui:VisualElement name="Title" class="orange-bg" style="width: 100%; height: 10%; flex-direction: row-reverse;">
+            <ui:Button text="&lt;b&gt;X&lt;/b&gt;" display-tooltip-when-elided="true" name="SIClose" style="height: 100%; width: 5%; right: 0; left: 95%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; background-color: rgb(255, 105, 97);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Body" class="brown-bg" style="width: 100%; height: 90%;">
+            <ui:ScrollView>
+                <ui:TextField picking-mode="Ignore" name="Name" text="Name" class="short-tf" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+                <ui:TextField picking-mode="Ignore" name="Description" text="Description" multiline="true" class="short-tf" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+                <ui:TextField picking-mode="Ignore" name="LocalFilePath" text="Local Icon File Path (ie icon.png)" class="short-tf" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+            </ui:ScrollView>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

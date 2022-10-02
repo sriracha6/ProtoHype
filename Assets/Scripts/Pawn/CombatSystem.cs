@@ -103,6 +103,7 @@ public class CombatSystem : MonoBehaviour
 
     public void doMeleeAttack(Pawn target)
     {
+        // its fine these checks are here and not checkcanmelee() because melee attacks can miss. you can swing Nd miss
         if (!target.dead && !target.pawnDowned &&                           // not downed or dead
             !CS.MeleeDodged(Skills.EffectToHitChance(p.meleeSkill),         // not dodged
                 Skills.EffectToDodgeChance(target.meleeSkill),              //  ...
@@ -120,6 +121,7 @@ public class CombatSystem : MonoBehaviour
             if (p.activeWeapon.enableRangedMeleeDamage)
             {
                 currentAttack = CS.GetAttack(p.activeWeapon.attacks);
+                PlaySwish();
                 target.healthSystem.TakeMeleeDamage(CS.randomVariation(p.activeWeapon.rangedMeleeDamage), p.activeWeapon, p,
                     currentAttack);
             }
@@ -129,6 +131,7 @@ public class CombatSystem : MonoBehaviour
                 {
                     if (Random.Range(0, 101) >= p.animal.sourceAnimal.hitChance)
                     {
+                        PlaySwish();
                         p.animal.TakeDamage((int)(CS.randomVariation(currentAttack.Damage) * p.healthSystem.GetVital(VitalSystem.Dexterity)));
                         return;
                     }
@@ -141,6 +144,7 @@ public class CombatSystem : MonoBehaviour
                     else
                         currentAttackDamage *= 0.75f;
 
+                PlaySwish();
                 target.healthSystem.TakeMeleeDamage(CS.randomVariation(
                     currentAttackDamage),                                                   // + (damage.Damage * Skills.EffectToDamage(p.meleeSkill))
                     p.activeWeapon, p, currentAttack);
@@ -168,6 +172,7 @@ public class CombatSystem : MonoBehaviour
              projectilef
                 , p.activeWeapon.rangedDamage, p, p.activeWeapon, healthSystem.GetVital(VitalSystem.Sight) * rangeRange,
              projectilef.hasFire);
+        PlaySwish();
     }
     void doRangeThrowerAttack(Pawn target)
     {
@@ -181,6 +186,7 @@ public class CombatSystem : MonoBehaviour
         arrow.GetComponent<ProjectileBehaviour>()
             .DoThrow(target.gameObject.transform, CS.calculateInaccuracy(shouldRunAndGun, p, runAndGunInaccuracy), p.activeWeapon,
                 p.activeWeapon.rangedDamage, healthSystem.GetVital(VitalSystem.Sight) * rangeRange, p);
+        PlaySwish();
     }
 
     public void onChangeWeapon()
@@ -196,6 +202,12 @@ public class CombatSystem : MonoBehaviour
         weaponSprite.transform.rotation = Quaternion.identity;
 
         extraRangeTime = Skills.EffectToAimTime(p.rangeSkill);
+    }
+
+    void PlaySwish()
+    {
+        SFXManager.I.PlaySound("swish-" + Random.Range(0, CachedItems.cachedSounds.FindAll(x => x.type == "Swishes").Count).ToString(),
+            "Swishes", 0.75f, transform.position, false);
     }
 
     void Checks()

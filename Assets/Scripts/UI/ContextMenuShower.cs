@@ -22,7 +22,7 @@ public class ContextMenuShower : MonoBehaviour
         if (I == null)
         {
             I = this;
-            UIManager.I.OnUiChange += I.OnUiChange;
+            UIManager.OnUiChange += I.OnUiChange;
         }
     }
 

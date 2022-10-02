@@ -31,7 +31,12 @@ public class Clipboard : MonoBehaviour
                 TilemapPlace.SetAll(s.builds, mousePos.x + (int)s.position.x, mousePos.y + (int)s.position.y);
             
             foreach((Pawn p, Vector2 position) in pawnClipboard)
-                PawnManager.I.CreatePawn(false, p.country, p.pname, p.troopType, p.regiment, mousePos + position, p.inventory);
+                PawnManager.I.CreatePawn(false, p.country, CachedItems.RandomName, p.regiment, p.transform.position, p.inventory, p.heldPrimary, p.heldSidearm, p.shield, p.animal != null ? p.animal.sourceAnimal : null, p.armor);
+        }
+
+        if(Input.GetKey(Keybinds.SubtractSelection) && Input.GetKeyDown(KeyCode.S))
+        {
+            SaveScenario.SaveScenarioToPath(Application.persistentDataPath + "\\scenario\\" + Menus.I.currentScenarioFilename + ".xml");
         }
     }
 }

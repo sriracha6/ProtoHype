@@ -14,6 +14,7 @@ using Weapons;
 using Armors;
 using Projectiles;
 using Shields;
+using Animals;
 
 /// <summary>
 /// I tried to make this OOP but I couldn't.
@@ -88,10 +89,10 @@ namespace PawnFunctions
             {
                 pawnSelected = true;
                 //pawnDarkener.forceRenderingOff = false;
-                
-                if (!BoxSelection.newSelectedPawns.Contains(this) && BoxSelection.mode == SelectionMode.Default) 
+
+                if (!BoxSelection.newSelectedPawns.Contains(this) && BoxSelection.mode == SelectionMode.Default)
                     BoxSelection.newSelectedPawns.Add(this);
-                if (BoxSelection.newSelectedPawns.Contains(this) && BoxSelection.mode == SelectionMode.Subtract) 
+                if (BoxSelection.newSelectedPawns.Contains(this) && BoxSelection.mode == SelectionMode.Subtract)
                     BoxSelection.newSelectedPawns.Remove(this);
                 if (BoxSelection.mode == SelectionMode.ClearAll)
                 {
@@ -101,6 +102,12 @@ namespace PawnFunctions
                 }
             }
         }
+
+        public override int GetHashCode() =>
+            (heldPrimary, heldSidearm, shield, animal == null ? null : animal.sourceAnimal, inventory, armor, inventory).GetHashCode();
+
+        public bool Equals(Pawn x, Pawn y) => x.Equals(y);
+        public int GetHashCode(Pawn p) => p.GetHashCode();
 
         protected void OnTriggerExit2D(Collider2D collision)
         {
@@ -124,5 +131,20 @@ namespace PawnFunctions
             mouseOverPawn = false;
             thisPawnMouseOver = false;
         }
+    }
+
+    class PawnComparer : IEqualityComparer<Pawn>
+    {
+        public bool Equals(Pawn x, Pawn y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (ReferenceEquals(x, null)) return false;
+            if (ReferenceEquals(y, null)) return false;
+            if (x.GetType() != y.GetType()) return false;
+
+            return x.heldPrimary == y.heldPrimary && x.heldSidearm == y.heldSidearm && x.shield == y.shield && ((x.animal != null && y.animal != null && x.animal.sourceAnimal == y.animal.sourceAnimal) || (x.animal == null && y.animal == null)) && x.inventory == y.inventory && x.armor == y.armor;
+        }
+        public int GetHashCode(Pawn p) =>
+            p.GetHashCode();
     }
 }

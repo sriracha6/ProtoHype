@@ -186,6 +186,8 @@
 
 .brown-bg {
     background-color: var(--bgcolor-lightbrown);
+    border-color: var(--color-light);
+    border-width:2px;
 }
 
 .brown-bg .unity-label {
@@ -218,5 +220,10 @@
 }
 
 .unity-base-slider__text-field {
-    color: rgba(0, 0, 0, 255);
+    color: rgb(0, 0, 0);
+}
+
+.short-tf .unity-label {
+    width: -3px;
+    -unity-font-definition: resource('garamond SDF');
 }

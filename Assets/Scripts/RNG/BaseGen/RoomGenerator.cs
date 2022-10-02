@@ -9,6 +9,7 @@ enum DoorSide : int { Left, Top, Right, Bottom }
 
 public class RoomGenerator : MonoBehaviour
 {
+    /*
     public static RoomGenerator I { get; private set; } = null;
     // Start is called before the first frame update
     protected void Awake()
@@ -52,4 +53,5 @@ public class RoomGenerator : MonoBehaviour
         }
         return roomPoints;
     }
+    */
 }

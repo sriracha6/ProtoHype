@@ -47,7 +47,7 @@ public class PawnAdder : MonoBehaviour
                 Messages.AddMessage("Non number input.");
             if (Regiment.List.Exists(x => x.id == result))
                 CurrentRegiment = Regiment.List.Find(x => x.id == result);
-            else
+            else if(CurrentTT != null)
                 CurrentRegiment = Regiment.Create(CurrentTT, CurrentTT.country);
         });
     }
@@ -77,15 +77,19 @@ public class PawnAdder : MonoBehaviour
     {
         if (!deleteMode)
         {
-            if (isVisible && CurrentTT != null && !UIManager.mouseOverUI && !Placer.canPlace && CurrentRegiment != null && Input.GetMouseButtonDown(Keybinds.LeftMouse))
+            if (isVisible && CurrentTT != null && !SCPauseMenu.I.isOpen && !UIManager.mouseOverUI && !Placer.canPlace && CurrentRegiment != null && Input.GetMouseButtonDown(Keybinds.LeftMouse))
             {
                 if (Mode == PawnAddMode.Single)
-                    PawnManager.I.CreatePawn(false, CurrentTT.country, CachedItems.RandomName, CurrentTT, CurrentRegiment, WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition));
+                    PawnManager.I.CreatePawn(false, CurrentTT.country, CachedItems.RandomName, CurrentTT, CurrentRegiment, WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition)/*, null, null*/);
                 else
                     PawnManager.I.CreateRegiment(false, CurrentTT, CurrentRegiment, root.Q<SliderInt>("RegimentSize").value, WCMngr.I.mainCam.ScreenToWorldPoint(Input.mousePosition));
             }
         }
-        else if (deleteMode && Input.GetMouseButton(Keybinds.LeftMouse) && PawnFunctions.Pawn.mouseOverPawn && !UIManager.mouseOverUI)
-            PawnManager.I.RemovePawn(PawnManager.allPawns.Find(p => p.thisPawnMouseOver));
+        else if (deleteMode && !SCPauseMenu.I.isOpen && Input.GetMouseButtonDown(Keybinds.LeftMouse) && PawnFunctions.Pawn.mouseOverPawn && !UIManager.mouseOverUI)
+        {
+            PawnFunctions.Pawn pawn = PawnManager.allPawns.Find(p => p.thisPawnMouseOver);
+            if(pawn != null)
+            PawnManager.I.RemovePawn(pawn);
+        }
     }
 }

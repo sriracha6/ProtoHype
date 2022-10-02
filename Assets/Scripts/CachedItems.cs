@@ -149,11 +149,13 @@ public class CachedItems
     {
         public AudioClip audioClip;
         public string name;
+        public string type;
 
-        public CachedSound(AudioClip audioClip, string name)
+        public CachedSound(AudioClip audioClip, string name, string type)
         {
             this.audioClip = audioClip;
             this.name = name;
+            this.type = type;
         }
     }
 

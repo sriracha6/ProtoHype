@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -15,6 +17,9 @@ public class SFXManager : MonoBehaviour
 
     public static float Volume01 = 0.5f;
     public int samplerate = 44100;
+
+    CachedSound item;
+    public AudioImporter importer;
 
     AudioSource nextAudioSource { get { return I.audioSources.Find(x => !x.isPlaying); } }
 
@@ -50,10 +55,9 @@ public class SFXManager : MonoBehaviour
 
         if (!isUI && !overrideDistanceCheck && sqrLen < (volume01 * volume01) * (MAXAUDIODISTANCE * MAXAUDIODISTANCE))
             return null;
-
         if (CachedItems.cachedSounds.Exists(x => x.name == name))
         {
-            var item = CachedItems.cachedSounds.Find(x => x.name == name).audioClip;
+            var item = CachedItems.cachedSounds.Find(x => x.name == name && x.type == type).audioClip;
             if (isUI)
             {
                 AudioSource audio;
@@ -64,10 +68,11 @@ public class SFXManager : MonoBehaviour
                 }
                 else
                 {
-                    audio = I.AddAudioSource(true);
+                    I.AddAudioSource(true);
+                    audio = I.nextCameraAudioSource;
                     audio.PlayOneShot(item, volume01 * Volume01);
                 }
-                return I.cameraAudioSources.Find(x => x.clip == item);
+                return audio;//I.cameraAudioSources.Find(x => x.clip == item);
             }
             if (I.nextAudioSource != null)
             {
@@ -75,6 +80,7 @@ public class SFXManager : MonoBehaviour
                 s.transform.position = location;
 
                 I.nextAudioSource.PlayOneShot(item, volume01 * Volume01);
+                return s;
             }
             else
             {
@@ -82,14 +88,17 @@ public class SFXManager : MonoBehaviour
                 s.transform.position = location;
 
                 s.PlayOneShot(item, volume01 * Volume01);
+                return s;
             }
         }
         else
         {
-            I.CacheAudio(name, type);
-            I.PlaySound(name, type, volume01, location, isUI);
+            I.doneCaching = false;
+            StartCoroutine(I.CacheAudio(name, type));
+            while(!I.doneCaching) { }
+            I.doneCaching = true;
+            return I.PlaySound(name, type, volume01, location, isUI);
         }
-        return audioSources.Find(x=>x.clip.name==name);
     }
 
     protected void Update()
@@ -97,23 +106,30 @@ public class SFXManager : MonoBehaviour
         transform.position = I.mainCam.transform.position; // i think
     }
 
-    public CachedSound CacheAudio(string name, string type)
+    static void Load(string path)
     {
-        // todo: mods
-        byte[] data = XMLLoader.Loaders.LoadBytes(Application.persistentDataPath + "\\audio\\" + type + "\\" + name);
-        AudioClip clip = AudioClip.Create(name, data.Length, 1, I.samplerate, false);
-        float[] samples = new float[clip.samples * clip.channels];
-        for (int i = 0; i < data.Length; i++)
-            samples[i] = data[i] / 255f; // wtf?
+        I.importer.Import(path);
+    }
 
-        clip.SetData(samples, 0);
+    bool doneCaching = false;
 
+    public IEnumerator CacheAudio(string name, string type)
+    {
+        Load(Application.persistentDataPath + "\\audio\\" + type + "\\" + name);
+        //yield return new WaitUntil(() => I.importer.isInitialized);
+        I.Create(name, type);
+        yield return null;
+    }
 
-        CachedSound item = new CachedItems.CachedSound(clip, name);
-        cachedSounds.Add(item);
+    void Create(string name, string type)
+    {
+        Debug.Log($"here");
+        AudioClip clip = I.importer.audioClip;
+        I.item = new CachedSound(clip, name, type);
         if (type == "UI")
             UIManager.UISounds.Add(item);
-        return item;
+        I.doneCaching = true;
+        cachedSounds.Add(I.item);
     }
 
     AudioSource AddAudioSource(bool camera=false)
@@ -122,13 +138,13 @@ public class SFXManager : MonoBehaviour
         { 
             GameObject o = new GameObject("AudioSource");
             var s = o.AddComponent<AudioSource>();
-            audioSources.Add(s);
+            I.audioSources.Add(s);
             return s;
         }
         else
         {
             var s = I.mainCam.gameObject.AddComponent<AudioSource>();
-            cameraAudioSources.Add(s);
+            I.cameraAudioSources.Add(s);
             return s;
         }
     }

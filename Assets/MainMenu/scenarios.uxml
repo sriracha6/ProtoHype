@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/root.uss" />
+    <ui:VisualElement name="BG" style="background-image: resource(&apos;ui/BGNEW&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-and-crop;" />
+    <ui:Button text="&lt;" display-tooltip-when-elided="true" name="BackButton" style="position: absolute; background-color: rgb(94, 94, 94); background-image: none;" />
+    <ui:VisualElement class="brown-bg" style="position: absolute; left: 10%; top: 5%; width: 80%; height: 80%; border-left-color: rgb(241, 232, 200); border-right-color: rgb(241, 232, 200); border-top-color: rgb(241, 232, 200); border-bottom-color: rgb(241, 232, 200); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; flex-direction: row;">
+        <ui:VisualElement style="width: 80%; height: 100%; border-right-color: rgb(241, 232, 200); border-right-width: 2px;">
+            <ui:ScrollView name="Scenarios" show-vertical-scroller="false" style="width: 100%; height: 100%;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="width: 20%; height: 100%;">
+            <ui:VisualElement name="Image" style="padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; width: 150px; height: 150px;" />
+            <ui:Label text="TITLE" display-tooltip-when-elided="true" name="TITLE" style="-unity-font-definition: resource(&apos;helvetica SDF&apos;); white-space: normal;" />
+            <ui:ScrollView>
+                <ui:Label text="Description" display-tooltip-when-elided="true" name="Description" style="-unity-font-definition: resource(&apos;garamond SDF&apos;); white-space: normal;" />
+            </ui:ScrollView>
+            <ui:DropdownField label="Difficulty" type="Difficulty" name="Difficulty" choices="Normal,Hard,Easy" style="width: 245px; -unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+            <ui:Toggle label="Attack Mode" name="AttackMode" style="-unity-font-definition: resource(&apos;garamond SDF&apos;);" />
+            <ui:Button text="Play" display-tooltip-when-elided="true" name="Play" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

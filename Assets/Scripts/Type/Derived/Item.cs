@@ -6,12 +6,10 @@ using Weapons;
 
 // for once, using OOP for what it's good at!
 // todo: source modname for folder in that folder. big blcak penis men
-static class ItemsList
-{
-    public static List<Item> items = new List<Item> ();
-}
 public class Item
 {
+    static List<Item> items = new List<Item>();
+    
     [XMLItem("Description")] public string Description { get; }
     [XMLItem("Name")] public string Name { get; }
     public int ID { get; }
@@ -27,9 +25,27 @@ public class Item
     {
         this.Name = name;
         this.Description = description;
-        ItemsList.items.Add (this);
-        this.ID = ItemsList.items.Count;
+        items.Add (this);
+        this.ID = items.Count;
         this.SourceFile = sourcefile;
         this.SourceFileName = Path.GetFileName(sourcefile);
+    }
+
+    public static Item GetGenericItem(string name)
+    {
+        if (items.Exists(x => x.Name == name))
+            return items.Find(x => x.Name == name);
+        else
+            DB.Attention($"Couldn't find [item] of name \"{name}\"");
+            return null;
+    }
+
+    public static Item GetGenericItem(int id)
+    {
+        if (items.Exists(x => x.ID == id))
+            return items.Find(x => x.ID == id);
+        else
+            DB.Attention($"Couldn't find [item] of id \"{id}\"");
+        return null;
     }
 }

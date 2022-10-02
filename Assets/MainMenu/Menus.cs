@@ -13,7 +13,11 @@ public class Menus : MonoBehaviour
     public UIDocument loading;
     public UIDocument warning;
     public UIDocument settings;
-    public UIDocument scenarioCreator;
+    public UIDocument scenarios;
+    public string currentScenarioFilename;
+    public string scenarioBackupName;
+
+    public bool scenLoad = false;
 
     public bool inBattle;
     public bool inSC;

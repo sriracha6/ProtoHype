@@ -35,7 +35,7 @@ public class TileSelection : MonoBehaviour
         }
         if (Input.GetMouseButton(Keybinds.RightMouse) && !Input.GetKey(Keybinds.bulkTileSelect) && started && !isBulkMode)
         {
-            var c = maincam.ScreenToWorldPoint(Input.mousePosition);
+            var c = maincam.ScreenToWorldPoint(Input.mousePosition)/2;
             currentMousePos = new Vector2(Mathf.Ceil(c.x), Mathf.Ceil(c.y));
 
             if (!selectedPoints.Contains(new Vector2Int((int)currentMousePos.x, (int)currentMousePos.y)))
@@ -66,7 +66,7 @@ public class TileSelection : MonoBehaviour
             isBulkMode = true;
             started = true;
             lineRenderer.positionCount = 4;
-            initialMousePos = maincam.ScreenToWorldPoint(Input.mousePosition);
+            initialMousePos = maincam.ScreenToWorldPoint(Input.mousePosition) / 2;
             lineRenderer.SetPosition(0, new Vector3(initialMousePos.x, initialMousePos.y, -1)); // this can be better, right?
             lineRenderer.SetPosition(1, new Vector3(initialMousePos.x, initialMousePos.y, -1));
             lineRenderer.SetPosition(2, new Vector3(initialMousePos.x, initialMousePos.y, -1));
@@ -108,8 +108,6 @@ public class TileSelection : MonoBehaviour
 
         void GetTilesInArea()
         {
-            print("Selected Tiles: " + area);
-            int it = 0;
             if (!Input.GetKey(Keybinds.SelectAdd))
                 Player.selectedTilePoses.Clear();
             for (int y = WCMngr.I.groundTilemap.cellBounds.min.y; y < WCMngr.I.groundTilemap.cellBounds.max.y; y++)
@@ -118,13 +116,9 @@ public class TileSelection : MonoBehaviour
                 {
                     Vector3Int p = new Vector3Int(x, y, 0);
                     if (bcollider.bounds.Contains(new Vector3(x, y, -1)))
-                    {
-                        it++;
                         Player.selectedTilePoses.Add(p);
-                    }
                 }
             }
-            Debug.Log($"IT:<color=magenta>{it}</color>");
         }
     }
 }

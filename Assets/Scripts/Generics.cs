@@ -2,29 +2,39 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Weapons;
 
 namespace Generics
 {
-    public struct Generic<T>
+    public struct Generic
     {
         public string name;
-        public Type type;
-        public List<T> elements;
+        public string type;
+        public List<string> identifiers;
 
-        public Generic(string name, List<T> elements, Type type)
+        public Generic(string name, List<string> elements, string type)
         {
             this.name = name;
-            this.elements = elements;
+            this.identifiers = elements;
             this.type = type;
         }
     }
     public static class GenericManager
     {
-        public static List<object> generics = new List<object>();
+        public static List<Generic> generics = new List<Generic>();
 
-        public static void CreateGenericList<T>(string name, List<T> contents, Type type)
+        public static List<T> GetGeneric<T>(string name) where T : Item
         {
-            generics.Add(new Generic<T>(name, contents, type));
+            if (generics.Exists(x => x.name == name))
+                return generics.Find(d => d.name == name).identifiers.ConvertAll<T>(x => (T)Item.GetGenericItem(x));
+            else
+                DB.Attention($"couldn't find generic of name \"{name}\"");
+                return null;
+        }
+
+        public static void CreateGenericList(string name, List<string> contents, string type)
+        {
+            generics.Add(new Generic(name, contents, type));
         }
     }
 }

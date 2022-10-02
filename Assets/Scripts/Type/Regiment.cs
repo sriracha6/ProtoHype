@@ -59,6 +59,12 @@ namespace Regiments
             List.Add(c);
             return c;
         }
+        public static Regiment Create(TroopType trooptype, Country origin, int id) // creates if it DOESNT exist
+        {
+            Regiment c = new Regiment(trooptype, origin, id);
+            List.Add(c);
+            return c;
+        }
         public static Regiment Get(int id)
         {
             if (List.Exists(x => x.id == id))

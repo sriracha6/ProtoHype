@@ -9,6 +9,7 @@ public enum WorldFeature
 }
 namespace Structures
 {
+    /*
     public class RoomInfo
     {
         public Room room;
@@ -76,6 +77,24 @@ namespace Structures
             else
                 DB.Attention("Couldn't find structure of name \""+name+"\"");
             return null;
+        }
+    }
+    */
+    public class Structure
+    {
+        public string Filepath;
+        public string Name { get { return System.IO.Path.GetFileName(Filepath); } }
+        public static List<Structure> List = new List<Structure>();
+
+        public Structure(string filepath)
+        {
+            Filepath = filepath;
+            List.Add(this);
+        }
+
+        public static Structure Get(string text)
+        {
+            return List.Find(x=>x.Name==text);
         }
     }
 }

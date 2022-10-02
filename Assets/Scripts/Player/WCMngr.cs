@@ -46,6 +46,9 @@ public class WCMngr : MonoBehaviour
     public RuleTile mountainTile;
     public Tile testTile;
 
+    public static TerrainType WaterTT;
+    public static TerrainType MountainTT;
+
     public List<string> bluntWoundNames;
     public List<string> seriousBluntWoundNames;
 
@@ -67,6 +70,8 @@ public class WCMngr : MonoBehaviour
             I.bloodParent = bloodParent;
             I.mainCam = Camera.main;
         }
+        WaterTT = new TerrainType("Water", "", BiomeArea.waterHeight, Color.blue, I.mountainTile, SpecialType.Water, false); ;
+        MountainTT = new TerrainType("Mountain", "", BiomeArea.mountainHeight, new Color(256, 100, 100), I.mountainTile, SpecialType.Mountain, false);
     }
 
     /// <summary>
