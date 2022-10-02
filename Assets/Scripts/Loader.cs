@@ -155,6 +155,8 @@ $@"            Codename
         foreach (string file in Directory.GetFiles(directorypath + "\\audio", "*.*")) StartCoroutine(SFXManager.I.CacheAudio(Path.GetFileName(file), file.Remove(0,(directorypath + "audio").Length).Substring(0,Path.GetFileName(file).Length)));
         if (firstPass) Loaders.LoadBodyparts(Application.persistentDataPath + "\\bodyparts.xml");
 
+        foreach (string file in Directory.GetFiles(directorypath + "\\trooptypeicons", "*.*")) Loaders.LoadTroopTypeIcon(file);
+
         foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\melee", "*.*")) Loaders.LoadMeleeWeapon(file);
         foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\ranged", "*.*")) Loaders.LoadRangedWeapon(file);
         foreach (string file in Directory.GetFiles(directorypath + "\\weapons\\projectiles", "*.*")) Loaders.LoadProjectile(file);

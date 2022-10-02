@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Biome name="Forest">
+    <Type>Biome</Type>
+    <Name>Forest</Name>
+    <Location>
+        <Temperature>70</Temperature> 
+        <Prefers>Flat</Prefers>
+        <AmbientSounds>birds</AmbientSounds> 
+    </Location>
+    <WeatherFrequencies> 
+        <Weather frequency="30">Rain</Weather> 
+        <Weather frequency="70">Clear</Weather>
+    </WeatherFrequencies>
+    <Description>A forest packed with all kinds of natural life.</Description>
+    <Color>18, 71, 28</Color>
+    <PlantDensity>0.7</PlantDensity>
+    <WaterComminality>0.6</WaterComminality>
+    <Terrains>
+        <Terrain frequency="90">Grass</Terrain>
+        <Terrain frequency="10">Dirt</Terrain>
+    </Terrains>
+    <WaterClampTT>Grass</WaterClampTT>
+    <Plants>Pine Tree,Tree,Bush,Grass,Birch Tree</Plants>
+</Biome>

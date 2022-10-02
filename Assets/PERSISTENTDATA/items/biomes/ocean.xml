@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Biome name="Ocean">
+    <Type>Biome</Type>
+    <Name>Ocean</Name>
+    <Location>
+        <Temperature>60</Temperature> 
+        <Prefers>None</Prefers>
+        <AmbientSounds>water</AmbientSounds> 
+    </Location>
+    <WeatherFrequencies> 
+        <Weather frequency="30">Rain</Weather> 
+        <Weather frequency="20">Thunderstorm</Weather>
+        <Weather frequency="50">Clear</Weather>
+    </WeatherFrequencies>
+    <Description>An endless ocean which seems to stretch on for miles.</Description>
+    <Color>60, 83, 199</Color>
+    <PlantDensity>0</PlantDensity>
+    <WaterComminality>1</WaterComminality>
+    <Terrains>
+        <Terrain frequency="100">Water</Terrain>
+    </Terrains>
+    <WaterClampTT>Water</WaterClampTT>
+    <Plants></Plants>
+</Biome>

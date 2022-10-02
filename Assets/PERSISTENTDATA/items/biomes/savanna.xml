@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<Biome name="Savanna">
+    <Type>Biome</Type>
+    <Name>Savanna</Name>
+    <Location>
+        <Temperature>50</Temperature> 
+        <Prefers>None</Prefers>
+        <AmbientSounds>insects</AmbientSounds> 
+    </Location>
+    <WeatherFrequencies> 
+        <Weather frequency="2.5">Rain</Weather> 
+        <Weather frequency="2.5">Thunderstorm</Weather>
+        <Weather frequency="95">Clear</Weather>
+    </WeatherFrequencies>
+    <Description>A temperate savanna. There's not much to see here.</Description>
+    <Color>105, 71, 29</Color>
+    <PlantDensity>0.25</PlantDensity>
+    <WaterComminality>0.05</WaterComminality>
+    <Terrains>
+        <Terrain frequency="90">Grass</Terrain> 
+        <Terrain frequency="5">Dirt</Terrain>
+        <Terrain frequency="5">Water</Terrain>
+    </Terrains>
+    <WaterClampTT>Grass</WaterClampTT>
+    <Plants>Grass,Bush,Acaccia Tree</Plants>
+</Biome>

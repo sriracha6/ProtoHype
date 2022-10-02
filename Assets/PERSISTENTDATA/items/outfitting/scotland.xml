@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<Outfittings country="Scotland">
+	<Soldier name="Infantry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Scotland</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>4-5</MeleeSkill>
+			<ShootingSkill>0-2</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Claymore,Lance,Battle Axe,War Hammer,Lochaber Axe,War Scythe
+		<Generic>euromeleegeneric</Generic>
+		</Weapons>
+		<Shields>
+		Buckler
+		</Shields>
+		<Armor>
+		Skirt,Bonnet
+		</Armor>
+		<Icon>glaive</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Archer">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Scotland</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>0-2</MeleeSkill>
+			<ShootingSkill>3-5</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Generic Bow
+		</Weapons>
+		<Sidearms>
+		Dagger
+		</Sidearms>
+		<Shields>
+		Buckler
+		</Shields>
+		<Armor> 
+		Quiver,Skirt,Gambeson,Helmet
+		</Armor>
+		<Icon>bow</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Calvalry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Scotland</CountryOrigin>
+		<RidingAnimal>horse</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Lance,Battle Axe,War Hammer,Lochaber Axe, War Scythe
+		</Weapons>
+		<Shields>
+		Heater Shield
+		</Shields>
+		<Armor>
+		Mail Coif,Helmet,Poleyn,Tabard
+		</Armor>
+		<Icon>horse</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Spearman">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Scotland</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Throwing Spear
+		</Weapons>
+		<Shields>
+		Targe
+		</Shields>
+		<Armor>
+		Quiver,Helmet,Gambeson
+		</Armor>
+		<Icon>stonespear</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+</Outfittings>

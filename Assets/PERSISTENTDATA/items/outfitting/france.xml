@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<Outfittings country="France">
+	<Soldier name="Infantry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>France</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>3-5</MeleeSkill>
+			<ShootingSkill>0-2</ShootingSkill>
+		</SkillsRange>
+		<Weapons> <!-- * signifies weapon groups -->
+		Bec De Corbin,Falchion,Estoc,Goedendag
+		<Generic>euromeleegeneric</Generic>
+		</Weapons>
+		<Shields>
+		Buckler
+		</Shields>
+		<Armor>
+		Gambeson
+		</Armor>
+		<Icon>glaive</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Paladin">
+		<Type>SoldierType</Type>
+		<CountryOrigin>France</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>7-9</MeleeSkill>
+			<ShootingSkill>7-9</ShootingSkill>
+		</SkillsRange>
+		<Weapons> <!-- * signifies weapon groups -->
+		Arming Sword
+		</Weapons>
+		<Sidearms>
+		Knife
+		</Sidearms>
+		<Armor>
+		Gambeson,Plated Mail,Helmet
+		</Armor>
+		<Icon>wingedsword</Icon>
+		<PreferSpawn>InsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Calvalry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>France</CountryOrigin>
+		<RidingAnimal>horse</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> <!-- * signifies weapon groups -->
+		Lance,Bec De Corbin,Horseman's Pick
+		</Weapons>
+		<Armor>
+		Light Plate Armor
+		</Armor>
+		<Icon>horse</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Spearman">
+		<Type>SoldierType</Type>
+		<CountryOrigin>France</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> <!-- * signifies weapon groups -->
+		Throwing Spear
+		</Weapons>
+		<Shields>
+		Hungarian Shield
+		</Shields>
+		<Armor>
+		Quiver,Mail,Poleyn,Bascinet
+		</Armor>
+		<Icon>stonespear</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+</Outfittings>

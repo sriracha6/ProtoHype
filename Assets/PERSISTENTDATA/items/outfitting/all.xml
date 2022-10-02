@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<Outfittings country="all">
+	<Soldier name="Knight">
+		<Type>SoldierType</Type>
+		<CountryOrigin>All</CountryOrigin>
+		<RidingAnimal>Horse</RidingAnimal>
+		<AnimalArmor>Barding</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>4-6</MeleeSkill>
+			<ShootingSkill>4-6</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Lance,
+		Arming Sword,
+		Battle Axe
+		</Weapons>
+		<Armor>
+		Plate Armor,
+		Gauntlet,
+		Heater Shield
+		</Armor>
+		<Icon>wingedsword</Icon>
+		<PreferSpawn>InsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Cataphract">
+		<Type>SoldierType</Type>
+		<CountryOrigin>all</CountryOrigin>
+		<RidingAnimal>Horse</RidingAnimal>
+		<AnimalArmor>Cataphract</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>4-6</MeleeSkill>
+			<ShootingSkill>2-3</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Lance
+		</Weapons>
+		<Armor>
+		Scale
+		</Armor>
+		<Icon>pegasus</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Master">
+		<Type>SoldierType</Type>
+		<CountryOrigin>all</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>6-8</MeleeSkill>
+			<ShootingSkill>6-8</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Quarterstaff
+		</Weapons>
+		<Sidearms>
+		Knife
+		</Sidearms>
+		<Armor>
+		Tabard,
+		Surcoat,
+		Pourpoint
+		</Armor>
+		<Icon>broadsword</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Housecarl">
+		<Type>SoldierType</Type>
+		<CountryOrigin>all</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>4-6</MeleeSkill>
+			<ShootingSkill>4-6</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		<GenericSpecial>Any</GenericSpecial>
+		</Weapons>
+		<Armor>
+		Surcoat,
+		Light Plate Armor
+		</Armor>
+		<Icon>glaive</Icon>
+		<PreferSpawn>InsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Peasant">
+		<Type>SoldierType</Type>
+		<CountryOrigin>all</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>0-4</MeleeSkill>
+			<ShootingSkill>0-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		<GenericSpecial>None</GenericSpecial>
+		Pickaxe,
+		Scythe
+		</Weapons>
+		<Armor>
+		Doublet,
+		Coif,
+		Tunic
+		</Armor>
+		<Icon>rake</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+</Outfittings>

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<Outfittings country="Russia">
+	<Soldier name="Infantry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Russia</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>3-5</MeleeSkill>
+			<ShootingSkill>0-2</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		War Hammer,Pike,Longsword
+		</Weapons>
+		<Shields>
+		Kite Shield
+		</Shields>
+		<Armor>
+		Boyar Helmet,Brigandine,Mirror Armor
+		</Armor>
+		<Icon>glaive</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Calvalry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Russia</CountryOrigin>
+		<RidingAnimal>horse</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Throwing Spear
+		</Weapons>
+		<Shields>
+		Kite Shield
+		</Shields>
+		<Armor>
+		Boyar Helmet,Brigandine,Mirror Armor		
+		</Armor>
+		<Icon>horse</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Spearman">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Russia</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Throwing Spear
+		</Weapons>
+		<Shields>
+		Kite Shield
+		</Shields>
+		<Armor>
+		Quiver,Boyar Helmet,Brigandine,Mirror Armor
+		</Armor>
+		<Icon>stonespear</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+</Outfittings>

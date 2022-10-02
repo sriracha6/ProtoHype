@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<Outfittings country="Vikings">
+	<Soldier name="Infantry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Vikings</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>3-5</MeleeSkill>
+			<ShootingSkill>0-2</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Battle Axe,Throwing Spear
+		</Weapons>
+		<Shields>
+		Targe
+		</Shields>
+		<Armor>
+		Spangehelm,Hauberk
+		</Armor>
+		<Icon>throwndaggers</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Archer">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Vikings</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>0-2</MeleeSkill>
+			<ShootingSkill>3-5</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		<Generic>eurorangegeneric</Generic>
+		</Weapons>
+		<Sidearms>
+		Dagger
+		</Sidearms>
+		<Armor>
+		Tabard,Quiver,Spangehelm
+		</Armor>
+		<Icon>bow</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Calvalry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Viking</CountryOrigin>
+		<RidingAnimal>horse</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Battle Axe
+		</Weapons>
+		<Armor>
+		Spangehelm,Scale Armor
+		</Armor>
+		<Icon>horse</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Spearman">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Viking</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Throwing Spear
+		</Weapons>
+		<Armor>
+		Quiver,Spangehelm,Buckler,Hauberk
+		</Armor>
+		<Icon>stonespear</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+</Outfittings>

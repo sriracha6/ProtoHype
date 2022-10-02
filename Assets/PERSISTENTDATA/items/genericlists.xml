@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<Lists>
+	<List name="euromeleegeneric" type="Weapon">
+	Flail,
+	Mace,
+	Club,
+	War Hammer,
+	Dagger,
+	Longsword,
+	Rapier,
+	Guisarme,
+	Lance,
+	Partisan,
+	Pike,
+	Ranseur,
+	Spetum,
+	Voulge,
+	War Scythe,
+	</List>
+	<List name="eurorangegeneric" type="Weapon">
+	Generic Bow,
+	Perso-Parthian Bow,
+	Arbalest
+	</List>
+</Lists>

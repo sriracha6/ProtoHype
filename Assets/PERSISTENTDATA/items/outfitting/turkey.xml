@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<Outfittings country="Turkey">
+	<Soldier name="Janissary">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Turkey</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>4-6</MeleeSkill>
+			<ShootingSkill>4-6</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Battle Axe,Turkish Bow,Throwing Spear
+		</Weapons>
+		<Armor>
+		Quiver,Turban,Splint Armor,Tabard
+		</Armor>
+		<Icon>broadsword</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Sipahi">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Turkey</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>0-2</MeleeSkill>
+			<ShootingSkill>3-5</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Turkish Bow
+		</Weapons>
+		<Sidearms>
+		Knife
+		</Sidearms>
+		<Shields>
+		Targe
+		</Shields>
+		<Armor>
+		Turban,Brigandine,Mail
+		</Armor>
+		<Icon>bow</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Infantry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Turkey</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>3-5</MeleeSkill>
+			<ShootingSkill>0-2</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		<Generic>euromeleegeneric</Generic>
+		</Weapons>
+		<Shields>
+		Targe
+		</Shields>
+		<Armor>
+		Brigandine,Mail,Turban
+		</Armor>
+		<Icon>glaive</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Calvalry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Turkey</CountryOrigin>
+		<RidingAnimal>horse</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Turkish Bow
+		</Weapons>
+		<Sidearms>
+		Knife
+		</Sidearms>
+		<Shields>
+		Targe
+		</Shields>
+		<Armor>
+		Quiver,Turban,Splint Armor
+		</Armor>
+		<Icon>horse</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+</Outfittings>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<Biome name="Rainforest">
+    <Type>Biome</Type>
+    <Name>Rainforest</Name>
+    <Location>
+        <Temperature>80</Temperature> 
+        <Prefers>None</Prefers>
+        <AmbientSounds>insectsandbirds</AmbientSounds> 
+    </Location>
+    <WeatherFrequencies> 
+        <Weather frequency="70">Rain</Weather> 
+        <Weather frequency="10">Thunderstorm</Weather>
+        <Weather frequency="20">Clear</Weather>
+    </WeatherFrequencies>
+    <Description>An disease ridden, incredibly dense forest. If you can somehow hear over the sounds of nature and hear a person, they are likely hiding secrets.</Description>
+    <Color>52, 74, 37</Color>
+    <PlantDensity>0.9</PlantDensity>
+    <WaterComminality>0.05</WaterComminality>
+    <Terrains>
+        <Terrain frequency="90">Grass</Terrain>
+        <Terrain frequency="5">Dirt</Terrain>
+        <Terrain frequency="5">Water</Terrain>
+    </Terrains>
+    <WaterClampTT>Grass</WaterClampTT>
+    <Plants>Balsa Tree,Bush,Grass,Tree,Mahogany Tree</Plants>
+</Biome>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<Biome name="Oasis">
+    <Type>Biome</Type>
+    <Name>Oasis</Name>
+    <Location>
+        <Temperature>70</Temperature> 
+        <Prefers>Flat</Prefers>
+        <AmbientSounds>water</AmbientSounds> 
+    </Location>
+    <WeatherFrequencies> 
+        <Weather frequency="50">Rain</Weather> 
+        <Weather frequency="50">Clear</Weather>
+    </WeatherFrequencies>
+    <Description>A </Description>
+    <Color>199, 183, 60</Color>
+    <PlantDensity>0.5</PlantDensity>
+    <WaterComminality>1</WaterComminality>
+    <Terrains>
+        <Terrain frequency="50">Grass</Terrain>
+        <Terrain frequency="10">Dirt</Terrain>
+        <Terrain frequency="40">Sand</Terrain>
+    </Terrains>
+    <WaterClampTT>Grass</WaterClampTT>
+    <Plants>Grass, Palm Tree</Plants>
+</Biome>

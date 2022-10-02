@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Biome name="Icesheet">
+    <Type>Biome</Type>
+    <Name>Icesheet</Name>
+    <Location>
+        <Temperature>-25</Temperature> 
+        <Prefers>None</Prefers>
+        <AmbientSounds>water</AmbientSounds> 
+    </Location>
+    <WeatherFrequencies> 
+        <Weather frequency="50">Rain</Weather> 
+        <Weather frequency="50">Clear</Weather>
+    </WeatherFrequencies>
+    <Description>A desolate sheet of ice with almost no life.</Description>
+    <Color>125, 192, 255</Color>
+    <PlantDensity>0.05</PlantDensity>
+    <WaterComminality>1</WaterComminality>
+    <Terrains>
+        <Terrain frequency="90">Ice</Terrain>
+        <Terrain frequency="10">Snow</Terrain>
+    </Terrains>
+    <WaterClampTT>Ice</WaterClampTT>
+    <Plants>Grass</Plants>
+</Biome>

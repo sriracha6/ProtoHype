@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<Outfittings country="Germany">
+	<Soldier name="Infantry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Germany</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>3-5</MeleeSkill>
+			<ShootingSkill>0-2</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Guisarme,Halberd,Flail,Morning Star,Ahlspiess,Plancon a Picot
+		</Weapons>
+		<Shields>
+		Pavise Shield
+		</Shields>
+		<Armor>
+		<PickFrom>Scale Armor,Coat of Plates</PickFrom>Bascinet
+		</Armor>
+		<Icon>glaive</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Calvalry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>Germany</CountryOrigin>
+		<RidingAnimal>Horse</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Halberd,Guisarme,Lance,Battle Axe,War Hammer,Horseman's Pick
+		</Weapons>
+		<Shields>
+		Pavise Shield
+		</Shields>
+		<Armor>
+		<PickFrom>Scale Armor,Coat of Plates</PickFrom>Bascinet
+		</Armor>
+		<Icon>horse</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Archer">
+		<Type>SoldierType</Type>
+		<Generic>eurogeneric</Generic>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>0-2</MeleeSkill>
+			<ShootingSkill>3-5</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Parthian Bow,Generic Bow
+		</Weapons>
+		<Sidearms>
+		Dagger
+		</Sidearms>
+		<Armor>
+		<PickFrom>Brigandine,Coat of Plates,Gambeson</PickFrom>
+		<PickFrom>Doublet,Poleyn,Sallet</PickFrom>
+		Mail,Quiver,Bracers
+		</Armor>
+		<Icon>bow</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+</Outfittings>

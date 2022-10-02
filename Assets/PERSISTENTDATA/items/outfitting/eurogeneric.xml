@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<Outfittings country="eurogeneric" generic="true">
+	<Soldier name="Archer">
+		<Type>SoldierType</Type>
+		<Generic>eurogeneric</Generic>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>0-2</MeleeSkill>
+			<ShootingSkill>3-5</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Parthian Bow,Generic Bow
+		</Weapons>
+		<Sidearms>
+		Dagger
+		</Sidearms>
+		<Armor>
+		<PickFrom>Brigandine,Coat of Plates,Gambeson</PickFrom>
+		<PickFrom>Doublet,Poleyn,Sallet</PickFrom>
+		Mail,Quiver,Bracers
+		</Armor>
+		<Icon>bow</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Crossbowman">
+		<Type>SoldierType</Type>
+		<CountryOrigin>eurogeneric</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>0-2</MeleeSkill>
+			<ShootingSkill>3-5</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Arbalest,Crossbow
+		</Weapons>
+		<Sidearms>
+		Dagger
+		</Sidearms>
+		<Armor>
+		Pavise,Light Plate,Mail Coif,Surcoat
+		</Armor>
+		<Icon>crossbow</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+</Outfittings>

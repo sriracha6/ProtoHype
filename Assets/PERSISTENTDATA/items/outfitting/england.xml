@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<Outfittings country="England">
+	<Soldier name="Infantry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>England</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>3-5</MeleeSkill>
+			<ShootingSkill>0-2</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Battle Axe,
+		Halberd
+		<Generic>euromeleegeneric</Generic>
+		</Weapons>
+		<Shields>
+		Kite Shield
+		</Shields>
+		<Armor>
+		Surcoat,
+		Mail,
+		Helmet
+		</Armor>
+		<Icon>glaive</Icon>
+		<PreferSpawn>AroundBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Longbowman">
+		<Type>SoldierType</Type>
+		<CountryOrigin>England</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>1-2</MeleeSkill>
+			<ShootingSkill>3-6</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Longbow
+		</Weapons>
+		<Sidearms>
+		Dagger
+		</Sidearms>
+		<Armor>
+		Gambeson,
+		Bracers,
+		Quiver,
+		Sallet
+		</Armor>
+		<Icon>strongbow</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Calvalry">
+		<Type>SoldierType</Type>
+		<CountryOrigin>England</CountryOrigin>
+		<RidingAnimal>horse</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Lance,
+		Battle Axe,
+		War Hammer,
+		Horseman's Pick
+		</Weapons>
+		<Armor>
+		Mail Hauberk,
+		Light Plate Armor
+		</Armor>
+		<Icon>horse</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+	<Soldier name="Spearman">
+		<Type>SoldierType</Type>
+		<CountryOrigin>England</CountryOrigin>
+		<RidingAnimal>false</RidingAnimal>
+		<AnimalArmor>false</AnimalArmor>
+		<SkillsRange>
+			<MeleeSkill>2-4</MeleeSkill>
+			<ShootingSkill>2-4</ShootingSkill>
+		</SkillsRange>
+		<Weapons> 
+		Throwing Spear
+		</Weapons>
+		<Armor>
+		<PickFrom>Gambeson,
+		Mail</PickFrom>
+		Tabard,
+		Quiver
+		</Armor>
+		<Icon>stonespear</Icon>
+		<PreferSpawn>OutsideBase</PreferSpawn>
+	</Soldier>
+</Outfittings>

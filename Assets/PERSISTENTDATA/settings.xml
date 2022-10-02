@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Auto-Generated-->
+<Settings>
+  <SliderStep>5</SliderStep>
+  <RunAndGunDefaultState>True</RunAndGunDefaultState>
+  <SpawnBlood>True</SpawnBlood>
+  <EnableScreenshake>True</EnableScreenshake>
+  <RegimentSortOrder>0</RegimentSortOrder>
+  <MasterMode>False</MasterMode>
+  <DeveloperMode>False</DeveloperMode>
+  <HUDOpacity01>1</HUDOpacity01>
+  <ShowFPS>False</ShowFPS>
+  <Controls>
+    <LeftMouse>Left Mouse</LeftMouse>
+    <RightMouse>Right Mouse</RightMouse>
+    <MiddleMouse>Middle Mouse</MiddleMouse>
+    <SelectAdd>LeftShift</SelectAdd>
+    <Escape>Escape</Escape>
+    <SubtractSelection>LeftControl</SubtractSelection>
+    <x1Speed>Alpha1</x1Speed>
+    <x2Speed>Alpha2</x2Speed>
+    <x3Speed>Alpha3</x3Speed>
+    <halfSpeed>Alpha0</halfSpeed>
+    <pauseUnpause>Space</pauseUnpause>
+    <clearTileSelection>K</clearTileSelection>
+    <clearPawnSelection>L</clearPawnSelection>
+    <mc_cancel>G</mc_cancel>
+    <mc_move>Z</mc_move>
+    <mc_searchdestroy>X</mc_searchdestroy>
+    <mc_standground>C</mc_standground>
+    <mc_secondary>V</mc_secondary>
+    <mc_runandgun>B</mc_runandgun>
+    <mc_followcursor>N</mc_followcursor>
+    <rp_inc>RightArrow</rp_inc>
+    <rp_dec>LeftArrow</rp_dec>
+    <hideUI>F1</hideUI>
+    <FasterCam>LeftShift</FasterCam>
+    <showRooves>Comma</showRooves>
+    <changeSpeed>LeftControl</changeSpeed>
+    <bulkTileSelect>LeftControl</bulkTileSelect>
+  </Controls>
+  <MasterAudioLevel>0.5</MasterAudioLevel>
+  <Video>
+    <Resolution>1920 x 1080 @ 144Hz</Resolution>
+    <WindowMode>Fullscreen</WindowMode>
+    <VSync>True</VSync>
+    <MaxFPS>0</MaxFPS>
+    <QualityLevel>Sexy</QualityLevel>
+    <AntiAliasing>None</AntiAliasing>
+  </Video>
+</Settings>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<Biome name="Tundra">
+    <Type>Biome</Type>
+    <Name>Tundra</Name>
+    <Location>
+        <Temperature>-10</Temperature> 
+        <Prefers>None</Prefers>
+        <AmbientSounds>wind</AmbientSounds> 
+    </Location>
+    <WeatherFrequencies> 
+        <Weather frequency="35">Rain</Weather> 
+        <Weather frequency="0">Thunderstorm</Weather>
+        <Weather frequency="65">Clear</Weather>
+    </WeatherFrequencies>
+    <Description>A very cold, but still inhabited biome.</Description>
+    <Color>130, 107, 57</Color>
+    <PlantDensity>0.5</PlantDensity>
+    <WaterComminality>0.1</WaterComminality>
+    <Terrains>
+        <Terrain frequency="60">Snow</Terrain> 
+        <Terrain frequency="10">Dirt</Terrain>
+        <Terrain frequency="30">Water</Terrain>
+    </Terrains>
+    <WaterClampTT>Snow</WaterClampTT>
+    <Plants>Grass,Bush,Birch Tree,Willow Tree</Plants>
+</Biome>
